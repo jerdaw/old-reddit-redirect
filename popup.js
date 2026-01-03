@@ -1,6 +1,5 @@
 const RULESET_ID = "ruleset_1";
 
-const statusElement = document.getElementById("status");
 const toggleButton = document.getElementById("toggle");
 
 let redirectEnabled = null;
@@ -9,22 +8,10 @@ function handleLastError() {
   void chrome.runtime.lastError;
 }
 
-function setStatus(text, state) {
-  if (!statusElement) return;
-  statusElement.textContent = text;
-
-  if (state) {
-    statusElement.dataset.state = state;
-  } else {
-    statusElement.removeAttribute("data-state");
-  }
-}
-
 function setToggleLabel(enabled) {
   if (!toggleButton) return;
   toggleButton.textContent = enabled ? "Disable redirect" : "Enable redirect";
   toggleButton.disabled = false;
-  toggleButton.dataset.state = enabled ? "on" : "off";
 }
 
 function updateActionUi(enabled, done) {
@@ -67,7 +54,6 @@ function toggleRedirect() {
     redirectEnabled = enabled;
 
     updateActionUi(enabled);
-    setStatus(enabled ? "Status: On" : "Status: Off", enabled ? "on" : "off");
     setToggleLabel(enabled);
   });
 }
@@ -79,7 +65,6 @@ function setRedirectEnabled(enabled) {
   updateRulesetState(enabled, () => {
     redirectEnabled = enabled;
     updateActionUi(enabled, () => {
-      setStatus(enabled ? "Status: On" : "Status: Off", enabled ? "on" : "off");
       setToggleLabel(enabled);
     });
   });
