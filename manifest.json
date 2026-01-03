@@ -28,7 +28,7 @@
       "css": ["styles.css"]
     }
   ],
-  "permissions": ["declarativeNetRequestWithHostAccess", "storage"],
+  "permissions": ["declarativeNetRequestWithHostAccess"],
   "host_permissions": [
     "*://reddit.com/*",
     "*://www.reddit.com/*",

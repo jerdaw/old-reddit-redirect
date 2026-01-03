@@ -1,5 +1,4 @@
 const RULESET_ID = "ruleset_1";
-const STORAGE_KEY = "enabled";
 
 const statusElement = document.getElementById("status");
 
@@ -45,21 +44,18 @@ function updateRulesetState(enabled, done) {
 }
 
 function toggleRedirect() {
-  chrome.storage.local.get({ [STORAGE_KEY]: true }, (items) => {
+  chrome.declarativeNetRequest.getEnabledRulesets((rulesets) => {
     handleLastError();
-    const enabled = !Boolean(items[STORAGE_KEY]);
+    const enabledRulesets = Array.isArray(rulesets) ? rulesets : [];
+    const enabled = !enabledRulesets.includes(RULESET_ID);
 
-    chrome.storage.local.set({ [STORAGE_KEY]: enabled }, () => {
-      handleLastError();
-      updateRulesetState(enabled, () => {
-        updateActionUi(enabled, () => {
-          setStatus(enabled ? "Redirect enabled" : "Redirect disabled");
-          window.close();
-        });
+    updateRulesetState(enabled, () => {
+      updateActionUi(enabled, () => {
+        setStatus(enabled ? "Redirect enabled" : "Redirect disabled");
+        window.close();
       });
     });
   });
 }
 
 toggleRedirect();
-
