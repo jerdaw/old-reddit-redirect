@@ -18,13 +18,17 @@
     "96": "img/icon96.png",
     "128": "img/icon128.png"
   },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Old Reddit Redirect"
+  },
   "content_scripts": [
     {
       "matches": ["https://old.reddit.com/*"],
       "css": ["styles.css"]
     }
   ],
-  "permissions": ["declarativeNetRequestWithHostAccess"],
+  "permissions": ["declarativeNetRequestWithHostAccess", "storage"],
   "host_permissions": [
     "*://reddit.com/*",
     "*://www.reddit.com/*",

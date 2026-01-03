@@ -15,6 +15,7 @@ Also has a new minor fixes and quality of life improvements like:
 
 - Removing the undismissable cookie banner
 - Rewriting links to galleries to the raw old reddit comments page
+- One-click toolbar toggle to turn the redirect on/off
 
 #### Redirected domains
 
