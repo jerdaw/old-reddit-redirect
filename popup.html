@@ -10,11 +10,21 @@
         padding: 8px 10px;
         font: 13px system-ui, -apple-system, Segoe UI, sans-serif;
       }
+
+      #status {
+        margin-bottom: 8px;
+      }
+
+      button {
+        width: 100%;
+        padding: 6px 10px;
+        font: inherit;
+      }
     </style>
   </head>
   <body>
-    <div id="status">Toggling…</div>
+    <div id="status">Loading…</div>
+    <button id="toggle" type="button" disabled>Toggle</button>
     <script src="popup.js"></script>
   </body>
 </html>
-

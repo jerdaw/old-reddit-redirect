@@ -1,6 +1,9 @@
 const RULESET_ID = "ruleset_1";
 
 const statusElement = document.getElementById("status");
+const toggleButton = document.getElementById("toggle");
+
+let redirectEnabled = null;
 
 function handleLastError() {
   void chrome.runtime.lastError;
@@ -11,6 +14,12 @@ function setStatus(text) {
   statusElement.textContent = text;
 }
 
+function setToggleLabel(enabled) {
+  if (!toggleButton) return;
+  toggleButton.textContent = enabled ? "Disable redirect" : "Enable redirect";
+  toggleButton.disabled = false;
+}
+
 function updateActionUi(enabled, done) {
   chrome.action.setBadgeBackgroundColor({ color: "#d14343" }, () => {
     handleLastError();
@@ -19,8 +28,8 @@ function updateActionUi(enabled, done) {
       chrome.action.setTitle(
         {
           title: enabled
-            ? "Old Reddit Redirect is ON (click to turn off)"
-            : "Old Reddit Redirect is OFF (click to turn on)",
+            ? "Old Reddit Redirect is ON"
+            : "Old Reddit Redirect is OFF",
         },
         () => {
           handleLastError();
@@ -47,14 +56,32 @@ function toggleRedirect() {
   chrome.declarativeNetRequest.getEnabledRulesets((rulesets) => {
     handleLastError();
     const enabledRulesets = Array.isArray(rulesets) ? rulesets : [];
-    const enabled = !enabledRulesets.includes(RULESET_ID);
+    const enabled = enabledRulesets.includes(RULESET_ID);
+    redirectEnabled = enabled;
 
-    updateRulesetState(enabled, () => {
-      updateActionUi(enabled, () => {
-        setStatus(enabled ? "Redirect enabled" : "Redirect disabled");
-        window.close();
-      });
+    updateActionUi(enabled);
+    setStatus(enabled ? "Redirect is enabled" : "Redirect is disabled");
+    setToggleLabel(enabled);
+  });
+}
+
+function setRedirectEnabled(enabled) {
+  if (!toggleButton) return;
+  toggleButton.disabled = true;
+
+  updateRulesetState(enabled, () => {
+    redirectEnabled = enabled;
+    updateActionUi(enabled, () => {
+      setStatus(enabled ? "Redirect is enabled" : "Redirect is disabled");
+      setToggleLabel(enabled);
     });
+  });
+}
+
+if (toggleButton) {
+  toggleButton.addEventListener("click", () => {
+    if (redirectEnabled === null) return;
+    setRedirectEnabled(!redirectEnabled);
   });
 }
 
