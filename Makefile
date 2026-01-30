@@ -1,7 +1,14 @@
 .PHONY: run clean
 
-old-reddit-redirect.zip: *.json img/* *.txt
-	zip -r old-reddit-redirect.zip * -x .git/* -x img/screenshot.png -x .gitignore -x Makefile -x _metadata/** -x "_metadata/*"
+old-reddit-redirect.zip: *.json img/* *.txt background.js styles.css
+	zip -r old-reddit-redirect.zip \
+		manifest.json \
+		rules.json \
+		background.js \
+		styles.css \
+		img/icon*.png \
+		LICENSE.txt \
+		-x "*.DS_Store"
 
 run:
 	npx web-ext run

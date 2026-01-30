@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a **browser extension** (Chrome/Firefox) that redirects all Reddit URLs to old.reddit.com. The extension uses **Manifest V3** for Chrome (V2 support discontinued) and employs the `declarativeNetRequest` API for URL redirection.
+This is a **browser extension** (Chrome/Firefox) that redirects all Reddit URLs to old.reddit.com. The extension uses **Manifest V3** and employs the `declarativeNetRequest` API for URL redirection.
+
+## Git Commit Policy
+
+**IMPORTANT**: Only humans should be credited as authors on commits, pushes, and code contributions. Never include AI attribution (e.g., "Co-Authored-By: Claude") in commit messages or code comments.
 
 ## Architecture
 
@@ -19,99 +23,66 @@ The extension uses Manifest V3 declarative net request rules and a service worke
 
 ### Redirect Rule System
 
-Rules in `rules.json` are prioritized and processed in order:
+Rules in `rules.json` use a priority system (higher priority = processed first):
 
-1. **Allowlist rules** (priority 2, IDs 1-2): Bypass redirect for new Reddit-only features:
-   - `/media`, `/mod`, `/poll`, `/settings`, `/topics`, `/community-points`, `/appeal(s)`
-   - `/notifications`, `/message/compose`, `/r/[subreddit]/s/` (Reddit chat)
+**Priority 3 - Allowlist Rules (IDs 1-5):**
 
-2. **Header modification** (priority 2, ID 3): Removes `Accept` header for `i.redd.it` and `preview.redd.it` to force image display instead of HTML
+- Paths that don't exist on old Reddit: `/media`, `/mod`, `/poll`, `/settings`, `/topics`, `/community-points`, `/appeals`, `/answers`, `/vault`, `/avatar`, `/talk`, `/coins`, `/premium`, `/predictions`, `/rpan`
+- User actions: `/notifications`, `/message/compose`, share links (`/r/*/s/*`)
+- Dedicated subdomains: `chat.reddit.com`, `mod.reddit.com`, `sh.reddit.com`
 
-3. **Gallery redirect** (priority 2, ID 4): Rewrites `/gallery/[id]` → `old.reddit.com/comments/[id]`
+**Priority 2 - Special Redirects (IDs 10-12):**
 
-4. **Domain redirects** (priority 1, IDs 5-9): Transforms hosts to `old.reddit.com`:
-   - `reddit.com`, `www.reddit.com`, `np.reddit.com`, `amp.reddit.com`, `i.reddit.com`
+- Header modification for `i.redd.it` and `preview.redd.it` (removes Accept header to force image display)
+- Gallery redirect: `/gallery/ID` → `/comments/ID`
+- Videos redirect: `/videos/ID` → `/comments/ID`
+
+**Priority 1 - Domain Redirects (IDs 20-21):**
+
+- Consolidated regex rule for subdomains: `www`, `np`, `nr`, `ns`, `amp`, `i`
+- Bare `reddit.com` redirect
 
 ### Toggle Mechanism (background.js)
 
-The extension can be toggled on/off by clicking the toolbar icon without requiring storage permissions:
+The extension can be toggled on/off by clicking the toolbar icon:
 
 - **Icon click handler**: `chrome.action.onClicked` listener triggers toggle function
 - **State management**: Uses `chrome.declarativeNetRequest.getEnabledRulesets()` to check if `ruleset_1` is enabled (no storage API needed)
 - **Toggle action**: `chrome.declarativeNetRequest.updateEnabledRulesets()` enables/disables the ruleset
-- **UI feedback**: Updates badge text ("OFF" when disabled), badge color, and toolbar tooltip via `chrome.action` API
-- **Initialization**: Sets correct badge state on install and browser startup
-
-The toggle state is ephemeral (resets on browser restart) by design to avoid requesting storage permissions.
+- **UI feedback**: Updates badge text ("OFF" when disabled), badge color, and toolbar tooltip
+- **IIFE pattern**: Code wrapped in immediately-invoked function expression to avoid global pollution
 
 ## Development Commands
+
+### Setup
+
+```bash
+npm install          # Install dependencies
+```
 
 ### Running the Extension
 
 ```bash
-# Start live-reload development server (uses web-ext)
-make run
-
-# This will:
-# - Launch Firefox with the extension loaded
-# - Watch for file changes and auto-reload
-# - Open browser DevTools for debugging
+npm run dev          # Start live-reload development server (web-ext)
+make run             # Alternative using Makefile
 ```
 
-### Building Distribution Package
+### Code Quality
 
 ```bash
-# Create zip file for upload to Chrome/Firefox stores
-make
-
-# Output: old-reddit-redirect.zip
-# Excludes: .git/*, img/screenshot.png, .gitignore, Makefile, _metadata/*
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint errors automatically
+npm run format       # Format code with Prettier
+npm run format:check # Check formatting without changes
+npm run validate     # Validate JSON and JS syntax
 ```
 
-### Cleaning Build Artifacts
+### Building
 
 ```bash
-make clean
+make                 # Create old-reddit-redirect.zip
+make clean           # Remove build artifacts
 ```
-
-## Key Implementation Details
-
-### Permissions Model
-
-The extension requests minimal permissions:
-
-- `declarativeNetRequestWithHostAccess`: Required for URL redirection (Manifest V3)
-- `host_permissions`: Scoped to specific Reddit domains only (no broad `<all_urls>`)
-
-**Storage permissions NOT required** - toggle state uses ruleset enable/disable API instead.
-
-### Chrome vs Firefox Compatibility
-
-- **Chrome**: Uses Manifest V3 (V2 being phased out)
-- **Firefox**: Currently uses separate Manifest V2 version (V3 support incomplete)
-- This repository contains the **V3 version** for Chrome
-
-Firefox-specific settings in manifest.json:
-- `browser_specific_settings.gecko.id`: Extension UUID for Firefox
-- `browser_specific_settings.gecko.strict_min_version`: Requires Firefox 130+
-
-### Content Script Injection
-
-`styles.css` is injected only on `https://old.reddit.com/*` to:
-- Hide `#eu-cookie-policy` (undismissable cookie banner)
-- Hide `#redesign-beta-optin-btn` (new Reddit nag prompt)
-
-### Error Handling Pattern
-
-All Chrome API callbacks use `handleLastError()` to suppress error console spam:
-
-```javascript
-function handleLastError() {
-  void chrome.runtime.lastError;
-}
-```
-
-This is necessary because some Chrome API calls may fail silently (e.g., when extension context is invalidated).
 
 ## File Structure
 
@@ -122,6 +93,10 @@ This is necessary because some Chrome API calls may fail silently (e.g., when ex
 ├── background.js          # Service worker for toggle functionality
 ├── styles.css             # Content script CSS (old.reddit.com only)
 ├── img/                   # Extension icons (16-128px)
+├── package.json           # npm dependencies and scripts
+├── eslint.config.js       # ESLint configuration (flat config)
+├── .prettierrc            # Prettier configuration
+├── .github/workflows/     # CI workflow
 ├── LICENSE.txt            # MIT license
 ├── Makefile               # Build commands
 ├── README.md              # User documentation
@@ -129,20 +104,14 @@ This is necessary because some Chrome API calls may fail silently (e.g., when ex
 └── CONTRIBUTING.md        # Contribution guidelines
 ```
 
-## Git Commit Policy
-
-**IMPORTANT**: Only humans should be credited as authors on commits, pushes, and code contributions. Never include AI attribution (e.g., "Co-Authored-By: Claude") in commit messages or code comments.
-
-## Common Modifications
-
-### Adding New Redirect Rules
+## Adding New Redirect Rules
 
 Edit `rules.json` and add a new object to the array:
 
 ```json
 {
-  "id": 10,                    // Must be unique
-  "priority": 1,               // Higher = processed first (2 > 1)
+  "id": 22,
+  "priority": 1,
   "condition": {
     "urlFilter": "||new.reddit.com/*",
     "resourceTypes": ["main_frame"]
@@ -156,43 +125,42 @@ Edit `rules.json` and add a new object to the array:
 }
 ```
 
-Rule types:
+**Rule types:**
+
 - `redirect`: Change URL (transform host, path, or use regex substitution)
 - `allow`: Skip other rules (for allowlisting)
 - `modifyHeaders`: Add/remove/modify request headers
 
+**Important:** When using `regexFilter` with capture groups, remember that `\\1` refers to the first capture group, `\\2` to the second, etc.
+
 ### Adding New Allowlist Paths
 
-To prevent redirect for specific paths, add to allowlist rules (IDs 1-2) with priority 2:
+Add to the regex in rules 1 or 2, or create a new allowlist rule with priority 3:
 
 ```json
 {
-  "id": 11,
-  "priority": 2,
+  "id": 6,
+  "priority": 3,
   "action": { "type": "allow" },
   "condition": {
-    "regexFilter": "^https://\\w*\\.?reddit\\.com/new-feature/.*",
+    "urlFilter": "||newfeature.reddit.com/*",
     "resourceTypes": ["main_frame"]
   }
 }
 ```
 
-### Updating Extension Version
-
-1. Edit `manifest.json` → `"version": "X.Y.Z"`
-2. Run `make` to create new zip
-3. Upload to Chrome Web Store / Firefox Add-ons
-
 ## Testing
 
 Manual testing workflow:
 
-1. Run `make run` to launch Firefox with extension
+1. Run `npm run dev` to launch Firefox with extension
 2. Navigate to `https://reddit.com` → should redirect to `old.reddit.com`
 3. Test allowlisted paths (e.g., `https://reddit.com/settings`) → should NOT redirect
 4. Test gallery redirect: `https://reddit.com/gallery/abc123` → should redirect to `old.reddit.com/comments/abc123`
-5. Test toggle: Click extension icon → verify badge shows "OFF" → navigate to `reddit.com` → should NOT redirect
-6. Click icon again → badge should clear → redirect should work again
+5. Test videos redirect: `https://reddit.com/videos/abc123` → should redirect to `old.reddit.com/comments/abc123`
+6. Test new subdomains: `https://nr.reddit.com` and `https://ns.reddit.com` → should redirect
+7. Test toggle: Click extension icon → verify badge shows "OFF" → navigate to `reddit.com` → should NOT redirect
+8. Click icon again → badge should clear → redirect should work again
 
 ## Debugging
 
@@ -218,3 +186,18 @@ Manual testing workflow:
 - **Icon click does nothing**: Ensure `chrome.action.onClicked` listener is registered in background.js
 - **Redirect loops**: Check rule priorities - allowlist rules must have priority >= redirect rules
 - **Permissions errors**: Ensure `host_permissions` covers all domains in rules.json
+- **Regex not matching**: Test regex patterns at https://regex101.com (use ECMAScript flavor)
+
+## CI/CD
+
+GitHub Actions workflow (`.github/workflows/ci.yml`) runs on push/PR to master:
+
+1. **Validate job**: JSON syntax, JS syntax, ESLint, Prettier formatting
+2. **Build job**: Create zip, verify contents, upload artifact
+
+## Code Style
+
+- **ESLint**: Enforces strict mode, no-var, prefer-const, no global functions
+- **Prettier**: 2-space indentation, double quotes, trailing commas (ES5)
+- **IIFE pattern**: All code wrapped to avoid global scope pollution
+- Run `npm run lint:fix && npm run format` before committing

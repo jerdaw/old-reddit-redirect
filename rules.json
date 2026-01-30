@@ -1,130 +1,130 @@
 [
   {
     "id": 1,
-    "priority": 2,
+    "priority": 3,
     "action": {
       "type": "allow"
     },
     "condition": {
-      "regexFilter": "^https://\\w*\\.?reddit\\.com/(media|mod|poll|settings|topics|community-points|appeals?).*",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/(media|mod|poll|settings|topics|community-points|appeals?|answers|vault|avatar|talk|coins|premium|predictions|rpan)(/|$|\\?).*",
       "resourceTypes": ["main_frame"]
     }
   },
   {
     "id": 2,
-    "priority": 2,
+    "priority": 3,
     "action": {
       "type": "allow"
     },
     "condition": {
-      "regexFilter": "^https://\\w*\\.?reddit\\.com/(notifications|message/compose/|r/[a-zA-Z0-9_]+/s/).*",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/(notifications|message/compose|r/[a-zA-Z0-9_]+/s/).*",
       "resourceTypes": ["main_frame"]
     }
   },
   {
     "id": 3,
+    "priority": 3,
+    "action": {
+      "type": "allow"
+    },
+    "condition": {
+      "urlFilter": "||chat.reddit.com/*",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 4,
+    "priority": 3,
+    "action": {
+      "type": "allow"
+    },
+    "condition": {
+      "urlFilter": "||mod.reddit.com/*",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 5,
+    "priority": 3,
+    "action": {
+      "type": "allow"
+    },
+    "condition": {
+      "urlFilter": "||sh.reddit.com/*",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 10,
     "priority": 2,
     "action": {
       "type": "modifyHeaders",
       "requestHeaders": [{ "header": "Accept", "operation": "remove" }]
     },
     "condition": {
-      "regexFilter": "^https://(i|preview).redd.it/*",
+      "regexFilter": "^https://(i|preview)\\.redd\\.it/.*",
       "resourceTypes": ["main_frame"]
     }
   },
   {
-    "id": 4,
+    "id": 11,
     "priority": 2,
     "action": {
       "type": "redirect",
       "redirect": {
-        "regexSubstitution": "https://old.reddit.com/comments/\\1"
+        "regexSubstitution": "https://old.reddit.com/comments/\\2"
       }
     },
     "condition": {
-      "regexFilter": "^https://\\w*\\.reddit\\.com/gallery/(.*)",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/gallery/([a-zA-Z0-9_]+).*",
       "resourceTypes": ["main_frame"]
     }
   },
   {
-    "id": 5,
+    "id": 12,
+    "priority": 2,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "regexSubstitution": "https://old.reddit.com/comments/\\2"
+      }
+    },
+    "condition": {
+      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/videos?/([a-zA-Z0-9_]+).*",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 20,
     "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": {
+          "host": "old.reddit.com"
+        }
+      }
+    },
+    "condition": {
+      "regexFilter": "^https://(www|np|nr|ns|amp|i)\\.reddit\\.com/.*",
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 21,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": {
+          "host": "old.reddit.com"
+        }
+      }
+    },
     "condition": {
       "urlFilter": "||reddit.com/*",
+      "excludedInitiatorDomains": ["reddit.com", "old.reddit.com"],
       "resourceTypes": ["main_frame"]
-    },
-    "action": {
-      "type": "redirect",
-      "redirect": {
-        "transform": {
-          "host": "old.reddit.com"
-        }
-      }
-    }
-  },
-  {
-    "id": 6,
-    "priority": 1,
-    "condition": {
-      "urlFilter": "||www.reddit.com/*",
-      "resourceTypes": ["main_frame"]
-    },
-    "action": {
-      "type": "redirect",
-      "redirect": {
-        "transform": {
-          "host": "old.reddit.com"
-        }
-      }
-    }
-  },
-  {
-    "id": 7,
-    "priority": 1,
-    "condition": {
-      "urlFilter": "||np.reddit.com/*",
-      "resourceTypes": ["main_frame"]
-    },
-    "action": {
-      "type": "redirect",
-      "redirect": {
-        "transform": {
-          "host": "old.reddit.com"
-        }
-      }
-    }
-  },
-  {
-    "id": 8,
-    "priority": 1,
-    "condition": {
-      "urlFilter": "||amp.reddit.com/*",
-      "resourceTypes": ["main_frame"]
-    },
-    "action": {
-      "type": "redirect",
-      "redirect": {
-        "transform": {
-          "host": "old.reddit.com"
-        }
-      }
-    }
-  },
-  {
-    "id": 9,
-    "priority": 1,
-    "condition": {
-      "urlFilter": "||i.reddit.com/*",
-      "resourceTypes": ["main_frame"]
-    },
-    "action": {
-      "type": "redirect",
-      "redirect": {
-        "transform": {
-          "host": "old.reddit.com"
-        }
-      }
     }
   }
 ]

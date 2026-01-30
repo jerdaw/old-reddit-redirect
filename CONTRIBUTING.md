@@ -6,6 +6,7 @@ Thank you for your interest in contributing to this actively maintained fork of 
 
 1. Fork the repository on GitHub
 2. Clone your fork locally:
+
    ```bash
    git clone git@github.com:YOUR_USERNAME/old-reddit-redirect.git
    cd old-reddit-redirect
@@ -49,6 +50,7 @@ Thank you for your interest in contributing to this actively maintained fork of 
 ## Submitting Changes
 
 1. Create a descriptive branch name:
+
    ```bash
    git checkout -b feature/your-feature-name
    # or
@@ -56,11 +58,13 @@ Thank you for your interest in contributing to this actively maintained fork of 
    ```
 
 2. Make your changes and commit with clear messages:
+
    ```bash
    git commit -m "Add support for chat.reddit.com redirect"
    ```
 
 3. Push to your fork:
+
    ```bash
    git push origin feature/your-feature-name
    ```
@@ -84,6 +88,7 @@ If you're adding new URL patterns to redirect:
 5. Test thoroughly with `make run`
 
 Example:
+
 ```json
 {
   "id": 10,
@@ -116,6 +121,7 @@ Found a bug or have a feature request?
 ## Questions?
 
 Open an issue for discussion or questions about:
+
 - Architecture decisions
 - Feature proposals
 - Implementation approaches
