@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Old Reddit Redirect</title>
+    <link rel="stylesheet" href="onboarding.css" />
+  </head>
+  <body>
+    <div class="onboarding-container">
+      <!-- Slide 1: Welcome -->
+      <section class="slide active" data-slide="1">
+        <div class="slide-content">
+          <img src="img/icon128.png" alt="Old Reddit Redirect" class="hero-icon" />
+          <h1>Welcome to Old Reddit Redirect</h1>
+          <p class="hero-text">
+            Reddit URLs will now automatically redirect to old.reddit.com
+          </p>
+          <div class="feature-badges">
+            <span class="badge">✓ Instant redirects</span>
+            <span class="badge">✓ No tracking</span>
+            <span class="badge">✓ Lightweight</span>
+          </div>
+        </div>
+        <button class="btn primary" data-action="next">Get Started</button>
+      </section>
+
+      <!-- Slide 2: Quick Toggle -->
+      <section class="slide" data-slide="2">
+        <div class="slide-content">
+          <div class="feature-demo">
+            <div class="keyboard-visual">
+              <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>
+            </div>
+          </div>
+          <h2>Quick Toggle</h2>
+          <p>
+            Press <strong>Alt+Shift+R</strong> to instantly toggle redirects on or off.
+            Works on any page, any time.
+          </p>
+        </div>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="prev">Back</button>
+          <button class="btn primary" data-action="next">Next</button>
+        </div>
+      </section>
+
+      <!-- Slide 3: Popup Features -->
+      <section class="slide" data-slide="3">
+        <div class="slide-content">
+          <h2>Powerful Features</h2>
+          <p>
+            Click the extension icon to access:
+          </p>
+          <ul class="feature-list">
+            <li>Temporary disable (5-60 minutes)</li>
+            <li>Per-tab toggle</li>
+            <li>Redirect statistics</li>
+            <li>Quick settings</li>
+          </ul>
+        </div>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="prev">Back</button>
+          <button class="btn primary" data-action="next">Next</button>
+        </div>
+      </section>
+
+      <!-- Slide 4: Subreddit Exceptions -->
+      <section class="slide" data-slide="4">
+        <div class="slide-content">
+          <div class="feature-demo">
+            <div class="context-menu-visual">
+              <div class="menu-item">Open in Old Reddit</div>
+              <div class="menu-item highlight">Keep on New Reddit</div>
+            </div>
+          </div>
+          <h2>Subreddit Exceptions</h2>
+          <p>
+            Some subreddits use new Reddit features like polls and predictions.
+            Right-click any Reddit link and select "Keep on New Reddit" to whitelist it.
+          </p>
+        </div>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="prev">Back</button>
+          <button class="btn primary" data-action="next">Finish Setup</button>
+        </div>
+      </section>
+
+      <!-- Slide 5: Done -->
+      <section class="slide" data-slide="5">
+        <div class="slide-content">
+          <div class="success-icon">🎉</div>
+          <h2>You're All Set!</h2>
+          <p>
+            Old Reddit Redirect is now active. Visit any Reddit page to see it in action.
+          </p>
+          <div class="quick-actions">
+            <label class="checkbox-option">
+              <input type="checkbox" id="enable-notifications" />
+              <span>Enable notifications for redirects</span>
+            </label>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="options">Open Options</button>
+          <button class="btn primary" data-action="close">Start Browsing</button>
+        </div>
+      </section>
+
+      <!-- Progress dots -->
+      <div class="progress-dots">
+        <span class="dot active" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
+        <span class="dot" data-slide="3"></span>
+        <span class="dot" data-slide="4"></span>
+        <span class="dot" data-slide="5"></span>
+      </div>
+    </div>
+    <script src="storage.js"></script>
+    <script src="onboarding.js"></script>
+  </body>
+</html>

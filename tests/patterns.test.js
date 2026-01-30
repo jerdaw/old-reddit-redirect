@@ -51,6 +51,12 @@ describe("Domain redirect patterns", () => {
     ).toBe(true);
   });
 
+  it("should match m.reddit.com", () => {
+    expect(
+      testRegex(rule20.condition.regexFilter, "https://m.reddit.com/r/test")
+    ).toBe(true);
+  });
+
   it("should NOT match old.reddit.com", () => {
     expect(
       testRegex(rule20.condition.regexFilter, "https://old.reddit.com/r/test")
@@ -139,13 +145,13 @@ describe("Allowlist patterns", () => {
     ).toBe(true);
   });
 
-  it("should allowlist share links", () => {
+  it("should NOT allowlist share links (they get redirected)", () => {
     expect(
       testRegex(
         rule2.condition.regexFilter,
         "https://www.reddit.com/r/javascript/s/abc123"
       )
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("should NOT allowlist regular subreddit paths", () => {

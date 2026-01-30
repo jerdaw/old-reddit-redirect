@@ -10,6 +10,7 @@
     <div class="container">
       <h1>Old Reddit Redirect</h1>
 
+      <!-- Main Toggle -->
       <section class="setting">
         <div class="setting-row">
           <div class="setting-info">
@@ -25,6 +26,159 @@
         </div>
       </section>
 
+      <!-- Statistics -->
+      <section class="setting">
+        <h2>Statistics</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-number" id="total-redirects">0</span>
+            <span class="stat-label">Total Redirects</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-number" id="today-redirects">0</span>
+            <span class="stat-label">Today</span>
+          </div>
+        </div>
+        <div class="stats-detail">
+          <h3>Top Subreddits</h3>
+          <ol id="top-subreddits" class="subreddit-list">
+            <!-- Populated by JS -->
+          </ol>
+          <p class="empty-state" id="subreddit-empty">
+            No subreddit data yet. Visit some subreddits to see stats!
+          </p>
+        </div>
+        <button class="button secondary" id="clear-stats">Clear Statistics</button>
+      </section>
+
+      <!-- Visual Preferences -->
+      <section class="setting">
+        <h2>Visual Preferences</h2>
+
+        <div class="option-row">
+          <label for="icon-click-behavior">Icon Click Behavior</label>
+          <select id="icon-click-behavior" class="select-input">
+            <option value="popup">Open popup (default)</option>
+            <option value="toggle">Toggle redirect on/off</option>
+          </select>
+          <p class="option-description">
+            Choose what happens when you click the extension icon.
+            Keyboard shortcut always toggles regardless of this setting.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="badge-style">Badge Style</label>
+          <select id="badge-style" class="select-input">
+            <option value="text">Text ("OFF" when disabled)</option>
+            <option value="count">Redirect count</option>
+            <option value="color">Color only</option>
+          </select>
+          <p class="option-description">
+            How the extension icon badge should display
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="animate-toggle" checked />
+            <span>Animate icon on toggle</span>
+          </label>
+          <p class="option-description">
+            Flash the badge color when toggling redirect on/off
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="show-notifications" />
+            <span>Show notifications</span>
+          </label>
+          <p class="option-description">
+            Show browser notifications for redirect events
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="show-redirect-notice" />
+            <span>Show redirect notice</span>
+          </label>
+          <p class="option-description">
+            Show a small notification on old.reddit.com after redirect with "Go back" option
+          </p>
+        </div>
+      </section>
+
+      <!-- Subreddit Exceptions -->
+      <section class="setting">
+        <h2>Subreddit Exceptions</h2>
+        <p class="section-description">
+          These subreddits will stay on new Reddit instead of redirecting.
+          Useful for subreddits that use new Reddit features (polls, predictions, etc.)
+        </p>
+
+        <div class="whitelist-container">
+          <div class="whitelist-input-row">
+            <span class="input-prefix">r/</span>
+            <input type="text"
+                   id="subreddit-input"
+                   class="text-input"
+                   placeholder="subreddit name"
+                   pattern="^[A-Za-z0-9_]+$">
+            <button class="button" id="add-subreddit">Add</button>
+          </div>
+
+          <ul id="whitelist" class="tag-list">
+            <!-- Populated by JS -->
+          </ul>
+
+          <p class="empty-state" id="whitelist-empty">
+            No exceptions configured. All subreddits redirect to old Reddit.
+          </p>
+        </div>
+
+        <div class="suggestions-container">
+          <h3>Suggested Exceptions</h3>
+          <p class="help-text">
+            Popular subreddits that use new Reddit features like polls and predictions:
+          </p>
+          <div id="suggestions-list" class="suggestions-list">
+            <!-- Populated by JS -->
+          </div>
+          <p class="empty-state" id="suggestions-empty" hidden>
+            All suggestions have been added!
+          </p>
+        </div>
+      </section>
+
+      <!-- URL Testing Tool -->
+      <section class="setting">
+        <h2>Test a URL</h2>
+        <p class="section-description">
+          Check if a URL would be redirected before visiting it.
+        </p>
+
+        <div class="url-test-container">
+          <div class="input-row">
+            <input type="url"
+                   id="test-url-input"
+                   class="text-input"
+                   placeholder="https://reddit.com/r/news">
+            <button class="button" id="test-url-btn">Test</button>
+          </div>
+
+          <div class="test-result" id="test-result" hidden>
+            <div class="result-icon" id="result-icon"></div>
+            <div class="result-text">
+              <p id="result-message"></p>
+              <p class="result-detail" id="result-detail"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Keyboard Shortcut -->
       <section class="setting">
         <div class="setting-row">
           <div class="setting-info">
@@ -38,6 +192,52 @@
         </div>
       </section>
 
+      <!-- Backup & Restore -->
+      <section class="setting">
+        <h2>Backup & Restore</h2>
+
+        <div class="backup-actions">
+          <button class="button" id="export-settings">
+            📤 Export Settings
+          </button>
+          <button class="button secondary" id="import-settings">
+            📥 Import Settings
+          </button>
+        </div>
+
+        <input type="file"
+               id="import-file"
+               accept=".json,application/json"
+               hidden>
+
+        <p class="help-text">
+          Export your settings to a JSON file. Import to restore or share configurations.
+          Statistics are not included in exports.
+        </p>
+      </section>
+
+      <!-- Sync Settings -->
+      <section class="setting">
+        <h2>Sync Settings</h2>
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="sync-toggle">Sync across browsers</label>
+            <p class="description">
+              Sync your preferences across Chrome/Edge browsers signed into the same account.
+              Statistics are never synced.
+            </p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="sync-toggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+        <p class="sync-status" id="sync-status">
+          <!-- "Last synced: 2 minutes ago" or "Not synced" -->
+        </p>
+      </section>
+
+      <!-- Footer -->
       <footer>
         <p>
           <a
@@ -53,7 +253,15 @@
           >
         </p>
       </footer>
+
+      <!-- Toast notification -->
+      <div id="toast" class="toast" hidden>
+        <span id="toast-message"></span>
+      </div>
     </div>
+    <script src="logger.js"></script>
+    <script src="storage.js"></script>
+    <script src="suggestions.js"></script>
     <script src="options.js"></script>
   </body>
 </html>

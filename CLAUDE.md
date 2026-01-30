@@ -28,7 +28,15 @@ The extension uses Manifest V3 declarative net request rules and a service worke
 
 - **manifest.json**: Extension metadata, permissions, and declarative net request ruleset registration
 - **rules.json**: Array of `declarativeNetRequest` rules that handle URL redirection/modification
-- **background.js**: Service worker that handles extension icon clicks to toggle redirect on/off
+- **background.js**: Service worker for toggle, context menus, stats tracking, and icon behavior
+- **storage.js**: Centralized storage abstraction layer with sync support
+- **logger.js**: Centralized logging utility with log levels (debug, info, warn, error)
+- **popup.html/js/css**: Extension popup UI with quick toggle, stats, and settings
+- **options.html/js/css**: Full options page with preferences, whitelist, and URL testing
+- **onboarding.html/css/js**: First-run onboarding experience (5 slides)
+- **suggestions.js**: Curated list of subreddits that benefit from new Reddit features
+- **offscreen.html/js**: Offscreen document for clipboard access (MV3 requirement)
+- **content-script.js**: Content script injected into old.reddit.com for redirect notices
 - **styles.css**: Content script CSS injected into old.reddit.com to hide cookie banners
 
 ### Redirect Rule System
@@ -38,33 +46,55 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 **Priority 3 - Allowlist Rules (IDs 1-5):**
 
 - Paths that don't exist on old Reddit: `/media`, `/mod`, `/poll`, `/settings`, `/topics`, `/community-points`, `/appeals`, `/answers`, `/vault`, `/avatar`, `/talk`, `/coins`, `/premium`, `/predictions`, `/rpan`
-- User actions: `/notifications`, `/message/compose`, share links (`/r/*/s/*`)
+- User actions: `/notifications`, `/message/compose`
 - Dedicated subdomains: `chat.reddit.com`, `mod.reddit.com`, `sh.reddit.com`
+- **Note**: Share links (`/r/*/s/*`) are NOT allowlisted - they redirect through Reddit then to old.reddit.com
 
 **Priority 2 - Special Redirects (IDs 10-12):**
 
 - Header modification for `i.redd.it` and `preview.redd.it` (removes Accept header to force image display)
-- Gallery redirect: `/gallery/ID` → `/comments/ID`
-- Videos redirect: `/videos/ID` → `/comments/ID`
+- Gallery redirect: `/gallery/ID` → `/comments/ID` (supports hyphens in IDs)
+- Videos redirect: `/videos/ID` → `/comments/ID` (supports hyphens in IDs)
 
 **Priority 1 - Domain Redirects (IDs 20-22):**
 
-- Consolidated regex rule for subdomains: `www`, `np`, `nr`, `ns`, `amp`, `i`
+- Consolidated regex rule for subdomains: `www`, `np`, `nr`, `ns`, `amp`, `i`, `m` (mobile)
 - Bare `reddit.com` redirect
 - Onion domain redirect: `*.reddit.com.onion` → `old.reddit.com`
 
-### Toggle Mechanism (background.js)
+### Core Features (background.js + storage.js)
 
-The extension can be toggled on/off via multiple methods:
-
-- **Icon click handler**: `chrome.action.onClicked` listener triggers toggle function
+**Toggle Mechanism:**
+- **Icon click**: Configurable to either open popup (default) or toggle redirect
 - **Keyboard shortcut**: Alt+Shift+R (configurable via `chrome://extensions/shortcuts`)
 - **Context menu**: Right-click menu items for opening links in old/new Reddit
-- **Options page**: UI toggle in extension options
-- **State management**: Uses `chrome.declarativeNetRequest.getEnabledRulesets()` to check if `ruleset_1` is enabled (no storage API needed)
-- **Toggle action**: `chrome.declarativeNetRequest.updateEnabledRulesets()` enables/disables the ruleset
-- **UI feedback**: Updates badge text ("OFF" when disabled), badge color, and toolbar tooltip
-- **IIFE pattern**: Code wrapped in immediately-invoked function expression to avoid global pollution
+- **Popup/Options UI**: Toggle switches with real-time feedback
+- **State management**: Uses `chrome.declarativeNetRequest.getEnabledRulesets()` + storage.js
+- **UI feedback**: Badge text/color, tooltip updates, optional notifications
+
+**Statistics Tracking:**
+- Total redirect count across all time
+- Daily redirect count (resets at midnight)
+- Per-subreddit redirect tracking (top 50)
+- Weekly history for trend analysis
+
+**Storage System:**
+- Centralized storage API in `storage.js`
+- Support for both local and sync storage
+- Automatic schema migration from legacy versions
+- Import/export settings functionality
+- Race condition prevention with proper async/await
+
+**Subreddit Exceptions:**
+- User-managed whitelist of subreddits to keep on new Reddit
+- Dynamic rule generation for whitelisted subreddits
+- Smart suggestions for subreddits using new Reddit features
+- Context menu integration for quick whitelist additions
+
+**Logging System:**
+- Centralized logger with configurable log levels
+- Contextual error messages for debugging
+- Integrated across all extension components
 
 ## Development Commands
 
@@ -108,11 +138,23 @@ make clean           # Remove build artifacts
 .
 ├── manifest.json             # Extension manifest (V3)
 ├── rules.json                # Declarative net request rules
-├── background.js             # Service worker for toggle functionality
-├── styles.css                # Content script CSS (old.reddit.com only)
+├── background.js             # Service worker (toggle, stats, context menus)
+├── storage.js                # Centralized storage abstraction layer
+├── logger.js                 # Centralized logging utility
+├── popup.html                # Extension popup UI
+├── popup.js                  # Popup logic
+├── popup.css                 # Popup styles
 ├── options.html              # Extension options page
 ├── options.js                # Options page logic
 ├── options.css               # Options page styles
+├── onboarding.html           # First-run onboarding experience
+├── onboarding.js             # Onboarding logic
+├── onboarding.css            # Onboarding styles
+├── suggestions.js            # Curated subreddit suggestions
+├── offscreen.html            # Offscreen document for clipboard
+├── offscreen.js              # Offscreen document logic
+├── content-script.js         # Content script for redirect notices
+├── styles.css                # Content script CSS (old.reddit.com)
 ├── img/                      # Extension icons (16-128px)
 ├── tests/                    # Vitest test suite
 │   ├── setup.js              # Test utilities
@@ -135,7 +177,8 @@ make clean           # Remove build artifacts
 ├── README.md                 # User documentation
 ├── CLAUDE.md                 # AI development guidance
 ├── CONTRIBUTING.md           # Contribution guidelines
-└── PRIVACY.md                # Privacy policy
+├── PRIVACY.md                # Privacy policy
+└── IMPROVEMENT-PLAN.md       # Detailed implementation roadmap
 ```
 
 ## Adding New Redirect Rules

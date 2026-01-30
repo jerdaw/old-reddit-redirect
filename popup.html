@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Old Reddit Redirect</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="popup-container">
+      <header class="popup-header">
+        <img src="img/icon32.png" alt="" class="popup-logo" />
+        <h1>Old Reddit Redirect</h1>
+      </header>
+
+      <main class="popup-main">
+        <!-- Main Toggle Section -->
+        <section class="toggle-section">
+          <label class="toggle-row">
+            <span class="toggle-label">Enable Redirect</span>
+            <div class="switch">
+              <input type="checkbox" id="main-toggle" checked />
+              <span class="slider"></span>
+            </div>
+          </label>
+          <p class="toggle-status" id="status-text">
+            Redirecting to old.reddit.com
+          </p>
+        </section>
+
+        <!-- Temporary Disable Section (hidden by default) -->
+        <section class="temp-disable-section" id="temp-disable-section" hidden>
+          <p class="countdown-text">
+            ⏱️ Re-enabling in <span id="countdown">0:00</span>
+          </p>
+          <button class="cancel-button" id="cancel-temp-disable">Cancel</button>
+        </section>
+
+        <!-- Disable Duration Dropdown -->
+        <section class="duration-section" id="duration-section">
+          <label for="disable-duration">Disable for:</label>
+          <select id="disable-duration" class="duration-select">
+            <option value="">Choose duration...</option>
+            <option value="300000">5 minutes</option>
+            <option value="900000">15 minutes</option>
+            <option value="1800000">30 minutes</option>
+            <option value="3600000">1 hour</option>
+          </select>
+        </section>
+
+        <!-- Per-Tab Toggle (only visible on Reddit pages) -->
+        <section class="tab-toggle-section" id="tab-toggle-section" hidden>
+          <label class="toggle-row secondary">
+            <span class="toggle-label">This tab only</span>
+            <div class="switch secondary">
+              <input type="checkbox" id="tab-toggle" checked />
+              <span class="slider"></span>
+            </div>
+          </label>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section">
+          <div class="stat-item">
+            <span class="stat-value" id="redirect-count">0</span>
+            <span class="stat-label">redirects today</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="total-count">0</span>
+            <span class="stat-label">total</span>
+          </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="actions-section">
+          <button class="action-btn" id="open-options">
+            <span class="action-icon">⚙️</span>
+            <span>Options</span>
+          </button>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="popup-footer">
+        <span class="shortcut-hint" id="shortcut-hint">
+          Loading shortcut...
+        </span>
+      </footer>
+    </div>
+    <script src="logger.js"></script>
+    <script src="storage.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

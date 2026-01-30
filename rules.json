@@ -6,7 +6,7 @@
       "type": "allow"
     },
     "condition": {
-      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/(media|mod|poll|settings|topics|community-points|appeals?|answers|vault|avatar|talk|coins|premium|predictions|rpan)(/|$|\\?).*",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i|m)?\\.?reddit\\.com/(media|mod|poll|settings|topics|community-points|appeals?|answers|vault|avatar|talk|coins|premium|predictions|rpan)(/|$|\\?).*",
       "resourceTypes": ["main_frame"]
     }
   },
@@ -17,7 +17,7 @@
       "type": "allow"
     },
     "condition": {
-      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/(notifications|message/compose|r/[a-zA-Z0-9_]+/s/).*",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i|m)?\\.?reddit\\.com/(notifications|message/compose)(/|$|\\?).*",
       "resourceTypes": ["main_frame"]
     }
   },
@@ -76,7 +76,7 @@
       }
     },
     "condition": {
-      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/gallery/([a-zA-Z0-9_]+).*",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i|m)?\\.?reddit\\.com/gallery/([a-zA-Z0-9_-]+)/?$",
       "resourceTypes": ["main_frame"]
     }
   },
@@ -90,7 +90,7 @@
       }
     },
     "condition": {
-      "regexFilter": "^https://(www|np|nr|ns|amp|i)?\\.?reddit\\.com/videos?/([a-zA-Z0-9_]+).*",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i|m)?\\.?reddit\\.com/videos?/([a-zA-Z0-9_-]+)/?$",
       "resourceTypes": ["main_frame"]
     }
   },
@@ -106,7 +106,7 @@
       }
     },
     "condition": {
-      "regexFilter": "^https://(www|np|nr|ns|amp|i)\\.reddit\\.com/.*",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i|m)\\.reddit\\.com/.*",
       "resourceTypes": ["main_frame"]
     }
   },

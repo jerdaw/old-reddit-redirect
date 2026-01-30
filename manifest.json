@@ -1,7 +1,7 @@
 {
   "name": "Old Reddit Redirect",
   "description": "Ensure Reddit always loads the old design",
-  "version": "3.0.0",
+  "version": "5.0.0",
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko_android": {},
@@ -19,6 +19,7 @@
     "128": "img/icon128.png"
   },
   "action": {
+    "default_popup": "popup.html",
     "default_title": "Old Reddit Redirect"
   },
   "commands": {
@@ -38,17 +39,35 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://old.reddit.com/*"],
-      "css": ["styles.css"]
+      "matches": [
+        "https://old.reddit.com/*"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "js": [
+        "content-script.js"
+      ],
+      "run_at": "document_end"
     }
   ],
-  "permissions": ["declarativeNetRequestWithHostAccess", "contextMenus"],
+  "permissions": [
+    "declarativeNetRequestWithHostAccess",
+    "contextMenus",
+    "storage",
+    "webNavigation",
+    "alarms",
+    "notifications",
+    "clipboardWrite",
+    "offscreen"
+  ],
   "host_permissions": [
     "*://reddit.com/*",
     "*://www.reddit.com/*",
     "*://np.reddit.com/*",
     "*://amp.reddit.com/*",
     "*://i.reddit.com/*",
+    "*://m.reddit.com/*",
     "*://nr.reddit.com/*",
     "*://ns.reddit.com/*",
     "*://sh.reddit.com/*",
@@ -66,5 +85,13 @@
         "path": "rules.json"
       }
     ]
-  }
+  },
+  "optional_host_permissions": [
+    "*://teddit.net/*",
+    "*://*.teddit.net/*",
+    "*://libreddit.spike.codes/*",
+    "*://*.libreddit.spike.codes/*",
+    "*://redlib.catsarch.com/*",
+    "*://*.redlib.catsarch.com/*"
+  ]
 }

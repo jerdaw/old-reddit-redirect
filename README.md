@@ -7,19 +7,35 @@
 
 ## New Features in This Fork
 
-- **Click extension icon** to instantly toggle redirect on/off ([#173](https://github.com/tom-james-watson/old-reddit-redirect/issues/173))
-- **Keyboard shortcut (Alt+Shift+R)** to toggle redirect on/off
-- **Context menu** - right-click Reddit links to open in old or new Reddit
-- **Options page** - manage settings and customize keyboard shortcuts
+### Core Features
+- **Popup UI** - Click icon to access quick settings, stats, and controls
+- **Configurable icon click** - Choose between popup or instant toggle
+- **Keyboard shortcut (Alt+Shift+R)** - Quickly toggle redirect on/off
+- **Context menu** - Right-click Reddit links to open in old or new Reddit
+- **First-run onboarding** - Interactive tutorial for new users
+- **Statistics tracking** - View total, daily, and per-subreddit redirect counts
+- **Settings sync** - Sync preferences across browsers (optional)
+
+### URL Handling
+- **Mobile Reddit support (m.reddit.com)** - Mobile web links now redirect
+- **Share link handling** - `/r/*/s/*` links redirect properly
+- **Gallery/video support** - Handles post IDs with hyphens
 - **Support for nr/ns subdomains** ([#174](https://github.com/tom-james-watson/old-reddit-redirect/issues/174), [#175](https://github.com/tom-james-watson/old-reddit-redirect/issues/175))
-- **Reddit .onion domain support** for Tor users
+- **Reddit .onion domain support** - Full Tor compatibility
+
+### Subreddit Management
+- **Subreddit exceptions** - Whitelist subreddits to keep on new Reddit
+- **Smart suggestions** - Curated list of subreddits using new Reddit features
+- **URL testing tool** - Check if a URL would redirect before visiting
+- **Import/export settings** - Backup and restore configuration
+
+### Bug Fixes & Quality
 - **Fix /videos/ links** redirecting to 404 pages ([#176](https://github.com/tom-james-watson/old-reddit-redirect/issues/176))
 - **Proper handling** for chat.reddit.com and mod.reddit.com ([#187](https://github.com/tom-james-watson/old-reddit-redirect/issues/187), [#190](https://github.com/tom-james-watson/old-reddit-redirect/issues/190))
-- **Allowlist for /answers/** and other new Reddit features ([#177](https://github.com/tom-james-watson/old-reddit-redirect/issues/177))
-- **Comprehensive test suite** with Vitest for rule validation and pattern testing
-- Badge shows "OFF" when disabled
-- Toggle state persists without requiring storage permissions
-- Consolidated and optimized redirect rules
+- **Storage race condition fix** - Prevents data corruption
+- **Proper clipboard API** - Copy links reliably in MV3
+- **Centralized logging** - Better debugging with contextual errors
+- **Comprehensive test suite** - Vitest tests for rules and patterns
 
 [Chrome extension](https://chrome.google.com/webstore/detail/old-reddit-redirect/dneaehbmnbhcippjikoajpoabadpodje)
 
@@ -42,6 +58,7 @@ Also has minor fixes and quality of life improvements like:
 - `np.reddit.com`
 - `amp.reddit.com`
 - `i.reddit.com`
+- `m.reddit.com` (mobile)
 - `nr.reddit.com`
 - `ns.reddit.com`
 - `*.reddit.com.onion` (Tor hidden service)
@@ -62,7 +79,8 @@ These paths don't exist on old Reddit and are allowed through:
 - `/appeals`, `/answers`, `/vault`, `/avatar`, `/talk`
 - `/coins`, `/premium`, `/predictions`, `/rpan`
 - `/notifications`, `/message/compose`
-- `/r/*/s/*` - Share links
+
+**Note**: Share links (`/r/*/s/*`) are no longer whitelisted. They redirect through Reddit's own redirect, then to old.reddit.com.
 
 ## Development
 
