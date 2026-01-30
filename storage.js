@@ -393,7 +393,8 @@
         _exportDate: new Date().toISOString(),
         _extensionVersion: chrome.runtime.getManifest().version,
         frontend: all.frontend || DEFAULTS.frontend,
-        subredditOverrides: all.subredditOverrides || DEFAULTS.subredditOverrides,
+        subredditOverrides:
+          all.subredditOverrides || DEFAULTS.subredditOverrides,
         ui: all.ui || DEFAULTS.ui,
       };
 

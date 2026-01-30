@@ -5,8 +5,12 @@
   const totalSlides = 5;
 
   function showSlide(n) {
-    document.querySelectorAll(".slide").forEach((s) => s.classList.remove("active"));
-    document.querySelectorAll(".dot").forEach((d) => d.classList.remove("active"));
+    document
+      .querySelectorAll(".slide")
+      .forEach((s) => s.classList.remove("active"));
+    document
+      .querySelectorAll(".dot")
+      .forEach((d) => d.classList.remove("active"));
 
     const slide = document.querySelector(`[data-slide="${n}"]`);
     const dot = document.querySelector(`.dot[data-slide="${n}"]`);
@@ -31,7 +35,9 @@
 
   async function finishOnboarding() {
     // Save onboarding preference
-    const enableNotifications = document.getElementById("enable-notifications").checked;
+    const enableNotifications = document.getElementById(
+      "enable-notifications"
+    ).checked;
 
     if (enableNotifications) {
       const prefs = await window.Storage.getUIPreferences();

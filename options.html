@@ -48,7 +48,9 @@
             No subreddit data yet. Visit some subreddits to see stats!
           </p>
         </div>
-        <button class="button secondary" id="clear-stats">Clear Statistics</button>
+        <button class="button secondary" id="clear-stats">
+          Clear Statistics
+        </button>
       </section>
 
       <!-- Visual Preferences -->
@@ -62,8 +64,8 @@
             <option value="toggle">Toggle redirect on/off</option>
           </select>
           <p class="option-description">
-            Choose what happens when you click the extension icon.
-            Keyboard shortcut always toggles regardless of this setting.
+            Choose what happens when you click the extension icon. Keyboard
+            shortcut always toggles regardless of this setting.
           </p>
         </div>
 
@@ -105,7 +107,8 @@
             <span>Show redirect notice</span>
           </label>
           <p class="option-description">
-            Show a small notification on old.reddit.com after redirect with "Go back" option
+            Show a small notification on old.reddit.com after redirect with "Go
+            back" option
           </p>
         </div>
       </section>
@@ -115,17 +118,20 @@
         <h2>Subreddit Exceptions</h2>
         <p class="section-description">
           These subreddits will stay on new Reddit instead of redirecting.
-          Useful for subreddits that use new Reddit features (polls, predictions, etc.)
+          Useful for subreddits that use new Reddit features (polls,
+          predictions, etc.)
         </p>
 
         <div class="whitelist-container">
           <div class="whitelist-input-row">
             <span class="input-prefix">r/</span>
-            <input type="text"
-                   id="subreddit-input"
-                   class="text-input"
-                   placeholder="subreddit name"
-                   pattern="^[A-Za-z0-9_]+$">
+            <input
+              type="text"
+              id="subreddit-input"
+              class="text-input"
+              placeholder="subreddit name"
+              pattern="^[A-Za-z0-9_]+$"
+            />
             <button class="button" id="add-subreddit">Add</button>
           </div>
 
@@ -141,7 +147,8 @@
         <div class="suggestions-container">
           <h3>Suggested Exceptions</h3>
           <p class="help-text">
-            Popular subreddits that use new Reddit features like polls and predictions:
+            Popular subreddits that use new Reddit features like polls and
+            predictions:
           </p>
           <div id="suggestions-list" class="suggestions-list">
             <!-- Populated by JS -->
@@ -161,10 +168,12 @@
 
         <div class="url-test-container">
           <div class="input-row">
-            <input type="url"
-                   id="test-url-input"
-                   class="text-input"
-                   placeholder="https://reddit.com/r/news">
+            <input
+              type="url"
+              id="test-url-input"
+              class="text-input"
+              placeholder="https://reddit.com/r/news"
+            />
             <button class="button" id="test-url-btn">Test</button>
           </div>
 
@@ -205,14 +214,16 @@
           </button>
         </div>
 
-        <input type="file"
-               id="import-file"
-               accept=".json,application/json"
-               hidden>
+        <input
+          type="file"
+          id="import-file"
+          accept=".json,application/json"
+          hidden
+        />
 
         <p class="help-text">
-          Export your settings to a JSON file. Import to restore or share configurations.
-          Statistics are not included in exports.
+          Export your settings to a JSON file. Import to restore or share
+          configurations. Statistics are not included in exports.
         </p>
       </section>
 
@@ -223,8 +234,8 @@
           <div class="setting-info">
             <label for="sync-toggle">Sync across browsers</label>
             <p class="description">
-              Sync your preferences across Chrome/Edge browsers signed into the same account.
-              Statistics are never synced.
+              Sync your preferences across Chrome/Edge browsers signed into the
+              same account. Statistics are never synced.
             </p>
           </div>
           <label class="switch">

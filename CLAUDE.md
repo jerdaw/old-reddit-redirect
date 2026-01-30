@@ -65,6 +65,7 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 ### Core Features (background.js + storage.js)
 
 **Toggle Mechanism:**
+
 - **Icon click**: Configurable to either open popup (default) or toggle redirect
 - **Keyboard shortcut**: Alt+Shift+R (configurable via `chrome://extensions/shortcuts`)
 - **Context menu**: Right-click menu items for opening links in old/new Reddit
@@ -73,12 +74,14 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 - **UI feedback**: Badge text/color, tooltip updates, optional notifications
 
 **Statistics Tracking:**
+
 - Total redirect count across all time
 - Daily redirect count (resets at midnight)
 - Per-subreddit redirect tracking (top 50)
 - Weekly history for trend analysis
 
 **Storage System:**
+
 - Centralized storage API in `storage.js`
 - Support for both local and sync storage
 - Automatic schema migration from legacy versions
@@ -86,12 +89,14 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 - Race condition prevention with proper async/await
 
 **Subreddit Exceptions:**
+
 - User-managed whitelist of subreddits to keep on new Reddit
 - Dynamic rule generation for whitelisted subreddits
 - Smart suggestions for subreddits using new Reddit features
 - Context menu integration for quick whitelist additions
 
 **Logging System:**
+
 - Centralized logger with configurable log levels
 - Contextual error messages for debugging
 - Integrated across all extension components

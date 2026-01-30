@@ -11,6 +11,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 ### **Phase 1: Foundation & Storage Architecture**
 
 #### 1. Storage Abstraction Layer (`storage.js`)
+
 - Centralized storage API for all extension data
 - Automatic migration from v3.0.0 (DNR-only state)
 - Schema versioning for future migrations
@@ -19,6 +20,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - **Files:** `storage.js`
 
 #### 2. Popup UI Foundation
+
 - Modern popup replacing the old icon-click toggle
 - Main toggle switch with status indicator
 - Today's redirect count display
@@ -30,6 +32,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - **Breaking Change:** Icon click now opens popup instead of toggling directly (keyboard shortcut still works)
 
 #### 3. Redirect Statistics Tracking
+
 - Tracks total and daily redirect counts
 - Per-subreddit statistics (top 50)
 - Weekly history tracking (last 7 days)
@@ -42,6 +45,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 ### **Phase 2: User Experience Enhancements**
 
 #### 4. Visual Feedback Improvements
+
 - **Badge Style Options:**
   - Text mode: "OFF" when disabled, empty when enabled (default)
   - Count mode: Shows today's redirect count
@@ -52,6 +56,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - **Enhanced Tooltip:** Shows enabled state + today's count
 
 #### 5. Temporary Disable Feature
+
 - Disable redirect for a set duration (5/15/30/60 minutes)
 - Countdown timer in popup
 - Persistent across browser restarts
@@ -61,6 +66,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - **Uses:** `chrome.alarms` API for timer
 
 #### 6. Keyboard Shortcut Visibility
+
 - Dynamic shortcut display in popup footer
 - Enhanced shortcut section in options page
 - Styled `<kbd>` elements for visual clarity
@@ -72,6 +78,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 ### **Phase 3: Power User Features**
 
 #### 7. Per-Subreddit Override (Whitelist)
+
 - Whitelist specific subreddits to stay on new Reddit
 - Add/remove subreddits via UI
 - Maximum 100 subreddits
@@ -81,6 +88,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - **Use Case:** Subreddits that use new Reddit features (polls, predictions, etc.)
 
 #### 8. Import/Export Settings
+
 - Export settings to JSON file
 - Import settings with validation
 - Schema version tracking
@@ -89,6 +97,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - **File naming:** `old-reddit-redirect-settings-YYYY-MM-DD.json`
 
 #### 9. Context Menu Enhancements
+
 - ✅ "Open in Old Reddit" (existing, enhanced)
 - ✅ "Open in New Reddit" (existing, enhanced)
 - ✅ **NEW:** "Copy as Old Reddit Link" (shows notification with URL)
@@ -100,6 +109,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 ### **Phase 4: Advanced Features**
 
 #### 10. Cross-Browser Sync
+
 - Opt-in sync via `chrome.storage.sync`
 - Syncs preferences across Chrome/Edge instances
 - Statistics never synced (privacy)
@@ -108,6 +118,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - **Synced Data:** Frontend preferences, subreddit overrides, UI preferences
 
 #### 11. Per-Tab Toggle
+
 - Disable redirect for specific tab only
 - Tab-specific toggle in popup (only visible on Reddit pages)
 - Badge indicator ("TAB") when tab-disabled
@@ -116,6 +127,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - Global toggle overrides per-tab settings
 
 #### 12. Redirect Notification (Content Script)
+
 - Shows notification on old.reddit.com after redirect
 - Displays source URL
 - "Go back" button to return to new Reddit
@@ -128,15 +140,18 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 ## ⏳ Not Yet Implemented
 
 ### **Phase 3.2: Alternative Frontend Support**
+
 **Status:** Deferred (complex implementation)
 
 **Why deferred:**
+
 - Requires comprehensive frontend definitions (`frontends.js`)
 - Needs dynamic rule generation for each frontend
 - Optional permissions management for alternative domains
 - Significant testing required for each frontend
 
 **What would be involved:**
+
 - Define supported frontends (Teddit, LibReddit, Redlib, custom)
 - Create frontend selection UI with radio cards
 - Dynamic rule generation to redirect to chosen frontend
@@ -146,13 +161,16 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 **Recommendation:** This can be added in v4.1.0 or v5.0.0 as a separate feature release.
 
 ### **Phase 14: Comprehensive Test Suite**
+
 **Status:** Partially deferred
 
 **Current testing:**
+
 - Existing tests in `tests/rules.test.js` and `tests/patterns.test.js` still valid
 - New features not yet covered by tests
 
 **What's needed:**
+
 - `tests/storage.test.js` - Storage CRUD, migration, import/export
 - `tests/popup.test.js` - UI state, toggle, messages
 - `tests/stats.test.js` - Counter logic, subreddit extraction
@@ -170,6 +188,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 ## 📦 Updated Files
 
 ### New Files Created
+
 - `storage.js` - Storage abstraction layer
 - `popup.html` - Popup UI markup
 - `popup.js` - Popup UI logic
@@ -177,6 +196,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - `content-script.js` - Redirect notification
 
 ### Modified Files
+
 - `manifest.json` - Version bump, permissions, popup, content scripts
 - `background.js` - Completely rewritten with storage integration, all new features
 - `options.html` - All new UI sections added
@@ -185,6 +205,7 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 - `package.json` - Version bump to 4.0.0
 
 ### Unchanged Files
+
 - `rules.json` - Static rules unchanged (dynamic rules added at runtime)
 - `styles.css` - Cookie banner hiding unchanged
 - `img/*` - Icons unchanged
@@ -194,18 +215,21 @@ I've successfully implemented **13 out of 15 planned features** across all 4 pha
 ## 🧪 Testing Instructions
 
 ### 1. Initial Load Test
+
 ```bash
 # In the extension directory
 npm run dev
 ```
 
 **Expected:**
+
 - Extension loads without errors
 - Storage migration runs (check console for "Migrating from legacy")
 - Popup opens when clicking extension icon
 - Options page loads with all new sections
 
 ### 2. Popup UI Test
+
 - Click extension icon
 - Verify main toggle works
 - Verify today's count displays (starts at 0)
@@ -214,6 +238,7 @@ npm run dev
 - Verify keyboard shortcut hint shows correct keys
 
 ### 3. Statistics Test
+
 1. Navigate to `reddit.com/r/programming`
 2. Should redirect to `old.reddit.com/r/programming`
 3. Open popup - today's count should increment
@@ -221,12 +246,14 @@ npm run dev
 5. Verify `r/programming` appears in top subreddits
 
 ### 4. Visual Preferences Test
+
 1. Open options page
 2. Change "Badge Style" to "Count"
 3. Extension icon badge should now show redirect count
 4. Test other preferences (animate toggle, notifications)
 
 ### 5. Subreddit Whitelist Test
+
 1. Open options page → "Subreddit Exceptions"
 2. Add "wallstreetbets" to whitelist
 3. Navigate to `reddit.com/r/wallstreetbets`
@@ -237,6 +264,7 @@ npm run dev
 8. Now it should redirect
 
 ### 6. Context Menu Test
+
 1. Find a Reddit link on any page
 2. Right-click the link
 3. Verify new menu items appear:
@@ -245,6 +273,7 @@ npm run dev
    - "Keep on New Reddit" (only on subreddit links)
 
 ### 7. Temporary Disable Test
+
 1. Open popup
 2. Select "15 minutes" from dropdown
 3. Popup should show countdown timer
@@ -254,6 +283,7 @@ npm run dev
 7. Should re-enable immediately
 
 ### 8. Per-Tab Toggle Test
+
 1. Open `reddit.com` in tab A
 2. Open extension popup in tab A
 3. Disable "This tab only" toggle
@@ -263,6 +293,7 @@ npm run dev
 7. Tab B should still redirect (global enabled)
 
 ### 9. Import/Export Test
+
 1. Configure some settings (whitelist, preferences)
 2. Open options → "Backup & Restore"
 3. Click "Export Settings"
@@ -272,6 +303,7 @@ npm run dev
 7. Settings should restore
 
 ### 10. Sync Test
+
 1. Open options → "Sync Settings"
 2. Enable sync toggle
 3. Status should show "Last synced: just now"
@@ -279,6 +311,7 @@ npm run dev
 5. Settings should sync automatically
 
 ### 11. Redirect Notification Test
+
 1. Open options → "Visual Preferences"
 2. Enable "Show redirect notice"
 3. Navigate to `www.reddit.com/r/news`
@@ -291,26 +324,31 @@ npm run dev
 ## 🐛 Known Issues & Limitations
 
 ### 1. Clipboard API Limitation
+
 - "Copy as Old Reddit Link" shows notification instead of copying
 - MV3 requires offscreen document for clipboard access
 - **Workaround:** Manual implementation needed or accept notification-only
 
 ### 2. Service Worker Lifecycle
+
 - Statistics tracking relies on service worker staying alive
 - Chrome may terminate service worker after inactivity
 - **Mitigation:** webNavigation listeners are persistent
 
 ### 3. Firefox Compatibility Notes
+
 - Extension ID required in manifest (`browser_specific_settings`)
 - `about:addons` instead of `chrome://extensions/shortcuts`
 - Browser-specific detection via `typeof browser !== "undefined"`
 
 ### 4. Dynamic Rules Limit
+
 - Maximum 5000 dynamic rules total
 - Subreddit whitelist limited to 100 (uses 100 rule IDs)
 - Per-tab toggles use session rules (separate limit)
 
 ### 5. Badge Text Length
+
 - Chrome limits badge text to ~4 characters
 - Large redirect counts (>9999) may truncate
 
@@ -342,16 +380,19 @@ The extension automatically migrates from v3.0.0:
 ## 📊 Performance Impact
 
 ### Storage Usage
+
 - **Local Storage:** ~10-50KB (stats, temp state)
 - **Sync Storage:** ~1-5KB (preferences only)
 - **Well within limits:** 5MB local, 100KB sync
 
 ### Memory Usage
+
 - **Service Worker:** ~2-5MB (typical for MV3)
 - **Content Script:** ~500KB (old.reddit.com only)
 - **Popup:** ~1MB when open
 
 ### Performance
+
 - **Redirect Speed:** Unchanged (DNR still instant)
 - **Badge Updates:** Negligible (~5ms)
 - **Stats Tracking:** Minimal (debounced writes)
@@ -361,22 +402,25 @@ The extension automatically migrates from v3.0.0:
 ## 🔒 Privacy & Security
 
 ### Data Collection
+
 - **Statistics:** Stored locally, never transmitted
 - **Preferences:** Synced only if user enables sync
 - **No Analytics:** No tracking or external requests
 
 ### Permissions Justification
-| Permission | Purpose |
-|------------|---------|
-| `storage` | Save preferences and statistics |
-| `webNavigation` | Track redirects for statistics |
-| `alarms` | Temporary disable timer |
-| `notifications` | Optional user notifications |
-| `clipboardWrite` | Copy link feature (currently notification-only) |
-| `declarativeNetRequestWithHostAccess` | Core redirect functionality |
-| `contextMenus` | Right-click menu items |
+
+| Permission                            | Purpose                                         |
+| ------------------------------------- | ----------------------------------------------- |
+| `storage`                             | Save preferences and statistics                 |
+| `webNavigation`                       | Track redirects for statistics                  |
+| `alarms`                              | Temporary disable timer                         |
+| `notifications`                       | Optional user notifications                     |
+| `clipboardWrite`                      | Copy link feature (currently notification-only) |
+| `declarativeNetRequestWithHostAccess` | Core redirect functionality                     |
+| `contextMenus`                        | Right-click menu items                          |
 
 ### Security Improvements
+
 - Input validation for subreddit names
 - JSON schema validation for imports
 - No eval or dynamic code execution
@@ -396,6 +440,7 @@ The extension automatically migrates from v3.0.0:
 ## 🎯 Next Steps
 
 ### Immediate (v4.0.0 Release)
+
 1. ✅ All core features implemented
 2. ⏳ Manual testing (use instructions above)
 3. ⏳ Create CHANGELOG.md entry
@@ -405,12 +450,14 @@ The extension automatically migrates from v3.0.0:
 7. ⏳ Submit to stores
 
 ### Short-term (v4.1.0)
+
 1. Add alternative frontend support
 2. Implement comprehensive test suite
 3. Add more statistics (weekly charts, etc.)
 4. Improve clipboard integration (offscreen document)
 
 ### Long-term (v5.0.0)
+
 1. Advanced filtering rules
 2. Custom redirect rules (regex-based)
 3. Multiple whitelist/blacklist modes
@@ -437,26 +484,31 @@ All features implemented following the comprehensive implementation plan created
 ## 🔧 Troubleshooting
 
 ### Extension doesn't load
+
 - Check browser console for errors
 - Verify manifest.json is valid JSON
 - Ensure all permissions are granted
 
 ### Redirects not working
+
 - Check if extension is enabled (toggle in options)
 - Verify not in temporary disable mode
 - Check if subreddit is whitelisted
 
 ### Statistics not tracking
+
 - Ensure webNavigation permission granted
 - Check service worker is running (chrome://extensions)
 - Verify navigating to old.reddit.com (not just loading)
 
 ### Popup doesn't open
+
 - Check if manifest has `default_popup` set
 - Verify popup files exist (popup.html, popup.js, popup.css)
 - Check browser console for errors
 
 ### Sync not working
+
 - Ensure signed into browser with same account
 - Check sync is enabled in extension options
 - Verify sync permission in manifest

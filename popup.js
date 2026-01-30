@@ -98,12 +98,15 @@
   async function loadShortcut() {
     chrome.commands.getAll((commands) => {
       handleLastError("getCommands");
-      const toggleCommand = commands.find((cmd) => cmd.name === "toggle-redirect");
+      const toggleCommand = commands.find(
+        (cmd) => cmd.name === "toggle-redirect"
+      );
 
       if (toggleCommand && toggleCommand.shortcut) {
         const keys = toggleCommand.shortcut.split("+");
         elements.shortcutHint.innerHTML =
-          keys.map((k) => `<kbd>${escapeHtml(k)}</kbd>`).join("+") + " to toggle";
+          keys.map((k) => `<kbd>${escapeHtml(k)}</kbd>`).join("+") +
+          " to toggle";
       } else {
         elements.shortcutHint.innerHTML =
           '<a href="#" id="set-shortcut">Set keyboard shortcut</a>';
@@ -344,7 +347,10 @@
   function attachListeners() {
     elements.mainToggle.addEventListener("change", handleMainToggle);
     elements.disableDuration.addEventListener("change", handleDurationSelect);
-    elements.cancelTempDisable.addEventListener("click", handleCancelTempDisable);
+    elements.cancelTempDisable.addEventListener(
+      "click",
+      handleCancelTempDisable
+    );
     elements.tabToggle.addEventListener("change", handleTabToggle);
     elements.openOptions.addEventListener("click", handleOpenOptions);
 

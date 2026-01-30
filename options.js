@@ -207,12 +207,14 @@
     }
 
     // Attach handlers
-    elements.suggestionsList.querySelectorAll(".suggestion-add").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const subreddit = btn.dataset.subreddit;
-        await addSuggestionToWhitelist(subreddit);
+    elements.suggestionsList
+      .querySelectorAll(".suggestion-add")
+      .forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const subreddit = btn.dataset.subreddit;
+          await addSuggestionToWhitelist(subreddit);
+        });
       });
-    });
   }
 
   /**
@@ -332,9 +334,9 @@
     if (behavior === "toggle") {
       const confirmed = confirm(
         "Switching to toggle mode will disable the popup.\n\n" +
-        "You can still access all features from this Options page.\n" +
-        "Keyboard shortcut (Alt+Shift+R) will continue to work.\n\n" +
-        "Continue?"
+          "You can still access all features from this Options page.\n" +
+          "Keyboard shortcut (Alt+Shift+R) will continue to work.\n\n" +
+          "Continue?"
       );
       if (!confirmed) {
         elements.iconClickBehavior.value = "popup";
@@ -352,7 +354,9 @@
       behavior,
     });
 
-    showToast(`Icon click will now ${behavior === "popup" ? "open popup" : "toggle redirect"}`);
+    showToast(
+      `Icon click will now ${behavior === "popup" ? "open popup" : "toggle redirect"}`
+    );
   }
 
   /**
@@ -506,9 +510,7 @@
       }
 
       // Confirm overwrite
-      if (
-        !confirm("This will replace your current settings. Continue?")
-      ) {
+      if (!confirm("This will replace your current settings. Continue?")) {
         return;
       }
 
@@ -571,7 +573,8 @@
       elements.testResult.hidden = false;
       elements.resultIcon.className = "result-icon error";
       elements.resultMessage.textContent = "Invalid URL";
-      elements.resultDetail.textContent = "Please enter a valid URL starting with https://";
+      elements.resultDetail.textContent =
+        "Please enter a valid URL starting with https://";
       return;
     }
 
@@ -590,7 +593,11 @@
       /^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/(notifications|message\/compose)(\/$|\?|$)/,
     ];
 
-    const allowlistDomains = ["chat.reddit.com", "mod.reddit.com", "sh.reddit.com"];
+    const allowlistDomains = [
+      "chat.reddit.com",
+      "mod.reddit.com",
+      "sh.reddit.com",
+    ];
 
     // Check allowlist domains
     if (allowlistDomains.includes(urlObj.hostname)) {
@@ -607,7 +614,8 @@
         elements.testResult.hidden = false;
         elements.resultIcon.className = "result-icon allow";
         elements.resultMessage.textContent = "Not redirected (allowlisted)";
-        elements.resultDetail.textContent = "This path stays on new Reddit by design";
+        elements.resultDetail.textContent =
+          "This path stays on new Reddit by design";
         return;
       }
     }
@@ -622,7 +630,9 @@
     }
 
     // Check gallery redirect (priority 2)
-    const galleryMatch = url.match(/^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/gallery\/([a-zA-Z0-9_-]+)\/?$/);
+    const galleryMatch = url.match(
+      /^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/gallery\/([a-zA-Z0-9_-]+)\/?$/
+    );
     if (galleryMatch) {
       elements.testResult.hidden = false;
       elements.resultIcon.className = "result-icon redirect";
@@ -632,7 +642,9 @@
     }
 
     // Check video redirect (priority 2)
-    const videoMatch = url.match(/^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/videos?\/([a-zA-Z0-9_-]+)\/?$/);
+    const videoMatch = url.match(
+      /^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/videos?\/([a-zA-Z0-9_-]+)\/?$/
+    );
     if (videoMatch) {
       elements.testResult.hidden = false;
       elements.resultIcon.className = "result-icon redirect";
@@ -642,9 +654,21 @@
     }
 
     // Check domain redirects (priority 1)
-    const redirectDomains = ["www.reddit.com", "np.reddit.com", "nr.reddit.com", "ns.reddit.com", "amp.reddit.com", "i.reddit.com", "m.reddit.com", "reddit.com"];
+    const redirectDomains = [
+      "www.reddit.com",
+      "np.reddit.com",
+      "nr.reddit.com",
+      "ns.reddit.com",
+      "amp.reddit.com",
+      "i.reddit.com",
+      "m.reddit.com",
+      "reddit.com",
+    ];
 
-    if (redirectDomains.includes(urlObj.hostname) || urlObj.hostname.endsWith("reddit.com.onion")) {
+    if (
+      redirectDomains.includes(urlObj.hostname) ||
+      urlObj.hostname.endsWith("reddit.com.onion")
+    ) {
       // Check subreddit overrides
       const subredditMatch = urlObj.pathname.match(/^\/r\/([a-zA-Z0-9_]+)/);
       if (subredditMatch) {
@@ -674,7 +698,8 @@
     elements.testResult.hidden = false;
     elements.resultIcon.className = "result-icon error";
     elements.resultMessage.textContent = "Not handled";
-    elements.resultDetail.textContent = "This URL doesn't match any redirect rules";
+    elements.resultDetail.textContent =
+      "This URL doesn't match any redirect rules";
   }
 
   /**
@@ -720,7 +745,10 @@
     });
 
     // Keyboard shortcut
-    elements.customizeShortcut.addEventListener("click", handleCustomizeShortcut);
+    elements.customizeShortcut.addEventListener(
+      "click",
+      handleCustomizeShortcut
+    );
 
     // Import/Export
     elements.exportSettings.addEventListener("click", handleExportSettings);

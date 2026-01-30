@@ -47,9 +47,7 @@ if (typeof importScripts === "function") {
         break;
     }
 
-    const setBadge = tabId
-      ? { text: badgeText, tabId }
-      : { text: badgeText };
+    const setBadge = tabId ? { text: badgeText, tabId } : { text: badgeText };
 
     chrome.action.setBadgeText(setBadge, () => {
       handleLastError();
@@ -222,7 +220,9 @@ if (typeof importScripts === "function") {
     });
 
     const existingIds = existingRules
-      .filter((r) => r.id >= DYNAMIC_RULE_ID_BASE && r.id < FRONTEND_RULE_ID_BASE)
+      .filter(
+        (r) => r.id >= DYNAMIC_RULE_ID_BASE && r.id < FRONTEND_RULE_ID_BASE
+      )
       .map((r) => r.id);
 
     if (existingIds.length > 0) {
@@ -397,10 +397,7 @@ if (typeof importScripts === "function") {
           id: "whitelist-subreddit",
           title: "Keep on New Reddit",
           contexts: ["link"],
-          targetUrlPatterns: [
-            "*://www.reddit.com/r/*",
-            "*://reddit.com/r/*",
-          ],
+          targetUrlPatterns: ["*://www.reddit.com/r/*", "*://reddit.com/r/*"],
         },
         () => {
           handleLastError();

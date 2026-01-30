@@ -5,6 +5,7 @@
 This plan details the implementation of 10 high-value improvements identified through comprehensive codebase analysis. The improvements are organized into 4 sequential phases based on dependencies, complexity, and user impact.
 
 **Target Versions:**
+
 - v4.1.0: Critical fixes + Quick wins (Phase 1)
 - v4.2.0: URL handling improvements (Phase 2)
 - v5.0.0: UX enhancements + Advanced features (Phases 3-4)
@@ -29,6 +30,7 @@ This plan details the implementation of 10 high-value improvements identified th
 **Lines:** 96-110
 
 **Current Problem:**
+
 ```javascript
 async set(key, value) {
   return new Promise((resolve) => {
@@ -89,11 +91,13 @@ async _getSyncConfigDirect() {
 ```
 
 **Testing Requirements:**
+
 - Unit test: Rapid sequential `set()` calls maintain data integrity
 - Unit test: Concurrent `set()` calls don't corrupt storage
 - Integration test: Toggle state survives rapid clicking
 
 **Files Modified:**
+
 - `storage.js`
 
 ---
@@ -105,6 +109,7 @@ async _getSyncConfigDirect() {
 **Lines:** 79, 93
 
 **Current Problem:**
+
 ```json
 "regexFilter": "^https?://(?:www\\.)?reddit\\.com/(gallery)/([a-zA-Z0-9_]+)$"
 ```
@@ -119,6 +124,7 @@ Update regex to include hyphens:
 ```
 
 **Rules to Update:**
+
 1. Rule 11 (Gallery redirect) - Line 79
 2. Rule 12 (Videos redirect) - Line 93
 
@@ -159,6 +165,7 @@ Update regex to include hyphens:
 Added `/?` to handle both `/gallery/abc123` and `/gallery/abc123/`
 
 **Testing Requirements:**
+
 - Test: `reddit.com/gallery/abc123` → redirects
 - Test: `reddit.com/gallery/abc-123-xyz` → redirects (NEW)
 - Test: `reddit.com/gallery/abc_123` → redirects
@@ -166,6 +173,7 @@ Added `/?` to handle both `/gallery/abc123` and `/gallery/abc123/`
 - Test: `reddit.com/videos/abc-def` → redirects
 
 **Files Modified:**
+
 - `rules.json`
 - `tests/patterns.test.js` (add new test cases)
 
@@ -177,6 +185,7 @@ Added `/?` to handle both `/gallery/abc123` and `/gallery/abc123/`
 **Files:** `background.js`, `storage.js`, `popup.js`, `options.js`
 
 **Current Problem:**
+
 ```javascript
 function handleLastError() {
   void chrome.runtime.lastError; // Silently swallows errors
@@ -189,6 +198,7 @@ Errors are completely hidden, making production debugging impossible.
 Create a centralized logging utility:
 
 **New File: `logger.js`**
+
 ```javascript
 "use strict";
 
@@ -236,8 +246,10 @@ Create a centralized logging utility:
     // Chrome API error handler
     handleChromeError(context = "") {
       if (chrome.runtime.lastError) {
-        this.warn(`Chrome API error${context ? ` (${context})` : ""}:`,
-          chrome.runtime.lastError.message);
+        this.warn(
+          `Chrome API error${context ? ` (${context})` : ""}:`,
+          chrome.runtime.lastError.message
+        );
         return true;
       }
       return false;
@@ -254,6 +266,7 @@ Create a centralized logging utility:
 ```
 
 **Update handleLastError() calls:**
+
 ```javascript
 // Before
 function handleLastError() {
@@ -272,6 +285,7 @@ chrome.action.setBadgeText({ text: badgeText }, () => {
 ```
 
 **Files Modified:**
+
 - New: `logger.js`
 - `background.js` - Import logger, update all handleLastError calls
 - `storage.js` - Import logger, add context to errors
@@ -280,6 +294,7 @@ chrome.action.setBadgeText({ text: badgeText }, () => {
 - `manifest.json` - Add logger.js to service worker imports
 
 **Service Worker Import:**
+
 ```javascript
 // background.js
 if (typeof importScripts === "function") {
@@ -288,6 +303,7 @@ if (typeof importScripts === "function") {
 ```
 
 **Testing Requirements:**
+
 - Verify errors appear in console with context
 - Verify LOG_PREFIX helps filter extension logs
 - Verify no performance impact from logging
@@ -300,6 +316,7 @@ if (typeof importScripts === "function") {
 **File:** `popup.html`, `popup.js`
 
 **Current Problem:**
+
 ```html
 <!-- popup.html line 86 -->
 <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd> to toggle
@@ -311,20 +328,22 @@ Shortcut is hardcoded, but users can customize it. Options page correctly loads 
 Load shortcut dynamically in popup, same as options page:
 
 **popup.html update:**
+
 ```html
 <footer class="popup-footer">
-  <span class="shortcut-hint" id="shortcut-hint">
-    Loading shortcut...
-  </span>
+  <span class="shortcut-hint" id="shortcut-hint"> Loading shortcut... </span>
 </footer>
 ```
 
 **popup.js update (loadShortcut function already exists but may not render kbd elements):**
+
 ```javascript
 async function loadShortcut() {
   chrome.commands.getAll((commands) => {
     handleLastError("getCommands");
-    const toggleCommand = commands.find((cmd) => cmd.name === "toggle-redirect");
+    const toggleCommand = commands.find(
+      (cmd) => cmd.name === "toggle-redirect"
+    );
 
     if (toggleCommand && toggleCommand.shortcut) {
       const keys = toggleCommand.shortcut.split("+");
@@ -360,17 +379,20 @@ function openShortcutSettings() {
 ```
 
 **Edge Cases:**
+
 - Shortcut not set → Show "Set keyboard shortcut" link
 - Custom shortcut → Display correctly
 - Very long shortcuts (4+ modifiers) → Should still fit
 
 **Testing Requirements:**
+
 - Test: Default shortcut displays correctly
 - Test: Custom shortcut displays correctly
 - Test: No shortcut shows setup link
 - Test: Setup link opens correct browser page
 
 **Files Modified:**
+
 - `popup.html`
 - `popup.js`
 
@@ -388,20 +410,22 @@ function openShortcutSettings() {
 Use Manifest V3 Offscreen Documents API for clipboard access.
 
 **New File: `offscreen.html`**
+
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Offscreen</title>
-</head>
-<body>
-  <textarea id="clipboard-area"></textarea>
-  <script src="offscreen.js"></script>
-</body>
+  <head>
+    <title>Offscreen</title>
+  </head>
+  <body>
+    <textarea id="clipboard-area"></textarea>
+    <script src="offscreen.js"></script>
+  </body>
 </html>
 ```
 
 **New File: `offscreen.js`**
+
 ```javascript
 "use strict";
 
@@ -424,6 +448,7 @@ async function copyToClipboard(text) {
 ```
 
 **Update manifest.json:**
+
 ```json
 {
   "permissions": [
@@ -434,6 +459,7 @@ async function copyToClipboard(text) {
 ```
 
 **Update background.js:**
+
 ```javascript
 let offscreenDocumentCreated = false;
 
@@ -444,7 +470,7 @@ async function ensureOffscreenDocument() {
     await chrome.offscreen.createDocument({
       url: "offscreen.html",
       reasons: ["CLIPBOARD"],
-      justification: "Copy Reddit link to clipboard"
+      justification: "Copy Reddit link to clipboard",
     });
     offscreenDocumentCreated = true;
   } catch (error) {
@@ -462,7 +488,7 @@ async function copyToClipboard(text) {
 
   const response = await chrome.runtime.sendMessage({
     type: "COPY_TO_CLIPBOARD",
-    text
+    text,
   });
 
   if (response.success) {
@@ -474,7 +500,7 @@ async function copyToClipboard(text) {
         iconUrl: "img/icon128.png",
         title: "Link Copied",
         message: "Old Reddit link copied to clipboard",
-        silent: true
+        silent: true,
       });
     }
   } else {
@@ -485,7 +511,7 @@ async function copyToClipboard(text) {
       iconUrl: "img/icon128.png",
       title: "Copy this link",
       message: text,
-      silent: true
+      silent: true,
     });
   }
 }
@@ -514,16 +540,19 @@ async function copyToClipboard(text) {
 ```
 
 **Testing Requirements:**
+
 - Test Chrome: Copy works, notification shows "Link Copied"
 - Test Firefox: Copy works via navigator.clipboard
 - Test failure: Fallback notification shows URL
 - Test rapid copies: Offscreen document reused, not recreated
 
 **Files Created:**
+
 - `offscreen.html`
 - `offscreen.js`
 
 **Files Modified:**
+
 - `manifest.json` - Add "offscreen" permission
 - `background.js` - New clipboard implementation
 
@@ -541,6 +570,7 @@ v4.0.0 changed icon click to open popup. Power users want single-click toggle ba
 Add preference to disable popup and restore icon-click toggle.
 
 **Storage Schema Addition:**
+
 ```javascript
 // In storage.js DEFAULTS
 {
@@ -552,6 +582,7 @@ Add preference to disable popup and restore icon-click toggle.
 ```
 
 **Options UI Addition (options.html):**
+
 ```html
 <div class="option-row">
   <label for="icon-click-behavior">Icon Click Behavior</label>
@@ -560,13 +591,14 @@ Add preference to disable popup and restore icon-click toggle.
     <option value="toggle">Toggle redirect on/off</option>
   </select>
   <p class="option-description">
-    Choose what happens when you click the extension icon.
-    Keyboard shortcut always toggles regardless of this setting.
+    Choose what happens when you click the extension icon. Keyboard shortcut
+    always toggles regardless of this setting.
   </p>
 </div>
 ```
 
 **Options.js Handler:**
+
 ```javascript
 async function handleIconClickBehaviorChange() {
   const behavior = elements.iconClickBehavior.value;
@@ -578,14 +610,17 @@ async function handleIconClickBehaviorChange() {
   // Notify background to update popup behavior
   chrome.runtime.sendMessage({
     type: "UPDATE_ICON_BEHAVIOR",
-    behavior
+    behavior,
   });
 
-  showToast(`Icon click will now ${behavior === "popup" ? "open popup" : "toggle redirect"}`);
+  showToast(
+    `Icon click will now ${behavior === "popup" ? "open popup" : "toggle redirect"}`
+  );
 }
 ```
 
 **Background.js Implementation:**
+
 ```javascript
 // On startup/install, check preference and configure
 async function configureIconBehavior() {
@@ -639,9 +674,9 @@ async function handleIconClickBehaviorChange() {
   if (behavior === "toggle") {
     const confirmed = confirm(
       "Switching to toggle mode will disable the popup.\n\n" +
-      "You can still access all features from this Options page.\n" +
-      "Keyboard shortcut (Alt+Shift+R) will continue to work.\n\n" +
-      "Continue?"
+        "You can still access all features from this Options page.\n" +
+        "Keyboard shortcut (Alt+Shift+R) will continue to work.\n\n" +
+        "Continue?"
     );
     if (!confirmed) {
       elements.iconClickBehavior.value = "popup";
@@ -653,12 +688,14 @@ async function handleIconClickBehaviorChange() {
 ```
 
 **Testing Requirements:**
+
 - Test: Setting to "toggle" → icon click toggles, no popup
 - Test: Setting to "popup" → icon click opens popup
 - Test: Keyboard shortcut works in both modes
 - Test: Preference persists across browser restart
 
 **Files Modified:**
+
 - `storage.js` - Add iconClickBehavior to defaults
 - `options.html` - Add dropdown
 - `options.js` - Add handler
@@ -668,16 +705,17 @@ async function handleIconClickBehaviorChange() {
 
 ### Phase 1 Summary
 
-| Item | Priority | Files | New Permissions |
-|------|----------|-------|-----------------|
-| 1.1 Storage Race Condition | Critical | storage.js | - |
-| 1.2 Gallery/Video Regex | High | rules.json, tests | - |
-| 1.3 Error Logging | High | logger.js (new), all JS files | - |
-| 1.4 Popup Shortcut | Medium | popup.html, popup.js | - |
-| 1.5 Clipboard API | High | offscreen.html/js (new), background.js | offscreen |
-| 1.6 Icon-Click Toggle | High | options.html/js, background.js, storage.js | - |
+| Item                       | Priority | Files                                      | New Permissions |
+| -------------------------- | -------- | ------------------------------------------ | --------------- |
+| 1.1 Storage Race Condition | Critical | storage.js                                 | -               |
+| 1.2 Gallery/Video Regex    | High     | rules.json, tests                          | -               |
+| 1.3 Error Logging          | High     | logger.js (new), all JS files              | -               |
+| 1.4 Popup Shortcut         | Medium   | popup.html, popup.js                       | -               |
+| 1.5 Clipboard API          | High     | offscreen.html/js (new), background.js     | offscreen       |
+| 1.6 Icon-Click Toggle      | High     | options.html/js, background.js, storage.js | -               |
 
 **Phase 1 Testing Checklist:**
+
 - [ ] Storage operations are thread-safe
 - [ ] Gallery/video URLs with hyphens redirect correctly
 - [ ] Errors appear in console with context
@@ -705,6 +743,7 @@ Reddit share links (`reddit.com/r/news/s/abc123`) are allowlisted (Rule 2), mean
 
 **Analysis:**
 Share links are short URLs that redirect to the actual post. The challenge is:
+
 1. We can't know the destination without following the redirect
 2. DNR can't follow redirects and then redirect again
 3. If we don't allowlist, the share link redirects to new Reddit, then our rule kicks in
@@ -715,6 +754,7 @@ Share links are short URLs that redirect to the actual post. The challenge is:
 Remove `/r/*/s/*` from allowlist. Let Reddit's share link redirect happen, then our rule catches the destination.
 
 Test this first:
+
 1. Visit `reddit.com/r/news/s/abc123`
 2. Reddit redirects to `reddit.com/r/news/comments/xyz...`
 3. Our rule catches this and redirects to `old.reddit.com/r/news/comments/xyz...`
@@ -736,7 +776,7 @@ chrome.webRequest.onBeforeRequest.addListener(
       try {
         const response = await fetch(details.url, {
           method: "HEAD",
-          redirect: "follow"
+          redirect: "follow",
         });
         const finalUrl = new URL(response.url);
         finalUrl.hostname = "old.reddit.com";
@@ -761,9 +801,11 @@ Inject content script on Reddit that detects share links and redirects.
 // share-link-handler.js (content script)
 "use strict";
 
-(function() {
+(function () {
   // Check if this is a share link page
-  const shareMatch = window.location.pathname.match(/^\/r\/([^/]+)\/s\/([^/]+)/);
+  const shareMatch = window.location.pathname.match(
+    /^\/r\/([^/]+)\/s\/([^/]+)/
+  );
   if (!shareMatch) return;
 
   // Reddit will redirect this page - watch for the redirect
@@ -795,11 +837,15 @@ Inject content script on Reddit that detects share links and redirects.
 ```
 
 **Manifest Addition:**
+
 ```json
 {
   "content_scripts": [
     {
-      "matches": ["https://reddit.com/r/*/s/*", "https://www.reddit.com/r/*/s/*"],
+      "matches": [
+        "https://reddit.com/r/*/s/*",
+        "https://www.reddit.com/r/*/s/*"
+      ],
       "js": ["share-link-handler.js"],
       "run_at": "document_start"
     }
@@ -809,6 +855,7 @@ Inject content script on Reddit that detects share links and redirects.
 
 **Update rules.json:**
 Remove share link from allowlist (Rule 2):
+
 ```json
 // Before
 "regexFilter": "^https?://(?:www\\.)?reddit\\.com/(notifications|message/compose|r/[^/]+/s/[^/]+)"
@@ -818,15 +865,18 @@ Remove share link from allowlist (Rule 2):
 ```
 
 **Testing Requirements:**
+
 - Test: Share link `reddit.com/r/news/s/abc` → ends up on old.reddit.com
 - Test: No flash of new Reddit content (or minimal)
 - Test: Share links still work when extension is disabled
 - Test: Performance impact is minimal
 
 **Files Created:**
+
 - `share-link-handler.js`
 
 **Files Modified:**
+
 - `manifest.json` - Add content script for share links
 - `rules.json` - Remove share links from allowlist
 
@@ -841,6 +891,7 @@ Remove share link from allowlist (Rule 2):
 `m.reddit.com` and potentially other mobile domains are not handled.
 
 **Analysis:**
+
 - `m.reddit.com` - Mobile web version
 - `i.reddit.com` - Already handled (compact/mobile)
 - `reddit.app.link` - App deep links (different domain)
@@ -850,6 +901,7 @@ Remove share link from allowlist (Rule 2):
 **Add m.reddit.com to rules:**
 
 Update Rule 20 (subdomain redirects):
+
 ```json
 // Before
 "regexFilter": "^https?://(www|np|nr|ns|amp|i)\\.reddit\\.com/(.*)$"
@@ -859,6 +911,7 @@ Update Rule 20 (subdomain redirects):
 ```
 
 **Add m.reddit.com to host_permissions:**
+
 ```json
 {
   "host_permissions": [
@@ -892,11 +945,13 @@ These are more complex - they're a different domain entirely.
 **Wait:** `reddit.app.link` redirects to reddit.com, which we already handle. Test if this is needed.
 
 **Testing Plan:**
+
 1. Test `m.reddit.com/r/news` → should redirect to `old.reddit.com/r/news`
 2. Test `reddit.app.link/xyz` → check if already handled by chain redirect
 3. Test mobile share links from apps
 
 **Files Modified:**
+
 - `rules.json` - Add m.reddit.com to regex
 - `manifest.json` - Add m.reddit.com to host_permissions
 - `tests/patterns.test.js` - Add mobile domain tests
@@ -905,12 +960,13 @@ These are more complex - they're a different domain entirely.
 
 ### Phase 2 Summary
 
-| Item | Priority | Approach | Files |
-|------|----------|----------|-------|
-| 2.1 Share Link Conversion | High | Content script + allowlist update | share-link-handler.js, rules.json, manifest.json |
-| 2.2 Mobile Reddit Links | Medium | Update existing regex + permissions | rules.json, manifest.json |
+| Item                      | Priority | Approach                            | Files                                            |
+| ------------------------- | -------- | ----------------------------------- | ------------------------------------------------ |
+| 2.1 Share Link Conversion | High     | Content script + allowlist update   | share-link-handler.js, rules.json, manifest.json |
+| 2.2 Mobile Reddit Links   | Medium   | Update existing regex + permissions | rules.json, manifest.json                        |
 
 **Phase 2 Testing Checklist:**
+
 - [ ] Share links redirect to old Reddit
 - [ ] Mobile links (m.reddit.com) redirect correctly
 - [ ] No double-redirect flashes
@@ -938,140 +994,155 @@ New users don't know about features like keyboard shortcuts, whitelist, temporar
 Show interactive onboarding page on first install.
 
 **Onboarding Flow:**
+
 1. Welcome screen with extension overview
 2. Feature highlights (3-4 slides)
 3. Quick configuration options
 4. Done / Open Options
 
 **New File: `onboarding.html`**
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Old Reddit Redirect</title>
-  <link rel="stylesheet" href="onboarding.css">
-</head>
-<body>
-  <div class="onboarding-container">
-    <!-- Slide 1: Welcome -->
-    <section class="slide active" data-slide="1">
-      <div class="slide-content">
-        <img src="img/icon128.png" alt="Old Reddit Redirect" class="hero-icon">
-        <h1>Welcome to Old Reddit Redirect</h1>
-        <p class="hero-text">
-          Reddit URLs will now automatically redirect to old.reddit.com
-        </p>
-        <div class="feature-badges">
-          <span class="badge">✓ Instant redirects</span>
-          <span class="badge">✓ No tracking</span>
-          <span class="badge">✓ Lightweight</span>
-        </div>
-      </div>
-      <button class="btn primary" data-action="next">Get Started</button>
-    </section>
-
-    <!-- Slide 2: Quick Toggle -->
-    <section class="slide" data-slide="2">
-      <div class="slide-content">
-        <div class="feature-demo">
-          <div class="keyboard-visual">
-            <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Old Reddit Redirect</title>
+    <link rel="stylesheet" href="onboarding.css" />
+  </head>
+  <body>
+    <div class="onboarding-container">
+      <!-- Slide 1: Welcome -->
+      <section class="slide active" data-slide="1">
+        <div class="slide-content">
+          <img
+            src="img/icon128.png"
+            alt="Old Reddit Redirect"
+            class="hero-icon"
+          />
+          <h1>Welcome to Old Reddit Redirect</h1>
+          <p class="hero-text">
+            Reddit URLs will now automatically redirect to old.reddit.com
+          </p>
+          <div class="feature-badges">
+            <span class="badge">✓ Instant redirects</span>
+            <span class="badge">✓ No tracking</span>
+            <span class="badge">✓ Lightweight</span>
           </div>
         </div>
-        <h2>Quick Toggle</h2>
-        <p>
-          Press <strong>Alt+Shift+R</strong> to instantly toggle redirects on or off.
-          Works on any page, any time.
-        </p>
-      </div>
-      <div class="btn-group">
-        <button class="btn secondary" data-action="prev">Back</button>
-        <button class="btn primary" data-action="next">Next</button>
-      </div>
-    </section>
+        <button class="btn primary" data-action="next">Get Started</button>
+      </section>
 
-    <!-- Slide 3: Popup Features -->
-    <section class="slide" data-slide="3">
-      <div class="slide-content">
-        <div class="feature-demo">
-          <img src="img/popup-preview.png" alt="Popup preview" class="demo-image">
+      <!-- Slide 2: Quick Toggle -->
+      <section class="slide" data-slide="2">
+        <div class="slide-content">
+          <div class="feature-demo">
+            <div class="keyboard-visual">
+              <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd>
+            </div>
+          </div>
+          <h2>Quick Toggle</h2>
+          <p>
+            Press <strong>Alt+Shift+R</strong> to instantly toggle redirects on
+            or off. Works on any page, any time.
+          </p>
         </div>
-        <h2>Powerful Popup</h2>
-        <p>
-          Click the extension icon to access:
-        </p>
-        <ul class="feature-list">
-          <li>Temporary disable (5-60 minutes)</li>
-          <li>Per-tab toggle</li>
-          <li>Redirect statistics</li>
-        </ul>
-      </div>
-      <div class="btn-group">
-        <button class="btn secondary" data-action="prev">Back</button>
-        <button class="btn primary" data-action="next">Next</button>
-      </div>
-    </section>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="prev">Back</button>
+          <button class="btn primary" data-action="next">Next</button>
+        </div>
+      </section>
 
-    <!-- Slide 4: Subreddit Exceptions -->
-    <section class="slide" data-slide="4">
-      <div class="slide-content">
-        <div class="feature-demo">
-          <div class="context-menu-visual">
-            <div class="menu-item">Open in Old Reddit</div>
-            <div class="menu-item highlight">Keep on New Reddit</div>
+      <!-- Slide 3: Popup Features -->
+      <section class="slide" data-slide="3">
+        <div class="slide-content">
+          <div class="feature-demo">
+            <img
+              src="img/popup-preview.png"
+              alt="Popup preview"
+              class="demo-image"
+            />
+          </div>
+          <h2>Powerful Popup</h2>
+          <p>Click the extension icon to access:</p>
+          <ul class="feature-list">
+            <li>Temporary disable (5-60 minutes)</li>
+            <li>Per-tab toggle</li>
+            <li>Redirect statistics</li>
+          </ul>
+        </div>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="prev">Back</button>
+          <button class="btn primary" data-action="next">Next</button>
+        </div>
+      </section>
+
+      <!-- Slide 4: Subreddit Exceptions -->
+      <section class="slide" data-slide="4">
+        <div class="slide-content">
+          <div class="feature-demo">
+            <div class="context-menu-visual">
+              <div class="menu-item">Open in Old Reddit</div>
+              <div class="menu-item highlight">Keep on New Reddit</div>
+            </div>
+          </div>
+          <h2>Subreddit Exceptions</h2>
+          <p>
+            Some subreddits use new Reddit features like polls and predictions.
+            Right-click any Reddit link and select "Keep on New Reddit" to
+            whitelist it.
+          </p>
+        </div>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="prev">Back</button>
+          <button class="btn primary" data-action="next">Finish Setup</button>
+        </div>
+      </section>
+
+      <!-- Slide 5: Done -->
+      <section class="slide" data-slide="5">
+        <div class="slide-content">
+          <div class="success-icon">🎉</div>
+          <h2>You're All Set!</h2>
+          <p>
+            Old Reddit Redirect is now active. Visit any Reddit page to see it
+            in action.
+          </p>
+          <div class="quick-actions">
+            <label class="checkbox-option">
+              <input type="checkbox" id="enable-notifications" />
+              <span>Enable notifications for redirects</span>
+            </label>
           </div>
         </div>
-        <h2>Subreddit Exceptions</h2>
-        <p>
-          Some subreddits use new Reddit features like polls and predictions.
-          Right-click any Reddit link and select "Keep on New Reddit" to whitelist it.
-        </p>
-      </div>
-      <div class="btn-group">
-        <button class="btn secondary" data-action="prev">Back</button>
-        <button class="btn primary" data-action="next">Finish Setup</button>
-      </div>
-    </section>
-
-    <!-- Slide 5: Done -->
-    <section class="slide" data-slide="5">
-      <div class="slide-content">
-        <div class="success-icon">🎉</div>
-        <h2>You're All Set!</h2>
-        <p>
-          Old Reddit Redirect is now active. Visit any Reddit page to see it in action.
-        </p>
-        <div class="quick-actions">
-          <label class="checkbox-option">
-            <input type="checkbox" id="enable-notifications">
-            <span>Enable notifications for redirects</span>
-          </label>
+        <div class="btn-group">
+          <button class="btn secondary" data-action="options">
+            Open Options
+          </button>
+          <button class="btn primary" data-action="close">
+            Start Browsing
+          </button>
         </div>
-      </div>
-      <div class="btn-group">
-        <button class="btn secondary" data-action="options">Open Options</button>
-        <button class="btn primary" data-action="close">Start Browsing</button>
-      </div>
-    </section>
+      </section>
 
-    <!-- Progress dots -->
-    <div class="progress-dots">
-      <span class="dot active" data-slide="1"></span>
-      <span class="dot" data-slide="2"></span>
-      <span class="dot" data-slide="3"></span>
-      <span class="dot" data-slide="4"></span>
-      <span class="dot" data-slide="5"></span>
+      <!-- Progress dots -->
+      <div class="progress-dots">
+        <span class="dot active" data-slide="1"></span>
+        <span class="dot" data-slide="2"></span>
+        <span class="dot" data-slide="3"></span>
+        <span class="dot" data-slide="4"></span>
+        <span class="dot" data-slide="5"></span>
+      </div>
     </div>
-  </div>
-  <script src="storage.js"></script>
-  <script src="onboarding.js"></script>
-</body>
+    <script src="storage.js"></script>
+    <script src="onboarding.js"></script>
+  </body>
 </html>
 ```
 
 **New File: `onboarding.css`**
+
 ```css
 * {
   box-sizing: border-box;
@@ -1080,7 +1151,8 @@ Show interactive onboarding page on first install.
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: linear-gradient(135deg, #1a1a1b 0%, #272729 100%);
   color: #d7dadc;
   min-height: 100vh;
@@ -1106,8 +1178,14 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .slide-content {
@@ -1196,7 +1274,7 @@ p {
 .demo-image {
   max-width: 200px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .context-menu-visual {
@@ -1205,7 +1283,7 @@ p {
   padding: 8px 0;
   display: inline-block;
   text-align: left;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .menu-item {
@@ -1290,16 +1368,21 @@ p {
 ```
 
 **New File: `onboarding.js`**
+
 ```javascript
 "use strict";
 
-(function() {
+(function () {
   let currentSlide = 1;
   const totalSlides = 5;
 
   function showSlide(n) {
-    document.querySelectorAll(".slide").forEach(s => s.classList.remove("active"));
-    document.querySelectorAll(".dot").forEach(d => d.classList.remove("active"));
+    document
+      .querySelectorAll(".slide")
+      .forEach((s) => s.classList.remove("active"));
+    document
+      .querySelectorAll(".dot")
+      .forEach((d) => d.classList.remove("active"));
 
     const slide = document.querySelector(`[data-slide="${n}"]`);
     const dot = document.querySelector(`.dot[data-slide="${n}"]`);
@@ -1324,7 +1407,9 @@ p {
 
   async function finishOnboarding() {
     // Save onboarding preference
-    const enableNotifications = document.getElementById("enable-notifications").checked;
+    const enableNotifications = document.getElementById(
+      "enable-notifications"
+    ).checked;
 
     if (enableNotifications) {
       const prefs = await window.Storage.getUIPreferences();
@@ -1366,7 +1451,7 @@ p {
   });
 
   // Dot navigation
-  document.querySelectorAll(".dot").forEach(dot => {
+  document.querySelectorAll(".dot").forEach((dot) => {
     dot.addEventListener("click", () => {
       const slide = parseInt(dot.dataset.slide, 10);
       showSlide(slide);
@@ -1383,6 +1468,7 @@ p {
 ```
 
 **Background.js Update:**
+
 ```javascript
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === "install") {
@@ -1398,6 +1484,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 ```
 
 **Testing Requirements:**
+
 - Test: Fresh install opens onboarding
 - Test: Update from v4.x doesn't show onboarding
 - Test: All slides navigate correctly
@@ -1406,12 +1493,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 - Test: Close/Options buttons work
 
 **Files Created:**
+
 - `onboarding.html`
 - `onboarding.css`
 - `onboarding.js`
 - `img/popup-preview.png` (screenshot needed)
 
 **Files Modified:**
+
 - `background.js` - Open onboarding on install
 - `storage.js` - Add onboardingComplete flag
 
@@ -1426,6 +1515,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 Let users test if a URL would redirect without visiting it.
 
 **UI Addition to Options Page:**
+
 ```html
 <section class="setting">
   <h2>Test a URL</h2>
@@ -1435,10 +1525,12 @@ Let users test if a URL would redirect without visiting it.
 
   <div class="url-test-container">
     <div class="input-row">
-      <input type="url"
-             id="test-url-input"
-             class="text-input"
-             placeholder="https://reddit.com/r/news">
+      <input
+        type="url"
+        id="test-url-input"
+        class="text-input"
+        placeholder="https://reddit.com/r/news"
+      />
       <button class="button" id="test-url-btn">Test</button>
     </div>
 
@@ -1454,6 +1546,7 @@ Let users test if a URL would redirect without visiting it.
 ```
 
 **CSS Addition:**
+
 ```css
 .url-test-container {
   margin-top: 16px;
@@ -1483,9 +1576,15 @@ Let users test if a URL would redirect without visiting it.
   line-height: 1;
 }
 
-.result-icon.redirect { color: #4caf50; }
-.result-icon.allow { color: #ff9800; }
-.result-icon.error { color: #d14343; }
+.result-icon.redirect {
+  color: #4caf50;
+}
+.result-icon.allow {
+  color: #ff9800;
+}
+.result-icon.error {
+  color: #d14343;
+}
 
 .result-text {
   flex: 1;
@@ -1499,6 +1598,7 @@ Let users test if a URL would redirect without visiting it.
 ```
 
 **JavaScript Implementation:**
+
 ```javascript
 // URL patterns from rules.json (simplified for testing)
 const URL_PATTERNS = {
@@ -1540,50 +1640,76 @@ async function testUrl() {
 
   // Check if it's a Reddit URL
   if (!url.hostname.includes("reddit.com")) {
-    showTestResult("skip", "Not a Reddit URL", "Only Reddit URLs are affected by this extension");
+    showTestResult(
+      "skip",
+      "Not a Reddit URL",
+      "Only Reddit URLs are affected by this extension"
+    );
     return;
   }
 
   // Check if already old.reddit.com
   if (url.hostname === "old.reddit.com") {
-    showTestResult("skip", "Already old Reddit", "This URL is already on old.reddit.com");
+    showTestResult(
+      "skip",
+      "Already old Reddit",
+      "This URL is already on old.reddit.com"
+    );
     return;
   }
 
   // Check whitelist
   const overrides = await window.Storage.getSubredditOverrides();
   const subredditMatch = url.pathname.match(/^\/r\/([^/?#]+)/);
-  if (subredditMatch && overrides.whitelist.includes(subredditMatch[1].toLowerCase())) {
-    showTestResult("allow", "Whitelisted subreddit",
-      `r/${subredditMatch[1]} is in your exceptions list`);
+  if (
+    subredditMatch &&
+    overrides.whitelist.includes(subredditMatch[1].toLowerCase())
+  ) {
+    showTestResult(
+      "allow",
+      "Whitelisted subreddit",
+      `r/${subredditMatch[1]} is in your exceptions list`
+    );
     return;
   }
 
   // Check allowlist paths
   for (const pattern of URL_PATTERNS.allowlist) {
     if (pattern.test(url.pathname)) {
-      showTestResult("allow", "Allowlisted path",
-        "This path doesn't exist on old Reddit and won't be redirected");
+      showTestResult(
+        "allow",
+        "Allowlisted path",
+        "This path doesn't exist on old Reddit and won't be redirected"
+      );
       return;
     }
   }
 
   // Check special redirects
   if (URL_PATTERNS.galleryRedirect.test(url.pathname)) {
-    showTestResult("redirect", "Will redirect (gallery → comments)",
-      `→ old.reddit.com${url.pathname.replace(/\/gallery\//, "/comments/")}`);
+    showTestResult(
+      "redirect",
+      "Will redirect (gallery → comments)",
+      `→ old.reddit.com${url.pathname.replace(/\/gallery\//, "/comments/")}`
+    );
     return;
   }
 
   if (URL_PATTERNS.videoRedirect.test(url.pathname)) {
-    showTestResult("redirect", "Will redirect (video → comments)",
-      `→ old.reddit.com${url.pathname.replace(/\/videos?\//, "/comments/")}`);
+    showTestResult(
+      "redirect",
+      "Will redirect (video → comments)",
+      `→ old.reddit.com${url.pathname.replace(/\/videos?\//, "/comments/")}`
+    );
     return;
   }
 
   // Standard redirect
-  showTestResult("redirect", "Will redirect to old Reddit",
-    `→ old.reddit.com${url.pathname}${url.search}`);
+  showTestResult(
+    "redirect",
+    "Will redirect to old Reddit",
+    `→ old.reddit.com${url.pathname}${url.search}`
+  );
 }
 
 function showTestResult(type, message, detail) {
@@ -1608,6 +1734,7 @@ document.getElementById("test-url-input").addEventListener("keypress", (e) => {
 ```
 
 **Testing Requirements:**
+
 - Test: Standard Reddit URL shows redirect
 - Test: Whitelisted subreddit shows allow
 - Test: Allowlisted path shows allow
@@ -1616,6 +1743,7 @@ document.getElementById("test-url-input").addEventListener("keypress", (e) => {
 - Test: Non-Reddit URL shows skip
 
 **Files Modified:**
+
 - `options.html`
 - `options.js`
 - `options.css`
@@ -1631,6 +1759,7 @@ document.getElementById("test-url-input").addEventListener("keypress", (e) => {
 Help users discover subreddits that benefit from new Reddit features.
 
 **New File: `suggestions.js`**
+
 ```javascript
 "use strict";
 
@@ -1642,53 +1771,53 @@ const SUGGESTED_SUBREDDITS = [
   {
     name: "wallstreetbets",
     reason: "Predictions, polls, and live discussions",
-    category: "finance"
+    category: "finance",
   },
   {
     name: "nba",
     reason: "Game threads with live comments and polls",
-    category: "sports"
+    category: "sports",
   },
   {
     name: "nfl",
     reason: "Game threads with predictions",
-    category: "sports"
+    category: "sports",
   },
   {
     name: "soccer",
     reason: "Match threads with live features",
-    category: "sports"
+    category: "sports",
   },
   {
     name: "cryptocurrency",
     reason: "Polls and moon distribution",
-    category: "finance"
+    category: "finance",
   },
   {
     name: "polls",
     reason: "Entire subreddit is poll-based",
-    category: "polls"
+    category: "polls",
   },
   {
     name: "predictions",
     reason: "Prediction tournaments",
-    category: "polls"
+    category: "polls",
   },
   {
     name: "rpan",
     reason: "Reddit Public Access Network (live streaming)",
-    category: "streaming"
+    category: "streaming",
   },
   {
     name: "pan",
     reason: "Reddit Public Access Network content",
-    category: "streaming"
+    category: "streaming",
   },
   {
     name: "theredditsynth",
     reason: "Live audio features",
-    category: "streaming"
-  }
+    category: "streaming",
+  },
 ];
 
 const Suggestions = {
@@ -1697,9 +1826,11 @@ const Suggestions = {
    */
   async getAvailableSuggestions() {
     const { whitelist } = await window.Storage.getSubredditOverrides();
-    const whitelistSet = new Set(whitelist.map(s => s.toLowerCase()));
+    const whitelistSet = new Set(whitelist.map((s) => s.toLowerCase()));
 
-    return SUGGESTED_SUBREDDITS.filter(s => !whitelistSet.has(s.name.toLowerCase()));
+    return SUGGESTED_SUBREDDITS.filter(
+      (s) => !whitelistSet.has(s.name.toLowerCase())
+    );
   },
 
   /**
@@ -1713,8 +1844,8 @@ const Suggestions = {
    * Get suggestions by category
    */
   getByCategory(category) {
-    return SUGGESTED_SUBREDDITS.filter(s => s.category === category);
-  }
+    return SUGGESTED_SUBREDDITS.filter((s) => s.category === category);
+  },
 };
 
 if (typeof module !== "undefined" && module.exports) {
@@ -1725,6 +1856,7 @@ if (typeof module !== "undefined" && module.exports) {
 ```
 
 **UI Addition to Options Page:**
+
 ```html
 <!-- In Subreddit Exceptions section -->
 <div class="suggestions-container" id="suggestions-container">
@@ -1739,6 +1871,7 @@ if (typeof module !== "undefined" && module.exports) {
 ```
 
 **CSS Addition:**
+
 ```css
 .suggestions-container {
   margin-top: 20px;
@@ -1796,6 +1929,7 @@ if (typeof module !== "undefined" && module.exports) {
 ```
 
 **JavaScript Implementation:**
+
 ```javascript
 async function loadSuggestions() {
   const container = document.getElementById("suggestion-chips");
@@ -1808,7 +1942,8 @@ async function loadSuggestions() {
 
   container.innerHTML = "";
 
-  for (const suggestion of suggestions.slice(0, 6)) { // Limit to 6
+  for (const suggestion of suggestions.slice(0, 6)) {
+    // Limit to 6
     const chip = document.createElement("button");
     chip.className = "suggestion-chip";
     chip.innerHTML = `
@@ -1836,15 +1971,18 @@ async function addSuggestion(subreddit) {
 ```
 
 **Testing Requirements:**
+
 - Test: Suggestions appear for subreddits not in whitelist
 - Test: Click adds subreddit and removes from suggestions
 - Test: Suggestion chips show reason on hover
 - Test: Empty state when all suggestions added
 
 **Files Created:**
+
 - `suggestions.js`
 
 **Files Modified:**
+
 - `options.html`
 - `options.js`
 - `options.css`
@@ -1853,13 +1991,14 @@ async function addSuggestion(subreddit) {
 
 ### Phase 3 Summary
 
-| Item | Priority | Complexity | Files |
-|------|----------|------------|-------|
-| 3.1 First-Run Onboarding | High | High | onboarding.html/css/js (new), background.js |
-| 3.2 URL Testing Tool | Medium | Medium | options.html/js/css |
-| 3.3 Smart Allowlist Suggestions | Medium | Low | suggestions.js (new), options.html/js/css |
+| Item                            | Priority | Complexity | Files                                       |
+| ------------------------------- | -------- | ---------- | ------------------------------------------- |
+| 3.1 First-Run Onboarding        | High     | High       | onboarding.html/css/js (new), background.js |
+| 3.2 URL Testing Tool            | Medium   | Medium     | options.html/js/css                         |
+| 3.3 Smart Allowlist Suggestions | Medium   | Low        | suggestions.js (new), options.html/js/css   |
 
 **Phase 3 Testing Checklist:**
+
 - [ ] Onboarding shows on fresh install only
 - [ ] Onboarding slides work correctly
 - [ ] URL tester identifies all redirect types
@@ -1885,6 +2024,7 @@ async function addSuggestion(subreddit) {
 Allow users to redirect to privacy-focused frontends (Teddit, LibReddit, Redlib) instead of old.reddit.com.
 
 **New File: `frontends.js`**
+
 ```javascript
 "use strict";
 
@@ -1904,8 +2044,8 @@ const FRONTENDS = {
       users: true,
       comments: true,
       search: true,
-      moderation: true
-    }
+      moderation: true,
+    },
   },
 
   "teddit.net": {
@@ -1920,13 +2060,9 @@ const FRONTENDS = {
       users: true,
       comments: true,
       search: true,
-      moderation: false
+      moderation: false,
     },
-    instances: [
-      "teddit.net",
-      "teddit.ggc-project.de",
-      "teddit.zaggy.nl"
-    ]
+    instances: ["teddit.net", "teddit.ggc-project.de", "teddit.zaggy.nl"],
   },
 
   "libreddit.spike.codes": {
@@ -1941,13 +2077,13 @@ const FRONTENDS = {
       users: true,
       comments: true,
       search: true,
-      moderation: false
+      moderation: false,
     },
     instances: [
       "libreddit.spike.codes",
       "libreddit.kavin.rocks",
-      "reddit.invak.id"
-    ]
+      "reddit.invak.id",
+    ],
   },
 
   "redlib.catsarch.com": {
@@ -1962,15 +2098,12 @@ const FRONTENDS = {
       users: true,
       comments: true,
       search: true,
-      moderation: false
+      moderation: false,
     },
-    instances: [
-      "redlib.catsarch.com",
-      "redlib.perennialte.ch"
-    ]
+    instances: ["redlib.catsarch.com", "redlib.perennialte.ch"],
   },
 
-  "custom": {
+  custom: {
     id: "custom",
     name: "Custom Instance",
     description: "Self-hosted or other instance",
@@ -1982,9 +2115,9 @@ const FRONTENDS = {
       users: true,
       comments: true,
       search: true,
-      moderation: false
-    }
-  }
+      moderation: false,
+    },
+  },
 };
 
 const Frontends = {
@@ -1993,7 +2126,7 @@ const Frontends = {
   },
 
   getById(id) {
-    return Object.values(FRONTENDS).find(f => f.id === id);
+    return Object.values(FRONTENDS).find((f) => f.id === id);
   },
 
   getByDomain(domain) {
@@ -2008,7 +2141,7 @@ const Frontends = {
   requiresPermission(id) {
     const frontend = this.getById(id);
     return frontend?.requiresPermission || false;
-  }
+  },
 };
 
 if (typeof module !== "undefined" && module.exports) {
@@ -2020,6 +2153,7 @@ if (typeof module !== "undefined" && module.exports) {
 ```
 
 **Storage Schema Update:**
+
 ```javascript
 // In storage.js DEFAULTS
 {
@@ -2032,6 +2166,7 @@ if (typeof module !== "undefined" && module.exports) {
 ```
 
 **Options UI Addition:**
+
 ```html
 <section class="setting">
   <h2>Reddit Frontend</h2>
@@ -2045,10 +2180,12 @@ if (typeof module !== "undefined" && module.exports) {
 
   <div class="custom-domain-row" id="custom-domain-section" hidden>
     <label for="custom-domain">Custom Domain</label>
-    <input type="text"
-           id="custom-domain"
-           class="text-input"
-           placeholder="example.com">
+    <input
+      type="text"
+      id="custom-domain"
+      class="text-input"
+      placeholder="example.com"
+    />
     <p class="help-text">Enter domain without https:// prefix</p>
     <button class="button" id="save-custom-domain">Save</button>
   </div>
@@ -2069,6 +2206,7 @@ if (typeof module !== "undefined" && module.exports) {
 ```
 
 **CSS Addition:**
+
 ```css
 .frontend-options {
   display: grid;
@@ -2141,6 +2279,7 @@ if (typeof module !== "undefined" && module.exports) {
 ```
 
 **JavaScript Implementation:**
+
 ```javascript
 async function loadFrontendOptions() {
   const container = document.getElementById("frontend-options");
@@ -2154,8 +2293,10 @@ async function loadFrontendOptions() {
     card.className = `frontend-card ${frontendConfig.target === domain ? "selected" : ""}`;
 
     const features = Object.entries(frontend.features)
-      .map(([name, supported]) =>
-        `<span class="feature-badge ${supported ? "" : "missing"}">${name}</span>`)
+      .map(
+        ([name, supported]) =>
+          `<span class="feature-badge ${supported ? "" : "missing"}">${name}</span>`
+      )
       .join("");
 
     card.innerHTML = `
@@ -2180,8 +2321,9 @@ async function loadFrontendOptions() {
 }
 
 async function selectFrontend(domain) {
-  const frontend = window.Frontends.getByDomain(domain) ||
-                   window.Frontends.getById(domain === "custom" ? "custom" : null);
+  const frontend =
+    window.Frontends.getByDomain(domain) ||
+    window.Frontends.getById(domain === "custom" ? "custom" : null);
 
   // Check if permission needed
   if (frontend?.requiresPermission && domain !== "custom") {
@@ -2193,14 +2335,19 @@ async function selectFrontend(domain) {
   }
 
   // Update selection
-  document.querySelectorAll(".frontend-card").forEach(c => c.classList.remove("selected"));
-  document.querySelector(`input[value="${domain}"]`)?.closest(".frontend-card")?.classList.add("selected");
+  document
+    .querySelectorAll(".frontend-card")
+    .forEach((c) => c.classList.remove("selected"));
+  document
+    .querySelector(`input[value="${domain}"]`)
+    ?.closest(".frontend-card")
+    ?.classList.add("selected");
 
   // Save config
   const config = {
     target: domain,
     customDomain: null,
-    instance: null
+    instance: null,
   };
 
   await window.Storage.setFrontend(config);
@@ -2216,17 +2363,23 @@ async function selectFrontend(domain) {
 
 async function checkPermission(domain) {
   return new Promise((resolve) => {
-    chrome.permissions.contains({
-      origins: [`*://${domain}/*`, `*://*.${domain}/*`]
-    }, resolve);
+    chrome.permissions.contains(
+      {
+        origins: [`*://${domain}/*`, `*://*.${domain}/*`],
+      },
+      resolve
+    );
   });
 }
 
 async function requestPermission(domain) {
   const granted = await new Promise((resolve) => {
-    chrome.permissions.request({
-      origins: [`*://${domain}/*`, `*://*.${domain}/*`]
-    }, resolve);
+    chrome.permissions.request(
+      {
+        origins: [`*://${domain}/*`, `*://*.${domain}/*`],
+      },
+      resolve
+    );
   });
 
   if (granted) {
@@ -2239,7 +2392,8 @@ async function requestPermission(domain) {
 
 function updateFrontendUI(config) {
   // Show/hide custom domain section
-  document.getElementById("custom-domain-section").hidden = config.target !== "custom";
+  document.getElementById("custom-domain-section").hidden =
+    config.target !== "custom";
 
   // Show/hide instance selector
   const frontend = window.Frontends.getByDomain(config.target);
@@ -2249,9 +2403,12 @@ function updateFrontendUI(config) {
   if (instances.length > 1) {
     instanceSection.hidden = false;
     const select = document.getElementById("instance-select");
-    select.innerHTML = instances.map(i =>
-      `<option value="${escapeHtml(i)}" ${config.instance === i ? "selected" : ""}>${escapeHtml(i)}</option>`
-    ).join("");
+    select.innerHTML = instances
+      .map(
+        (i) =>
+          `<option value="${escapeHtml(i)}" ${config.instance === i ? "selected" : ""}>${escapeHtml(i)}</option>`
+      )
+      .join("");
   } else {
     instanceSection.hidden = true;
   }
@@ -2262,6 +2419,7 @@ function updateFrontendUI(config) {
 ```
 
 **Background.js Update - Dynamic Frontend Rules:**
+
 ```javascript
 const FRONTEND_RULE_ID_BASE = 2000;
 
@@ -2428,6 +2586,7 @@ case "UPDATE_FRONTEND_RULES":
 ```
 
 **Testing Requirements:**
+
 - Test: Selecting Teddit redirects to teddit.net
 - Test: Selecting LibReddit redirects to libreddit.spike.codes
 - Test: Custom domain works with valid input
@@ -2438,9 +2597,11 @@ case "UPDATE_FRONTEND_RULES":
 - Test: All redirect types work (gallery, video, etc.) on alternative frontends
 
 **Files Created:**
+
 - `frontends.js`
 
 **Files Modified:**
+
 - `storage.js` - Frontend config schema
 - `options.html` - Frontend selection UI
 - `options.js` - Frontend handlers
@@ -2459,6 +2620,7 @@ case "UPDATE_FRONTEND_RULES":
 Add visual charts for redirect statistics (weekly trend, top subreddits).
 
 **UI Addition - Weekly Chart:**
+
 ```html
 <!-- In Statistics section -->
 <div class="chart-container">
@@ -2470,6 +2632,7 @@ Add visual charts for redirect statistics (weekly trend, top subreddits).
 ```
 
 **CSS Addition:**
+
 ```css
 .chart-container {
   margin: 20px 0;
@@ -2540,13 +2703,18 @@ Add visual charts for redirect statistics (weekly trend, top subreddits).
 ```
 
 **JavaScript Implementation:**
+
 ```javascript
 async function loadStats() {
   const stats = await window.Storage.getStats();
 
   // Update numbers
-  document.getElementById("total-redirects").textContent = formatNumber(stats.totalRedirects || 0);
-  document.getElementById("today-redirects").textContent = formatNumber(stats.todayRedirects || 0);
+  document.getElementById("total-redirects").textContent = formatNumber(
+    stats.totalRedirects || 0
+  );
+  document.getElementById("today-redirects").textContent = formatNumber(
+    stats.todayRedirects || 0
+  );
 
   // Render weekly chart
   renderWeeklyChart(stats.weeklyHistory || []);
@@ -2566,26 +2734,28 @@ function renderWeeklyChart(history) {
     const date = new Date();
     date.setDate(date.getDate() - i);
     const dateStr = date.toISOString().split("T")[0];
-    const entry = history.find(h => h.date === dateStr);
+    const entry = history.find((h) => h.date === dateStr);
     days.push({
       date: dateStr,
       day: dayNames[date.getDay()],
-      count: entry?.count || 0
+      count: entry?.count || 0,
     });
   }
 
-  const maxCount = Math.max(...days.map(d => d.count), 1);
+  const maxCount = Math.max(...days.map((d) => d.count), 1);
 
-  container.innerHTML = days.map(d => {
-    const height = (d.count / maxCount) * 80; // Max 80px height
-    return `
+  container.innerHTML = days
+    .map((d) => {
+      const height = (d.count / maxCount) * 80; // Max 80px height
+      return `
       <div class="bar-wrapper">
         <span class="bar-value">${d.count || ""}</span>
         <div class="bar" style="height: ${Math.max(height, 2)}px"></div>
         <span class="bar-label">${d.day}</span>
       </div>
     `;
-  }).join("");
+    })
+    .join("");
 }
 
 function renderTopSubreddits(perSubreddit) {
@@ -2604,20 +2774,24 @@ function renderTopSubreddits(perSubreddit) {
   emptyState.hidden = true;
   const maxCount = entries[0][1];
 
-  list.innerHTML = entries.slice(0, 10).map(([subreddit, count]) => {
-    const percentage = (count / maxCount) * 100;
-    return `
+  list.innerHTML = entries
+    .slice(0, 10)
+    .map(([subreddit, count]) => {
+      const percentage = (count / maxCount) * 100;
+      return `
       <li>
         <div class="subreddit-bar" style="width: ${percentage}%"></div>
         <span class="subreddit-name">r/${escapeHtml(subreddit)}</span>
         <span class="subreddit-count">${formatNumber(count)}</span>
       </li>
     `;
-  }).join("");
+    })
+    .join("");
 }
 ```
 
 **Popup Enhancement - Mini Sparkline:**
+
 ```html
 <!-- In popup stats section -->
 <div class="mini-chart" id="mini-chart">
@@ -2656,20 +2830,23 @@ async function renderMiniChart() {
     const date = new Date();
     date.setDate(date.getDate() - i);
     const dateStr = date.toISOString().split("T")[0];
-    const entry = history.find(h => h.date === dateStr);
+    const entry = history.find((h) => h.date === dateStr);
     days.push(entry?.count || 0);
   }
 
   const max = Math.max(...days, 1);
 
-  container.innerHTML = days.map(count => {
-    const height = (count / max) * 20;
-    return `<div class="mini-bar" style="height: ${Math.max(height, 2)}px"></div>`;
-  }).join("");
+  container.innerHTML = days
+    .map((count) => {
+      const height = (count / max) * 20;
+      return `<div class="mini-bar" style="height: ${Math.max(height, 2)}px"></div>`;
+    })
+    .join("");
 }
 ```
 
 **Testing Requirements:**
+
 - Test: Weekly chart displays correctly
 - Test: Chart handles empty history
 - Test: Bars scale relative to max
@@ -2677,6 +2854,7 @@ async function renderMiniChart() {
 - Test: Mini sparkline in popup works
 
 **Files Modified:**
+
 - `options.html`
 - `options.js`
 - `options.css`
@@ -2688,12 +2866,13 @@ async function renderMiniChart() {
 
 ### Phase 4 Summary
 
-| Item | Priority | Complexity | Files |
-|------|----------|------------|-------|
-| 4.1 Alternative Frontend Support | High | High | frontends.js (new), storage.js, options.html/js/css, background.js |
-| 4.2 Statistics Visualization | Medium | Medium | options.html/js/css, popup.html/js/css |
+| Item                             | Priority | Complexity | Files                                                              |
+| -------------------------------- | -------- | ---------- | ------------------------------------------------------------------ |
+| 4.1 Alternative Frontend Support | High     | High       | frontends.js (new), storage.js, options.html/js/css, background.js |
+| 4.2 Statistics Visualization     | Medium   | Medium     | options.html/js/css, popup.html/js/css                             |
 
 **Phase 4 Testing Checklist:**
+
 - [ ] All alternative frontends work correctly
 - [ ] Custom domain validation works
 - [ ] Permission flow works smoothly
@@ -2731,77 +2910,85 @@ v5.0.0 (Phases 3-4 - Major Features)
 ## Files Summary
 
 ### New Files (11)
-| File | Phase | Purpose |
-|------|-------|---------|
-| `logger.js` | 1.3 | Centralized logging |
-| `offscreen.html` | 1.5 | Clipboard API |
-| `offscreen.js` | 1.5 | Clipboard API |
-| `share-link-handler.js` | 2.1 | Share link content script |
-| `onboarding.html` | 3.1 | Welcome page |
-| `onboarding.css` | 3.1 | Welcome page styles |
-| `onboarding.js` | 3.1 | Welcome page logic |
-| `suggestions.js` | 3.3 | Allowlist suggestions |
-| `frontends.js` | 4.1 | Frontend definitions |
-| `img/popup-preview.png` | 3.1 | Onboarding screenshot |
+
+| File                    | Phase | Purpose                   |
+| ----------------------- | ----- | ------------------------- |
+| `logger.js`             | 1.3   | Centralized logging       |
+| `offscreen.html`        | 1.5   | Clipboard API             |
+| `offscreen.js`          | 1.5   | Clipboard API             |
+| `share-link-handler.js` | 2.1   | Share link content script |
+| `onboarding.html`       | 3.1   | Welcome page              |
+| `onboarding.css`        | 3.1   | Welcome page styles       |
+| `onboarding.js`         | 3.1   | Welcome page logic        |
+| `suggestions.js`        | 3.3   | Allowlist suggestions     |
+| `frontends.js`          | 4.1   | Frontend definitions      |
+| `img/popup-preview.png` | 3.1   | Onboarding screenshot     |
 
 ### Modified Files (10)
-| File | Phases | Changes |
-|------|--------|---------|
-| `storage.js` | 1.1, 1.6, 4.1 | Race condition fix, new config fields |
-| `rules.json` | 1.2, 2.1, 2.2 | Regex fixes, mobile domain |
-| `manifest.json` | 1.5, 2.1, 2.2, 4.1 | Permissions, content scripts |
-| `background.js` | 1.3, 1.5, 1.6, 2.1, 4.1 | Logging, clipboard, frontend rules |
-| `popup.html` | 1.4, 4.2 | Dynamic shortcut, mini chart |
-| `popup.js` | 1.4, 4.2 | Shortcut loading, sparkline |
-| `popup.css` | 4.2 | Mini chart styles |
-| `options.html` | 1.6, 3.2, 3.3, 4.1, 4.2 | All new UI sections |
-| `options.js` | 1.6, 3.2, 3.3, 4.1, 4.2 | All new handlers |
-| `options.css` | 3.2, 3.3, 4.1, 4.2 | All new styles |
+
+| File            | Phases                  | Changes                               |
+| --------------- | ----------------------- | ------------------------------------- |
+| `storage.js`    | 1.1, 1.6, 4.1           | Race condition fix, new config fields |
+| `rules.json`    | 1.2, 2.1, 2.2           | Regex fixes, mobile domain            |
+| `manifest.json` | 1.5, 2.1, 2.2, 4.1      | Permissions, content scripts          |
+| `background.js` | 1.3, 1.5, 1.6, 2.1, 4.1 | Logging, clipboard, frontend rules    |
+| `popup.html`    | 1.4, 4.2                | Dynamic shortcut, mini chart          |
+| `popup.js`      | 1.4, 4.2                | Shortcut loading, sparkline           |
+| `popup.css`     | 4.2                     | Mini chart styles                     |
+| `options.html`  | 1.6, 3.2, 3.3, 4.1, 4.2 | All new UI sections                   |
+| `options.js`    | 1.6, 3.2, 3.3, 4.1, 4.2 | All new handlers                      |
+| `options.css`   | 3.2, 3.3, 4.1, 4.2      | All new styles                        |
 
 ---
 
 ## Testing Strategy
 
 ### Unit Tests (vitest)
+
 - `tests/storage.test.js` - Race condition, sync logic
 - `tests/frontends.test.js` - Frontend definitions, domain mapping
 - `tests/suggestions.test.js` - Suggestion filtering
 - `tests/patterns.test.js` - Updated for new regex patterns
 
 ### Integration Tests
+
 - Test full redirect flow for each frontend
 - Test permission request/denial flow
 - Test onboarding → options flow
 
 ### Manual Testing Checklist
+
 See individual phase testing checklists above.
 
 ---
 
 ## Risk Assessment
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Storage race condition causes data corruption | High | Comprehensive testing, gradual rollout |
-| Alternative frontends become unavailable | Medium | Instance selection, fallback to old.reddit.com |
-| Offscreen API not supported in older Chrome | Low | Feature detection, fallback to notification |
-| Onboarding interrupts user flow | Low | One-time only, easy to skip |
-| Share link handling causes redirect loops | Medium | Careful testing, timeout safeguards |
+| Risk                                          | Impact | Mitigation                                     |
+| --------------------------------------------- | ------ | ---------------------------------------------- |
+| Storage race condition causes data corruption | High   | Comprehensive testing, gradual rollout         |
+| Alternative frontends become unavailable      | Medium | Instance selection, fallback to old.reddit.com |
+| Offscreen API not supported in older Chrome   | Low    | Feature detection, fallback to notification    |
+| Onboarding interrupts user flow               | Low    | One-time only, easy to skip                    |
+| Share link handling causes redirect loops     | Medium | Careful testing, timeout safeguards            |
 
 ---
 
 ## Success Metrics
 
 ### v4.1.0
+
 - Zero reports of data loss from storage issues
 - Clipboard copy success rate > 95%
 - Error logs available for debugging
 
 ### v4.2.0
+
 - Share links properly redirect to old Reddit
 - Mobile links work correctly
 
 ### v5.0.0
+
 - > 50% of new users complete onboarding
 - > 10% of users try alternative frontends
 - Positive feedback on statistics visualization

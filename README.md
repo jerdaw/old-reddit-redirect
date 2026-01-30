@@ -8,6 +8,7 @@
 ## New Features in This Fork
 
 ### Core Features
+
 - **Popup UI** - Click icon to access quick settings, stats, and controls
 - **Configurable icon click** - Choose between popup or instant toggle
 - **Keyboard shortcut (Alt+Shift+R)** - Quickly toggle redirect on/off
@@ -17,6 +18,7 @@
 - **Settings sync** - Sync preferences across browsers (optional)
 
 ### URL Handling
+
 - **Mobile Reddit support (m.reddit.com)** - Mobile web links now redirect
 - **Share link handling** - `/r/*/s/*` links redirect properly
 - **Gallery/video support** - Handles post IDs with hyphens
@@ -24,12 +26,14 @@
 - **Reddit .onion domain support** - Full Tor compatibility
 
 ### Subreddit Management
+
 - **Subreddit exceptions** - Whitelist subreddits to keep on new Reddit
 - **Smart suggestions** - Curated list of subreddits using new Reddit features
 - **URL testing tool** - Check if a URL would redirect before visiting
 - **Import/export settings** - Backup and restore configuration
 
 ### Bug Fixes & Quality
+
 - **Fix /videos/ links** redirecting to 404 pages ([#176](https://github.com/tom-james-watson/old-reddit-redirect/issues/176))
 - **Proper handling** for chat.reddit.com and mod.reddit.com ([#187](https://github.com/tom-james-watson/old-reddit-redirect/issues/187), [#190](https://github.com/tom-james-watson/old-reddit-redirect/issues/190))
 - **Storage race condition fix** - Prevents data corruption
