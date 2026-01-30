@@ -810,6 +810,334 @@ footer a:hover {
   border-top: 1px solid #343536;
 }
 
+/* Sort Preferences Section */
+.sort-preferences-management {
+  margin-top: 20px;
+  padding: 20px;
+  background: #272729;
+  border-radius: 8px;
+  border: 1px solid #343536;
+}
+
+.prefs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.prefs-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #d7dadc;
+}
+
+.pref-count {
+  font-weight: normal;
+  color: #818384;
+  font-size: 14px;
+}
+
+.prefs-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-input {
+  padding: 6px 12px;
+  border: 1px solid #343536;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 200px;
+  background: #1a1a1b;
+  color: #d7dadc;
+}
+
+.search-input:focus {
+  outline: 2px solid #0079d3;
+  outline-offset: 0;
+}
+
+#prefs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #1a1a1b;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#prefs-table th {
+  text-align: left;
+  padding: 12px;
+  background: #272729;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #343536;
+  color: #d7dadc;
+}
+
+#prefs-table td {
+  padding: 12px;
+  border-bottom: 1px solid #343536;
+  font-size: 14px;
+  color: #d7dadc;
+}
+
+#prefs-table tr:last-child td {
+  border-bottom: none;
+}
+
+#prefs-table tbody tr:hover {
+  background: #272729;
+}
+
+.subreddit-cell a {
+  color: #0079d3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.subreddit-cell a:hover {
+  text-decoration: underline;
+  color: #4fbcff;
+}
+
+.empty-state {
+  color: #818384;
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.danger-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-weight: 500;
+}
+
+.danger-button:hover {
+  background: #c82333;
+}
+
+.danger-button:active {
+  transform: translateY(1px);
+}
+
+.secondary-button {
+  background: #343536;
+  color: #d7dadc;
+  border: 1px solid #343536;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.secondary-button:hover {
+  background: #5a6268;
+  border-color: #5a6268;
+}
+
+.secondary-button:active {
+  transform: translateY(1px);
+}
+
+#prefs-tbody .delete-pref {
+  padding: 4px 12px;
+  font-size: 13px;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .prefs-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .prefs-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  #prefs-table {
+    font-size: 13px;
+  }
+
+  #prefs-table th,
+  #prefs-table td {
+    padding: 8px;
+  }
+}
+
+/* User Tags Section */
+.user-tags-management {
+  margin-top: 20px;
+  padding: 20px;
+  background: #272729;
+  border-radius: 8px;
+  border: 1px solid #343536;
+}
+
+.tags-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tags-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #d7dadc;
+}
+
+.tag-count {
+  font-weight: normal;
+  color: #818384;
+  font-size: 14px;
+}
+
+.tags-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+#tags-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #1a1a1b;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#tags-table th {
+  text-align: left;
+  padding: 12px;
+  background: #272729;
+  font-weight: 600;
+  font-size: 14px;
+  border-bottom: 2px solid #343536;
+  color: #d7dadc;
+}
+
+#tags-table td {
+  padding: 12px;
+  border-bottom: 1px solid #343536;
+  font-size: 14px;
+  color: #d7dadc;
+}
+
+#tags-table tr:last-child td {
+  border-bottom: none;
+}
+
+#tags-table tbody tr:hover {
+  background: #272729;
+}
+
+.username-cell a {
+  color: #0079d3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.username-cell a:hover {
+  text-decoration: underline;
+  color: #4fbcff;
+}
+
+.tag-badge-preview {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  border-radius: 3px;
+}
+
+.tag-color-preview {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid #343536;
+}
+
+#tags-tbody .delete-tag {
+  padding: 4px 12px;
+  font-size: 13px;
+}
+
+.edit-tag {
+  padding: 4px 12px;
+  font-size: 13px;
+  margin-right: 4px;
+}
+
+/* Responsive layout for tags */
+@media (max-width: 768px) {
+  .tags-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .tags-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #tags-table {
+    font-size: 13px;
+  }
+
+  #tags-table th,
+  #tags-table td {
+    padding: 8px;
+  }
+}
+
+/* Scroll Position Memory Section */
+.scroll-positions-management {
+  margin-top: 20px;
+  padding: 15px;
+  background: #272729;
+  border-radius: 8px;
+  border: 1px solid #343536;
+}
+
+.info-text {
+  color: #d7dadc;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.info-text strong {
+  color: #0079d3;
+}
+
 [hidden] {
   display: none !important;
 }

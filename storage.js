@@ -7,7 +7,7 @@
 
 (function () {
   // Schema version for future migrations
-  const SCHEMA_VERSION = 1;
+  const SCHEMA_VERSION = 2;
 
   // Keys that should be synced across browsers (when sync is enabled)
   const SYNC_KEYS = [
@@ -17,6 +17,9 @@
     "darkMode",
     "nagBlocking",
     "contentFiltering",
+    "commentEnhancements",
+    "sortPreferences",
+    "userTags",
   ];
 
   // Default configuration
@@ -66,6 +69,31 @@
       blockEmailVerification: true,
       blockPremiumBanners: true,
       blockAppPrompts: true,
+    },
+    commentEnhancements: {
+      colorCodedComments: true,
+      colorPalette: "standard", // "standard" | "colorblind"
+      stripeWidth: 3,
+      navigationButtons: true,
+      navButtonPosition: "bottom-right", // "bottom-right" | "bottom-left"
+      inlineImages: true,
+      maxImageWidth: 600, // pixels, 0 = full width
+    },
+    sortPreferences: {
+      enabled: true,
+      maxEntries: 100,
+      preferences: {}, // { subreddit: { sort, time, timestamp } }
+    },
+    userTags: {
+      enabled: true,
+      maxTags: 500,
+      tags: {}, // { username: { text, color, timestamp } }
+    },
+    scrollPositions: {
+      enabled: true,
+      maxEntries: 100,
+      retentionHours: 24,
+      positions: {}, // { url: { scrollY, timestamp } }
     },
     sync: {
       enabled: false,
@@ -672,6 +700,333 @@
      */
     async setNagBlocking(prefs) {
       return this.set("nagBlocking", prefs);
+    },
+
+    /**
+     * Get comment enhancements preferences
+     * @returns {Promise<Object>}
+     */
+    async getCommentEnhancements() {
+      return this.get("commentEnhancements", DEFAULTS.commentEnhancements);
+    },
+
+    /**
+     * Set comment enhancements preferences
+     * @param {Object} prefs
+     * @returns {Promise<void>}
+     */
+    async setCommentEnhancements(prefs) {
+      return this.set("commentEnhancements", prefs);
+    },
+
+    /**
+     * Get sort preferences configuration
+     * @returns {Promise<Object>}
+     */
+    async getSortPreferences() {
+      return this.get("sortPreferences", DEFAULTS.sortPreferences);
+    },
+
+    /**
+     * Set sort preferences configuration
+     * @param {Object} prefs
+     * @returns {Promise<void>}
+     */
+    async setSortPreferences(prefs) {
+      return this.set("sortPreferences", prefs);
+    },
+
+    /**
+     * Get sort preference for a specific subreddit
+     * @param {string} subreddit - Subreddit name
+     * @returns {Promise<Object|null>}
+     */
+    async getSortPreference(subreddit) {
+      const config = await this.getSortPreferences();
+      const key = subreddit.toLowerCase();
+      return config.preferences[key] || null;
+    },
+
+    /**
+     * Set sort preference for a specific subreddit
+     * @param {string} subreddit - Subreddit name
+     * @param {Object} sortData - { sort, time }
+     * @returns {Promise<void>}
+     */
+    async setSortPreference(subreddit, sortData) {
+      const config = await this.getSortPreferences();
+      const key = subreddit.toLowerCase();
+
+      // Add timestamp
+      config.preferences[key] = {
+        ...sortData,
+        timestamp: Date.now(),
+      };
+
+      // Enforce limit with LRU eviction
+      const entries = Object.entries(config.preferences);
+      if (entries.length > config.maxEntries) {
+        // Find oldest entry
+        let oldest = null;
+        let oldestTime = Infinity;
+        for (const [sub, data] of entries) {
+          if (data.timestamp < oldestTime) {
+            oldest = sub;
+            oldestTime = data.timestamp;
+          }
+        }
+        if (oldest) {
+          delete config.preferences[oldest];
+        }
+      }
+
+      await this.setSortPreferences(config);
+    },
+
+    /**
+     * Delete sort preference for a specific subreddit
+     * @param {string} subreddit - Subreddit name
+     * @returns {Promise<void>}
+     */
+    async deleteSortPreference(subreddit) {
+      const config = await this.getSortPreferences();
+      const key = subreddit.toLowerCase();
+      delete config.preferences[key];
+      await this.setSortPreferences(config);
+    },
+
+    /**
+     * Clear all sort preferences
+     * @returns {Promise<void>}
+     */
+    async clearSortPreferences() {
+      const config = await this.getSortPreferences();
+      config.preferences = {};
+      await this.setSortPreferences(config);
+    },
+
+    /**
+     * Check if sort preferences feature is enabled
+     * @returns {Promise<boolean>}
+     */
+    async isSortPreferencesEnabled() {
+      const config = await this.getSortPreferences();
+      return config.enabled !== false;
+    },
+
+    /**
+     * Get user tags configuration
+     * @returns {Promise<Object>}
+     */
+    async getUserTags() {
+      return this.get("userTags", DEFAULTS.userTags);
+    },
+
+    /**
+     * Set user tags configuration
+     * @param {Object} config
+     * @returns {Promise<void>}
+     */
+    async setUserTags(config) {
+      return this.set("userTags", config);
+    },
+
+    /**
+     * Get tag for a specific user
+     * @param {string} username - Username (case-insensitive)
+     * @returns {Promise<Object|null>}
+     */
+    async getUserTag(username) {
+      const config = await this.getUserTags();
+      const key = username.toLowerCase();
+      return config.tags[key] || null;
+    },
+
+    /**
+     * Set tag for a specific user
+     * @param {string} username - Username
+     * @param {Object} tagData - { text, color }
+     * @returns {Promise<void>}
+     */
+    async setUserTag(username, tagData) {
+      const config = await this.getUserTags();
+      const key = username.toLowerCase();
+
+      // Validate tag text length
+      if (tagData.text && tagData.text.length > 50) {
+        tagData.text = tagData.text.substring(0, 50);
+      }
+
+      // Add timestamp
+      config.tags[key] = {
+        text: tagData.text,
+        color: tagData.color,
+        timestamp: Date.now(),
+      };
+
+      // Enforce limit with LRU eviction
+      const entries = Object.entries(config.tags);
+      if (entries.length > config.maxTags) {
+        // Find oldest entry
+        let oldest = null;
+        let oldestTime = Infinity;
+        for (const [user, data] of entries) {
+          if (data.timestamp < oldestTime) {
+            oldest = user;
+            oldestTime = data.timestamp;
+          }
+        }
+        if (oldest) {
+          delete config.tags[oldest];
+        }
+      }
+
+      await this.setUserTags(config);
+    },
+
+    /**
+     * Delete tag for a specific user
+     * @param {string} username - Username
+     * @returns {Promise<void>}
+     */
+    async deleteUserTag(username) {
+      const config = await this.getUserTags();
+      const key = username.toLowerCase();
+      delete config.tags[key];
+      await this.setUserTags(config);
+    },
+
+    /**
+     * Clear all user tags
+     * @returns {Promise<void>}
+     */
+    async clearUserTags() {
+      const config = await this.getUserTags();
+      config.tags = {};
+      await this.setUserTags(config);
+    },
+
+    /**
+     * Check if user tagging feature is enabled
+     * @returns {Promise<boolean>}
+     */
+    async isUserTagsEnabled() {
+      const config = await this.getUserTags();
+      return config.enabled !== false;
+    },
+
+    /**
+     * Get scroll positions configuration
+     * @returns {Promise<Object>}
+     */
+    async getScrollPositions() {
+      return this.get("scrollPositions", DEFAULTS.scrollPositions);
+    },
+
+    /**
+     * Set scroll positions configuration
+     * @param {Object} config
+     * @returns {Promise<void>}
+     */
+    async setScrollPositions(config) {
+      return this.set("scrollPositions", config);
+    },
+
+    /**
+     * Get scroll position for a specific URL
+     * @param {string} url - Normalized URL
+     * @returns {Promise<Object|null>}
+     */
+    async getScrollPosition(url) {
+      const config = await this.getScrollPositions();
+      return config.positions[url] || null;
+    },
+
+    /**
+     * Set scroll position for a specific URL
+     * @param {string} url - Normalized URL
+     * @param {Object} data - { scrollY, timestamp }
+     * @returns {Promise<void>}
+     */
+    async setScrollPosition(url, data) {
+      const config = await this.getScrollPositions();
+
+      config.positions[url] = {
+        scrollY: data.scrollY,
+        timestamp: Date.now(),
+      };
+
+      // Enforce limit with LRU eviction
+      const entries = Object.entries(config.positions);
+      if (entries.length > config.maxEntries) {
+        let oldest = null;
+        let oldestTime = Infinity;
+        for (const [urlKey, posData] of entries) {
+          if (posData.timestamp < oldestTime) {
+            oldest = urlKey;
+            oldestTime = posData.timestamp;
+          }
+        }
+        if (oldest) {
+          delete config.positions[oldest];
+        }
+      }
+
+      await this.setScrollPositions(config);
+    },
+
+    /**
+     * Delete scroll position for a specific URL
+     * @param {string} url - Normalized URL
+     * @returns {Promise<void>}
+     */
+    async deleteScrollPosition(url) {
+      const config = await this.getScrollPositions();
+      delete config.positions[url];
+      await this.setScrollPositions(config);
+    },
+
+    /**
+     * Clear all scroll positions
+     * @returns {Promise<void>}
+     */
+    async clearScrollPositions() {
+      const config = await this.getScrollPositions();
+      config.positions = {};
+      await this.setScrollPositions(config);
+    },
+
+    /**
+     * Cleanup old scroll positions (older than retention period)
+     * @returns {Promise<void>}
+     */
+    async cleanupOldScrollPositions() {
+      const config = await this.getScrollPositions();
+      const now = Date.now();
+      const maxAge = config.retentionHours * 60 * 60 * 1000; // Convert to ms
+
+      let cleaned = 0;
+      for (const [url, data] of Object.entries(config.positions)) {
+        if (now - data.timestamp > maxAge) {
+          delete config.positions[url];
+          cleaned++;
+        }
+      }
+
+      if (cleaned > 0) {
+        await this.setScrollPositions(config);
+      }
+
+      return cleaned;
+    },
+
+    /**
+     * Check if scroll positions feature is enabled
+     * @returns {Promise<boolean>}
+     */
+    async isScrollPositionsEnabled() {
+      const config = await this.getScrollPositions();
+      return config.enabled !== false;
     },
 
     /**

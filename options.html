@@ -162,6 +162,295 @@
         </div>
       </section>
 
+      <!-- Comment Enhancements -->
+      <section class="setting">
+        <h2>Comment Enhancements</h2>
+        <p class="section-description">
+          Improve the comment reading experience with visual enhancements.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="color-coded-comments" checked />
+            <span>Color-coded comment depth</span>
+          </label>
+          <p class="option-description">
+            Add colored stripes to the left edge of comments indicating nesting
+            depth. Helps visually track conversation threads.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="color-palette">Color Palette</label>
+          <select id="color-palette" class="select-input">
+            <option value="standard">Standard (Rainbow)</option>
+            <option value="colorblind">Color-Blind Friendly</option>
+          </select>
+          <p class="option-description">
+            Choose color palette for comment depth indicators. Color-blind
+            palette uses distinct hues optimized for accessibility.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="stripe-width">Stripe Width</label>
+          <select id="stripe-width" class="select-input">
+            <option value="2">Thin (2px)</option>
+            <option value="3">Medium (3px)</option>
+            <option value="4">Thick (4px)</option>
+            <option value="5">Extra Thick (5px)</option>
+          </select>
+          <p class="option-description">
+            Width of the colored stripe on the left edge of comments.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="navigation-buttons" checked />
+            <span>Comment navigation buttons</span>
+          </label>
+          <p class="option-description">
+            Show floating buttons to jump between top-level comments. Use
+            Shift+J/K for keyboard navigation.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="nav-button-position">Button Position</label>
+          <select id="nav-button-position" class="select-input">
+            <option value="bottom-right">Bottom Right</option>
+            <option value="bottom-left">Bottom Left</option>
+          </select>
+          <p class="option-description">
+            Choose where the navigation buttons appear on the screen.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="inline-images" checked />
+            <span>Inline image expansion</span>
+          </label>
+          <p class="option-description">
+            Add expand buttons next to image links in comments. Click to view
+            images inline without opening a new tab.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="max-image-width">Maximum Image Width</label>
+          <select id="max-image-width" class="select-input">
+            <option value="400">Small (400px)</option>
+            <option value="600">Medium (600px)</option>
+            <option value="800">Large (800px)</option>
+            <option value="0">Full Width</option>
+          </select>
+          <p class="option-description">
+            Maximum width for expanded images. "Full Width" uses the comment
+            area width.
+          </p>
+        </div>
+      </section>
+
+      <!-- Sort Preferences -->
+      <section class="setting">
+        <h2>Subreddit Sort Preferences</h2>
+        <p class="section-description">
+          Automatically apply your preferred sort order (new, top, rising, etc.)
+          when visiting subreddits. Your preference is saved when you manually
+          change the sort order.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="sort-preferences-enabled" checked />
+            <span>Remember sort order per subreddit</span>
+          </label>
+          <p class="option-description">
+            Enable automatic sort order application when visiting subreddits
+          </p>
+        </div>
+
+        <div class="sort-preferences-management" id="sort-prefs-container">
+          <div class="prefs-header">
+            <h3>
+              Saved Preferences
+              <span class="pref-count"
+                >(<span id="pref-count">0</span>/<span id="pref-max">100</span
+                >)</span
+              >
+            </h3>
+            <div class="prefs-controls">
+              <input
+                type="text"
+                id="pref-search"
+                placeholder="Search subreddits..."
+                class="search-input"
+              />
+              <button
+                id="export-prefs"
+                class="secondary-button"
+                title="Export preferences as JSON"
+              >
+                Export
+              </button>
+              <button
+                id="import-prefs"
+                class="secondary-button"
+                title="Import preferences from JSON"
+              >
+                Import
+              </button>
+              <button
+                id="clear-all-prefs"
+                class="danger-button"
+                title="Clear all saved preferences"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <div id="prefs-list-container">
+            <table id="prefs-table">
+              <thead>
+                <tr>
+                  <th>Subreddit</th>
+                  <th>Sort Order</th>
+                  <th>Time Filter</th>
+                  <th>Last Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="prefs-tbody">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+
+            <p class="empty-state" id="prefs-empty">
+              No saved preferences yet. Visit a subreddit and change the sort
+              order to automatically save your preference.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- User Tags -->
+      <section class="setting">
+        <h2>User Tags</h2>
+        <p class="section-description">
+          Add custom labels and colors to Reddit users. Tags appear as badges
+          next to usernames throughout Reddit.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="user-tags-enabled" checked />
+            <span>Enable user tagging</span>
+          </label>
+          <p class="option-description">
+            Click the tag button (🏷️) next to any username on Reddit to add a
+            custom tag
+          </p>
+        </div>
+
+        <div class="user-tags-management" id="user-tags-container">
+          <div class="tags-header">
+            <h3>
+              Saved Tags
+              <span class="tag-count"
+                >(<span id="tag-count">0</span>/<span id="tag-max">500</span
+                >)</span
+              >
+            </h3>
+            <div class="tags-controls">
+              <input
+                type="text"
+                id="tag-search"
+                placeholder="Search users..."
+                class="search-input"
+              />
+              <button
+                id="export-tags"
+                class="secondary-button"
+                title="Export tags as JSON"
+              >
+                Export
+              </button>
+              <button
+                id="import-tags"
+                class="secondary-button"
+                title="Import tags from JSON"
+              >
+                Import
+              </button>
+              <button
+                id="clear-all-tags"
+                class="danger-button"
+                title="Clear all saved tags"
+              >
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <div id="tags-list-container">
+            <table id="tags-table">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Tag</th>
+                  <th>Color</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tags-tbody">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+
+            <p class="empty-state" id="tags-empty">
+              No tags yet. Visit Reddit and click the tag button (🏷️) next to
+              any username to add a tag.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scroll Position Memory -->
+      <section class="setting">
+        <h2>Scroll Position Memory</h2>
+        <p class="section-description">
+          Remember your scroll position when navigating away from pages. Your
+          position is automatically restored when you return via the back
+          button.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="scroll-positions-enabled" checked />
+            <span>Remember scroll positions</span>
+          </label>
+          <p class="option-description">
+            Automatically save and restore scroll position when using back
+            button
+          </p>
+        </div>
+
+        <div class="scroll-positions-management">
+          <p class="info-text">
+            <strong>Storage:</strong>
+            <span id="scroll-positions-count">0</span> positions saved (max 100,
+            auto-cleanup after 24 hours)
+          </p>
+          <button id="clear-scroll-positions" class="secondary-button">
+            Clear All Positions
+          </button>
+        </div>
+      </section>
+
       <!-- Nag Blocking -->
       <section class="setting">
         <h2>Nag & Banner Blocking</h2>

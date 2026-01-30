@@ -10,9 +10,19 @@ This is a **browser extension** (Chrome/Firefox) that redirects all Reddit URLs 
 
 The project uses Vitest for unit testing. Tests are located in the `tests/` directory:
 
-- `tests/rules.test.js` - Validates rule structure and manifest configuration
-- `tests/patterns.test.js` - Tests URL pattern matching for all redirect rules
+- `tests/rules.test.js` - Validates rule structure and manifest configuration (11 tests)
+- `tests/patterns.test.js` - Tests URL pattern matching for all redirect rules (21 tests)
+- `tests/stats.test.js` - Tests statistics tracking and calculations (19 tests)
+- `tests/storage.test.js` - Tests storage schema and sync operations (21 tests)
+- `tests/frontends.test.js` - Tests alternative frontend configurations (26 tests)
+- `tests/suggestions.test.js` - Tests subreddit suggestion system (22 tests)
+- `tests/comments.test.js` - Tests comment enhancements and filtering (77 tests)
+- `tests/sort-preferences.test.js` - Tests sort order memory (23 tests)
+- `tests/user-tags.test.js` - Tests user tagging system (25 tests)
+- `tests/scroll-positions.test.js` - Tests scroll position memory (25 tests)
 - `tests/setup.js` - Shared test utilities
+
+**Total: 270 tests across 10 test suites**
 
 Run tests with `npm test` or `npm run test:watch` for watch mode.
 
@@ -101,7 +111,7 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 - Contextual error messages for debugging
 - Integrated across all extension components
 
-**Dark Mode & Content Filtering (v6.0.0):**
+**v6.0.0 - Dark Mode & Content Filtering:**
 
 - **Dark Mode**: Auto/Light/Dark/OLED themes with system detection
 - **Nag Blocking**: Granular controls for login prompts, email verification, premium ads, app prompts
@@ -111,6 +121,18 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 - **Domain Muting**: Filter posts by linked domains with wildcard subdomain support (up to 100)
 - **Import/Export**: JSON-based backup/restore for all filter lists
 - **MutationObserver**: Single debounced observer (100ms) watching all dynamic content
+
+**v7.0.0-v7.2.0 - Comment Enhancements:**
+
+- **Color-coded Comments (v7.0.0)**: Visual depth indicators with rainbow/color-blind palettes, customizable stripe width
+- **Comment Navigation (v7.1.0)**: Floating buttons for next/previous/top navigation, keyboard shortcuts (Shift+J/K)
+- **Inline Image Expansion (v7.2.0)**: Expand images directly in comments, supports imgur/i.redd.it, lazy loading
+
+**v8.0.0-v10.0.0 - User Experience Polish:**
+
+- **Sort Order Memory (v8.0.0)**: Remember preferred sort per subreddit, auto-apply on visit, LRU eviction at 100 entries
+- **User Tagging (v9.0.0)**: Custom labels/colors for Reddit users, 12 preset colors, tag management, up to 500 tags
+- **Scroll Position Memory (v10.0.0)**: Remember scroll position when navigating back, 24-hour retention, LRU eviction at 100 entries
 
 ## Development Commands
 
@@ -172,10 +194,18 @@ make clean           # Remove build artifacts
 ├── content-script.js         # Content script (redirect notices, dark mode, filtering)
 ├── styles.css                # Content script CSS (dark mode, nag blocking)
 ├── img/                      # Extension icons (16-128px)
-├── tests/                    # Vitest test suite
+├── tests/                    # Vitest test suite (270 tests)
 │   ├── setup.js              # Test utilities
-│   ├── rules.test.js         # Rule validation tests
-│   └── patterns.test.js      # URL pattern matching tests
+│   ├── rules.test.js         # Rule validation tests (11 tests)
+│   ├── patterns.test.js      # URL pattern matching tests (21 tests)
+│   ├── stats.test.js         # Statistics tracking tests (19 tests)
+│   ├── storage.test.js       # Storage schema tests (21 tests)
+│   ├── frontends.test.js     # Alternative frontends tests (26 tests)
+│   ├── suggestions.test.js   # Subreddit suggestions tests (22 tests)
+│   ├── comments.test.js      # Comment enhancements tests (77 tests)
+│   ├── sort-preferences.test.js # Sort memory tests (23 tests)
+│   ├── user-tags.test.js     # User tagging tests (25 tests)
+│   └── scroll-positions.test.js # Scroll memory tests (25 tests)
 ├── scripts/                  # Build and utility scripts
 │   └── sync-version.js       # Version synchronization script
 ├── store/                    # Store metadata
@@ -194,7 +224,8 @@ make clean           # Remove build artifacts
 ├── CLAUDE.md                 # AI development guidance
 ├── CONTRIBUTING.md           # Contribution guidelines
 ├── PRIVACY.md                # Privacy policy
-└── IMPROVEMENT-PLAN.md       # Detailed implementation roadmap
+├── ROADMAP.md                # Feature roadmap
+└── CHANGELOG.md              # Version history and changes
 ```
 
 ## Adding New Redirect Rules

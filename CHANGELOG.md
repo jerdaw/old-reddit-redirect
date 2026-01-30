@@ -7,6 +7,195 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [10.0.0] - 2026-01-30
+
+### Added
+
+#### Phase 4.3: Scroll Position Memory
+
+- **Scroll Position Memory**: Automatically remember and restore scroll position when navigating back
+  - Saves scroll position on page unload (beforeunload event)
+  - Restores scroll position on page load using requestIdleCallback for performance
+  - URL normalization preserves sort parameters while removing pagination params
+  - Position clamping prevents errors on pages with different heights
+  - 24-hour automatic cleanup of old positions
+  - LRU eviction at 100 entry limit
+  - Toggle to enable/disable in options page
+  - Clear all positions button for manual cleanup
+  - 60px scroll threshold (only saves if scrolled beyond this)
+  - Syncs across browser instances when sync is enabled
+
+### Changed
+
+- **Storage schema**: Added `scrollPositions` object with positions dictionary
+- **Content script**: Added 120+ lines of scroll save/restore logic
+- **Options page**: Added Scroll Position Memory management section
+
+### Technical Details
+
+- **New storage fields**: `scrollPositions.enabled`, `positions`, `maxEntries`, `retentionHours`
+- **New CSS**: 20+ lines for scroll positions management section
+- **Test coverage**: 25 new tests for scroll position memory (270 total tests passing)
+- **Performance**: requestIdleCallback with 100ms timeout for non-blocking restoration
+- **URL handling**: Normalizes URLs to create consistent storage keys
+
+## [9.0.0] - 2026-01-30
+
+### Added
+
+#### Phase 4.2: User Tagging
+
+- **User Tagging System**: Add custom labels and colors to Reddit users
+  - Tag button (🏷️) appears next to all usernames on Reddit
+  - Click to tag users with custom text (max 50 characters)
+  - Choose from 12 preset colors for tag badges
+  - Tags display as colored badges next to usernames everywhere
+  - Edit or delete tags with a single click
+  - Full management interface in options page with search
+  - Import/export tags as JSON
+  - Stores up to 500 tags with LRU eviction
+  - Tags persist across sessions and sync across browser instances
+  - Real-time updates when tags are modified
+
+### Changed
+
+- **Storage schema**: Added `userTags` object with tags dictionary
+- **Content script**: Added 250+ lines of tag detection, dialog UI, and badge display
+- **Options page**: Added User Tags management section with full CRUD operations
+- **CSS**: Added 300+ lines for tag buttons, badges, and dialog styling
+
+### Technical Details
+
+- **New storage fields**: `userTags.enabled`, `tags`, `maxTags`
+- **New CSS**: 300+ lines for tag UI elements and dark mode support
+- **New message types**: `REFRESH_USER_TAGS`, `REFRESH_USER_TAG` for real-time updates
+- **Test coverage**: 25 new tests for user tags (245 total tests passing)
+- **Performance**: Tags are cached and applied efficiently with MutationObserver
+- **Security**: All tag text and usernames are HTML-escaped to prevent XSS
+
+## [8.0.0] - 2026-01-30
+
+### Added
+
+#### Phase 4.1: Subreddit Sort Preferences
+
+- **Sort Order Memory**: Automatically remember and apply your preferred sort order per subreddit
+  - Saves preference when you manually change sort (new/top/rising/hot/controversial)
+  - Auto-applies saved preference on future visits to that subreddit
+  - Supports time filters for top/controversial (hour/day/week/month/year/all)
+  - Stores up to 100 subreddit preferences with LRU eviction
+  - Prevents redirect loops with session-based tracking
+  - Works seamlessly without disrupting Reddit's native behavior
+  - Syncs across browser instances when sync is enabled
+
+### Changed
+
+- **Storage schema**: Added `sortPreferences` object with preferences dictionary
+- **Content script**: Added 170+ lines of sort detection, URL parsing, and redirect logic
+- **Options page**: Added Sort Preferences management section with search and import/export
+
+### Technical Details
+
+- **New storage fields**: `sortPreferences.enabled`, `preferences`, `maxEntries`
+- **New CSS**: 160+ lines for sort preferences table, buttons, and responsive design
+- **Test coverage**: 23 new tests for sort preferences (220 total tests passing)
+- **Performance**: Interval-based detection (1000ms) with minimal overhead
+- **URL patterns**: Supports all Reddit sort types and time filters
+
+## [7.2.0] - 2026-01-30
+
+### Added
+
+#### Phase 3.3: Inline Image Expansion
+
+- **Inline Image Preview**: Expand images directly within comment text
+  - Support for i.redd.it, preview.redd.it, i.imgur.com, and imgur.com
+  - Expand/collapse buttons ([+]/[-]) next to image links
+  - Lazy loading for performance optimization
+  - Loading states and error handling for failed images
+  - Max width customization (400/600/800px or full width)
+  - Automatic imgur page URL conversion to direct image URLs
+  - Dark mode compatible styling
+  - Syncs across browser instances when sync is enabled
+
+### Changed
+
+- **Storage schema**: Extended `commentEnhancements` with `inlineImages` and `maxImageWidth`
+- **Content script**: Added 250+ lines of image detection, expansion, and lazy loading logic
+- **Options page**: Extended Comment Enhancements section with inline image controls
+
+### Technical Details
+
+- **New storage fields**: `commentEnhancements.inlineImages`, `maxImageWidth`
+- **New CSS**: 90+ lines for expand buttons, inline image containers, and loading states
+- **New message type**: `REFRESH_INLINE_IMAGES` for real-time updates
+- **Test coverage**: 34 new tests for inline image expansion (197 total tests passing)
+- **Performance**: Lazy loading prevents bandwidth waste on collapsed images
+- **Supported formats**: jpg, jpeg, png, gif, webp, svg
+
+## [7.1.0] - 2026-01-30
+
+### Added
+
+#### Phase 3.2: Comment Navigation Buttons
+
+- **Floating Navigation Buttons**: Navigate between top-level comments effortlessly
+  - Three-button interface: Previous, Next, and Back to Top
+  - Smooth scroll animation with visual comment highlighting
+  - Keyboard shortcuts: Shift+J (next) and Shift+K (previous)
+  - Position customization (bottom-right or bottom-left)
+  - Touch-friendly button sizing (44px desktop, 48px mobile)
+  - Smart context detection (only appears on comment pages)
+  - Dark mode compatible styling
+  - Accessibility features: focus-visible states, screen reader titles
+  - Respects reduced-motion preferences
+  - Syncs across browser instances when sync is enabled
+
+### Changed
+
+- **Storage schema**: Extended `commentEnhancements` with `navigationButtons` and `navButtonPosition`
+- **Content script**: Added 200+ lines of navigation logic and button creation
+- **Options page**: Extended Comment Enhancements section with navigation controls
+
+### Technical Details
+
+- **New storage fields**: `commentEnhancements.navigationButtons`, `navButtonPosition`
+- **New CSS**: 120+ lines for navigation button styles and responsive design
+- **New message type**: `REFRESH_COMMENT_NAVIGATION` for real-time updates
+- **Test coverage**: 20 new tests for comment navigation (163 total tests passing)
+- **Performance**: Optimized parent comment detection for threads with 100+ top-level comments
+
+## [7.0.0] - 2026-01-30
+
+### Added
+
+#### Phase 3.1: Color-Coded Comments
+
+- **Color-Coded Comment Depth**: Visual indicators showing comment nesting depth
+  - Rainbow color stripe on left edge of comments
+  - 10-color palette cycling for deeper nesting
+  - Color-blind friendly palette option for accessibility
+  - Stripe width customization (2-5 pixels)
+  - Automatic depth calculation using requestIdleCallback
+  - Real-time updates via MutationObserver
+  - Dark mode compatible color adjustments
+  - Syncs across browser instances when sync is enabled
+
+### Changed
+
+- **Storage schema**: Updated to version 2 with `commentEnhancements` object
+- **Content script**: Added depth calculation and color stripe application logic
+- **MutationObserver**: Extended to watch for dynamically loaded comments
+- **Options page**: Added Comment Enhancements section with toggles and palette selector
+
+### Technical Details
+
+- **New storage fields**: `commentEnhancements.colorCodedComments`, `colorPalette`, `stripeWidth`
+- **New CSS**: 150+ lines of color palette definitions and stripe styles
+- **New message type**: `REFRESH_COLOR_CODED_COMMENTS` for real-time updates
+- **Test coverage**: 23 new tests for comment enhancements (143 total tests passing)
+- **Performance**: Optimized for threads with 500+ comments using requestIdleCallback
+
 ## [6.0.0] - 2026-01-30
 
 ### Added

@@ -59,6 +59,40 @@
   - Up to 100 muted domains
   - Import/export domain lists
 
+### Comment Enhancements
+
+- **Color-coded comments** - Visual depth indicators for nested comment threads
+  - Rainbow or color-blind friendly palettes
+  - Customizable stripe width
+  - Toggle on/off as needed
+- **Comment navigation** - Floating buttons to navigate between top-level comments
+  - "Next" and "Previous" parent comment buttons
+  - "Back to top" button
+  - Keyboard shortcuts (Shift+J/K)
+  - Customizable position
+- **Inline image expansion** - View images directly in comments without opening new tabs
+  - Supports imgur, i.redd.it, and other common hosts
+  - Click to expand/collapse
+  - Works with jpg, png, gif, webp formats
+
+### User Experience Polish
+
+- **Sort order memory** - Remember preferred sort per subreddit
+  - Auto-applies sort preference on next visit
+  - Supports all sort types (hot, new, top, controversial, etc.)
+  - Time parameter memory for top/controversial
+  - LRU eviction at 100 entries
+- **User tagging** - Add custom labels/tags to Reddit users
+  - 12 preset colors or custom color picker
+  - Tags display next to usernames everywhere
+  - Tag management in options page
+  - Up to 500 tags with LRU eviction
+- **Scroll position memory** - Remember scroll position when navigating back
+  - Auto-saves on page unload
+  - Auto-restores when returning via back button
+  - 24-hour retention with automatic cleanup
+  - LRU eviction at 100 entries
+
 ### URL Handling
 
 - **Mobile Reddit support (m.reddit.com)** - Mobile web links now redirect

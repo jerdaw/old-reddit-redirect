@@ -308,3 +308,694 @@ a[href*="/premium"],
 .orr-notice-close:hover {
   color: #d7dadc;
 }
+
+/* ============================================
+   Color-Coded Comments
+   ============================================ */
+
+/* Color palette CSS variables - Standard (Rainbow) */
+body.orr-palette-standard {
+  --orr-depth-1: #e74c3c; /* Red */
+  --orr-depth-2: #e67e22; /* Orange */
+  --orr-depth-3: #f1c40f; /* Yellow */
+  --orr-depth-4: #2ecc71; /* Green */
+  --orr-depth-5: #1abc9c; /* Teal */
+  --orr-depth-6: #3498db; /* Blue */
+  --orr-depth-7: #9b59b6; /* Purple */
+  --orr-depth-8: #e91e63; /* Pink */
+  --orr-depth-9: #795548; /* Brown */
+  --orr-depth-10: #607d8b; /* Gray */
+}
+
+/* Color palette CSS variables - Color-Blind Friendly */
+body.orr-palette-colorblind {
+  --orr-depth-1: #000000; /* Black */
+  --orr-depth-2: #e69f00; /* Orange */
+  --orr-depth-3: #56b4e9; /* Sky Blue */
+  --orr-depth-4: #009e73; /* Bluish Green */
+  --orr-depth-5: #f0e442; /* Yellow */
+  --orr-depth-6: #0072b2; /* Blue */
+  --orr-depth-7: #d55e00; /* Vermillion */
+  --orr-depth-8: #cc79a7; /* Reddish Purple */
+  --orr-depth-9: #999999; /* Gray */
+  --orr-depth-10: #666666; /* Dark Gray */
+}
+
+/* Adjust color-blind palette for dark mode */
+body.orr-dark-mode.orr-palette-colorblind,
+body.orr-oled-mode.orr-palette-colorblind {
+  --orr-depth-1: #ffffff; /* White instead of black */
+  --orr-depth-2: #e69f00;
+  --orr-depth-3: #56b4e9;
+  --orr-depth-4: #009e73;
+  --orr-depth-5: #f0e442;
+  --orr-depth-6: #0072b2;
+  --orr-depth-7: #d55e00;
+  --orr-depth-8: #cc79a7;
+  --orr-depth-9: #cccccc;
+  --orr-depth-10: #999999;
+}
+
+/* Color stripe on left edge of comments */
+body.orr-color-comments .thing.comment[data-depth] {
+  position: relative;
+}
+
+body.orr-color-comments .thing.comment[data-depth]::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--orr-stripe-width, 3px);
+}
+
+/* Apply colors based on depth (cycle for depth > 10) */
+body.orr-color-comments .thing.comment[data-depth="1"]::before {
+  background-color: var(--orr-depth-1);
+}
+
+body.orr-color-comments .thing.comment[data-depth="2"]::before {
+  background-color: var(--orr-depth-2);
+}
+
+body.orr-color-comments .thing.comment[data-depth="3"]::before {
+  background-color: var(--orr-depth-3);
+}
+
+body.orr-color-comments .thing.comment[data-depth="4"]::before {
+  background-color: var(--orr-depth-4);
+}
+
+body.orr-color-comments .thing.comment[data-depth="5"]::before {
+  background-color: var(--orr-depth-5);
+}
+
+body.orr-color-comments .thing.comment[data-depth="6"]::before {
+  background-color: var(--orr-depth-6);
+}
+
+body.orr-color-comments .thing.comment[data-depth="7"]::before {
+  background-color: var(--orr-depth-7);
+}
+
+body.orr-color-comments .thing.comment[data-depth="8"]::before {
+  background-color: var(--orr-depth-8);
+}
+
+body.orr-color-comments .thing.comment[data-depth="9"]::before {
+  background-color: var(--orr-depth-9);
+}
+
+body.orr-color-comments .thing.comment[data-depth="10"]::before {
+  background-color: var(--orr-depth-10);
+}
+
+/* Cycle colors for depth > 10 */
+body.orr-color-comments .thing.comment[data-depth="11"]::before {
+  background-color: var(--orr-depth-1);
+}
+
+body.orr-color-comments .thing.comment[data-depth="12"]::before {
+  background-color: var(--orr-depth-2);
+}
+
+body.orr-color-comments .thing.comment[data-depth="13"]::before {
+  background-color: var(--orr-depth-3);
+}
+
+body.orr-color-comments .thing.comment[data-depth="14"]::before {
+  background-color: var(--orr-depth-4);
+}
+
+body.orr-color-comments .thing.comment[data-depth="15"]::before {
+  background-color: var(--orr-depth-5);
+}
+
+body.orr-color-comments .thing.comment[data-depth="16"]::before {
+  background-color: var(--orr-depth-6);
+}
+
+body.orr-color-comments .thing.comment[data-depth="17"]::before {
+  background-color: var(--orr-depth-7);
+}
+
+body.orr-color-comments .thing.comment[data-depth="18"]::before {
+  background-color: var(--orr-depth-8);
+}
+
+body.orr-color-comments .thing.comment[data-depth="19"]::before {
+  background-color: var(--orr-depth-9);
+}
+
+body.orr-color-comments .thing.comment[data-depth="20"]::before {
+  background-color: var(--orr-depth-10);
+}
+
+/* ============================================
+   Comment Navigation Buttons
+   ============================================ */
+
+/* Navigation container */
+.orr-comment-nav {
+  position: fixed;
+  bottom: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Position variants */
+.orr-nav-bottom-right {
+  right: 20px;
+}
+
+.orr-nav-bottom-left {
+  left: 20px;
+}
+
+/* Hide on non-comment pages */
+body:not(.comments-page) .orr-comment-nav {
+  display: none !important;
+}
+
+/* Navigation buttons */
+.orr-nav-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: #0079d3;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+  padding: 0;
+}
+
+.orr-nav-button:hover {
+  transform: scale(1.1);
+  background: #0066b3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.orr-nav-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* SVG icon sizing */
+.orr-nav-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Dark mode support */
+body.orr-dark-mode .orr-nav-button,
+body.orr-oled-mode .orr-nav-button {
+  background: #1a1a1b;
+  border: 1px solid #343536;
+  color: #d7dadc;
+}
+
+body.orr-dark-mode .orr-nav-button:hover,
+body.orr-oled-mode .orr-nav-button:hover {
+  background: #272729;
+  border-color: #818384;
+}
+
+/* Accessibility - focus visible */
+.orr-nav-button:focus-visible {
+  outline: 2px solid #0079d3;
+  outline-offset: 2px;
+}
+
+body.orr-dark-mode .orr-nav-button:focus-visible,
+body.orr-oled-mode .orr-nav-button:focus-visible {
+  outline-color: #5f99cf;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .orr-comment-nav {
+    bottom: 15px;
+  }
+
+  .orr-nav-bottom-right {
+    right: 15px;
+  }
+
+  .orr-nav-bottom-left {
+    left: 15px;
+  }
+
+  .orr-nav-button {
+    width: 48px;
+    height: 48px;
+  }
+
+  .orr-nav-button svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .orr-nav-button {
+    transition: none;
+  }
+
+  .orr-nav-button:hover {
+    transform: none;
+  }
+
+  .orr-nav-button:active {
+    transform: none;
+  }
+}
+
+/* ============================================
+   Inline Image Expansion
+   ============================================ */
+
+/* Expand/collapse button */
+.orr-expand-image {
+  margin-left: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-family: monospace;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #666;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  vertical-align: baseline;
+}
+
+.orr-expand-image:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+.orr-expand-image:active {
+  background: #d0d0d0;
+}
+
+/* Dark mode for expand button */
+body.orr-dark-mode .orr-expand-image,
+body.orr-oled-mode .orr-expand-image {
+  background: #272729;
+  border-color: #343536;
+  color: #818384;
+}
+
+body.orr-dark-mode .orr-expand-image:hover,
+body.orr-oled-mode .orr-expand-image:hover {
+  background: #343536;
+  color: #d7dadc;
+}
+
+body.orr-dark-mode .orr-expand-image:active,
+body.orr-oled-mode .orr-expand-image:active {
+  background: #3a3a3c;
+}
+
+/* Inline image container */
+.orr-inline-image {
+  margin: 8px 0;
+  max-width: var(--orr-max-image-width, 600px);
+  display: block;
+}
+
+/* Image styling */
+.orr-inline-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  display: block;
+  background: #f5f5f5;
+}
+
+/* Dark mode for images */
+body.orr-dark-mode .orr-inline-image img,
+body.orr-oled-mode .orr-inline-image img {
+  border-color: #343536;
+  background: #1a1a1b;
+}
+
+/* Loading state */
+.orr-inline-image.orr-loading {
+  min-height: 100px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  color: #888;
+}
+
+.orr-inline-image.orr-loading::before {
+  content: "Loading image...";
+}
+
+/* Dark mode for loading state */
+body.orr-dark-mode .orr-inline-image.orr-loading,
+body.orr-oled-mode .orr-inline-image.orr-loading {
+  background: #1a1a1b;
+  border-color: #343536;
+  color: #818384;
+}
+
+/* Error state styling (inline) */
+.orr-inline-image span {
+  display: block;
+  padding: 20px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ==============================================================================
+   USER TAGGING
+   Custom labels/tags for Reddit users
+   ============================================================================== */
+
+/* Tag button (appears when user has no tag) */
+.orr-tag-btn {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 4px;
+  font-size: 12px;
+  background: transparent;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  vertical-align: middle;
+}
+
+.orr-tag-btn:hover {
+  opacity: 1;
+  border-color: #0079d3;
+}
+
+/* Dark mode tag button */
+body.orr-dark-mode .orr-tag-btn,
+body.orr-oled-mode .orr-tag-btn {
+  border-color: #343536;
+  color: #818384;
+}
+
+body.orr-dark-mode .orr-tag-btn:hover,
+body.orr-oled-mode .orr-tag-btn:hover {
+  border-color: #0079d3;
+  opacity: 1;
+}
+
+/* Tag badge (displays user's tag) */
+.orr-user-tag {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  background: #3498db;
+  border-radius: 3px;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: opacity 0.15s;
+}
+
+.orr-user-tag:hover {
+  opacity: 0.8;
+}
+
+/* Tag dialog overlay */
+.orr-tag-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  animation: fadeIn 0.15s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Tag dialog */
+.orr-tag-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 90%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  animation: slideIn 0.15s;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translate(-50%, -48%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+.orr-tag-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.orr-tag-dialog-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #1a1a1b;
+}
+
+.orr-tag-dialog-close {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #878a8c;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.orr-tag-dialog-close:hover {
+  background: #f6f7f8;
+}
+
+.orr-tag-dialog-body {
+  padding: 20px;
+}
+
+.orr-tag-dialog-body label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #1a1a1b;
+}
+
+.orr-tag-dialog-body input[type="text"] {
+  width: 100%;
+  padding: 8px 12px;
+  margin-top: 6px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.orr-tag-dialog-body input[type="text"]:focus {
+  outline: 2px solid #0079d3;
+  outline-offset: 0;
+}
+
+/* Color picker */
+.orr-color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.orr-color-option {
+  width: 40px;
+  height: 40px;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.orr-color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.orr-color-option.selected {
+  border-color: #1a1a1b;
+  box-shadow:
+    0 0 0 2px white,
+    0 0 0 4px #0079d3;
+}
+
+.orr-tag-dialog-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.orr-tag-dialog-footer button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.orr-tag-save {
+  background: #0079d3;
+  color: white;
+}
+
+.orr-tag-save:hover {
+  background: #0060a8;
+}
+
+.orr-tag-delete {
+  background: #ea0027;
+  color: white;
+}
+
+.orr-tag-delete:hover {
+  background: #c10020;
+}
+
+.orr-tag-cancel {
+  background: #f6f7f8;
+  color: #1a1a1b;
+}
+
+.orr-tag-cancel:hover {
+  background: #e9ecef;
+}
+
+/* Dark mode for dialog */
+body.orr-dark-mode .orr-tag-dialog,
+body.orr-oled-mode .orr-tag-dialog {
+  background: #1a1a1b;
+}
+
+body.orr-dark-mode .orr-tag-dialog-header,
+body.orr-oled-mode .orr-tag-dialog-header {
+  border-color: #343536;
+}
+
+body.orr-dark-mode .orr-tag-dialog-header h3,
+body.orr-oled-mode .orr-tag-dialog-header h3 {
+  color: #d7dadc;
+}
+
+body.orr-dark-mode .orr-tag-dialog-close:hover,
+body.orr-oled-mode .orr-tag-dialog-close:hover {
+  background: #272729;
+}
+
+body.orr-dark-mode .orr-tag-dialog-body label,
+body.orr-oled-mode .orr-tag-dialog-body label {
+  color: #d7dadc;
+}
+
+body.orr-dark-mode .orr-tag-dialog-body input[type="text"],
+body.orr-oled-mode .orr-tag-dialog-body input[type="text"] {
+  background: #272729;
+  border-color: #343536;
+  color: #d7dadc;
+}
+
+body.orr-dark-mode .orr-tag-dialog-footer,
+body.orr-oled-mode .orr-tag-dialog-footer {
+  border-color: #343536;
+}
+
+body.orr-dark-mode .orr-tag-cancel,
+body.orr-oled-mode .orr-tag-cancel {
+  background: #272729;
+  color: #d7dadc;
+}
+
+body.orr-dark-mode .orr-tag-cancel:hover,
+body.orr-oled-mode .orr-tag-cancel:hover {
+  background: #343536;
+}
+
+body.orr-dark-mode .orr-color-option.selected,
+body.orr-oled-mode .orr-color-option.selected {
+  border-color: #d7dadc;
+  box-shadow:
+    0 0 0 2px #1a1a1b,
+    0 0 0 4px #0079d3;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .orr-tag-dialog {
+    width: 95%;
+    max-width: 95%;
+  }
+
+  .orr-color-picker {
+    gap: 6px;
+  }
+
+  .orr-color-option {
+    width: 36px;
+    height: 36px;
+  }
+}

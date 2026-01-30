@@ -46,6 +46,13 @@
     toastMessage: document.getElementById("toast-message"),
     darkMode: document.getElementById("dark-mode"),
     autoCollapseAutomod: document.getElementById("auto-collapse-automod"),
+    colorCodedComments: document.getElementById("color-coded-comments"),
+    colorPalette: document.getElementById("color-palette"),
+    stripeWidth: document.getElementById("stripe-width"),
+    navigationButtons: document.getElementById("navigation-buttons"),
+    navButtonPosition: document.getElementById("nav-button-position"),
+    inlineImages: document.getElementById("inline-images"),
+    maxImageWidth: document.getElementById("max-image-width"),
     nagBlockingEnabled: document.getElementById("nag-blocking-enabled"),
     blockLoginPrompts: document.getElementById("block-login-prompts"),
     blockEmailVerification: document.getElementById("block-email-verification"),
@@ -124,6 +131,10 @@
     await loadStats();
     await loadUIPreferences();
     await loadDarkModeSettings();
+    await loadCommentEnhancementsSettings();
+    await loadSortPreferences();
+    await loadUserTags();
+    await loadScrollPositions();
     await loadNagBlockingSettings();
     await loadFrontendOptions();
     await loadWhitelist();
@@ -280,6 +291,558 @@
     elements.darkMode.value = darkModePrefs.enabled || "auto";
     elements.autoCollapseAutomod.checked =
       darkModePrefs.autoCollapseAutomod !== false;
+  }
+
+  /**
+   * Load comment enhancements settings
+   */
+  async function loadCommentEnhancementsSettings() {
+    const enhancements = await window.Storage.getCommentEnhancements();
+
+    elements.colorCodedComments.checked =
+      enhancements.colorCodedComments !== false;
+    elements.colorPalette.value = enhancements.colorPalette || "standard";
+    elements.stripeWidth.value = String(enhancements.stripeWidth || 3);
+    elements.navigationButtons.checked =
+      enhancements.navigationButtons !== false;
+    elements.navButtonPosition.value =
+      enhancements.navButtonPosition || "bottom-right";
+    elements.inlineImages.checked = enhancements.inlineImages !== false;
+    elements.maxImageWidth.value = String(enhancements.maxImageWidth || 600);
+  }
+
+  /**
+   * Load sort preferences settings
+   */
+  async function loadSortPreferences() {
+    const config = await window.Storage.getSortPreferences();
+
+    // Set toggle state
+    document.getElementById("sort-preferences-enabled").checked =
+      config.enabled !== false;
+
+    // Refresh the list
+    await refreshSortPreferencesList();
+  }
+
+  /**
+   * Refresh the sort preferences list
+   */
+  async function refreshSortPreferencesList() {
+    const config = await window.Storage.getSortPreferences();
+    const prefs = config.preferences || {};
+    const tbody = document.getElementById("prefs-tbody");
+    const emptyState = document.getElementById("prefs-empty");
+    const countSpan = document.getElementById("pref-count");
+    const maxSpan = document.getElementById("pref-max");
+    const searchInput = document.getElementById("pref-search");
+
+    const entries = Object.entries(prefs);
+    const searchTerm = (searchInput.value || "").toLowerCase();
+
+    // Filter by search term
+    const filtered = entries.filter(([sub]) => sub.includes(searchTerm));
+
+    // Sort by timestamp (newest first)
+    filtered.sort((a, b) => b[1].timestamp - a[1].timestamp);
+
+    countSpan.textContent = entries.length;
+    maxSpan.textContent = config.maxEntries || 100;
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = "";
+      emptyState.style.display = "block";
+      document.getElementById("prefs-table").style.display = "none";
+      return;
+    }
+
+    emptyState.style.display = "none";
+    document.getElementById("prefs-table").style.display = "table";
+
+    tbody.innerHTML = filtered
+      .map(([subreddit, data]) => {
+        const sortDisplay = formatSortDisplay(data.sort);
+        const timeDisplay = data.time ? formatTimeDisplay(data.time) : "—";
+        const dateDisplay = formatDate(data.timestamp);
+
+        return `
+      <tr data-subreddit="${escapeHtml(subreddit)}">
+        <td class="subreddit-cell">
+          <a href="https://old.reddit.com/r/${escapeHtml(subreddit)}/"
+             target="_blank"
+             rel="noopener">
+            r/${escapeHtml(subreddit)}
+          </a>
+        </td>
+        <td>${sortDisplay}</td>
+        <td>${timeDisplay}</td>
+        <td>${dateDisplay}</td>
+        <td>
+          <button class="delete-pref secondary-button"
+                  data-subreddit="${escapeHtml(subreddit)}"
+                  title="Delete preference">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `;
+      })
+      .join("");
+
+    // Attach delete handlers
+    tbody.querySelectorAll(".delete-pref").forEach((btn) => {
+      btn.addEventListener("click", handleDeletePreference);
+    });
+  }
+
+  /**
+   * Format sort display name
+   */
+  function formatSortDisplay(sort) {
+    const labels = {
+      hot: "Hot",
+      new: "New",
+      top: "Top",
+      rising: "Rising",
+      controversial: "Controversial",
+    };
+    return labels[sort] || sort;
+  }
+
+  /**
+   * Format time filter display name
+   */
+  function formatTimeDisplay(time) {
+    const labels = {
+      hour: "Past Hour",
+      day: "Today",
+      week: "This Week",
+      month: "This Month",
+      year: "This Year",
+      all: "All Time",
+    };
+    return labels[time] || time;
+  }
+
+  /**
+   * Format date display
+   */
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+
+    return date.toLocaleDateString();
+  }
+
+  /**
+   * Handle sort preferences toggle
+   */
+  async function handleSortPreferencesToggle(e) {
+    const enabled = e.target.checked;
+    const config = await window.Storage.getSortPreferences();
+    config.enabled = enabled;
+    await window.Storage.setSortPreferences(config);
+  }
+
+  /**
+   * Handle delete individual preference
+   */
+  async function handleDeletePreference(e) {
+    const subreddit = e.target.dataset.subreddit;
+
+    if (!confirm(`Delete sort preference for r/${subreddit}?`)) {
+      return;
+    }
+
+    await window.Storage.deleteSortPreference(subreddit);
+    await refreshSortPreferencesList();
+  }
+
+  /**
+   * Handle clear all preferences
+   */
+  async function handleClearAllPreferences() {
+    const config = await window.Storage.getSortPreferences();
+    const count = Object.keys(config.preferences || {}).length;
+
+    if (count === 0) {
+      alert("No preferences to clear.");
+      return;
+    }
+
+    if (
+      !confirm(
+        `Clear all ${count} saved sort preferences? This cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    await window.Storage.clearSortPreferences();
+    await refreshSortPreferencesList();
+  }
+
+  /**
+   * Handle export preferences
+   */
+  async function handleExportPreferences() {
+    const config = await window.Storage.getSortPreferences();
+    const prefs = config.preferences || {};
+    const json = JSON.stringify(prefs, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `sort-preferences-${Date.now()}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Handle import preferences
+   */
+  async function handleImportPreferences() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+
+        // Validate structure
+        if (typeof imported !== "object" || imported === null) {
+          throw new Error("Invalid format");
+        }
+
+        const config = await window.Storage.getSortPreferences();
+        config.preferences = { ...config.preferences, ...imported };
+
+        await window.Storage.setSortPreferences(config);
+        await refreshSortPreferencesList();
+
+        alert(`Imported ${Object.keys(imported).length} preferences`);
+      } catch (err) {
+        alert("Failed to import preferences: " + err.message);
+      }
+    };
+
+    input.click();
+  }
+
+  /**
+   * Load user tags settings
+   */
+  async function loadUserTags() {
+    const config = await window.Storage.getUserTags();
+
+    // Set toggle state
+    document.getElementById("user-tags-enabled").checked =
+      config.enabled !== false;
+
+    // Refresh the list
+    await refreshUserTagsList();
+  }
+
+  /**
+   * Refresh the user tags list
+   */
+  async function refreshUserTagsList() {
+    const config = await window.Storage.getUserTags();
+    const tags = config.tags || {};
+    const tbody = document.getElementById("tags-tbody");
+    const emptyState = document.getElementById("tags-empty");
+    const countSpan = document.getElementById("tag-count");
+    const maxSpan = document.getElementById("tag-max");
+    const searchInput = document.getElementById("tag-search");
+
+    const entries = Object.entries(tags);
+    const searchTerm = (searchInput.value || "").toLowerCase();
+
+    // Filter by search term
+    const filtered = entries.filter(([username]) =>
+      username.includes(searchTerm)
+    );
+
+    // Sort by timestamp (newest first)
+    filtered.sort((a, b) => b[1].timestamp - a[1].timestamp);
+
+    countSpan.textContent = entries.length;
+    maxSpan.textContent = config.maxTags || 500;
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = "";
+      emptyState.style.display = "block";
+      document.getElementById("tags-table").style.display = "none";
+      return;
+    }
+
+    emptyState.style.display = "none";
+    document.getElementById("tags-table").style.display = "table";
+
+    tbody.innerHTML = filtered
+      .map(([username, data]) => {
+        const dateDisplay = formatDate(data.timestamp);
+
+        return `
+      <tr data-username="${escapeHtml(username)}">
+        <td class="username-cell">
+          <a href="https://old.reddit.com/user/${escapeHtml(username)}"
+             target="_blank"
+             rel="noopener">
+            u/${escapeHtml(username)}
+          </a>
+        </td>
+        <td>
+          <span class="tag-badge-preview" style="background: ${data.color}">
+            ${escapeHtml(data.text)}
+          </span>
+        </td>
+        <td>
+          <span class="tag-color-preview" style="background: ${data.color}"></span>
+        </td>
+        <td>${dateDisplay}</td>
+        <td>
+          <button class="edit-tag secondary-button"
+                  data-username="${escapeHtml(username)}"
+                  title="Edit tag">
+            Edit
+          </button>
+          <button class="delete-tag secondary-button"
+                  data-username="${escapeHtml(username)}"
+                  title="Delete tag">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `;
+      })
+      .join("");
+
+    // Attach edit handlers
+    tbody.querySelectorAll(".edit-tag").forEach((btn) => {
+      btn.addEventListener("click", handleEditTag);
+    });
+
+    // Attach delete handlers
+    tbody.querySelectorAll(".delete-tag").forEach((btn) => {
+      btn.addEventListener("click", handleDeleteTag);
+    });
+  }
+
+  /**
+   * Handle user tags toggle
+   */
+  async function handleUserTagsToggle(e) {
+    const enabled = e.target.checked;
+    const config = await window.Storage.getUserTags();
+    config.enabled = enabled;
+    await window.Storage.setUserTags(config);
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_TAGS" });
+      }
+    });
+  }
+
+  /**
+   * Handle edit tag
+   */
+  async function handleEditTag(e) {
+    const username = e.target.dataset.username;
+    const tag = await window.Storage.getUserTag(username);
+
+    if (!tag) {
+      alert("Tag not found");
+      return;
+    }
+
+    const newText = prompt(`Edit tag for u/${username}:`, tag.text);
+    if (newText === null) return; // Cancelled
+
+    if (!newText.trim()) {
+      alert("Tag text cannot be empty");
+      return;
+    }
+
+    await window.Storage.setUserTag(username, {
+      text: newText.trim(),
+      color: tag.color,
+    });
+
+    await refreshUserTagsList();
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "REFRESH_USER_TAG",
+          username: username,
+        });
+      }
+    });
+  }
+
+  /**
+   * Handle delete individual tag
+   */
+  async function handleDeleteTag(e) {
+    const username = e.target.dataset.username;
+
+    if (!confirm(`Delete tag for u/${username}?`)) {
+      return;
+    }
+
+    await window.Storage.deleteUserTag(username);
+    await refreshUserTagsList();
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "REFRESH_USER_TAG",
+          username: username,
+        });
+      }
+    });
+  }
+
+  /**
+   * Handle clear all tags
+   */
+  async function handleClearAllTags() {
+    const config = await window.Storage.getUserTags();
+    const count = Object.keys(config.tags || {}).length;
+
+    if (count === 0) {
+      alert("No tags to clear.");
+      return;
+    }
+
+    if (
+      !confirm(`Clear all ${count} saved user tags? This cannot be undone.`)
+    ) {
+      return;
+    }
+
+    await window.Storage.clearUserTags();
+    await refreshUserTagsList();
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_TAGS" });
+      }
+    });
+  }
+
+  /**
+   * Handle export tags
+   */
+  async function handleExportTags() {
+    const config = await window.Storage.getUserTags();
+    const tags = config.tags || {};
+    const json = JSON.stringify(tags, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `user-tags-${Date.now()}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Handle import tags
+   */
+  async function handleImportTags() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+
+        // Validate structure
+        if (typeof imported !== "object" || imported === null) {
+          throw new Error("Invalid format");
+        }
+
+        const config = await window.Storage.getUserTags();
+        config.tags = { ...config.tags, ...imported };
+
+        await window.Storage.setUserTags(config);
+        await refreshUserTagsList();
+
+        alert(`Imported ${Object.keys(imported).length} tags`);
+
+        // Notify content script to refresh
+        chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+          for (const tab of tabs) {
+            chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_TAGS" });
+          }
+        });
+      } catch (err) {
+        alert("Failed to import tags: " + err.message);
+      }
+    };
+
+    input.click();
+  }
+
+  /**
+   * Load scroll positions settings
+   */
+  async function loadScrollPositions() {
+    const config = await window.Storage.getScrollPositions();
+
+    document.getElementById("scroll-positions-enabled").checked =
+      config.enabled !== false;
+
+    const count = Object.keys(config.positions || {}).length;
+    document.getElementById("scroll-positions-count").textContent = count;
+  }
+
+  /**
+   * Handle scroll positions toggle
+   */
+  async function handleScrollPositionsToggle(e) {
+    const enabled = e.target.checked;
+    const config = await window.Storage.getScrollPositions();
+    config.enabled = enabled;
+    await window.Storage.setScrollPositions(config);
+  }
+
+  /**
+   * Handle clear scroll positions
+   */
+  async function handleClearScrollPositions() {
+    if (!confirm("Clear all saved scroll positions?")) return;
+
+    await window.Storage.clearScrollPositions();
+    await loadScrollPositions();
   }
 
   /**
@@ -642,6 +1205,53 @@
     });
 
     showToast("Dark mode settings saved");
+  }
+
+  /**
+   * Handle comment enhancements preference changes
+   */
+  async function handleCommentEnhancementsChange() {
+    const enhancements = {
+      colorCodedComments: elements.colorCodedComments.checked,
+      colorPalette: elements.colorPalette.value,
+      stripeWidth: parseInt(elements.stripeWidth.value, 10),
+      navigationButtons: elements.navigationButtons.checked,
+      navButtonPosition: elements.navButtonPosition.value,
+      inlineImages: elements.inlineImages.checked,
+      maxImageWidth: parseInt(elements.maxImageWidth.value, 10),
+    };
+
+    await window.Storage.setCommentEnhancements(enhancements);
+
+    // Notify all old.reddit.com tabs to refresh comment enhancements
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_COLOR_CODED_COMMENTS" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_COMMENT_NAVIGATION" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_INLINE_IMAGES" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Comment enhancements settings saved");
   }
 
   /**
@@ -1762,6 +2372,36 @@
       handleDarkModeChange
     );
 
+    // Comment enhancements
+    elements.colorCodedComments.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+    elements.colorPalette.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+    elements.stripeWidth.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+    elements.navigationButtons.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+    elements.navButtonPosition.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+    elements.inlineImages.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+    elements.maxImageWidth.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+
     // Nag blocking
     elements.nagBlockingEnabled.addEventListener(
       "change",
@@ -1845,6 +2485,57 @@
         handleTestUrl();
       }
     });
+
+    // Sort Preferences
+    document
+      .getElementById("sort-preferences-enabled")
+      .addEventListener("change", handleSortPreferencesToggle);
+
+    document
+      .getElementById("pref-search")
+      .addEventListener("input", refreshSortPreferencesList);
+
+    document
+      .getElementById("clear-all-prefs")
+      .addEventListener("click", handleClearAllPreferences);
+
+    document
+      .getElementById("export-prefs")
+      .addEventListener("click", handleExportPreferences);
+
+    document
+      .getElementById("import-prefs")
+      .addEventListener("click", handleImportPreferences);
+
+    // User Tags
+    document
+      .getElementById("user-tags-enabled")
+      .addEventListener("change", handleUserTagsToggle);
+
+    document
+      .getElementById("tag-search")
+      .addEventListener("input", refreshUserTagsList);
+
+    document
+      .getElementById("clear-all-tags")
+      .addEventListener("click", handleClearAllTags);
+
+    document
+      .getElementById("export-tags")
+      .addEventListener("click", handleExportTags);
+
+    document
+      .getElementById("import-tags")
+      .addEventListener("click", handleImportTags);
+
+    // Scroll Positions
+    document
+      .getElementById("scroll-positions-enabled")
+      .addEventListener("change", handleScrollPositionsToggle);
+
+    document
+      .getElementById("clear-scroll-positions")
+      .addEventListener("click", handleClearScrollPositions);
 
     // Keyboard shortcut
     elements.customizeShortcut.addEventListener(
