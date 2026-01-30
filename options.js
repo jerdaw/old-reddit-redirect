@@ -289,7 +289,8 @@
     const nagBlocking = await window.Storage.getNagBlocking();
 
     elements.nagBlockingEnabled.checked = nagBlocking.enabled !== false;
-    elements.blockLoginPrompts.checked = nagBlocking.blockLoginPrompts !== false;
+    elements.blockLoginPrompts.checked =
+      nagBlocking.blockLoginPrompts !== false;
     elements.blockEmailVerification.checked =
       nagBlocking.blockEmailVerification !== false;
     elements.blockPremiumBanners.checked =
@@ -1035,7 +1036,9 @@
       }
 
       // Validate keywords (strings only)
-      const invalid = imported.filter((k) => typeof k !== "string" || !k.trim());
+      const invalid = imported.filter(
+        (k) => typeof k !== "string" || !k.trim()
+      );
       if (invalid.length > 0) {
         showToast("Invalid keywords detected", "error");
         return;
@@ -1227,7 +1230,9 @@
       }
 
       // Validate domains (strings only)
-      const invalid = imported.filter((d) => typeof d !== "string" || !d.trim());
+      const invalid = imported.filter(
+        (d) => typeof d !== "string" || !d.trim()
+      );
       if (invalid.length > 0) {
         showToast("Invalid domains detected", "error");
         return;
@@ -1774,7 +1779,10 @@
       "change",
       handleNagBlockingChange
     );
-    elements.blockAppPrompts.addEventListener("change", handleNagBlockingChange);
+    elements.blockAppPrompts.addEventListener(
+      "change",
+      handleNagBlockingChange
+    );
 
     // Subreddit whitelist
     elements.addSubreddit.addEventListener("click", handleAddSubreddit);
@@ -1805,7 +1813,10 @@
         handleAddKeyword();
       }
     });
-    elements.caseSensitive.addEventListener("change", handleCaseSensitiveChange);
+    elements.caseSensitive.addEventListener(
+      "change",
+      handleCaseSensitiveChange
+    );
     elements.exportKeywords.addEventListener("click", handleExportKeywords);
     elements.importKeywords.addEventListener("click", handleImportKeywords);
     elements.importKeywordsFile.addEventListener(

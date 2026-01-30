@@ -7,6 +7,7 @@ Version 6.0.0 is a major feature release that adds comprehensive enhancements to
 ## 🎨 Dark Mode & Theming
 
 ### Dark Mode for old.reddit.com
+
 Experience old Reddit with a beautiful dark theme that's easy on your eyes.
 
 - **Auto mode** - Automatically switches between light and dark based on your system preference
@@ -16,6 +17,7 @@ Experience old Reddit with a beautiful dark theme that's easy on your eyes.
 - **Syncs across devices** - Your preference syncs when extension sync is enabled
 
 ### Auto-collapse Bot Comments
+
 Bot comments (AutoModerator, RemindMeBot, etc.) are automatically collapsed to reduce clutter.
 
 - Supports 13 common bots
@@ -27,12 +29,14 @@ Bot comments (AutoModerator, RemindMeBot, etc.) are automatically collapsed to r
 Block Reddit's annoying prompts and banners with granular controls.
 
 ### Granular Category Controls
+
 - **Login prompts** - Hide modal overlays asking you to log in
-- **Email verification** - Remove email verification nag banners  
+- **Email verification** - Remove email verification nag banners
 - **Premium banners** - Block Reddit Premium/Gold promotional content
 - **App prompts** - Hide mobile app download prompts
 
 ### Smart Blocking
+
 - 40+ CSS selectors covering various nag types
 - MutationObserver watches for dynamically inserted nags
 - Individual toggles let you enable/disable each category
@@ -42,6 +46,7 @@ Block Reddit's annoying prompts and banners with granular controls.
 Powerful filtering tools to customize your Reddit experience.
 
 ### Subreddit Muting
+
 Hide posts from specific subreddits on /r/all and /r/popular.
 
 - **Context menu integration** - Right-click any subreddit link to mute it
@@ -51,6 +56,7 @@ Hide posts from specific subreddits on /r/all and /r/popular.
 - Supports up to 100 muted subreddits
 
 ### Keyword Muting
+
 Filter posts by keywords or phrases in their titles.
 
 - **Smart matching** - Word boundary matching prevents false positives
@@ -61,6 +67,7 @@ Filter posts by keywords or phrases in their titles.
 - Supports up to 200 muted keywords
 
 ### Domain Muting
+
 Filter posts linking to specific websites.
 
 - **Wildcard subdomains** - `*.example.com` matches all subdomains

@@ -9,6 +9,7 @@
 ### Summary
 
 Implemented comprehensive dark mode support for old.reddit.com with four modes:
+
 1. **Auto** - Follows system preference (light/dark)
 2. **Light** - Always light mode
 3. **Dark** - Dark mode with gray tones
@@ -59,17 +60,20 @@ Implemented comprehensive dark mode support for old.reddit.com with four modes:
 ### Features Implemented
 
 ✅ **Dark Mode Core**
+
 - Auto-detection of system preference via `prefers-color-scheme`
 - Manual override options (light/dark/oled)
 - Real-time switching without page reload
 - Syncs across browser instances (when sync enabled)
 
 ✅ **Auto-collapse Automod (Bonus Feature 1.3)**
+
 - Automatically collapses comments from 13 common bots
 - User can toggle on/off in options
 - Runs on page load
 
 ✅ **UI Controls**
+
 - Quick toggle in popup
 - Full settings in options page
 - Instant feedback via toast notifications
@@ -131,6 +135,7 @@ Implemented comprehensive dark mode support for old.reddit.com with four modes:
 ### Summary
 
 Implemented comprehensive nag/banner blocking for old.reddit.com with granular category controls:
+
 1. **Login Prompts** - Modal overlays and tooltips asking users to log in
 2. **Email Verification** - Banners nagging about email verification
 3. **Premium Banners** - Reddit Premium/Gold promotional content
@@ -139,18 +144,21 @@ Implemented comprehensive nag/banner blocking for old.reddit.com with granular c
 ### Features Implemented
 
 ✅ **Granular Blocking Controls**
+
 - Master toggle for all nag blocking
 - Individual toggles for each category
 - Real-time application without page reload
 - Syncs across browser instances
 
 ✅ **Smart Blocking System**
+
 - CSS-based hiding via `.orr-nag` class
 - MutationObserver watches for dynamically inserted nags
 - Debounced mutation handling (100ms) for performance
 - 40+ specific selectors targeting various nag types
 
 ✅ **UI Controls**
+
 - Full settings panel in options page
 - Individual category toggles
 - Instant feedback via toast notifications
@@ -203,15 +211,18 @@ Implemented comprehensive nag/banner blocking for old.reddit.com with granular c
 ### Nag Categories and Selectors
 
 **Login Prompts (7 selectors)**
+
 - `.login-required-popup`, `.login-form-side`, `.modal-dialog.login-popup`
 - `#login_login-main`, `.cover-overlay`, `.login-popup-overlay`
 - `.tooltip.login-required`
 
 **Email Verification (5 selectors)**
+
 - `.infobar.verify-email`, `.newsletterbar`, `.email-collection`
 - `#newsletter-signup`, `.user-info .verify-email-cta`
 
 **Premium Banners (11 selectors)**
+
 - `.gold-accent`, `.premium-banner`, `.gold-banner-wrap`, `#gold-promo`
 - `.sidecontentbox .premium-cta`, `a[href*="/premium"]`
 - `.native-banner-ad`, `.premium-tooltip`
@@ -219,6 +230,7 @@ Implemented comprehensive nag/banner blocking for old.reddit.com with granular c
 - `.side .infobar.premium`, `.gold-accent.gold-accent-link`
 
 **App Prompts (6 selectors)**
+
 - `.app-download-prompt`, `.mobile-app-banner`, `.get-app-banner`
 - `#app-download-splash`, `.download-app-button`, `.mobile-web-redirect`
 
@@ -240,6 +252,7 @@ Implemented comprehensive nag/banner blocking for old.reddit.com with granular c
 ## Phase 1 Status: Complete 🎉
 
 All Phase 1 features have been successfully implemented:
+
 - ✅ 1.1 Dark Mode Support
 - ✅ 1.2 Enhanced Nag/Banner Removal
 - ✅ 1.3 Auto-collapse Automod Comments
@@ -261,24 +274,28 @@ Implemented comprehensive subreddit muting for /r/all and /r/popular feeds, allo
 ### Features Implemented
 
 ✅ **Core Muting System**
+
 - Hide posts from muted subreddits on /r/all and /r/popular
 - MutationObserver handles dynamically loaded posts
 - Only applies to aggregate feeds (not individual subreddit pages)
 - Supports up to 100 muted subreddits
 
 ✅ **Quick Muting**
+
 - Context menu: "Mute this Subreddit"
 - Right-click any subreddit link to mute
 - Optional notification when muted
 - Real-time application without page reload
 
 ✅ **Management UI**
+
 - Dedicated "Muted Subreddits" section in options
 - Add/remove subreddits manually
 - Visual tag-based list display
 - Search validation (alphanumeric + underscore only)
 
 ✅ **Import/Export**
+
 - Export mute list as JSON
 - Import mute lists from JSON files
 - Validation prevents invalid names
@@ -342,7 +359,7 @@ Implemented comprehensive subreddit muting for /r/all and /r/popular feeds, allo
 
 1. **Page-specific**: Only works on /r/all and /r/popular, not custom multireddits
 2. **Data attribute dependency**: Relies on old Reddit's `data-subreddit` attribute
-3. **No regex**: Cannot mute patterns (e.g., all "*_irl" subreddits)
+3. **No regex**: Cannot mute patterns (e.g., all "\*\_irl" subreddits)
 4. **Client-side only**: Posts are still loaded from server, then hidden
 
 ### Future Enhancements
@@ -368,6 +385,7 @@ Implemented comprehensive keyword filtering to hide posts containing specific wo
 ### Features Implemented
 
 ✅ **Smart Keyword Matching**
+
 - Word boundary matching (prevents false positives)
 - Case-sensitive and case-insensitive modes (user toggle)
 - Multi-word phrase support
@@ -375,6 +393,7 @@ Implemented comprehensive keyword filtering to hide posts containing specific wo
 - Supports up to 200 muted keywords
 
 ✅ **Management UI**
+
 - Dedicated "Muted Keywords" section in options
 - Simple input field for adding keywords/phrases
 - Tag-based list display with remove buttons
@@ -382,6 +401,7 @@ Implemented comprehensive keyword filtering to hide posts containing specific wo
 - Real-time application without page reload
 
 ✅ **Import/Export**
+
 - Export keyword list as JSON
 - Import keywords from JSON files
 - Validation prevents empty/invalid entries
@@ -448,6 +468,7 @@ const regex = new RegExp(
 ```
 
 **Examples**:
+
 - Keyword "trump" matches "Trump says..." ✅
 - Keyword "trump" does NOT match "trumpets" ❌ (word boundary)
 - Phrase "breaking news" matches "Breaking News: ..." ✅
@@ -482,18 +503,21 @@ Implemented comprehensive domain filtering to hide posts linking to specific dom
 ### Features Implemented
 
 ✅ **Smart Domain Matching**
+
 - Exact domain matching (e.g., example.com)
-- Wildcard subdomain support (e.g., *.example.com matches all subdomains)
+- Wildcard subdomain support (e.g., \*.example.com matches all subdomains)
 - Automatic domain normalization (removes https://, http://, www.)
 - Supports up to 100 muted domains
 
 ✅ **Management UI**
+
 - Dedicated "Muted Domains" section in options
 - Simple input field for adding domains
 - Tag-based list display with remove buttons
 - Real-time application without page reload
 
 ✅ **Import/Export**
+
 - Export domain list as JSON
 - Import domains from JSON files
 - Validation prevents empty/invalid entries
@@ -536,7 +560,7 @@ Implemented comprehensive domain filtering to hide posts linking to specific dom
 ### Acceptance Criteria
 
 - [x] Posts from muted domains are hidden
-- [x] Wildcard subdomains work (*.example.com)
+- [x] Wildcard subdomains work (\*.example.com)
 - [x] User can manage domain list in options
 - [x] Domain normalization works correctly
 - [x] Import/export functionality works
@@ -562,6 +586,7 @@ return postDomain === mutedDomain;
 ```
 
 **Examples**:
+
 - Domain `example.com` matches posts from `example.com` ✅
 - Wildcard `*.example.com` matches `news.example.com`, `blog.example.com`, etc. ✅
 - Wildcard `*.example.com` also matches base `example.com` ✅
@@ -572,7 +597,7 @@ return postDomain === mutedDomain;
 1. **Client-side only**: Posts are loaded from server, then hidden
 2. **Data attribute dependency**: Relies on old Reddit's `data-domain` attribute
 3. **No regex patterns**: Only supports exact matches and wildcard subdomains
-4. **Subdomain wildcards only**: Cannot use wildcards in the middle (e.g., example.*.com)
+4. **Subdomain wildcards only**: Cannot use wildcards in the middle (e.g., example.\*.com)
 
 ### Future Enhancements
 
@@ -587,6 +612,7 @@ return postDomain === mutedDomain;
 ## Phase 2 Status: Complete 🎉
 
 All Phase 2 features have been successfully implemented:
+
 - ✅ 2.1 Subreddit Muting
 - ✅ 2.2 Keyword Muting
 - ✅ 2.3 Domain Muting
@@ -603,11 +629,13 @@ All Phase 2 features have been successfully implemented:
 ### Features Implemented
 
 **Phase 1 (3 features):**
+
 1. ✅ Dark Mode Support with 4 modes (Auto/Light/Dark/OLED)
 2. ✅ Enhanced Nag/Banner Removal with 4 category toggles
 3. ✅ Auto-collapse Automod Comments (13 bot accounts)
 
 **Phase 2 (3 features):**
+
 1. ✅ Subreddit Muting (up to 100, with import/export)
 2. ✅ Keyword Muting (up to 200, with import/export)
 3. ✅ Domain Muting (up to 100, wildcard support, import/export)
@@ -621,7 +649,7 @@ All Phase 2 features have been successfully implemented:
 - **Tests**: 120 tests passing, 0 failures
 - **ESLint errors**: 0
 - **Storage schema**: 3 new objects (darkMode, nagBlocking, contentFiltering)
-- **Message types added**: 5 new REFRESH_* message types
+- **Message types added**: 5 new REFRESH\_\* message types
 - **CSS selectors**: 40+ nag selectors added
 
 ### Quality Metrics
@@ -651,6 +679,7 @@ All Phase 2 features have been successfully implemented:
 ### Ready for Release
 
 All features are implemented, tested, and documented. The extension is ready for:
+
 1. Manual testing in browser
 2. Creating git tag v6.0.0
 3. Publishing to Chrome Web Store
@@ -659,15 +688,17 @@ All features are implemented, tested, and documented. The extension is ready for
 ### Future Work
 
 **Phase 3 - Comment Enhancements** (Under Consideration):
+
 - 3.1 Color-Coded Comments
 - 3.2 Comment Navigation Buttons
 - 3.3 Inline Image Expansion
 
 **Phase 4 - User Experience Polish** (Under Consideration):
+
 - 4.1 Remember Sort Order
 - 4.2 User Tagging
 - 4.3 Scroll Position Memory
 
 ---
 
-*Log maintained for tracking implementation progress of ROADMAP.md features*
+_Log maintained for tracking implementation progress of ROADMAP.md features_

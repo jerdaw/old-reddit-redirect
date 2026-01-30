@@ -257,8 +257,7 @@
     const overrides = await chrome.storage.local.get({
       subredditOverrides: { mutedSubreddits: [] },
     });
-    const mutedSubreddits =
-      overrides.subredditOverrides?.mutedSubreddits || [];
+    const mutedSubreddits = overrides.subredditOverrides?.mutedSubreddits || [];
 
     if (mutedSubreddits.length === 0) {
       return;
@@ -310,7 +309,10 @@
       const matchedKeyword = keywords.find((keyword) => {
         const searchKeyword = caseSensitive ? keyword : keyword.toLowerCase();
         // Use word boundary matching for better accuracy
-        const regex = new RegExp(`\\b${searchKeyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+        const regex = new RegExp(
+          `\\b${searchKeyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
+          "i"
+        );
         return regex.test(searchText);
       });
 
@@ -348,7 +350,9 @@
         // Support wildcard subdomains (*.example.com)
         if (mutedDomain.startsWith("*.")) {
           const baseDomain = mutedDomain.substring(2);
-          return postDomain === baseDomain || postDomain.endsWith("." + baseDomain);
+          return (
+            postDomain === baseDomain || postDomain.endsWith("." + baseDomain)
+          );
         }
         return postDomain === mutedDomain;
       });

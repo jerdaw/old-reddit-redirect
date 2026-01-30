@@ -54,7 +54,7 @@
   - Up to 200 muted keywords
   - Import/export keyword lists
 - **Domain muting** - Filter posts linking to specific websites
-  - Wildcard subdomain support (*.example.com matches all subdomains)
+  - Wildcard subdomain support (\*.example.com matches all subdomains)
   - Automatic domain normalization (removes https://, www., etc.)
   - Up to 100 muted domains
   - Import/export domain lists

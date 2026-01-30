@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Up to 200 muted keywords
   - Import/Export keyword lists
 - **Domain Muting**: Filter posts linking to specific domains
-  - Wildcard subdomain support (*.example.com)
+  - Wildcard subdomain support (\*.example.com)
   - Automatic domain normalization
   - Up to 100 muted domains
   - Import/Export domain lists

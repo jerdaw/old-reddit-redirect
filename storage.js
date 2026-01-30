@@ -425,7 +425,9 @@
      */
     async addMutedDomain(domain) {
       const filtering = await this.getContentFiltering();
-      const normalized = domain.toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, "");
+      const normalized = domain
+        .toLowerCase()
+        .replace(/^(https?:\/\/)?(www\.)?/, "");
 
       if (normalized && !filtering.mutedDomains.includes(normalized)) {
         filtering.mutedDomains.push(normalized);
