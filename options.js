@@ -567,7 +567,7 @@
     let urlObj;
     try {
       urlObj = new URL(url);
-    } catch (error) {
+    } catch {
       elements.testResult.hidden = false;
       elements.resultIcon.className = "result-icon error";
       elements.resultMessage.textContent = "Invalid URL";

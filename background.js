@@ -140,7 +140,6 @@ if (typeof importScripts === "function") {
    * Initialize action UI on startup
    */
   async function initializeActionUi() {
-    const enabled = await Storage.getEnabled();
     await updateActionUi();
   }
 
@@ -163,7 +162,7 @@ if (typeof importScripts === "function") {
       if (prefs.badgeStyle === "count") {
         await updateActionUi();
       }
-    } catch (e) {
+    } catch {
       // Invalid URL, ignore
     }
   }

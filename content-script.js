@@ -27,7 +27,7 @@
           showNotification(referrerUrl.href);
         }
       });
-    } catch (e) {
+    } catch {
       // Invalid referrer URL, ignore
     }
   }
