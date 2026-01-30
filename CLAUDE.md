@@ -126,6 +126,10 @@ This is necessary because some Chrome API calls may fail silently (e.g., when ex
 └── README.md              # User documentation
 ```
 
+## Git Commit Policy
+
+**IMPORTANT**: Only humans should be credited as authors on commits, pushes, and code contributions. Never include AI attribution (e.g., "Co-Authored-By: Claude") in commit messages or code comments.
+
 ## Common Modifications
 
 ### Adding New Redirect Rules
