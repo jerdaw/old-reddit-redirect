@@ -543,6 +543,23 @@ if (typeof importScripts === "function") {
           handleLastError();
         }
       );
+
+      // Mute subreddit from /r/all and /r/popular
+      chrome.contextMenus.create(
+        {
+          id: "mute-subreddit",
+          title: "Mute this Subreddit",
+          contexts: ["link"],
+          targetUrlPatterns: [
+            "*://old.reddit.com/r/*",
+            "*://www.reddit.com/r/*",
+            "*://reddit.com/r/*",
+          ],
+        },
+        () => {
+          handleLastError();
+        }
+      );
     });
   }
 
@@ -594,6 +611,37 @@ if (typeof importScripts === "function") {
               silent: true,
             });
           }
+        }
+      }
+    } else if (info.menuItemId === "mute-subreddit") {
+      const match = url.pathname.match(/\/r\/([^/?#]+)/);
+      if (match) {
+        const subreddit = match[1].toLowerCase();
+        await Storage.addMutedSubreddit(subreddit);
+
+        // Notify all old.reddit.com tabs to refresh muting
+        chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+          tabs.forEach((tab) => {
+            chrome.tabs.sendMessage(
+              tab.id,
+              { type: "REFRESH_SUBREDDIT_MUTING" },
+              () => {
+                void chrome.runtime.lastError;
+              }
+            );
+          });
+        });
+
+        // Show notification
+        const prefs = await Storage.getUIPreferences();
+        if (prefs.showNotifications) {
+          chrome.notifications.create({
+            type: "basic",
+            iconUrl: "img/icon128.png",
+            title: "Old Reddit Redirect",
+            message: `r/${subreddit} muted from /r/all and /r/popular`,
+            silent: true,
+          });
         }
       }
     }

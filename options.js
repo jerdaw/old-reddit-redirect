@@ -44,6 +44,35 @@
     resultDetail: document.getElementById("result-detail"),
     toast: document.getElementById("toast"),
     toastMessage: document.getElementById("toast-message"),
+    darkMode: document.getElementById("dark-mode"),
+    autoCollapseAutomod: document.getElementById("auto-collapse-automod"),
+    nagBlockingEnabled: document.getElementById("nag-blocking-enabled"),
+    blockLoginPrompts: document.getElementById("block-login-prompts"),
+    blockEmailVerification: document.getElementById("block-email-verification"),
+    blockPremiumBanners: document.getElementById("block-premium-banners"),
+    blockAppPrompts: document.getElementById("block-app-prompts"),
+    mutedSubredditInput: document.getElementById("muted-subreddit-input"),
+    addMutedSubreddit: document.getElementById("add-muted-subreddit"),
+    mutedList: document.getElementById("muted-list"),
+    mutedEmpty: document.getElementById("muted-empty"),
+    exportMuted: document.getElementById("export-muted"),
+    importMuted: document.getElementById("import-muted"),
+    importMutedFile: document.getElementById("import-muted-file"),
+    keywordInput: document.getElementById("keyword-input"),
+    addKeyword: document.getElementById("add-keyword"),
+    caseSensitive: document.getElementById("case-sensitive"),
+    keywordList: document.getElementById("keyword-list"),
+    keywordEmpty: document.getElementById("keyword-empty"),
+    exportKeywords: document.getElementById("export-keywords"),
+    importKeywords: document.getElementById("import-keywords"),
+    importKeywordsFile: document.getElementById("import-keywords-file"),
+    domainInput: document.getElementById("domain-input"),
+    addDomain: document.getElementById("add-domain"),
+    domainList: document.getElementById("domain-list"),
+    domainEmpty: document.getElementById("domain-empty"),
+    exportDomains: document.getElementById("export-domains"),
+    importDomains: document.getElementById("import-domains"),
+    importDomainsFile: document.getElementById("import-domains-file"),
   };
 
   function handleLastError() {
@@ -94,8 +123,13 @@
     await loadMainToggle();
     await loadStats();
     await loadUIPreferences();
+    await loadDarkModeSettings();
+    await loadNagBlockingSettings();
     await loadFrontendOptions();
     await loadWhitelist();
+    await loadMutedSubreddits();
+    await loadKeywordFiltering();
+    await loadDomainFiltering();
     await loadSuggestions();
     await loadShortcut();
     await loadSyncStatus();
@@ -238,6 +272,32 @@
   }
 
   /**
+   * Load dark mode settings
+   */
+  async function loadDarkModeSettings() {
+    const darkModePrefs = await window.Storage.getDarkMode();
+
+    elements.darkMode.value = darkModePrefs.enabled || "auto";
+    elements.autoCollapseAutomod.checked =
+      darkModePrefs.autoCollapseAutomod !== false;
+  }
+
+  /**
+   * Load nag blocking settings
+   */
+  async function loadNagBlockingSettings() {
+    const nagBlocking = await window.Storage.getNagBlocking();
+
+    elements.nagBlockingEnabled.checked = nagBlocking.enabled !== false;
+    elements.blockLoginPrompts.checked = nagBlocking.blockLoginPrompts !== false;
+    elements.blockEmailVerification.checked =
+      nagBlocking.blockEmailVerification !== false;
+    elements.blockPremiumBanners.checked =
+      nagBlocking.blockPremiumBanners !== false;
+    elements.blockAppPrompts.checked = nagBlocking.blockAppPrompts !== false;
+  }
+
+  /**
    * Load subreddit whitelist
    */
   async function loadWhitelist() {
@@ -261,6 +321,63 @@
       btn.addEventListener("click", () => {
         const subreddit = btn.dataset.subreddit;
         removeSubreddit(subreddit);
+      });
+    });
+  }
+
+  /**
+   * Load muted subreddits list
+   */
+  async function loadMutedSubreddits() {
+    const { mutedSubreddits } = await window.Storage.getSubredditOverrides();
+
+    elements.mutedList.innerHTML = "";
+    elements.mutedEmpty.hidden = mutedSubreddits.length > 0;
+
+    for (const subreddit of mutedSubreddits) {
+      const li = document.createElement("li");
+      li.className = "tag";
+      li.innerHTML = `
+        r/${escapeHtml(subreddit)}
+        <button class="remove" data-subreddit="${escapeHtml(subreddit)}">×</button>
+      `;
+      elements.mutedList.appendChild(li);
+    }
+
+    // Attach remove handlers
+    elements.mutedList.querySelectorAll(".remove").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const subreddit = btn.dataset.subreddit;
+        removeMutedSubreddit(subreddit);
+      });
+    });
+  }
+
+  /**
+   * Load keyword filtering settings
+   */
+  async function loadKeywordFiltering() {
+    const filtering = await window.Storage.getContentFiltering();
+
+    elements.caseSensitive.checked = filtering.caseSensitive || false;
+    elements.keywordList.innerHTML = "";
+    elements.keywordEmpty.hidden = filtering.mutedKeywords.length > 0;
+
+    for (const keyword of filtering.mutedKeywords) {
+      const li = document.createElement("li");
+      li.className = "tag";
+      li.innerHTML = `
+        ${escapeHtml(keyword)}
+        <button class="remove" data-keyword="${escapeHtml(keyword)}">×</button>
+      `;
+      elements.keywordList.appendChild(li);
+    }
+
+    // Attach remove handlers
+    elements.keywordList.querySelectorAll(".remove").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const keyword = btn.dataset.keyword;
+        removeMutedKeyword(keyword);
       });
     });
   }
@@ -503,6 +620,61 @@
   }
 
   /**
+   * Handle dark mode preference changes
+   */
+  async function handleDarkModeChange() {
+    const darkModePrefs = {
+      enabled: elements.darkMode.value,
+      autoCollapseAutomod: elements.autoCollapseAutomod.checked,
+    };
+
+    await window.Storage.setDarkMode(darkModePrefs);
+
+    // Notify all old.reddit.com tabs to refresh dark mode
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_DARK_MODE" }, () => {
+          void chrome.runtime.lastError;
+        });
+      });
+    });
+
+    showToast("Dark mode settings saved");
+  }
+
+  /**
+   * Handle nag blocking preference changes
+   */
+  async function handleNagBlockingChange() {
+    const nagBlocking = {
+      enabled: elements.nagBlockingEnabled.checked,
+      blockLoginPrompts: elements.blockLoginPrompts.checked,
+      blockEmailVerification: elements.blockEmailVerification.checked,
+      blockPremiumBanners: elements.blockPremiumBanners.checked,
+      blockAppPrompts: elements.blockAppPrompts.checked,
+    };
+
+    await window.Storage.setNagBlocking(nagBlocking);
+
+    // Notify all old.reddit.com tabs to refresh nag blocking
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_NAG_BLOCKING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Nag blocking settings saved");
+  }
+
+  /**
    * Add subreddit to whitelist
    */
   async function handleAddSubreddit() {
@@ -558,6 +730,554 @@
 
       await loadWhitelist();
       showToast(`r/${subreddit} removed from exceptions`);
+    }
+  }
+
+  /**
+   * Add subreddit to mute list
+   */
+  async function handleAddMutedSubreddit() {
+    const subreddit = elements.mutedSubredditInput.value.trim().toLowerCase();
+
+    if (!subreddit) {
+      showToast("Please enter a subreddit name", "error");
+      return;
+    }
+
+    if (!/^[a-z0-9_]+$/i.test(subreddit)) {
+      showToast("Invalid subreddit name", "error");
+      return;
+    }
+
+    const overrides = await window.Storage.getSubredditOverrides();
+
+    if (overrides.mutedSubreddits.includes(subreddit)) {
+      showToast("Subreddit already muted", "error");
+      return;
+    }
+
+    if (overrides.mutedSubreddits.length >= 100) {
+      showToast("Maximum 100 muted subreddits allowed", "error");
+      return;
+    }
+
+    await window.Storage.addMutedSubreddit(subreddit);
+
+    // Notify all old.reddit.com tabs to refresh muting
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_SUBREDDIT_MUTING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    elements.mutedSubredditInput.value = "";
+    await loadMutedSubreddits();
+
+    showToast(`r/${subreddit} muted`);
+  }
+
+  /**
+   * Remove subreddit from mute list
+   */
+  async function removeMutedSubreddit(subreddit) {
+    await window.Storage.removeMutedSubreddit(subreddit);
+
+    // Notify all old.reddit.com tabs to refresh muting
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_SUBREDDIT_MUTING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    await loadMutedSubreddits();
+    showToast(`r/${subreddit} unmuted`);
+  }
+
+  /**
+   * Export muted subreddits list
+   */
+  async function handleExportMuted() {
+    const { mutedSubreddits } = await window.Storage.getSubredditOverrides();
+
+    const blob = new Blob([JSON.stringify(mutedSubreddits, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `orr-muted-subreddits-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast("Mute list exported");
+  }
+
+  /**
+   * Import muted subreddits list
+   */
+  async function handleImportMuted() {
+    elements.importMutedFile.click();
+  }
+
+  /**
+   * Handle muted list file selection
+   */
+  async function handleImportMutedFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const imported = JSON.parse(text);
+
+      if (!Array.isArray(imported)) {
+        showToast("Invalid format: must be JSON array", "error");
+        return;
+      }
+
+      // Validate subreddit names
+      const invalid = imported.filter(
+        (s) => typeof s !== "string" || !/^[a-z0-9_]+$/i.test(s)
+      );
+      if (invalid.length > 0) {
+        showToast(`Invalid subreddit names: ${invalid.join(", ")}`, "error");
+        return;
+      }
+
+      const overrides = await window.Storage.getSubredditOverrides();
+      const newMutes = imported.filter(
+        (s) => !overrides.mutedSubreddits.includes(s.toLowerCase())
+      );
+
+      if (newMutes.length === 0) {
+        showToast("All subreddits already muted", "error");
+        return;
+      }
+
+      // Add new mutes
+      for (const sub of newMutes) {
+        await window.Storage.addMutedSubreddit(sub);
+      }
+
+      // Refresh UI
+      await loadMutedSubreddits();
+
+      // Notify tabs
+      chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+        tabs.forEach((tab) => {
+          chrome.tabs.sendMessage(
+            tab.id,
+            { type: "REFRESH_SUBREDDIT_MUTING" },
+            () => {
+              void chrome.runtime.lastError;
+            }
+          );
+        });
+      });
+
+      showToast(`${newMutes.length} subreddits imported`);
+    } catch (error) {
+      showToast(`Import failed: ${error.message}`, "error");
+    } finally {
+      // Reset file input
+      event.target.value = "";
+    }
+  }
+
+  /**
+   * Add keyword to mute list
+   */
+  async function handleAddKeyword() {
+    const keyword = elements.keywordInput.value.trim();
+
+    if (!keyword) {
+      showToast("Please enter a keyword or phrase", "error");
+      return;
+    }
+
+    const filtering = await window.Storage.getContentFiltering();
+
+    if (filtering.mutedKeywords.includes(keyword)) {
+      showToast("Keyword already muted", "error");
+      return;
+    }
+
+    if (filtering.mutedKeywords.length >= 200) {
+      showToast("Maximum 200 keywords allowed", "error");
+      return;
+    }
+
+    await window.Storage.addMutedKeyword(keyword);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    elements.keywordInput.value = "";
+    await loadKeywordFiltering();
+
+    showToast(`"${keyword}" muted`);
+  }
+
+  /**
+   * Remove keyword from mute list
+   */
+  async function removeMutedKeyword(keyword) {
+    await window.Storage.removeMutedKeyword(keyword);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    await loadKeywordFiltering();
+    showToast(`"${keyword}" unmuted`);
+  }
+
+  /**
+   * Handle case sensitive toggle
+   */
+  async function handleCaseSensitiveChange() {
+    const filtering = await window.Storage.getContentFiltering();
+    filtering.caseSensitive = elements.caseSensitive.checked;
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Case sensitivity updated");
+  }
+
+  /**
+   * Export keywords list
+   */
+  async function handleExportKeywords() {
+    const filtering = await window.Storage.getContentFiltering();
+
+    const blob = new Blob([JSON.stringify(filtering.mutedKeywords, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `orr-muted-keywords-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast("Keyword list exported");
+  }
+
+  /**
+   * Import keywords list
+   */
+  async function handleImportKeywords() {
+    elements.importKeywordsFile.click();
+  }
+
+  /**
+   * Handle keywords file selection
+   */
+  async function handleImportKeywordsFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const imported = JSON.parse(text);
+
+      if (!Array.isArray(imported)) {
+        showToast("Invalid format: must be JSON array", "error");
+        return;
+      }
+
+      // Validate keywords (strings only)
+      const invalid = imported.filter((k) => typeof k !== "string" || !k.trim());
+      if (invalid.length > 0) {
+        showToast("Invalid keywords detected", "error");
+        return;
+      }
+
+      const filtering = await window.Storage.getContentFiltering();
+      const newKeywords = imported.filter(
+        (k) => !filtering.mutedKeywords.includes(k.trim())
+      );
+
+      if (newKeywords.length === 0) {
+        showToast("All keywords already muted", "error");
+        return;
+      }
+
+      // Add new keywords
+      for (const keyword of newKeywords) {
+        await window.Storage.addMutedKeyword(keyword.trim());
+      }
+
+      // Refresh UI
+      await loadKeywordFiltering();
+
+      // Notify tabs
+      chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+        tabs.forEach((tab) => {
+          chrome.tabs.sendMessage(
+            tab.id,
+            { type: "REFRESH_KEYWORD_FILTERING" },
+            () => {
+              void chrome.runtime.lastError;
+            }
+          );
+        });
+      });
+
+      showToast(`${newKeywords.length} keywords imported`);
+    } catch (error) {
+      showToast(`Import failed: ${error.message}`, "error");
+    } finally {
+      // Reset file input
+      event.target.value = "";
+    }
+  }
+
+  /**
+   * Load domain filtering settings
+   */
+  async function loadDomainFiltering() {
+    const filtering = await window.Storage.getContentFiltering();
+
+    elements.domainList.innerHTML = "";
+    elements.domainEmpty.hidden = filtering.mutedDomains.length > 0;
+
+    for (const domain of filtering.mutedDomains) {
+      const li = document.createElement("li");
+      li.className = "tag";
+      li.innerHTML = `
+        ${escapeHtml(domain)}
+        <button class="remove" data-domain="${escapeHtml(domain)}">×</button>
+      `;
+      elements.domainList.appendChild(li);
+    }
+
+    // Attach remove handlers
+    elements.domainList.querySelectorAll(".remove").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const domain = btn.dataset.domain;
+        removeMutedDomain(domain);
+      });
+    });
+  }
+
+  /**
+   * Add domain to mute list
+   */
+  async function handleAddDomain() {
+    const domain = elements.domainInput.value.trim();
+
+    if (!domain) {
+      showToast("Please enter a domain", "error");
+      return;
+    }
+
+    const filtering = await window.Storage.getContentFiltering();
+
+    // Normalize domain (will be done by storage helper, but check for duplicates first)
+    const normalized = domain
+      .replace(/^https?:\/\//, "")
+      .replace(/^www\./, "")
+      .toLowerCase();
+
+    if (filtering.mutedDomains.includes(normalized)) {
+      showToast("Domain already muted", "error");
+      return;
+    }
+
+    if (filtering.mutedDomains.length >= 100) {
+      showToast("Maximum 100 domains allowed", "error");
+      return;
+    }
+
+    await window.Storage.addMutedDomain(domain);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_DOMAIN_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    elements.domainInput.value = "";
+    await loadDomainFiltering();
+
+    showToast(`"${normalized}" muted`);
+  }
+
+  /**
+   * Remove domain from mute list
+   */
+  async function removeMutedDomain(domain) {
+    await window.Storage.removeMutedDomain(domain);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_DOMAIN_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    await loadDomainFiltering();
+    showToast(`"${domain}" unmuted`);
+  }
+
+  /**
+   * Export domains list
+   */
+  async function handleExportDomains() {
+    const filtering = await window.Storage.getContentFiltering();
+
+    const blob = new Blob([JSON.stringify(filtering.mutedDomains, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `orr-muted-domains-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast("Domain list exported");
+  }
+
+  /**
+   * Import domains list
+   */
+  async function handleImportDomains() {
+    elements.importDomainsFile.click();
+  }
+
+  /**
+   * Handle domains file selection
+   */
+  async function handleImportDomainsFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const imported = JSON.parse(text);
+
+      if (!Array.isArray(imported)) {
+        showToast("Invalid format: must be JSON array", "error");
+        return;
+      }
+
+      // Validate domains (strings only)
+      const invalid = imported.filter((d) => typeof d !== "string" || !d.trim());
+      if (invalid.length > 0) {
+        showToast("Invalid domains detected", "error");
+        return;
+      }
+
+      const filtering = await window.Storage.getContentFiltering();
+
+      // Normalize and filter for new domains
+      const newDomains = imported
+        .map((d) =>
+          d
+            .trim()
+            .replace(/^https?:\/\//, "")
+            .replace(/^www\./, "")
+            .toLowerCase()
+        )
+        .filter((d) => !filtering.mutedDomains.includes(d));
+
+      if (newDomains.length === 0) {
+        showToast("All domains already muted", "error");
+        return;
+      }
+
+      // Add new domains
+      for (const domain of newDomains) {
+        await window.Storage.addMutedDomain(domain);
+      }
+
+      // Refresh UI
+      await loadDomainFiltering();
+
+      // Notify tabs
+      chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+        tabs.forEach((tab) => {
+          chrome.tabs.sendMessage(
+            tab.id,
+            { type: "REFRESH_DOMAIN_FILTERING" },
+            () => {
+              void chrome.runtime.lastError;
+            }
+          );
+        });
+      });
+
+      showToast(`${newDomains.length} domains imported`);
+    } catch (error) {
+      showToast(`Import failed: ${error.message}`, "error");
+    } finally {
+      // Reset file input
+      event.target.value = "";
     }
   }
 
@@ -1030,6 +1750,32 @@
       handleUIPreferenceChange
     );
 
+    // Dark mode
+    elements.darkMode.addEventListener("change", handleDarkModeChange);
+    elements.autoCollapseAutomod.addEventListener(
+      "change",
+      handleDarkModeChange
+    );
+
+    // Nag blocking
+    elements.nagBlockingEnabled.addEventListener(
+      "change",
+      handleNagBlockingChange
+    );
+    elements.blockLoginPrompts.addEventListener(
+      "change",
+      handleNagBlockingChange
+    );
+    elements.blockEmailVerification.addEventListener(
+      "change",
+      handleNagBlockingChange
+    );
+    elements.blockPremiumBanners.addEventListener(
+      "change",
+      handleNagBlockingChange
+    );
+    elements.blockAppPrompts.addEventListener("change", handleNagBlockingChange);
+
     // Subreddit whitelist
     elements.addSubreddit.addEventListener("click", handleAddSubreddit);
     elements.subredditInput.addEventListener("keypress", (e) => {
@@ -1037,6 +1783,49 @@
         handleAddSubreddit();
       }
     });
+
+    // Muted subreddits
+    elements.addMutedSubreddit.addEventListener(
+      "click",
+      handleAddMutedSubreddit
+    );
+    elements.mutedSubredditInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        handleAddMutedSubreddit();
+      }
+    });
+    elements.exportMuted.addEventListener("click", handleExportMuted);
+    elements.importMuted.addEventListener("click", handleImportMuted);
+    elements.importMutedFile.addEventListener("change", handleImportMutedFile);
+
+    // Keyword filtering
+    elements.addKeyword.addEventListener("click", handleAddKeyword);
+    elements.keywordInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        handleAddKeyword();
+      }
+    });
+    elements.caseSensitive.addEventListener("change", handleCaseSensitiveChange);
+    elements.exportKeywords.addEventListener("click", handleExportKeywords);
+    elements.importKeywords.addEventListener("click", handleImportKeywords);
+    elements.importKeywordsFile.addEventListener(
+      "change",
+      handleImportKeywordsFile
+    );
+
+    // Domain filtering
+    elements.addDomain.addEventListener("click", handleAddDomain);
+    elements.domainInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        handleAddDomain();
+      }
+    });
+    elements.exportDomains.addEventListener("click", handleExportDomains);
+    elements.importDomains.addEventListener("click", handleImportDomains);
+    elements.importDomainsFile.addEventListener(
+      "change",
+      handleImportDomainsFile
+    );
 
     // URL Testing Tool
     elements.testUrlBtn.addEventListener("click", handleTestUrl);

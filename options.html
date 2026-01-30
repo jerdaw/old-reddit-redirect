@@ -127,6 +127,100 @@
         </div>
       </section>
 
+      <!-- Dark Mode -->
+      <section class="setting">
+        <h2>Dark Mode for old.reddit.com</h2>
+        <p class="section-description">
+          Apply a dark theme to old Reddit that respects your system
+          preferences.
+        </p>
+
+        <div class="option-row">
+          <label for="dark-mode">Dark Mode</label>
+          <select id="dark-mode" class="select-input">
+            <option value="auto">Auto (follow system preference)</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="oled">OLED Black</option>
+          </select>
+          <p class="option-description">
+            Choose when to apply dark mode. "Auto" follows your system's
+            light/dark preference. "OLED Black" uses pure black for OLED
+            screens.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="auto-collapse-automod" checked />
+            <span>Auto-collapse bot comments</span>
+          </label>
+          <p class="option-description">
+            Automatically collapse AutoModerator and common bot comments when
+            loading comment threads
+          </p>
+        </div>
+      </section>
+
+      <!-- Nag Blocking -->
+      <section class="setting">
+        <h2>Nag & Banner Blocking</h2>
+        <p class="section-description">
+          Remove annoying popups, banners, and promotional content from old
+          Reddit.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="nag-blocking-enabled" checked />
+            <span>Enable nag blocking</span>
+          </label>
+          <p class="option-description">
+            Master toggle for all nag/banner blocking features below
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-login-prompts" checked />
+            <span>Block login prompts</span>
+          </label>
+          <p class="option-description">
+            Hide popups and overlays asking you to log in
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-email-verification" checked />
+            <span>Block email verification nags</span>
+          </label>
+          <p class="option-description">
+            Remove banners asking you to verify your email address
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-premium-banners" checked />
+            <span>Block Reddit Premium ads</span>
+          </label>
+          <p class="option-description">
+            Hide promotional content for Reddit Premium/Gold
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-app-prompts" checked />
+            <span>Block app download prompts</span>
+          </label>
+          <p class="option-description">
+            Remove banners asking you to download the mobile app
+          </p>
+        </div>
+      </section>
+
       <!-- Alternative Frontend -->
       <section class="setting">
         <h2>Reddit Frontend</h2>
@@ -205,6 +299,149 @@
           <p class="empty-state" id="suggestions-empty" hidden>
             All suggestions have been added!
           </p>
+        </div>
+      </section>
+
+      <!-- Muted Subreddits -->
+      <section class="setting">
+        <h2>Muted Subreddits</h2>
+        <p class="section-description">
+          Hide posts from these subreddits on /r/all and /r/popular. Useful for
+          filtering out noise or unwanted content.
+        </p>
+
+        <div class="whitelist-container">
+          <div class="whitelist-input-row">
+            <span class="input-prefix">r/</span>
+            <input
+              type="text"
+              id="muted-subreddit-input"
+              class="text-input"
+              placeholder="subreddit name"
+              pattern="^[A-Za-z0-9_]+$"
+            />
+            <button class="button" id="add-muted-subreddit">Mute</button>
+          </div>
+
+          <ul id="muted-list" class="tag-list">
+            <!-- Populated by JS -->
+          </ul>
+
+          <p class="empty-state" id="muted-empty">
+            No muted subreddits. Posts from all subreddits will appear on /r/all
+            and /r/popular.
+          </p>
+        </div>
+
+        <div class="muted-actions">
+          <button class="button secondary" id="export-muted">
+            📥 Export List
+          </button>
+          <button class="button secondary" id="import-muted">
+            📤 Import List
+          </button>
+          <input
+            type="file"
+            id="import-muted-file"
+            accept=".json"
+            style="display: none"
+          />
+        </div>
+      </section>
+
+      <!-- Muted Keywords -->
+      <section class="setting">
+        <h2>Muted Keywords</h2>
+        <p class="section-description">
+          Hide posts containing specific words or phrases in their titles. Useful
+          for filtering clickbait, spoilers, or topics you want to avoid.
+        </p>
+
+        <div class="whitelist-container">
+          <div class="whitelist-input-row">
+            <input
+              type="text"
+              id="keyword-input"
+              class="text-input"
+              placeholder="word or phrase"
+            />
+            <button class="button" id="add-keyword">Mute</button>
+          </div>
+
+          <div class="option-row" style="margin-top: 8px">
+            <label class="checkbox-label">
+              <input type="checkbox" id="case-sensitive" />
+              <span>Case sensitive matching</span>
+            </label>
+          </div>
+
+          <ul id="keyword-list" class="tag-list">
+            <!-- Populated by JS -->
+          </ul>
+
+          <p class="empty-state" id="keyword-empty">
+            No muted keywords. All post titles will be shown.
+          </p>
+        </div>
+
+        <div class="muted-actions">
+          <button class="button secondary" id="export-keywords">
+            📥 Export List
+          </button>
+          <button class="button secondary" id="import-keywords">
+            📤 Import List
+          </button>
+          <input
+            type="file"
+            id="import-keywords-file"
+            accept=".json"
+            style="display: none"
+          />
+        </div>
+      </section>
+
+      <!-- Muted Domains -->
+      <section class="setting">
+        <h2>Muted Domains</h2>
+        <p class="section-description">
+          Hide posts linking to specific domains. Useful for filtering clickbait
+          sites or content from sources you want to avoid. Supports wildcard
+          subdomains (e.g., *.example.com).
+        </p>
+
+        <div class="whitelist-container">
+          <div class="whitelist-input-row">
+            <input
+              type="text"
+              id="domain-input"
+              class="text-input"
+              placeholder="example.com or *.example.com"
+            />
+            <button class="button" id="add-domain">Mute</button>
+          </div>
+
+          <ul id="domain-list" class="tag-list">
+            <!-- Populated by JS -->
+          </ul>
+
+          <p class="empty-state" id="domain-empty">
+            No muted domains. All post domains will be shown.
+          </p>
+        </div>
+
+        <div class="muted-actions">
+          <button class="button secondary" id="export-domains">
+            📥 Export List
+          </button>
+          <button class="button secondary" id="import-domains">
+            📤 Import List
+          </button>
+          <input
+            type="file"
+            id="import-domains-file"
+            accept=".json"
+            style="display: none"
+          />
         </div>
       </section>
 

@@ -11,6 +11,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Phase 1: Enhanced Blocking & Dark Mode
+
+- **Dark Mode Support**: Auto-detection of system color scheme with manual overrides (Light/Dark/OLED Black)
+  - Comprehensive dark theme for all old.reddit.com pages
+  - Real-time switching without page reload
+  - CSS custom properties for theming
+  - Syncs across browser instances when sync is enabled
+- **Enhanced Nag/Banner Removal**: Granular blocking controls for Reddit annoyances
+  - Block login prompts, email verification nags, premium banners, and app prompts
+  - Individual category toggles for fine-grained control
+  - 40+ CSS selectors covering various nag types
+  - MutationObserver watches for dynamically inserted nags
+- **Auto-collapse Bot Comments**: Automatically collapse comments from 13 common bots
+  - AutoModerator, RemindMeBot, RepostSleuthBot, and 10 more
+  - Uses old Reddit's native collapse mechanism
+  - Toggle control in options page
+
+#### Phase 2: Content Filtering
+
+- **Subreddit Muting**: Hide posts from specific subreddits on /r/all and /r/popular
+  - Context menu integration (right-click to mute)
+  - Support for up to 100 muted subreddits
+  - Tag-based UI with visual chips
+  - Import/Export mute lists as JSON
+  - Real-time filtering with MutationObserver
+- **Keyword Muting**: Filter posts by keywords/phrases in titles
+  - Word boundary matching prevents false positives
+  - Case-sensitive and case-insensitive modes
+  - Support for multi-word phrases
+  - Up to 200 muted keywords
+  - Import/Export keyword lists
+- **Domain Muting**: Filter posts linking to specific domains
+  - Wildcard subdomain support (*.example.com)
+  - Automatic domain normalization
+  - Up to 100 muted domains
+  - Import/Export domain lists
+
+#### Alternative Frontends & Other Features
+
 - **Alternative frontend support**: Choose between old.reddit.com, Teddit, Redlib, or custom instances
 - **Frontend selection UI**: Visual cards in options page for easy frontend switching
 - **Dynamic rule generation**: Seamlessly switches between frontends without page reload
@@ -22,9 +61,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Storage schema**: Extended with darkMode, nagBlocking, and contentFiltering objects
+- **Content script**: Significantly expanded with filtering, theming, and dynamic content watching
+- **Options page**: Added 5 new sections (Dark Mode, Nag Blocking, Muted Subreddits, Muted Keywords, Muted Domains)
+- **MutationObserver**: Consolidated single observer watching all dynamic content with 100ms debouncing
+- **Message passing**: Added 5 new message types for real-time updates (REFRESH_DARK_MODE, REFRESH_NAG_BLOCKING, etc.)
 - Frontend configuration now uses dynamic rules for alternative frontends
 - Static ruleset only used when old.reddit.com is selected
 - Improved content script with better storage integration
+
+### Technical Details
+
+- **New storage methods**: `getDarkMode()`, `setDarkMode()`, `getNagBlocking()`, `setNagBlocking()`, `getContentFiltering()`, `setContentFiltering()`
+- **Helper methods**: `addMutedSubreddit()`, `removeMutedSubreddit()`, `addMutedKeyword()`, `removeMutedKeyword()`, `addMutedDomain()`, `removeMutedDomain()`
+- **Performance**: 100ms debounced MutationObserver for optimal performance
+- **Cross-browser sync**: All new settings added to SYNC_KEYS for Chrome/Edge/Firefox sync
 
 ## [5.2.0] - 2026-01-30
 

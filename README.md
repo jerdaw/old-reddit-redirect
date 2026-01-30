@@ -22,6 +22,43 @@
 - **Redirect notice** - Optional notification with "Go back" button after redirects
 - **Settings sync** - Sync preferences across browsers (optional)
 
+### Dark Mode & Theming
+
+- **Dark mode for old.reddit.com** - Beautiful dark theme that respects your system preferences
+  - **Auto mode** - Automatically switches based on system color scheme
+  - **Manual modes** - Light, Dark, and OLED Black themes available
+  - **Real-time switching** - Toggle between modes without page reload
+  - **Comprehensive styling** - Works on all old.reddit.com pages (feed, comments, profiles, etc.)
+- **Auto-collapse bot comments** - Automatically collapse AutoModerator and 12 other common bots
+
+### Nag & Banner Blocking
+
+- **Enhanced nag removal** - Block Reddit's annoying prompts with granular controls
+  - **Login prompts** - Hide modal overlays asking you to log in
+  - **Email verification** - Remove email verification nag banners
+  - **Premium banners** - Block Reddit Premium/Gold promotional content
+  - **App prompts** - Hide mobile app download prompts
+  - **Smart blocking** - MutationObserver catches dynamically inserted nags
+  - **Individual toggles** - Enable/disable each category independently
+
+### Content Filtering
+
+- **Subreddit muting** - Hide posts from specific subreddits on /r/all and /r/popular
+  - Right-click any subreddit link to mute it via context menu
+  - Supports up to 100 muted subreddits
+  - Import/export mute lists as JSON
+- **Keyword muting** - Filter posts by keywords/phrases in titles
+  - Word boundary matching prevents false positives (e.g., "cat" won't match "catch")
+  - Case-sensitive and case-insensitive modes
+  - Supports multi-word phrases
+  - Up to 200 muted keywords
+  - Import/export keyword lists
+- **Domain muting** - Filter posts linking to specific websites
+  - Wildcard subdomain support (*.example.com matches all subdomains)
+  - Automatic domain normalization (removes https://, www., etc.)
+  - Up to 100 muted domains
+  - Import/export domain lists
+
 ### URL Handling
 
 - **Mobile Reddit support (m.reddit.com)** - Mobile web links now redirect
@@ -56,6 +93,10 @@ Will force all reddit.com usage to old.reddit.com. Will work when navigating to 
 
 Also has minor fixes and quality of life improvements like:
 
+- **Dark mode** for old.reddit.com with auto-detection
+- **Enhanced nag blocking** for login prompts, email verification, premium ads, and app prompts
+- **Content filtering** to mute subreddits, keywords, and domains
+- **Auto-collapse bot comments** (AutoModerator, RemindMeBot, etc.)
 - Removing the undismissable cookie banner
 - Rewriting links to galleries and videos to the raw old reddit comments page
 - Click extension icon to turn the redirect on/off

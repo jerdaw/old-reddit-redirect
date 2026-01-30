@@ -10,7 +10,14 @@
   const SCHEMA_VERSION = 1;
 
   // Keys that should be synced across browsers (when sync is enabled)
-  const SYNC_KEYS = ["frontend", "subredditOverrides", "ui"];
+  const SYNC_KEYS = [
+    "frontend",
+    "subredditOverrides",
+    "ui",
+    "darkMode",
+    "nagBlocking",
+    "contentFiltering",
+  ];
 
   // Default configuration
   const DEFAULTS = {
@@ -31,6 +38,12 @@
     },
     subredditOverrides: {
       whitelist: [],
+      mutedSubreddits: [],
+    },
+    contentFiltering: {
+      mutedKeywords: [],
+      mutedDomains: [],
+      caseSensitive: false,
     },
     frontend: {
       target: "old.reddit.com",
@@ -42,6 +55,17 @@
       badgeStyle: "text", // "text" | "count" | "color"
       animateToggle: true,
       iconClickBehavior: "popup", // "popup" | "toggle"
+    },
+    darkMode: {
+      enabled: "auto", // "auto" | "light" | "dark" | "oled"
+      autoCollapseAutomod: true,
+    },
+    nagBlocking: {
+      enabled: true,
+      blockLoginPrompts: true,
+      blockEmailVerification: true,
+      blockPremiumBanners: true,
+      blockAppPrompts: true,
     },
     sync: {
       enabled: false,
@@ -318,6 +342,112 @@
     },
 
     /**
+     * Add subreddit to mute list
+     * @param {string} subreddit - Subreddit name without r/ prefix
+     * @returns {Promise<void>}
+     */
+    async addMutedSubreddit(subreddit) {
+      const overrides = await this.getSubredditOverrides();
+      const normalized = subreddit.toLowerCase().replace(/^r\//, "");
+
+      if (!overrides.mutedSubreddits.includes(normalized)) {
+        overrides.mutedSubreddits.push(normalized);
+        overrides.mutedSubreddits.sort();
+        await this.setSubredditOverrides(overrides);
+      }
+    },
+
+    /**
+     * Remove subreddit from mute list
+     * @param {string} subreddit - Subreddit name
+     * @returns {Promise<void>}
+     */
+    async removeMutedSubreddit(subreddit) {
+      const overrides = await this.getSubredditOverrides();
+      const normalized = subreddit.toLowerCase().replace(/^r\//, "");
+
+      overrides.mutedSubreddits = overrides.mutedSubreddits.filter(
+        (s) => s !== normalized
+      );
+      await this.setSubredditOverrides(overrides);
+    },
+
+    /**
+     * Get content filtering preferences
+     * @returns {Promise<Object>}
+     */
+    async getContentFiltering() {
+      return this.get("contentFiltering", DEFAULTS.contentFiltering);
+    },
+
+    /**
+     * Set content filtering preferences
+     * @param {Object} filtering
+     * @returns {Promise<void>}
+     */
+    async setContentFiltering(filtering) {
+      return this.set("contentFiltering", filtering);
+    },
+
+    /**
+     * Add keyword to mute list
+     * @param {string} keyword - Keyword or phrase to mute
+     * @returns {Promise<void>}
+     */
+    async addMutedKeyword(keyword) {
+      const filtering = await this.getContentFiltering();
+      const normalized = keyword.trim();
+
+      if (normalized && !filtering.mutedKeywords.includes(normalized)) {
+        filtering.mutedKeywords.push(normalized);
+        filtering.mutedKeywords.sort();
+        await this.setContentFiltering(filtering);
+      }
+    },
+
+    /**
+     * Remove keyword from mute list
+     * @param {string} keyword - Keyword to remove
+     * @returns {Promise<void>}
+     */
+    async removeMutedKeyword(keyword) {
+      const filtering = await this.getContentFiltering();
+      filtering.mutedKeywords = filtering.mutedKeywords.filter(
+        (k) => k !== keyword
+      );
+      await this.setContentFiltering(filtering);
+    },
+
+    /**
+     * Add domain to mute list
+     * @param {string} domain - Domain to mute (e.g., "example.com")
+     * @returns {Promise<void>}
+     */
+    async addMutedDomain(domain) {
+      const filtering = await this.getContentFiltering();
+      const normalized = domain.toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, "");
+
+      if (normalized && !filtering.mutedDomains.includes(normalized)) {
+        filtering.mutedDomains.push(normalized);
+        filtering.mutedDomains.sort();
+        await this.setContentFiltering(filtering);
+      }
+    },
+
+    /**
+     * Remove domain from mute list
+     * @param {string} domain - Domain to remove
+     * @returns {Promise<void>}
+     */
+    async removeMutedDomain(domain) {
+      const filtering = await this.getContentFiltering();
+      filtering.mutedDomains = filtering.mutedDomains.filter(
+        (d) => d !== domain
+      );
+      await this.setContentFiltering(filtering);
+    },
+
+    /**
      * Get frontend configuration
      * @returns {Promise<Object>}
      */
@@ -506,6 +636,40 @@
       }
 
       return { valid: errors.length === 0, errors };
+    },
+
+    /**
+     * Get dark mode preferences
+     * @returns {Promise<Object>}
+     */
+    async getDarkMode() {
+      return this.get("darkMode", DEFAULTS.darkMode);
+    },
+
+    /**
+     * Set dark mode preferences
+     * @param {Object} prefs
+     * @returns {Promise<void>}
+     */
+    async setDarkMode(prefs) {
+      return this.set("darkMode", prefs);
+    },
+
+    /**
+     * Get nag blocking preferences
+     * @returns {Promise<Object>}
+     */
+    async getNagBlocking() {
+      return this.get("nagBlocking", DEFAULTS.nagBlocking);
+    },
+
+    /**
+     * Set nag blocking preferences
+     * @param {Object} prefs
+     * @returns {Promise<void>}
+     */
+    async setNagBlocking(prefs) {
+      return this.set("nagBlocking", prefs);
     },
 
     /**

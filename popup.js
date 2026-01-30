@@ -18,6 +18,7 @@
     tabToggleSection: document.getElementById("tab-toggle-section"),
     tabToggle: document.getElementById("tab-toggle"),
     shortcutHint: document.getElementById("shortcut-hint"),
+    darkModeSelect: document.getElementById("dark-mode-select"),
   };
 
   let countdownInterval = null;
@@ -33,6 +34,7 @@
     await loadState();
     await loadStats();
     await loadShortcut();
+    await loadDarkMode();
     await checkTabContext();
     attachListeners();
   }
@@ -377,6 +379,35 @@
   }
 
   /**
+   * Load dark mode preference
+   */
+  async function loadDarkMode() {
+    const darkMode = await window.Storage.getDarkMode();
+    elements.darkModeSelect.value = darkMode.enabled || "auto";
+  }
+
+  /**
+   * Handle dark mode selection change
+   */
+  async function handleDarkModeChange() {
+    const selected = elements.darkModeSelect.value;
+    const darkMode = await window.Storage.getDarkMode();
+    darkMode.enabled = selected;
+    await window.Storage.setDarkMode(darkMode);
+
+    // Notify all old.reddit.com tabs to update their dark mode
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_DARK_MODE" }, () => {
+          // Ignore errors - tab might not have content script loaded
+          void chrome.runtime.lastError;
+        });
+      });
+    });
+  }
+
+  /**
    * Attach event listeners
    */
   function attachListeners() {
@@ -388,6 +419,7 @@
     );
     elements.tabToggle.addEventListener("change", handleTabToggle);
     elements.openOptions.addEventListener("click", handleOpenOptions);
+    elements.darkModeSelect.addEventListener("change", handleDarkModeChange);
 
     // Listen for storage changes to keep popup in sync (debounced for performance)
     let statsUpdateTimeout = null;

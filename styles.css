@@ -3,6 +3,241 @@
   display: none !important;
 }
 
+/* ============================================
+   Dark Mode Styles for old.reddit.com
+   ============================================ */
+
+/* Dark mode root variables */
+body.orr-dark-mode,
+body.orr-oled-mode {
+  --orr-bg-primary: #1a1a1b;
+  --orr-bg-secondary: #272729;
+  --orr-bg-tertiary: #343536;
+  --orr-text-primary: #d7dadc;
+  --orr-text-secondary: #818384;
+  --orr-border-color: #343536;
+  --orr-link-color: #5f99cf;
+  --orr-link-hover: #7bb3e4;
+  --orr-reddit-orange: #ff4500;
+}
+
+/* OLED mode (pure black) */
+body.orr-oled-mode {
+  --orr-bg-primary: #000000;
+  --orr-bg-secondary: #0a0a0a;
+  --orr-bg-tertiary: #1a1a1a;
+}
+
+/* Main page background */
+body.orr-dark-mode,
+body.orr-oled-mode {
+  background-color: var(--orr-bg-primary) !important;
+  color: var(--orr-text-primary) !important;
+}
+
+/* Header */
+body.orr-dark-mode #header,
+body.orr-oled-mode #header {
+  background-color: var(--orr-bg-secondary) !important;
+  border-bottom: 1px solid var(--orr-border-color) !important;
+}
+
+body.orr-dark-mode #header-bottom-left,
+body.orr-oled-mode #header-bottom-left {
+  background-color: var(--orr-bg-secondary) !important;
+}
+
+/* Links */
+body.orr-dark-mode a,
+body.orr-oled-mode a {
+  color: var(--orr-link-color) !important;
+}
+
+body.orr-dark-mode a:hover,
+body.orr-oled-mode a:hover {
+  color: var(--orr-link-hover) !important;
+}
+
+/* Post listings */
+body.orr-dark-mode .thing,
+body.orr-oled-mode .thing {
+  background-color: var(--orr-bg-secondary) !important;
+  border-color: var(--orr-border-color) !important;
+  color: var(--orr-text-primary) !important;
+}
+
+body.orr-dark-mode .thing .title,
+body.orr-oled-mode .thing .title {
+  color: var(--orr-text-primary) !important;
+}
+
+body.orr-dark-mode .thing .title:visited,
+body.orr-oled-mode .thing .title:visited {
+  color: var(--orr-text-secondary) !important;
+}
+
+/* Comments */
+body.orr-dark-mode .comment,
+body.orr-oled-mode .comment {
+  background-color: transparent !important;
+  border-left-color: var(--orr-border-color) !important;
+}
+
+body.orr-dark-mode .comment .md,
+body.orr-oled-mode .comment .md {
+  color: var(--orr-text-primary) !important;
+}
+
+/* Sidebar */
+body.orr-dark-mode .side,
+body.orr-oled-mode .side {
+  background-color: var(--orr-bg-secondary) !important;
+  color: var(--orr-text-primary) !important;
+}
+
+body.orr-dark-mode .sidebox,
+body.orr-oled-mode .sidebox {
+  background-color: var(--orr-bg-tertiary) !important;
+  border-color: var(--orr-border-color) !important;
+}
+
+/* Forms and inputs */
+body.orr-dark-mode input[type="text"],
+body.orr-dark-mode input[type="password"],
+body.orr-dark-mode textarea,
+body.orr-dark-mode select,
+body.orr-oled-mode input[type="text"],
+body.orr-oled-mode input[type="password"],
+body.orr-oled-mode textarea,
+body.orr-oled-mode select {
+  background-color: var(--orr-bg-tertiary) !important;
+  border-color: var(--orr-border-color) !important;
+  color: var(--orr-text-primary) !important;
+}
+
+/* Buttons */
+body.orr-dark-mode .button,
+body.orr-oled-mode .button {
+  background-color: var(--orr-bg-tertiary) !important;
+  border-color: var(--orr-border-color) !important;
+  color: var(--orr-text-primary) !important;
+}
+
+/* Code blocks */
+body.orr-dark-mode .md code,
+body.orr-dark-mode .md pre,
+body.orr-oled-mode .md code,
+body.orr-oled-mode .md pre {
+  background-color: var(--orr-bg-tertiary) !important;
+  border-color: var(--orr-border-color) !important;
+  color: var(--orr-text-primary) !important;
+}
+
+/* Tables */
+body.orr-dark-mode .md table,
+body.orr-oled-mode .md table {
+  border-color: var(--orr-border-color) !important;
+}
+
+body.orr-dark-mode .md table td,
+body.orr-dark-mode .md table th,
+body.orr-oled-mode .md table td,
+body.orr-oled-mode .md table th {
+  border-color: var(--orr-border-color) !important;
+  background-color: var(--orr-bg-tertiary) !important;
+}
+
+/* Voting arrows */
+body.orr-dark-mode .arrow,
+body.orr-oled-mode .arrow {
+  filter: brightness(0.8) !important;
+}
+
+/* RES compatibility - ensure RES night mode doesn't conflict */
+body.orr-dark-mode.res-nightmode,
+body.orr-oled-mode.res-nightmode {
+  /* Let RES handle it if user has both */
+  background-color: inherit !important;
+}
+
+/* ============================================
+   Enhanced Nag/Banner Removal
+   ============================================ */
+
+/* Applied when nag blocking is enabled */
+body.orr-block-nags .orr-nag {
+  display: none !important;
+}
+
+/* Login prompts and modals */
+.login-required-popup,
+.login-form-side,
+.modal-dialog.login-popup,
+#login_login-main,
+.cover-overlay,
+.login-popup-overlay {
+  /* Marked for conditional blocking */
+}
+
+/* Email verification nags */
+.infobar.verify-email,
+.newsletterbar,
+.email-collection,
+#newsletter-signup,
+.user-info .verify-email-cta {
+  /* Marked for conditional blocking */
+}
+
+/* Reddit Premium promotional banners */
+.gold-accent,
+.premium-banner,
+.gold-banner-wrap,
+#gold-promo,
+.sidecontentbox .premium-cta,
+a[href*="/premium"],
+.native-banner-ad,
+.premium-tooltip {
+  /* Marked for conditional blocking */
+}
+
+/* App download prompts */
+.app-download-prompt,
+.mobile-app-banner,
+.get-app-banner,
+#app-download-splash,
+.download-app-button,
+.mobile-web-redirect {
+  /* Marked for conditional blocking */
+}
+
+/* General promotional content */
+.promotedlink.promoted,
+.organic-listing .promoted,
+.promotion-tooltip,
+.native-promo,
+.happening-now-wrap,
+.reddit-infobar.announcement,
+.announcement-bar,
+.global-announcement {
+  /* Marked for conditional blocking */
+}
+
+/* Tooltips and overlays that nag users */
+.tooltip.login-required,
+.overlay-message,
+.interstitial,
+.modal-backdrop,
+.fancy-toggle-button__tooltip {
+  /* Marked for conditional blocking */
+}
+
+/* Specific Reddit Premium elements in sidebar */
+.side .spacer .titlebox .premium-banner-inner,
+.side .infobar.premium,
+.gold-accent.gold-accent-link {
+  /* Marked for conditional blocking */
+}
+
 /* Redirect Notice */
 #orr-redirect-notice {
   position: fixed;

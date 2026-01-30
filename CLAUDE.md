@@ -36,8 +36,8 @@ The extension uses Manifest V3 declarative net request rules and a service worke
 - **onboarding.html/css/js**: First-run onboarding experience (5 slides)
 - **suggestions.js**: Curated list of subreddits that benefit from new Reddit features
 - **offscreen.html/js**: Offscreen document for clipboard access (MV3 requirement)
-- **content-script.js**: Content script injected into old.reddit.com for redirect notices
-- **styles.css**: Content script CSS injected into old.reddit.com to hide cookie banners
+- **content-script.js**: Content script injected into old.reddit.com (redirect notices, dark mode, nag blocking, content filtering)
+- **styles.css**: Content script CSS injected into old.reddit.com (dark mode themes, nag blocking, cookie banner removal)
 
 ### Redirect Rule System
 
@@ -101,6 +101,17 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 - Contextual error messages for debugging
 - Integrated across all extension components
 
+**Dark Mode & Content Filtering (v6.0.0):**
+
+- **Dark Mode**: Auto/Light/Dark/OLED themes with system detection
+- **Nag Blocking**: Granular controls for login prompts, email verification, premium ads, app prompts
+- **Auto-collapse Bots**: Automatically collapse 13 common bot accounts (AutoModerator, etc.)
+- **Subreddit Muting**: Filter unwanted subreddits on /r/all and /r/popular (up to 100)
+- **Keyword Muting**: Filter posts by title keywords/phrases with word boundary matching (up to 200)
+- **Domain Muting**: Filter posts by linked domains with wildcard subdomain support (up to 100)
+- **Import/Export**: JSON-based backup/restore for all filter lists
+- **MutationObserver**: Single debounced observer (100ms) watching all dynamic content
+
 ## Development Commands
 
 ### Setup
@@ -158,8 +169,8 @@ make clean           # Remove build artifacts
 ├── suggestions.js            # Curated subreddit suggestions
 ├── offscreen.html            # Offscreen document for clipboard
 ├── offscreen.js              # Offscreen document logic
-├── content-script.js         # Content script for redirect notices
-├── styles.css                # Content script CSS (old.reddit.com)
+├── content-script.js         # Content script (redirect notices, dark mode, filtering)
+├── styles.css                # Content script CSS (dark mode, nag blocking)
 ├── img/                      # Extension icons (16-128px)
 ├── tests/                    # Vitest test suite
 │   ├── setup.js              # Test utilities
