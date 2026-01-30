@@ -7,9 +7,10 @@
 
 ## New Features in This Fork
 
-- **Toolbar toggle** to enable/disable redirect without removing the extension (addresses [#173](https://github.com/tom-james-watson/old-reddit-redirect/issues/173))
+- **Click extension icon** to instantly toggle redirect on/off (addresses [#173](https://github.com/tom-james-watson/old-reddit-redirect/issues/173))
+- No popup needed - just click the icon to toggle
+- Badge shows "OFF" when disabled
 - Toggle state persists without requiring storage permissions
-- Improved popup UI with clear on/off indication
 
 > [!NOTE]
 > If you're wondering why the extension recently requested new permissions, please see https://github.com/tom-james-watson/old-reddit-redirect/issues/117
@@ -26,7 +27,7 @@ Also has a new minor fixes and quality of life improvements like:
 
 - Removing the undismissable cookie banner
 - Rewriting links to galleries to the raw old reddit comments page
-- Toolbar toggle to turn the redirect on/off
+- Click extension icon to turn the redirect on/off
 
 #### Redirected domains
 

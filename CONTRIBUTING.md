@@ -27,8 +27,9 @@ Thank you for your interest in contributing to this actively maintained fork of 
 2. The `web-ext` development server will auto-reload the extension
 3. Test manually by:
    - Navigating to various Reddit URLs
-   - Testing the toolbar popup toggle
+   - Clicking the extension icon to toggle on/off
    - Checking both enabled and disabled states
+   - Verifying badge shows "OFF" when disabled
    - Verifying allowlisted paths (e.g., `/settings`, `/mod`)
 
 ### Code Style
@@ -42,8 +43,7 @@ Thank you for your interest in contributing to this actively maintained fork of 
 
 - `manifest.json` - Extension metadata and permissions
 - `rules.json` - Declarative net request rules for redirects
-- `popup.js` - Toggle functionality for toolbar popup
-- `popup.html` - Popup UI
+- `background.js` - Service worker for icon click toggle functionality
 - `styles.css` - Content script CSS (injected on old.reddit.com)
 
 ## Submitting Changes

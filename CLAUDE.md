@@ -10,11 +10,11 @@ This is a **browser extension** (Chrome/Firefox) that redirects all Reddit URLs 
 
 ### Manifest V3 Structure
 
-The extension uses Manifest V3 declarative net request rules instead of background scripts:
+The extension uses Manifest V3 declarative net request rules and a service worker:
 
 - **manifest.json**: Extension metadata, permissions, and declarative net request ruleset registration
 - **rules.json**: Array of `declarativeNetRequest` rules that handle URL redirection/modification
-- **popup.html + popup.js**: Toolbar popup UI for toggling redirect on/off
+- **background.js**: Service worker that handles extension icon clicks to toggle redirect on/off
 - **styles.css**: Content script CSS injected into old.reddit.com to hide cookie banners
 
 ### Redirect Rule System
@@ -32,13 +32,15 @@ Rules in `rules.json` are prioritized and processed in order:
 4. **Domain redirects** (priority 1, IDs 5-9): Transforms hosts to `old.reddit.com`:
    - `reddit.com`, `www.reddit.com`, `np.reddit.com`, `amp.reddit.com`, `i.reddit.com`
 
-### Toggle Mechanism (popup.js)
+### Toggle Mechanism (background.js)
 
-The extension can be toggled on/off via toolbar popup without requiring storage permissions:
+The extension can be toggled on/off by clicking the toolbar icon without requiring storage permissions:
 
+- **Icon click handler**: `chrome.action.onClicked` listener triggers toggle function
 - **State management**: Uses `chrome.declarativeNetRequest.getEnabledRulesets()` to check if `ruleset_1` is enabled (no storage API needed)
 - **Toggle action**: `chrome.declarativeNetRequest.updateEnabledRulesets()` enables/disables the ruleset
 - **UI feedback**: Updates badge text ("OFF" when disabled), badge color, and toolbar tooltip via `chrome.action` API
+- **Initialization**: Sets correct badge state on install and browser startup
 
 The toggle state is ephemeral (resets on browser restart) by design to avoid requesting storage permissions.
 
@@ -117,13 +119,14 @@ This is necessary because some Chrome API calls may fail silently (e.g., when ex
 .
 ├── manifest.json          # Extension manifest (V3)
 ├── rules.json             # Declarative net request rules
-├── popup.html             # Toolbar popup UI
-├── popup.js               # Toggle logic for popup
+├── background.js          # Service worker for toggle functionality
 ├── styles.css             # Content script CSS (old.reddit.com only)
 ├── img/                   # Extension icons (16-128px)
 ├── LICENSE.txt            # MIT license
 ├── Makefile               # Build commands
-└── README.md              # User documentation
+├── README.md              # User documentation
+├── CLAUDE.md              # AI development guidance
+└── CONTRIBUTING.md        # Contribution guidelines
 ```
 
 ## Git Commit Policy
@@ -188,8 +191,8 @@ Manual testing workflow:
 2. Navigate to `https://reddit.com` → should redirect to `old.reddit.com`
 3. Test allowlisted paths (e.g., `https://reddit.com/settings`) → should NOT redirect
 4. Test gallery redirect: `https://reddit.com/gallery/abc123` → should redirect to `old.reddit.com/comments/abc123`
-5. Test toggle: Click toolbar icon → click "Disable redirect" → navigate to `reddit.com` → should NOT redirect
-6. Verify badge shows "OFF" when disabled
+5. Test toggle: Click extension icon → verify badge shows "OFF" → navigate to `reddit.com` → should NOT redirect
+6. Click icon again → badge should clear → redirect should work again
 
 ## Debugging
 
@@ -197,20 +200,21 @@ Manual testing workflow:
 
 1. Navigate to `chrome://extensions/`
 2. Enable "Developer mode"
-3. Click "Inspect views: popup.html" to debug popup
+3. Click "Inspect views: service worker" to debug background.js
 4. Check "Errors" button for extension errors
-5. Use `chrome://extensions/` → "Inspect views: service worker" for background errors (if any)
+5. Use Console tab in service worker inspector to check toggle logic
 
 ### Firefox DevTools
 
 1. Navigate to `about:debugging#/runtime/this-firefox`
 2. Find "Old Reddit Redirect"
-3. Click "Inspect" to open extension console
-4. Popup debugging: Open popup → Right-click → "Inspect Element"
+3. Click "Inspect" to open extension console (for background.js)
+4. Check Console for any errors or debug output
 
 ### Common Issues
 
-- **Rules not applying**: Check `chrome.declarativeNetRequest.getEnabledRulesets()` in popup console
-- **Toggle not working**: Verify ruleset ID matches `RULESET_ID` constant in popup.js ("ruleset_1")
+- **Rules not applying**: Check `chrome.declarativeNetRequest.getEnabledRulesets()` in service worker console
+- **Toggle not working**: Verify ruleset ID matches `RULESET_ID` constant in background.js ("ruleset_1")
+- **Icon click does nothing**: Ensure `chrome.action.onClicked` listener is registered in background.js
 - **Redirect loops**: Check rule priorities - allowlist rules must have priority >= redirect rules
 - **Permissions errors**: Ensure `host_permissions` covers all domains in rules.json
