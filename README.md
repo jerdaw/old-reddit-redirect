@@ -1,6 +1,17 @@
 # Old Reddit Redirect
 
-> [!NOTE]  
+> [!IMPORTANT]
+> **This is an actively maintained fork** of [tom-james-watson/old-reddit-redirect](https://github.com/tom-james-watson/old-reddit-redirect).
+>
+> The original repository has not been updated since July 2025. This fork includes new features and bug fixes that have been requested but not merged upstream.
+
+## New Features in This Fork
+
+- **Toolbar toggle** to enable/disable redirect without removing the extension (addresses [#173](https://github.com/tom-james-watson/old-reddit-redirect/issues/173))
+- Toggle state persists without requiring storage permissions
+- Improved popup UI with clear on/off indication
+
+> [!NOTE]
 > If you're wondering why the extension recently requested new permissions, please see https://github.com/tom-james-watson/old-reddit-redirect/issues/117
 
 [Chrome extension](https://chrome.google.com/webstore/detail/old-reddit-redirect/dneaehbmnbhcippjikoajpoabadpodje)
@@ -41,6 +52,17 @@ Also has a new minor fixes and quality of life improvements like:
 Ensure you have [`node`](https://nodejs.org/en) installed. Then run `make run` to start the live-reloading development server. This will open a browser window with the extension installed for testing.
 
 Once you've verified things are working correctly locally you can fork this repo and submit a pull request with your changes.
+
+## Contributing
+
+This fork welcomes contributions! If you have bug fixes, features, or improvements:
+
+1. Fork this repository
+2. Create a feature branch
+3. Make your changes and test with `make run`
+4. Submit a pull request
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## License
 
