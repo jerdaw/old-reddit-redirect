@@ -198,21 +198,38 @@
     },
 
     /**
-     * Get statistics
+     * Get statistics with defensive checks
      * @returns {Promise<Object>}
      */
     async getStats() {
       const stats = await this.get("stats", DEFAULTS.stats);
       const today = getTodayDate();
 
+      // Defensive: Ensure stats object has all required fields
+      const safeStats = {
+        totalRedirects:
+          typeof stats.totalRedirects === "number" ? stats.totalRedirects : 0,
+        todayRedirects:
+          typeof stats.todayRedirects === "number" ? stats.todayRedirects : 0,
+        todayDate: stats.todayDate || today,
+        lastRedirect: stats.lastRedirect || null,
+        perSubreddit:
+          stats.perSubreddit && typeof stats.perSubreddit === "object"
+            ? stats.perSubreddit
+            : {},
+        weeklyHistory: Array.isArray(stats.weeklyHistory)
+          ? stats.weeklyHistory
+          : [],
+      };
+
       // Reset daily count if it's a new day
-      if (stats.todayDate !== today) {
-        stats.todayRedirects = 0;
-        stats.todayDate = today;
-        await this.set("stats", stats);
+      if (safeStats.todayDate !== today) {
+        safeStats.todayRedirects = 0;
+        safeStats.todayDate = today;
+        await this.set("stats", safeStats);
       }
 
-      return stats;
+      return safeStats;
     },
 
     /**

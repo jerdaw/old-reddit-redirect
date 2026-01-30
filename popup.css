@@ -195,16 +195,21 @@ input:checked + .slider:before {
 /* Statistics Section */
 .stats-section {
   display: flex;
+  align-items: center;
+  justify-content: space-around;
   gap: 12px;
   margin-bottom: 16px;
   padding: 12px;
   background-color: #272729;
   border-radius: 8px;
+  flex-wrap: wrap;
 }
 
 .stat-item {
-  flex: 1;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .stat-value {
@@ -219,7 +224,53 @@ input:checked + .slider:before {
   display: block;
   font-size: 11px;
   color: #818384;
-  margin-top: 4px;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 32px;
+  background-color: #343536;
+  flex-shrink: 0;
+}
+
+/* Sparkline */
+.sparkline-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 24px;
+  padding: 2px 0;
+}
+
+.sparkline-bar {
+  width: 6px;
+  background: #ff4500;
+  border-radius: 2px;
+  min-height: 3px;
+  transition: height 0.3s ease-out;
+}
+
+.sparkline-bar.today {
+  background: #ff6b3d;
+  box-shadow: 0 0 4px rgba(255, 107, 61, 0.6);
+}
+
+.sparkline-bar.empty {
+  background: #343536;
+}
+
+.sparkline-label {
+  font-size: 10px;
+  color: #818384;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Action Buttons */

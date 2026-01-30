@@ -11,6 +11,7 @@
     topSubreddits: document.getElementById("top-subreddits"),
     subredditEmpty: document.getElementById("subreddit-empty"),
     clearStats: document.getElementById("clear-stats"),
+    exportStats: document.getElementById("export-stats"),
     iconClickBehavior: document.getElementById("icon-click-behavior"),
     badgeStyle: document.getElementById("badge-style"),
     animateToggle: document.getElementById("animate-toggle"),
@@ -29,6 +30,12 @@
     importFile: document.getElementById("import-file"),
     syncToggle: document.getElementById("sync-toggle"),
     syncStatus: document.getElementById("sync-status"),
+    frontendOptions: document.getElementById("frontend-options"),
+    customDomainSection: document.getElementById("custom-domain-section"),
+    customDomain: document.getElementById("custom-domain"),
+    saveCustomDomain: document.getElementById("save-custom-domain"),
+    permissionNotice: document.getElementById("permission-notice"),
+    requestPermission: document.getElementById("request-permission"),
     testUrlInput: document.getElementById("test-url-input"),
     testUrlBtn: document.getElementById("test-url-btn"),
     testResult: document.getElementById("test-result"),
@@ -87,6 +94,7 @@
     await loadMainToggle();
     await loadStats();
     await loadUIPreferences();
+    await loadFrontendOptions();
     await loadWhitelist();
     await loadSuggestions();
     await loadShortcut();
@@ -114,25 +122,106 @@
       stats.todayRedirects || 0
     );
 
-    // Load top subreddits
-    const entries = Object.entries(stats.perSubreddit || {});
+    // Render weekly chart
+    renderWeeklyChart(stats.weeklyHistory || []);
+
+    // Render top subreddits with percentage bars
+    renderTopSubreddits(stats.perSubreddit || {}, stats.totalRedirects || 0);
+  }
+
+  /**
+   * Render weekly chart
+   * @param {Array} history - Array of {date, count} objects
+   */
+  function renderWeeklyChart(history) {
+    const container = document.getElementById("weekly-chart");
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    // Build data for last 7 days
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split("T")[0];
+      const entry = history.find((h) => h.date === dateStr);
+      days.push({
+        date: dateStr,
+        day: dayNames[date.getDay()],
+        count: entry?.count || 0,
+        isToday: i === 0,
+      });
+    }
+
+    // Check for any data
+    const hasData = days.some((d) => d.count > 0);
+    if (!hasData) {
+      container.innerHTML = `
+        <div class="chart-empty">
+          No redirect data yet. Browse some Reddit to see your stats!
+        </div>
+      `;
+      return;
+    }
+
+    const maxCount = Math.max(...days.map((d) => d.count), 1);
+
+    container.innerHTML = days
+      .map((d) => {
+        const height = (d.count / maxCount) * 100; // Percentage height
+        const formattedDate = new Date(d.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+        return `
+          <div class="bar-wrapper">
+            <span class="bar-value">${d.count > 0 ? formatNumber(d.count) : ""}</span>
+            <div class="bar${d.isToday ? " today" : ""}" style="height: ${Math.max(height, 4)}%">
+              <span class="bar-tooltip">${formattedDate}: ${formatNumber(d.count)} redirects</span>
+            </div>
+            <span class="bar-label">${d.day}</span>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  /**
+   * Render top subreddits with percentage bars
+   * @param {Object} perSubreddit - Object with subreddit names as keys and counts as values
+   * @param {number} totalRedirects - Total redirect count
+   */
+  function renderTopSubreddits(perSubreddit, totalRedirects) {
+    const entries = Object.entries(perSubreddit || {});
     entries.sort((a, b) => b[1] - a[1]);
 
-    if (entries.length > 0) {
+    if (entries.length === 0) {
       elements.topSubreddits.innerHTML = "";
-      elements.subredditEmpty.hidden = true;
-
-      entries.slice(0, 10).forEach(([subreddit, count]) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <span class="subreddit-name">r/${escapeHtml(subreddit)}</span>
-          <span class="subreddit-count">${formatNumber(count)} redirects</span>
-        `;
-        elements.topSubreddits.appendChild(li);
-      });
-    } else {
       elements.subredditEmpty.hidden = false;
+      return;
     }
+
+    elements.subredditEmpty.hidden = true;
+    const maxCount = entries[0][1];
+
+    elements.topSubreddits.innerHTML = entries
+      .slice(0, 10)
+      .map(([subreddit, count], index) => {
+        const percentage = (count / maxCount) * 100;
+        const totalPercent =
+          totalRedirects > 0
+            ? ((count / totalRedirects) * 100).toFixed(1)
+            : "0.0";
+        return `
+          <li>
+            <div class="subreddit-bar" style="width: ${percentage}%"></div>
+            <span class="subreddit-rank">${index + 1}.</span>
+            <span class="subreddit-name">r/${escapeHtml(subreddit)}</span>
+            <span class="subreddit-count">${formatNumber(count)}</span>
+            <span class="subreddit-percent">${totalPercent}%</span>
+          </li>
+        `;
+      })
+      .join("");
   }
 
   /**
@@ -322,6 +411,40 @@
     await window.Storage.clearStats();
     await loadStats();
     showToast("Statistics cleared");
+  }
+
+  /**
+   * Export statistics to JSON
+   */
+  async function handleExportStats() {
+    const stats = await window.Storage.getStats();
+
+    const exportData = {
+      _exportType: "statistics",
+      _exportDate: new Date().toISOString(),
+      _extensionVersion: chrome.runtime.getManifest().version,
+      totalRedirects: stats.totalRedirects,
+      todayRedirects: stats.todayRedirects,
+      todayDate: stats.todayDate,
+      lastRedirect: stats.lastRedirect,
+      weeklyHistory: stats.weeklyHistory,
+      topSubreddits: Object.entries(stats.perSubreddit || {})
+        .sort((a, b) => b[1] - a[1])
+        .map(([name, count]) => ({ name, count })),
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: "application/json",
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `old-reddit-redirect-stats-${formatDate(new Date())}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast("Statistics exported");
   }
 
   /**
@@ -703,6 +826,184 @@
   }
 
   /**
+   * Load and render frontend options
+   */
+  async function loadFrontendOptions() {
+    const frontends = window.Frontends.getAll();
+    const frontendConfig = await window.Storage.getFrontend();
+    const currentTarget = frontendConfig.target || "old.reddit.com";
+
+    elements.frontendOptions.innerHTML = frontends
+      .map(
+        (frontend) => `
+      <label class="frontend-card ${currentTarget === frontend.domain || (currentTarget === "custom" && frontend.id === "custom") ? "selected" : ""}">
+        <input
+          type="radio"
+          name="frontend"
+          value="${frontend.id}"
+          ${currentTarget === frontend.domain || (currentTarget === "custom" && frontend.id === "custom") ? "checked" : ""}
+        />
+        <div class="frontend-header">
+          <span class="frontend-icon">${frontend.icon}</span>
+          <span class="frontend-name">${escapeHtml(frontend.name)}</span>
+        </div>
+        <p class="frontend-description">${escapeHtml(frontend.description)}</p>
+      </label>
+    `
+      )
+      .join("");
+
+    // Show custom domain section if custom is selected
+    if (currentTarget === "custom") {
+      elements.customDomainSection.hidden = false;
+      elements.customDomain.value = frontendConfig.customDomain || "";
+    } else {
+      elements.customDomainSection.hidden = true;
+    }
+
+    // Add event listeners to cards
+    document.querySelectorAll('input[name="frontend"]').forEach((radio) => {
+      radio.addEventListener("change", handleFrontendChange);
+    });
+  }
+
+  /**
+   * Handle frontend selection change
+   */
+  async function handleFrontendChange(event) {
+    const selectedId = event.target.value;
+    const frontend = window.Frontends.getById(selectedId);
+
+    // Update selection UI
+    document.querySelectorAll(".frontend-card").forEach((card) => {
+      card.classList.remove("selected");
+    });
+    event.target.closest(".frontend-card").classList.add("selected");
+
+    // Show/hide custom domain section
+    if (selectedId === "custom") {
+      elements.customDomainSection.hidden = false;
+      return; // Don't save until custom domain is entered
+    } else {
+      elements.customDomainSection.hidden = true;
+      elements.permissionNotice.hidden = true;
+    }
+
+    // Check if permission is required
+    if (frontend.requiresPermission) {
+      const hasPermission = await checkPermission(frontend.domain);
+      if (!hasPermission) {
+        elements.permissionNotice.hidden = false;
+        elements.requestPermission.onclick = () =>
+          requestPermission(frontend.domain);
+        return;
+      }
+    }
+
+    // Save selection
+    await saveFrontendSelection(frontend.domain);
+  }
+
+  /**
+   * Handle custom domain save
+   */
+  async function handleSaveCustomDomain() {
+    const domain = elements.customDomain.value.trim();
+
+    if (!domain) {
+      showToast("Please enter a domain", "error");
+      return;
+    }
+
+    // Validate domain format
+    if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain)) {
+      showToast("Invalid domain format", "error");
+      return;
+    }
+
+    // Check permission
+    const hasPermission = await checkPermission(domain);
+    if (!hasPermission) {
+      elements.permissionNotice.hidden = false;
+      elements.requestPermission.onclick = () => requestPermission(domain);
+      return;
+    }
+
+    // Save custom domain
+    await window.Storage.setFrontend({
+      target: "custom",
+      customDomain: domain,
+    });
+
+    showToast("Custom frontend saved!", "success");
+    elements.permissionNotice.hidden = true;
+
+    // Notify background script to update rules
+    await chrome.runtime.sendMessage({ type: "UPDATE_FRONTEND_RULES" });
+  }
+
+  /**
+   * Save frontend selection
+   */
+  async function saveFrontendSelection(domain) {
+    await window.Storage.setFrontend({
+      target: domain,
+      customDomain: null,
+    });
+
+    showToast("Frontend updated!", "success");
+
+    // Notify background script to update rules
+    await chrome.runtime.sendMessage({ type: "UPDATE_FRONTEND_RULES" });
+  }
+
+  /**
+   * Check if permission is granted for domain
+   */
+  async function checkPermission(domain) {
+    try {
+      return await chrome.permissions.contains({
+        origins: [`*://${domain}/*`, `*://*.${domain}/*`],
+      });
+    } catch (error) {
+      window.Logger?.warn("Permission check failed:", error);
+      return false;
+    }
+  }
+
+  /**
+   * Request permission for domain
+   */
+  async function requestPermission(domain) {
+    try {
+      const granted = await chrome.permissions.request({
+        origins: [`*://${domain}/*`, `*://*.${domain}/*`],
+      });
+
+      if (granted) {
+        elements.permissionNotice.hidden = true;
+        showToast("Permission granted!", "success");
+
+        // Save the selection now
+        if (elements.customDomainSection.hidden) {
+          const selectedRadio = document.querySelector(
+            'input[name="frontend"]:checked'
+          );
+          const frontend = window.Frontends.getById(selectedRadio.value);
+          await saveFrontendSelection(frontend.domain);
+        } else {
+          await handleSaveCustomDomain();
+        }
+      } else {
+        showToast("Permission denied", "error");
+      }
+    } catch (error) {
+      window.Logger?.error("Permission request failed:", error);
+      showToast("Permission request failed", "error");
+    }
+  }
+
+  /**
    * Attach event listeners
    */
   function attachListeners() {
@@ -711,6 +1012,7 @@
 
     // Statistics
     elements.clearStats.addEventListener("click", handleClearStats);
+    elements.exportStats.addEventListener("click", handleExportStats);
 
     // UI preferences
     elements.iconClickBehavior.addEventListener(
@@ -758,14 +1060,33 @@
     // Sync
     elements.syncToggle.addEventListener("change", handleSyncToggle);
 
-    // Listen for storage changes
+    // Frontend selection
+    elements.saveCustomDomain.addEventListener("click", handleSaveCustomDomain);
+    elements.customDomain.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        handleSaveCustomDomain();
+      }
+    });
+
+    // Listen for storage changes (debounced for performance)
+    let statsUpdateTimeout = null;
+    let enabledUpdateTimeout = null;
+
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area === "local") {
         if (changes.stats) {
-          loadStats();
+          // Debounce stats updates to avoid rapid re-renders
+          clearTimeout(statsUpdateTimeout);
+          statsUpdateTimeout = setTimeout(() => {
+            loadStats();
+          }, 100);
         }
         if (changes.enabled) {
-          loadMainToggle();
+          // Debounce enabled state updates
+          clearTimeout(enabledUpdateTimeout);
+          enabledUpdateTimeout = setTimeout(() => {
+            loadMainToggle();
+          }, 50);
         }
       }
     });

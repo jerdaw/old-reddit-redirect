@@ -74,6 +74,41 @@
     const stats = await window.Storage.getStats();
     elements.redirectCount.textContent = stats.todayRedirects || 0;
     elements.totalCount.textContent = formatNumber(stats.totalRedirects || 0);
+
+    // Render sparkline
+    renderMiniSparkline(stats.weeklyHistory || []);
+  }
+
+  /**
+   * Render mini sparkline in popup
+   * @param {Array} history - Array of {date, count} objects
+   */
+  function renderMiniSparkline(history) {
+    const container = document.getElementById("mini-sparkline");
+
+    // Build data for last 7 days
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split("T")[0];
+      const entry = history.find((h) => h.date === dateStr);
+      days.push({
+        count: entry?.count || 0,
+        isToday: i === 0,
+      });
+    }
+
+    const hasData = days.some((d) => d.count > 0);
+    const maxCount = Math.max(...days.map((d) => d.count), 1);
+
+    container.innerHTML = days
+      .map((d) => {
+        const height = hasData ? (d.count / maxCount) * 20 : 3; // Max 20px
+        const barClass = d.count === 0 ? "empty" : d.isToday ? "today" : "";
+        return `<div class="sparkline-bar ${barClass}" style="height: ${Math.max(height, 3)}px"></div>`;
+      })
+      .join("");
   }
 
   /**
@@ -354,17 +389,25 @@
     elements.tabToggle.addEventListener("change", handleTabToggle);
     elements.openOptions.addEventListener("click", handleOpenOptions);
 
-    // Listen for storage changes to keep popup in sync
+    // Listen for storage changes to keep popup in sync (debounced for performance)
+    let statsUpdateTimeout = null;
+    let stateUpdateTimeout = null;
+
     chrome.storage.onChanged.addListener((changes, area) => {
       if (area === "local") {
         if (changes.stats) {
-          loadStats();
+          // Debounce stats updates
+          clearTimeout(statsUpdateTimeout);
+          statsUpdateTimeout = setTimeout(() => {
+            loadStats();
+          }, 100);
         }
-        if (changes.enabled) {
-          loadState();
-        }
-        if (changes.temporaryDisable) {
-          loadState();
+        if (changes.enabled || changes.temporaryDisable) {
+          // Debounce state updates
+          clearTimeout(stateUpdateTimeout);
+          stateUpdateTimeout = setTimeout(() => {
+            loadState();
+          }, 50);
         }
       }
     });

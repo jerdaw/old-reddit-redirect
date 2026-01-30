@@ -15,6 +15,11 @@
 - **Context menu** - Right-click Reddit links to open in old or new Reddit
 - **First-run onboarding** - Interactive tutorial for new users
 - **Statistics tracking** - View total, daily, and per-subreddit redirect counts
+- **Visual statistics** - Weekly trend charts, sparklines, and percentage bars
+- **Export statistics** - Download your redirect stats as JSON for analysis
+- **Alternative frontends** - Choose between old.reddit.com, Teddit, Redlib, or custom instances
+- **Per-tab control** - Disable redirect for specific tabs without affecting others
+- **Redirect notice** - Optional notification with "Go back" button after redirects
 - **Settings sync** - Sync preferences across browsers (optional)
 
 ### URL Handling

@@ -2,3 +2,74 @@
 #redesign-beta-optin-btn {
   display: none !important;
 }
+
+/* Redirect Notice */
+#orr-redirect-notice {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #272729;
+  color: #d7dadc;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 999999;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  animation: orr-slide-up 0.3s ease;
+}
+
+@keyframes orr-slide-up {
+  from {
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+#orr-redirect-notice.orr-fade-out {
+  animation: orr-fade-out 0.3s ease forwards;
+}
+
+@keyframes orr-fade-out {
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}
+
+.orr-notice-button {
+  background: #ff4500;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.orr-notice-button:hover {
+  background: #ff5722;
+}
+
+.orr-notice-close {
+  background: none;
+  border: none;
+  color: #818384;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+.orr-notice-close:hover {
+  color: #d7dadc;
+}

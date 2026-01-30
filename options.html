@@ -39,6 +39,15 @@
             <span class="stat-label">Today</span>
           </div>
         </div>
+
+        <!-- Weekly Trend Chart -->
+        <div class="chart-container">
+          <h3>Last 7 Days</h3>
+          <div class="bar-chart" id="weekly-chart">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
         <div class="stats-detail">
           <h3>Top Subreddits</h3>
           <ol id="top-subreddits" class="subreddit-list">
@@ -48,9 +57,14 @@
             No subreddit data yet. Visit some subreddits to see stats!
           </p>
         </div>
-        <button class="button secondary" id="clear-stats">
-          Clear Statistics
-        </button>
+        <div class="stats-actions">
+          <button class="button secondary" id="export-stats">
+            📊 Export Stats
+          </button>
+          <button class="button secondary" id="clear-stats">
+            Clear Statistics
+          </button>
+        </div>
       </section>
 
       <!-- Visual Preferences -->
@@ -110,6 +124,41 @@
             Show a small notification on old.reddit.com after redirect with "Go
             back" option
           </p>
+        </div>
+      </section>
+
+      <!-- Alternative Frontend -->
+      <section class="setting">
+        <h2>Reddit Frontend</h2>
+        <p class="section-description">
+          Choose which Reddit frontend to redirect to. Alternative frontends
+          offer privacy benefits and work without JavaScript.
+        </p>
+
+        <div class="frontend-options" id="frontend-options">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="custom-domain-section" id="custom-domain-section" hidden>
+          <label for="custom-domain">Custom Domain</label>
+          <div class="input-row">
+            <input
+              type="text"
+              id="custom-domain"
+              class="text-input"
+              placeholder="example.com"
+            />
+            <button class="button" id="save-custom-domain">Save</button>
+          </div>
+          <p class="help-text">Enter domain without https:// prefix</p>
+        </div>
+
+        <div class="permission-notice" id="permission-notice" hidden>
+          <span class="notice-icon">⚠️</span>
+          <span>This frontend requires additional permissions.</span>
+          <button class="button" id="request-permission">
+            Grant Permission
+          </button>
         </div>
       </section>
 
@@ -273,6 +322,7 @@
     <script src="logger.js"></script>
     <script src="storage.js"></script>
     <script src="suggestions.js"></script>
+    <script src="frontends.js"></script>
     <script src="options.js"></script>
   </body>
 </html>

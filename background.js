@@ -269,6 +269,146 @@ if (typeof importScripts === "function") {
   }
 
   /**
+   * Update redirect rules based on frontend selection
+   */
+  async function updateFrontendRules() {
+    const frontendConfig = await Storage.getFrontend();
+    let targetDomain = frontendConfig.target;
+
+    // Handle custom domain
+    if (targetDomain === "custom") {
+      targetDomain = frontendConfig.customDomain;
+      if (!targetDomain) {
+        Logger.warn("Custom frontend selected but no domain configured");
+        return;
+      }
+    }
+
+    // If using old.reddit.com, use static ruleset
+    if (targetDomain === "old.reddit.com") {
+      await enableStaticRuleset();
+      await clearDynamicFrontendRules();
+      Logger.info("Using static ruleset for old.reddit.com");
+      return;
+    }
+
+    // For alternative frontends, use dynamic rules
+    Logger.info("Switching to alternative frontend:", targetDomain);
+    await disableStaticRuleset();
+    await createDynamicFrontendRules(targetDomain);
+  }
+
+  /**
+   * Create dynamic rules for alternative frontends
+   */
+  async function createDynamicFrontendRules(targetDomain) {
+    await clearDynamicFrontendRules();
+
+    const rules = [
+      // Main redirect rule for subdomains
+      {
+        id: FRONTEND_RULE_ID_BASE,
+        priority: 1,
+        action: {
+          type: "redirect",
+          redirect: { transform: { host: targetDomain } },
+        },
+        condition: {
+          regexFilter: "^https?://(www|np|nr|ns|amp|i|m)\\.reddit\\.com/.*",
+          resourceTypes: ["main_frame"],
+        },
+      },
+      // Bare domain redirect
+      {
+        id: FRONTEND_RULE_ID_BASE + 1,
+        priority: 1,
+        action: {
+          type: "redirect",
+          redirect: { transform: { host: targetDomain } },
+        },
+        condition: {
+          urlFilter: "||reddit.com/*",
+          excludedInitiatorDomains: ["reddit.com", "old.reddit.com"],
+          resourceTypes: ["main_frame"],
+        },
+      },
+    ];
+
+    await new Promise((resolve) => {
+      chrome.declarativeNetRequest.updateDynamicRules(
+        { addRules: rules },
+        () => {
+          handleLastError();
+          resolve();
+        }
+      );
+    });
+
+    Logger.info("Frontend rules updated for:", targetDomain);
+  }
+
+  /**
+   * Clear dynamic frontend rules
+   */
+  async function clearDynamicFrontendRules() {
+    const existingRules = await new Promise((resolve) => {
+      chrome.declarativeNetRequest.getDynamicRules((rules) => {
+        handleLastError();
+        resolve(rules || []);
+      });
+    });
+
+    const frontendRuleIds = existingRules
+      .filter(
+        (r) =>
+          r.id >= FRONTEND_RULE_ID_BASE && r.id < FRONTEND_RULE_ID_BASE + 100
+      )
+      .map((r) => r.id);
+
+    if (frontendRuleIds.length > 0) {
+      await new Promise((resolve) => {
+        chrome.declarativeNetRequest.updateDynamicRules(
+          { removeRuleIds: frontendRuleIds },
+          () => {
+            handleLastError();
+            resolve();
+          }
+        );
+      });
+    }
+  }
+
+  /**
+   * Enable static ruleset
+   */
+  async function enableStaticRuleset() {
+    await new Promise((resolve) => {
+      chrome.declarativeNetRequest.updateEnabledRulesets(
+        { enableRulesetIds: [RULESET_ID] },
+        () => {
+          handleLastError();
+          resolve();
+        }
+      );
+    });
+  }
+
+  /**
+   * Disable static ruleset
+   */
+  async function disableStaticRuleset() {
+    await new Promise((resolve) => {
+      chrome.declarativeNetRequest.updateEnabledRulesets(
+        { disableRulesetIds: [RULESET_ID] },
+        () => {
+          handleLastError();
+          resolve();
+        }
+      );
+    });
+  }
+
+  /**
    * Disable redirect for specific tab
    */
   async function disableForTab(tabId) {
@@ -582,6 +722,11 @@ if (typeof importScripts === "function") {
             sendResponse({ success: true });
             break;
 
+          case "UPDATE_FRONTEND_RULES":
+            await updateFrontendRules();
+            sendResponse({ success: true });
+            break;
+
           case "DISABLE_FOR_TAB":
             await disableForTab(message.tabId);
             sendResponse({ success: true });
@@ -683,6 +828,9 @@ if (typeof importScripts === "function") {
     // Update subreddit rules
     await updateSubredditRules();
 
+    // Update frontend rules
+    await updateFrontendRules();
+
     // Initialize UI
     await initializeActionUi();
 
@@ -723,6 +871,7 @@ if (typeof importScripts === "function") {
   chrome.runtime.onStartup.addListener(async () => {
     await initializeActionUi();
     await updateSubredditRules();
+    await updateFrontendRules();
 
     // Configure icon behavior
     const prefs = await Storage.getUIPreferences();

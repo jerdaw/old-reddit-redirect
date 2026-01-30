@@ -20,3 +20,9 @@ Thumbs.db
 .vscode/
 .idea/
 *.sublime-*
+
+# Planning/temporary docs (keep in local, not in repo)
+IMPLEMENTATION-PLAN*.md
+IMPLEMENTATION-STATUS*.md
+IMPLEMENTATION-SUMMARY*.md
+IMPROVEMENT-PLAN*.md
