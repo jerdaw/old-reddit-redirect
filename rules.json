@@ -126,5 +126,21 @@
       "excludedInitiatorDomains": ["reddit.com", "old.reddit.com"],
       "resourceTypes": ["main_frame"]
     }
+  },
+  {
+    "id": 22,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": {
+          "host": "old.reddit.com"
+        }
+      }
+    },
+    "condition": {
+      "regexFilter": "^https?://(www\\.)?reddit\\.com\\.onion/.*",
+      "resourceTypes": ["main_frame"]
+    }
   }
 ]

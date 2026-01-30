@@ -8,10 +8,15 @@
 ## New Features in This Fork
 
 - **Click extension icon** to instantly toggle redirect on/off ([#173](https://github.com/tom-james-watson/old-reddit-redirect/issues/173))
+- **Keyboard shortcut (Alt+Shift+R)** to toggle redirect on/off
+- **Context menu** - right-click Reddit links to open in old or new Reddit
+- **Options page** - manage settings and customize keyboard shortcuts
 - **Support for nr/ns subdomains** ([#174](https://github.com/tom-james-watson/old-reddit-redirect/issues/174), [#175](https://github.com/tom-james-watson/old-reddit-redirect/issues/175))
+- **Reddit .onion domain support** for Tor users
 - **Fix /videos/ links** redirecting to 404 pages ([#176](https://github.com/tom-james-watson/old-reddit-redirect/issues/176))
 - **Proper handling** for chat.reddit.com and mod.reddit.com ([#187](https://github.com/tom-james-watson/old-reddit-redirect/issues/187), [#190](https://github.com/tom-james-watson/old-reddit-redirect/issues/190))
 - **Allowlist for /answers/** and other new Reddit features ([#177](https://github.com/tom-james-watson/old-reddit-redirect/issues/177))
+- **Comprehensive test suite** with Vitest for rule validation and pattern testing
 - Badge shows "OFF" when disabled
 - Toggle state persists without requiring storage permissions
 - Consolidated and optimized redirect rules
@@ -39,6 +44,7 @@ Also has minor fixes and quality of life improvements like:
 - `i.reddit.com`
 - `nr.reddit.com`
 - `ns.reddit.com`
+- `*.reddit.com.onion` (Tor hidden service)
 - `i.redd.it`
 - `preview.redd.it`
 
@@ -86,11 +92,15 @@ This will open a browser window with the extension installed for testing.
 
 ```bash
 npm run dev           # Start development server (web-ext)
+npm test              # Run test suite with Vitest
+npm run test:watch    # Run tests in watch mode
 npm run lint          # Run ESLint
 npm run lint:fix      # Fix ESLint errors automatically
 npm run format        # Format code with Prettier
 npm run format:check  # Check formatting
 npm run validate      # Validate JSON and JS syntax
+npm run version:sync  # Sync version from package.json to manifest.json
+npm run version:check # Check if versions are in sync
 npm run build         # Build extension zip (or use: make)
 ```
 
@@ -108,7 +118,7 @@ This fork welcomes contributions! If you have bug fixes, features, or improvemen
 1. Fork this repository
 2. Create a feature branch
 3. Make your changes and test with `npm run dev`
-4. Run `npm run lint && npm run format:check` before committing
+4. Run `npm test && npm run lint && npm run format:check` before committing
 5. Submit a pull request
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.

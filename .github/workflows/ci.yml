@@ -34,13 +34,16 @@ jobs:
           echo "✓ rules.json is valid"
 
       - name: Validate JavaScript syntax
-        run: node -c background.js
+        run: node -c background.js && node -c options.js
 
       - name: Run ESLint
         run: npm run lint
 
       - name: Check formatting
         run: npm run format:check
+
+      - name: Run tests
+        run: npm test
 
   build:
     name: Build Extension

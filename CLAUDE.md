@@ -6,6 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **browser extension** (Chrome/Firefox) that redirects all Reddit URLs to old.reddit.com. The extension uses **Manifest V3** and employs the `declarativeNetRequest` API for URL redirection.
 
+## Testing
+
+The project uses Vitest for unit testing. Tests are located in the `tests/` directory:
+
+- `tests/rules.test.js` - Validates rule structure and manifest configuration
+- `tests/patterns.test.js` - Tests URL pattern matching for all redirect rules
+- `tests/setup.js` - Shared test utilities
+
+Run tests with `npm test` or `npm run test:watch` for watch mode.
+
 ## Git Commit Policy
 
 **IMPORTANT**: Only humans should be credited as authors on commits, pushes, and code contributions. Never include AI attribution (e.g., "Co-Authored-By: Claude") in commit messages or code comments.
@@ -37,16 +47,20 @@ Rules in `rules.json` use a priority system (higher priority = processed first):
 - Gallery redirect: `/gallery/ID` → `/comments/ID`
 - Videos redirect: `/videos/ID` → `/comments/ID`
 
-**Priority 1 - Domain Redirects (IDs 20-21):**
+**Priority 1 - Domain Redirects (IDs 20-22):**
 
 - Consolidated regex rule for subdomains: `www`, `np`, `nr`, `ns`, `amp`, `i`
 - Bare `reddit.com` redirect
+- Onion domain redirect: `*.reddit.com.onion` → `old.reddit.com`
 
 ### Toggle Mechanism (background.js)
 
-The extension can be toggled on/off by clicking the toolbar icon:
+The extension can be toggled on/off via multiple methods:
 
 - **Icon click handler**: `chrome.action.onClicked` listener triggers toggle function
+- **Keyboard shortcut**: Alt+Shift+R (configurable via `chrome://extensions/shortcuts`)
+- **Context menu**: Right-click menu items for opening links in old/new Reddit
+- **Options page**: UI toggle in extension options
 - **State management**: Uses `chrome.declarativeNetRequest.getEnabledRulesets()` to check if `ruleset_1` is enabled (no storage API needed)
 - **Toggle action**: `chrome.declarativeNetRequest.updateEnabledRulesets()` enables/disables the ruleset
 - **UI feedback**: Updates badge text ("OFF" when disabled), badge color, and toolbar tooltip
@@ -70,11 +84,15 @@ make run             # Alternative using Makefile
 ### Code Quality
 
 ```bash
+npm test             # Run Vitest test suite
+npm run test:watch   # Run tests in watch mode
 npm run lint         # Run ESLint
 npm run lint:fix     # Fix ESLint errors automatically
 npm run format       # Format code with Prettier
 npm run format:check # Check formatting without changes
 npm run validate     # Validate JSON and JS syntax
+npm run version:sync # Sync version from package.json to manifest.json
+npm run version:check # Check if versions are in sync
 ```
 
 ### Building
@@ -88,20 +106,36 @@ make clean           # Remove build artifacts
 
 ```
 .
-├── manifest.json          # Extension manifest (V3)
-├── rules.json             # Declarative net request rules
-├── background.js          # Service worker for toggle functionality
-├── styles.css             # Content script CSS (old.reddit.com only)
-├── img/                   # Extension icons (16-128px)
-├── package.json           # npm dependencies and scripts
-├── eslint.config.js       # ESLint configuration (flat config)
-├── .prettierrc            # Prettier configuration
-├── .github/workflows/     # CI workflow
-├── LICENSE.txt            # MIT license
-├── Makefile               # Build commands
-├── README.md              # User documentation
-├── CLAUDE.md              # AI development guidance
-└── CONTRIBUTING.md        # Contribution guidelines
+├── manifest.json             # Extension manifest (V3)
+├── rules.json                # Declarative net request rules
+├── background.js             # Service worker for toggle functionality
+├── styles.css                # Content script CSS (old.reddit.com only)
+├── options.html              # Extension options page
+├── options.js                # Options page logic
+├── options.css               # Options page styles
+├── img/                      # Extension icons (16-128px)
+├── tests/                    # Vitest test suite
+│   ├── setup.js              # Test utilities
+│   ├── rules.test.js         # Rule validation tests
+│   └── patterns.test.js      # URL pattern matching tests
+├── scripts/                  # Build and utility scripts
+│   └── sync-version.js       # Version synchronization script
+├── store/                    # Store metadata
+│   ├── description.txt       # Short description
+│   └── detailed-description.md # Full store listing
+├── package.json              # npm dependencies and scripts
+├── vitest.config.js          # Vitest test configuration
+├── eslint.config.js          # ESLint configuration (flat config)
+├── .prettierrc               # Prettier configuration
+├── .github/workflows/        # CI and release workflows
+│   ├── ci.yml                # Continuous integration
+│   └── release.yml           # Automated releases
+├── LICENSE.txt               # MIT license
+├── Makefile                  # Build commands
+├── README.md                 # User documentation
+├── CLAUDE.md                 # AI development guidance
+├── CONTRIBUTING.md           # Contribution guidelines
+└── PRIVACY.md                # Privacy policy
 ```
 
 ## Adding New Redirect Rules
@@ -151,7 +185,18 @@ Add to the regex in rules 1 or 2, or create a new allowlist rule with priority 3
 
 ## Testing
 
-Manual testing workflow:
+### Automated Testing
+
+Run the test suite with `npm test`. Tests cover:
+
+- Rule structure validation (unique IDs, required fields, valid actions)
+- Manifest configuration validation
+- URL pattern matching for all redirect rules
+- Allowlist pattern verification
+- Gallery and video redirect logic
+- Onion domain support
+
+### Manual Testing Workflow
 
 1. Run `npm run dev` to launch Firefox with extension
 2. Navigate to `https://reddit.com` → should redirect to `old.reddit.com`
@@ -159,8 +204,12 @@ Manual testing workflow:
 4. Test gallery redirect: `https://reddit.com/gallery/abc123` → should redirect to `old.reddit.com/comments/abc123`
 5. Test videos redirect: `https://reddit.com/videos/abc123` → should redirect to `old.reddit.com/comments/abc123`
 6. Test new subdomains: `https://nr.reddit.com` and `https://ns.reddit.com` → should redirect
-7. Test toggle: Click extension icon → verify badge shows "OFF" → navigate to `reddit.com` → should NOT redirect
-8. Click icon again → badge should clear → redirect should work again
+7. Test onion domain: `https://reddit.com.onion` → should redirect
+8. Test keyboard shortcut: Press Alt+Shift+R → verify toggle works
+9. Test context menu: Right-click a Reddit link → verify menu items appear
+10. Test options page: Right-click extension icon → Options → verify UI controls work
+11. Test toggle: Click extension icon → verify badge shows "OFF" → navigate to `reddit.com` → should NOT redirect
+12. Click icon again → badge should clear → redirect should work again
 
 ## Debugging
 

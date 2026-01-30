@@ -21,8 +21,20 @@
   "action": {
     "default_title": "Old Reddit Redirect"
   },
+  "commands": {
+    "toggle-redirect": {
+      "suggested_key": {
+        "default": "Alt+Shift+R"
+      },
+      "description": "Toggle Old Reddit Redirect on/off"
+    }
+  },
   "background": {
     "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
   },
   "content_scripts": [
     {
@@ -30,7 +42,7 @@
       "css": ["styles.css"]
     }
   ],
-  "permissions": ["declarativeNetRequestWithHostAccess"],
+  "permissions": ["declarativeNetRequestWithHostAccess", "contextMenus"],
   "host_permissions": [
     "*://reddit.com/*",
     "*://www.reddit.com/*",
@@ -43,7 +55,8 @@
     "*://chat.reddit.com/*",
     "*://mod.reddit.com/*",
     "*://i.redd.it/*",
-    "*://preview.redd.it/*"
+    "*://preview.redd.it/*",
+    "*://*.reddit.com.onion/*"
   ],
   "declarative_net_request": {
     "rule_resources": [

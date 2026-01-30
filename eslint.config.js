@@ -26,7 +26,39 @@ export default [
     },
   },
   {
-    ignores: ["node_modules/**", "*.zip", "_metadata/**", "eslint.config.js"],
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      sourceType: "module",
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      strict: "off",
+      "no-implicit-globals": "off",
+    },
+  },
+  {
+    files: ["scripts/**/*.js", "vitest.config.js"],
+    languageOptions: {
+      sourceType: "module",
+      globals: {
+        ...globals.node,
+      },
+    },
+    rules: {
+      strict: "off",
+      "no-implicit-globals": "off",
+    },
+  },
+  {
+    ignores: [
+      "node_modules/**",
+      "*.zip",
+      "_metadata/**",
+      "eslint.config.js",
+      "store/**",
+    ],
   },
   eslintConfigPrettier,
 ];

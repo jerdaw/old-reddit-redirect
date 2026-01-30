@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Old Reddit Redirect - Options</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Old Reddit Redirect</h1>
+
+      <section class="setting">
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="toggle-redirect">Enable Redirect</label>
+            <p class="description">
+              Automatically redirect Reddit URLs to old.reddit.com
+            </p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-redirect" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="setting">
+        <div class="setting-row">
+          <div class="setting-info">
+            <label>Keyboard Shortcut</label>
+            <p class="description">
+              Toggle redirect on/off with
+              <kbd id="shortcut-display">Alt+Shift+R</kbd>
+            </p>
+          </div>
+          <a href="#" id="customize-shortcut" class="button">Customize</a>
+        </div>
+      </section>
+
+      <footer>
+        <p>
+          <a
+            href="https://github.com/tom-james-watson/old-reddit-redirect"
+            target="_blank"
+            >View on GitHub</a
+          >
+          &bull;
+          <a
+            href="https://github.com/tom-james-watson/old-reddit-redirect/blob/master/PRIVACY.md"
+            target="_blank"
+            >Privacy Policy</a
+          >
+        </p>
+      </footer>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

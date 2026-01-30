@@ -10,6 +10,10 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "validate": "node -e \"JSON.parse(require('fs').readFileSync('./manifest.json')); JSON.parse(require('fs').readFileSync('./rules.json'));\" && node -c background.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "version:check": "node scripts/sync-version.js --check",
+    "version:sync": "node scripts/sync-version.js",
     "dev": "npx web-ext run",
     "build": "make"
   },
@@ -17,7 +21,8 @@
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "globals": "^15.0.0",
-    "prettier": "^3.2.0"
+    "prettier": "^3.2.0",
+    "vitest": "^2.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
