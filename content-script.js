@@ -346,7 +346,7 @@
    */
 
   // Performance: Cache for storage values to reduce async calls
-  const storageCache = {
+  const _storageCache = {
     lastUpdate: 0,
     ttl: 5000, // 5 second cache TTL
     data: {},
