@@ -79,6 +79,7 @@
 
     let shouldEnableDark = false;
     let shouldEnableOLED = false;
+    let shouldEnableHighContrast = false;
 
     switch (darkMode.enabled) {
       case "auto":
@@ -94,22 +95,85 @@
         shouldEnableDark = true;
         shouldEnableOLED = true;
         break;
+      case "high-contrast":
+        shouldEnableDark = true;
+        shouldEnableHighContrast = true;
+        break;
       case "light":
         shouldEnableDark = false;
         break;
     }
 
     // Apply classes to body
+    document.body.classList.remove(
+      "orr-dark-mode",
+      "orr-oled-mode",
+      "orr-high-contrast-mode"
+    );
+
     if (shouldEnableDark) {
-      if (shouldEnableOLED) {
+      if (shouldEnableHighContrast) {
+        document.body.classList.add("orr-high-contrast-mode");
+      } else if (shouldEnableOLED) {
         document.body.classList.add("orr-oled-mode");
-        document.body.classList.remove("orr-dark-mode");
       } else {
         document.body.classList.add("orr-dark-mode");
-        document.body.classList.remove("orr-oled-mode");
       }
+    }
+  }
+
+  /**
+   * Apply accessibility settings (font size, reduce motion)
+   */
+  async function applyAccessibility() {
+    const prefs = await chrome.storage.local.get({
+      accessibility: {
+        fontSize: "medium",
+        reduceMotion: "auto",
+        highContrast: false,
+      },
+    });
+    const accessibility = prefs.accessibility || {};
+
+    // Remove existing font size classes
+    document.body.classList.remove(
+      "orr-font-small",
+      "orr-font-medium",
+      "orr-font-large",
+      "orr-font-x-large"
+    );
+
+    // Apply font size class
+    const fontSizeClass = `orr-font-${accessibility.fontSize || "medium"}`;
+    document.body.classList.add(fontSizeClass);
+
+    // Handle reduce motion preference
+    let shouldReduceMotion = false;
+    switch (accessibility.reduceMotion) {
+      case "auto":
+        shouldReduceMotion = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+        break;
+      case "always":
+        shouldReduceMotion = true;
+        break;
+      case "never":
+        shouldReduceMotion = false;
+        break;
+    }
+
+    if (shouldReduceMotion) {
+      document.body.classList.add("orr-reduce-motion");
     } else {
-      document.body.classList.remove("orr-dark-mode", "orr-oled-mode");
+      document.body.classList.remove("orr-reduce-motion");
+    }
+
+    // Handle high contrast UI elements toggle
+    if (accessibility.highContrast) {
+      document.body.classList.add("orr-high-contrast-ui");
+    } else {
+      document.body.classList.remove("orr-high-contrast-ui");
     }
   }
 
@@ -190,6 +254,46 @@
         ".download-app-button",
         ".mobile-web-redirect",
       ],
+      // v11.2.0: Advanced content blocking
+      aiContent: [
+        '[data-ai-generated="true"]',
+        "[data-testid*='ai']",
+        ".ai-overview",
+        ".ai-answer",
+        ".ai-summary",
+        ".generated-content",
+        '[aria-label*="AI-generated"]',
+        '[aria-label*="AI answer"]',
+        ".search-ai-answer",
+        ".ai-comment",
+      ],
+      trending: [
+        ".trending-subreddits",
+        "#trending-posts",
+        ".trending-communities",
+        '[data-type="trending"]',
+        ".sidecontentbox .trending",
+      ],
+      recommended: [
+        ".recommended-communities",
+        ".recommended-subreddits",
+        ".subreddit-recommendations",
+        "[data-recommendation-type]",
+        ".side .rec-community",
+      ],
+      communityHighlights: [
+        ".community-highlights",
+        ".featured-content",
+        ".community-spotlight",
+        ".highlighted-post",
+      ],
+      morePosts: [
+        ".more-posts-you-may-like",
+        ".recommended-posts",
+        '[data-context="recommended"]',
+        ".continue-this-thread",
+        ".recommended-feed",
+      ],
     };
 
     // Remove elements based on preferences
@@ -207,6 +311,22 @@
     if (nagBlocking.blockAppPrompts) {
       selectorsToBlock.push(...nagSelectors.appPrompts);
     }
+    // v11.2.0: Advanced content blocking
+    if (nagBlocking.blockAIContent) {
+      selectorsToBlock.push(...nagSelectors.aiContent);
+    }
+    if (nagBlocking.blockTrending) {
+      selectorsToBlock.push(...nagSelectors.trending);
+    }
+    if (nagBlocking.blockRecommended) {
+      selectorsToBlock.push(...nagSelectors.recommended);
+    }
+    if (nagBlocking.blockCommunityHighlights) {
+      selectorsToBlock.push(...nagSelectors.communityHighlights);
+    }
+    if (nagBlocking.blockMorePosts) {
+      selectorsToBlock.push(...nagSelectors.morePosts);
+    }
 
     // Remove all matching elements
     selectorsToBlock.forEach((selector) => {
@@ -219,21 +339,143 @@
   }
 
   /**
+   * ============================================================================
+   * PERFORMANCE OPTIMIZATION (Phase 6)
+   * Optimized mutation observer with batched updates
+   * ============================================================================
+   */
+
+  // Performance: Cache for storage values to reduce async calls
+  const storageCache = {
+    lastUpdate: 0,
+    ttl: 5000, // 5 second cache TTL
+    data: {},
+  };
+
+  // Performance: Batch update tracking
+  const pendingUpdates = {
+    visual: false,
+    content: false,
+    rafId: null,
+    idleId: null,
+  };
+
+  /**
+   * Schedule visual updates using requestAnimationFrame
+   */
+  function scheduleVisualUpdate() {
+    if (pendingUpdates.visual) return;
+    pendingUpdates.visual = true;
+
+    if (pendingUpdates.rafId) {
+      cancelAnimationFrame(pendingUpdates.rafId);
+    }
+
+    pendingUpdates.rafId = requestAnimationFrame(() => {
+      pendingUpdates.visual = false;
+      pendingUpdates.rafId = null;
+
+      // Visual updates that affect layout
+      applyColorCodedComments();
+      applyInlineImages();
+      applyUserTags();
+      addParentNavButtons();
+    });
+  }
+
+  /**
+   * Schedule content updates using requestIdleCallback
+   */
+  function scheduleContentUpdate() {
+    if (pendingUpdates.content) return;
+    pendingUpdates.content = true;
+
+    if (pendingUpdates.idleId) {
+      if (typeof cancelIdleCallback === "function") {
+        cancelIdleCallback(pendingUpdates.idleId);
+      }
+    }
+
+    const runContentUpdates = () => {
+      pendingUpdates.content = false;
+      pendingUpdates.idleId = null;
+
+      // Content filtering updates (less visual priority)
+      applyNagBlocking();
+      applySubredditMuting();
+      applyKeywordFiltering();
+      applyDomainFiltering();
+      applyUserMuting();
+      applyNsfwControls();
+    };
+
+    if (typeof requestIdleCallback === "function") {
+      pendingUpdates.idleId = requestIdleCallback(runContentUpdates, {
+        timeout: 200,
+      });
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      setTimeout(runContentUpdates, 50);
+    }
+  }
+
+  /**
    * Watch for dynamically inserted content (nags and posts)
+   * Optimized with batched updates and priority scheduling
    */
   function watchForDynamicContent() {
-    const observer = new MutationObserver((_mutations) => {
-      // Debounce rapid mutations
-      clearTimeout(watchForDynamicContent.timeout);
-      watchForDynamicContent.timeout = setTimeout(() => {
-        applyNagBlocking();
-        applySubredditMuting();
-        applyKeywordFiltering();
-        applyDomainFiltering();
-        applyColorCodedComments();
-        applyInlineImages();
-        applyUserTags();
-      }, 100);
+    let mutationCount = 0;
+    let lastMutationTime = 0;
+
+    const observer = new MutationObserver((mutations) => {
+      const now = performance.now();
+
+      // Track mutation rate for adaptive throttling
+      mutationCount++;
+      const timeSinceLastMutation = now - lastMutationTime;
+      lastMutationTime = now;
+
+      // Adaptive debounce: longer delay if mutations are rapid
+      const isRapidMutations = timeSinceLastMutation < 50 && mutationCount > 5;
+
+      // Check if mutations contain relevant nodes
+      const hasRelevantMutations = mutations.some((mutation) => {
+        if (mutation.type !== "childList") return false;
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            // Check for post, comment, or user-related content
+            if (
+              node.classList?.contains("thing") ||
+              node.classList?.contains("comment") ||
+              node.querySelector?.(".thing, .comment, .author")
+            ) {
+              return true;
+            }
+          }
+        }
+        return false;
+      });
+
+      if (!hasRelevantMutations) return;
+
+      // Reset count periodically
+      if (timeSinceLastMutation > 500) {
+        mutationCount = 0;
+      }
+
+      // Schedule updates based on priority
+      if (isRapidMutations) {
+        // During rapid mutations, use longer debounce
+        clearTimeout(watchForDynamicContent.timeout);
+        watchForDynamicContent.timeout = setTimeout(() => {
+          scheduleVisualUpdate();
+          scheduleContentUpdate();
+        }, 150);
+      } else {
+        // Normal case: schedule immediately
+        scheduleVisualUpdate();
+        scheduleContentUpdate();
+      }
     });
 
     observer.observe(document.body, {
@@ -284,16 +526,31 @@
   }
 
   /**
-   * Apply keyword filtering to posts
+   * Apply keyword filtering to posts (with advanced options)
    */
   async function applyKeywordFiltering() {
     const filtering = await chrome.storage.local.get({
-      contentFiltering: { mutedKeywords: [], caseSensitive: false },
+      contentFiltering: {
+        mutedKeywords: [],
+        caseSensitive: false,
+        useRegex: false,
+        filterContent: false,
+        filterByFlair: false,
+        mutedFlairs: [],
+        filterByScore: false,
+        minScore: 0,
+      },
     });
-    const keywords = filtering.contentFiltering?.mutedKeywords || [];
-    const caseSensitive = filtering.contentFiltering?.caseSensitive || false;
+    const config = filtering.contentFiltering || {};
+    const keywords = config.mutedKeywords || [];
+    const flairs = config.mutedFlairs || [];
 
-    if (keywords.length === 0) {
+    // Skip if no filters enabled
+    if (
+      keywords.length === 0 &&
+      !config.filterByFlair &&
+      !config.filterByScore
+    ) {
       return;
     }
 
@@ -301,28 +558,95 @@
     const posts = document.querySelectorAll(".thing[data-url]");
 
     for (const post of posts) {
-      // Get post title
-      const titleElement = post.querySelector("a.title");
-      if (!titleElement) continue;
+      let shouldHide = false;
+      let reason = "";
 
-      const title = titleElement.textContent;
-      const searchText = caseSensitive ? title : title.toLowerCase();
+      // 1. Keyword filtering (title + optional content)
+      if (keywords.length > 0) {
+        const titleElement = post.querySelector("a.title");
+        if (titleElement) {
+          let searchText = titleElement.textContent;
 
-      // Check if title contains any muted keyword
-      const matchedKeyword = keywords.find((keyword) => {
-        const searchKeyword = caseSensitive ? keyword : keyword.toLowerCase();
-        // Use word boundary matching for better accuracy
-        const regex = new RegExp(
-          `\\b${searchKeyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`,
-          "i"
-        );
-        return regex.test(searchText);
-      });
+          // Optionally include post content (selftext)
+          if (config.filterContent) {
+            const contentElement = post.querySelector(
+              ".expando .md, .usertext-body .md"
+            );
+            if (contentElement) {
+              searchText += " " + contentElement.textContent;
+            }
+          }
 
-      if (matchedKeyword) {
-        // Mark as muted and hide
-        post.classList.add("orr-muted-keyword");
-        post.setAttribute("data-muted-keyword", matchedKeyword);
+          // Apply case sensitivity
+          if (!config.caseSensitive) {
+            searchText = searchText.toLowerCase();
+          }
+
+          // Check keywords
+          const matchedKeyword = keywords.find((keyword) => {
+            try {
+              if (config.useRegex) {
+                // Regex mode
+                const flags = config.caseSensitive ? "g" : "gi";
+                const regex = new RegExp(keyword, flags);
+                return regex.test(searchText);
+              } else {
+                // Normal mode with word boundaries
+                const searchKeyword = config.caseSensitive
+                  ? keyword
+                  : keyword.toLowerCase();
+                const regex = new RegExp(
+                  `\\b${searchKeyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`
+                );
+                return regex.test(searchText);
+              }
+            } catch (_e) {
+              // Invalid regex, skip
+              return false;
+            }
+          });
+
+          if (matchedKeyword) {
+            shouldHide = true;
+            reason = "keyword";
+            post.setAttribute("data-muted-keyword", matchedKeyword);
+          }
+        }
+      }
+
+      // 2. Flair filtering
+      if (!shouldHide && config.filterByFlair && flairs.length > 0) {
+        const flairElement = post.querySelector(".linkflairlabel");
+        if (flairElement) {
+          const flairText = flairElement.textContent.trim().toLowerCase();
+          const matchedFlair = flairs.find(
+            (flair) => flair.toLowerCase() === flairText
+          );
+          if (matchedFlair) {
+            shouldHide = true;
+            reason = "flair";
+            post.setAttribute("data-muted-flair", matchedFlair);
+          }
+        }
+      }
+
+      // 3. Score filtering
+      if (!shouldHide && config.filterByScore) {
+        const scoreElement = post.querySelector(".score.unvoted");
+        if (scoreElement) {
+          const scoreText = scoreElement.textContent.trim();
+          const score = parseInt(scoreText, 10);
+          if (!isNaN(score) && score < config.minScore) {
+            shouldHide = true;
+            reason = "score";
+            post.setAttribute("data-muted-score", score.toString());
+          }
+        }
+      }
+
+      // Apply hiding
+      if (shouldHide) {
+        post.classList.add("orr-muted-" + reason);
         post.style.display = "none";
       }
     }
@@ -367,6 +691,182 @@
         post.style.display = "none";
       }
     }
+  }
+
+  /**
+   * Apply user muting to posts and comments
+   */
+  async function applyUserMuting() {
+    const prefs = await chrome.storage.sync.get({
+      mutedUsers: { enabled: true, users: {} },
+    });
+    const mutedUsers = prefs.mutedUsers || {};
+
+    if (!mutedUsers.enabled || Object.keys(mutedUsers.users).length === 0) {
+      return;
+    }
+
+    const mutedUsernames = Object.keys(mutedUsers.users).map((u) =>
+      u.toLowerCase()
+    );
+
+    // Hide posts from muted users
+    const posts = document.querySelectorAll(".thing[data-author]");
+    for (const post of posts) {
+      const author = post.getAttribute("data-author")?.toLowerCase();
+      if (author && mutedUsernames.includes(author)) {
+        post.classList.add("orr-muted-user");
+        post.setAttribute("data-muted-user", author);
+        post.style.display = "none";
+      }
+    }
+
+    // Hide comments from muted users
+    const comments = document.querySelectorAll(".thing.comment");
+    for (const comment of comments) {
+      const authorLink = comment.querySelector("a.author");
+      if (!authorLink) continue;
+
+      const author = authorLink.textContent.trim().toLowerCase();
+      if (mutedUsernames.includes(author)) {
+        comment.classList.add("orr-muted-user");
+        comment.setAttribute("data-muted-user", author);
+        comment.style.display = "none";
+      }
+    }
+  }
+
+  /**
+   * Apply NSFW content controls (blur/hide/show)
+   */
+  async function applyNsfwControls() {
+    const prefs = await chrome.storage.local.get({
+      nsfwControls: {
+        enabled: false,
+        visibility: "show",
+        blurIntensity: 10,
+        revealOnHover: true,
+        showWarning: true,
+        allowedSubreddits: [],
+      },
+    });
+    const config = prefs.nsfwControls || {};
+
+    // Skip if NSFW controls are disabled or set to show everything
+    if (!config.enabled || config.visibility === "show") {
+      // Remove any existing NSFW blur classes
+      document.body.classList.remove(
+        "orr-nsfw-blur",
+        "orr-nsfw-hide",
+        "orr-nsfw-reveal-hover"
+      );
+      document
+        .querySelectorAll(".orr-nsfw-blurred, .orr-nsfw-hidden")
+        .forEach((el) => {
+          el.classList.remove(
+            "orr-nsfw-blurred",
+            "orr-nsfw-hidden",
+            "orr-nsfw-allowed"
+          );
+        });
+      return;
+    }
+
+    // Get current subreddit from page
+    const currentSubreddit = getCurrentSubreddit();
+    const allowedSubreddits = (config.allowedSubreddits || []).map((s) =>
+      s.toLowerCase()
+    );
+    const isAllowedSubreddit =
+      currentSubreddit &&
+      allowedSubreddits.includes(currentSubreddit.toLowerCase());
+
+    // If current subreddit is in allowlist, don't apply NSFW controls
+    if (isAllowedSubreddit) {
+      document.body.classList.remove(
+        "orr-nsfw-blur",
+        "orr-nsfw-hide",
+        "orr-nsfw-reveal-hover"
+      );
+      return;
+    }
+
+    // Apply body classes for global styling
+    document.body.classList.remove(
+      "orr-nsfw-blur",
+      "orr-nsfw-hide",
+      "orr-nsfw-reveal-hover"
+    );
+    if (config.visibility === "blur") {
+      document.body.classList.add("orr-nsfw-blur");
+      if (config.revealOnHover) {
+        document.body.classList.add("orr-nsfw-reveal-hover");
+      }
+    } else if (config.visibility === "hide") {
+      document.body.classList.add("orr-nsfw-hide");
+    }
+
+    // Set blur intensity as CSS variable
+    document.documentElement.style.setProperty(
+      "--orr-nsfw-blur",
+      `${config.blurIntensity}px`
+    );
+
+    // Find all NSFW posts
+    const nsfwPosts = document.querySelectorAll(
+      ".thing.over18, .thing[data-nsfw='true']"
+    );
+
+    for (const post of nsfwPosts) {
+      // Check if post's subreddit is in allowlist
+      const postSubreddit = post.getAttribute("data-subreddit")?.toLowerCase();
+      if (postSubreddit && allowedSubreddits.includes(postSubreddit)) {
+        post.classList.add("orr-nsfw-allowed");
+        post.classList.remove("orr-nsfw-blurred", "orr-nsfw-hidden");
+        continue;
+      }
+
+      if (config.visibility === "hide") {
+        post.classList.add("orr-nsfw-hidden");
+        post.classList.remove("orr-nsfw-blurred");
+        post.style.display = "none";
+      } else if (config.visibility === "blur") {
+        post.classList.add("orr-nsfw-blurred");
+        post.classList.remove("orr-nsfw-hidden");
+        post.style.display = "";
+
+        // Add warning overlay if enabled and not already present
+        if (config.showWarning && !post.querySelector(".orr-nsfw-warning")) {
+          const thumbnail = post.querySelector(".thumbnail");
+          if (thumbnail && !thumbnail.classList.contains("self")) {
+            const warning = document.createElement("div");
+            warning.className = "orr-nsfw-warning";
+            warning.innerHTML =
+              '<span class="orr-nsfw-warning-icon">18+</span><span class="orr-nsfw-warning-text">NSFW</span>';
+            warning.addEventListener("click", (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // Temporarily reveal this specific post
+              post.classList.add("orr-nsfw-revealed");
+              setTimeout(() => {
+                post.classList.remove("orr-nsfw-revealed");
+              }, 10000); // Auto-hide after 10 seconds
+            });
+            thumbnail.style.position = "relative";
+            thumbnail.appendChild(warning);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Get current subreddit from URL
+   * @returns {string|null} Subreddit name or null
+   */
+  function getCurrentSubreddit() {
+    const match = window.location.pathname.match(/^\/r\/([^\/]+)/i);
+    return match ? match[1] : null;
   }
 
   /**
@@ -688,9 +1188,11 @@
   }
 
   /**
-   * Handle keyboard shortcuts for navigation
+   * DEPRECATED: Replaced by customizable keyboard shortcuts system
+   * Handle keyboard shortcuts for navigation (OLD)
    * @param {KeyboardEvent} e - The keyboard event
    */
+  /*
   function handleNavigationKeyboard(e) {
     // Only on comments pages
     if (!document.body.classList.contains("comments-page")) return;
@@ -717,6 +1219,7 @@
       navigateToPrevious();
     }
   }
+  */
 
   /**
    * Check if a URL is an image URL
@@ -868,11 +1371,1052 @@
   }
 
   /**
+   * ============================================================================
+   * FEED ENHANCEMENTS
+   * Customize feed appearance and layout
+   * ============================================================================
+   */
+
+  /**
+   * Apply feed enhancements based on user preferences
+   */
+  async function applyFeedEnhancements() {
+    try {
+      const config = await chrome.storage.local.get({ feedEnhancements: {} });
+      const feed = config.feedEnhancements || {};
+
+      // Apply class-based toggles
+      document.body.classList.toggle("orr-compact-feed", feed.compactMode);
+      document.body.classList.toggle("orr-text-only", feed.textOnlyMode);
+      document.body.classList.toggle("orr-uncrop-images", feed.uncropImages);
+      document.body.classList.toggle("orr-hide-join", feed.hideJoinButtons);
+      document.body.classList.toggle("orr-hide-actions", feed.hideActionLinks);
+
+      // Apply custom CSS
+      if (feed.customCSSEnabled && feed.customCSS) {
+        injectCustomCSS(feed.customCSS);
+      } else {
+        removeCustomCSS();
+      }
+    } catch (error) {
+      console.error("[ORR] Error applying feed enhancements:", error);
+    }
+  }
+
+  /**
+   * Inject custom CSS into the page
+   * @param {string} css - Custom CSS string
+   */
+  function injectCustomCSS(css) {
+    // Remove old custom CSS
+    removeCustomCSS();
+
+    // Inject new custom CSS
+    const style = document.createElement("style");
+    style.id = "orr-custom-css";
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  /**
+   * Remove custom CSS from the page
+   */
+  function removeCustomCSS() {
+    const existing = document.getElementById("orr-custom-css");
+    if (existing) {
+      existing.remove();
+    }
+  }
+
+  /**
+   * ============================================================================
+   * LAYOUT PRESETS
+   * Apply saved layout presets based on context (global or per-subreddit)
+   * ============================================================================
+   */
+
+  /**
+   * Get the current subreddit from URL
+   * @returns {string|null} Subreddit name or null if not on a subreddit
+   */
+  function getCurrentSubreddit() {
+    const match = window.location.pathname.match(/^\/r\/([^\/]+)/);
+    return match ? match[1].toLowerCase() : null;
+  }
+
+  /**
+   * Apply layout preset based on current context
+   */
+  async function applyLayoutPreset() {
+    try {
+      const config = await chrome.storage.local.get({ layoutPresets: {} });
+      const presets = config.layoutPresets || {};
+
+      // Check if feature is enabled
+      if (presets.enabled === false) {
+        return;
+      }
+
+      // Determine which preset to apply
+      let presetName = null;
+      const subreddit = getCurrentSubreddit();
+
+      // Check for subreddit-specific layout first
+      if (subreddit && presets.subredditLayouts) {
+        presetName = presets.subredditLayouts[subreddit];
+      }
+
+      // Fall back to active global preset
+      if (!presetName && presets.activePreset) {
+        presetName = presets.activePreset;
+      }
+
+      // If no preset to apply, return
+      if (!presetName || !presets.presets || !presets.presets[presetName]) {
+        return;
+      }
+
+      const preset = presets.presets[presetName];
+
+      // Apply dark mode
+      if (preset.darkMode !== undefined) {
+        if (preset.darkMode) {
+          const mode = preset.darkModeType === "oled" ? "oled" : "dark";
+          if (mode === "oled") {
+            document.body.classList.add("orr-oled-mode");
+            document.body.classList.remove("orr-dark-mode");
+          } else {
+            document.body.classList.add("orr-dark-mode");
+            document.body.classList.remove("orr-oled-mode");
+          }
+        } else {
+          document.body.classList.remove("orr-dark-mode", "orr-oled-mode");
+        }
+      }
+
+      // Apply feed enhancements
+      document.body.classList.toggle(
+        "orr-compact-feed",
+        preset.compactMode || false
+      );
+      document.body.classList.toggle(
+        "orr-text-only",
+        preset.textOnlyMode || false
+      );
+      document.body.classList.toggle(
+        "orr-uncrop-images",
+        preset.uncropImages || false
+      );
+      document.body.classList.toggle(
+        "orr-hide-join",
+        preset.hideJoinButtons || false
+      );
+      document.body.classList.toggle(
+        "orr-hide-actions",
+        preset.hideActionLinks || false
+      );
+
+      // Apply comment enhancements
+      if (preset.colorCodedComments !== undefined) {
+        if (preset.colorCodedComments) {
+          document.body.classList.add("orr-color-comments");
+          document.body.classList.remove(
+            "orr-palette-standard",
+            "orr-palette-colorblind"
+          );
+          document.body.classList.add(
+            `orr-palette-${preset.colorPalette || "standard"}`
+          );
+        } else {
+          document.body.classList.remove(
+            "orr-color-comments",
+            "orr-palette-standard",
+            "orr-palette-colorblind"
+          );
+        }
+      }
+
+      // Apply custom CSS from preset
+      if (preset.customCSS) {
+        injectPresetCSS(preset.customCSS);
+      } else {
+        removePresetCSS();
+      }
+
+      console.log(`[ORR] Applied layout preset: ${presetName}`);
+    } catch (error) {
+      console.error("[ORR] Error applying layout preset:", error);
+    }
+  }
+
+  /**
+   * Inject preset-specific custom CSS
+   * @param {string} css - Custom CSS string
+   */
+  function injectPresetCSS(css) {
+    removePresetCSS();
+    const style = document.createElement("style");
+    style.id = "orr-preset-css";
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  /**
+   * Remove preset-specific custom CSS
+   */
+  function removePresetCSS() {
+    const existing = document.getElementById("orr-preset-css");
+    if (existing) {
+      existing.remove();
+    }
+  }
+
+  /**
+   * Cycle through available layout presets
+   */
+  async function cycleLayoutPreset() {
+    try {
+      const config = await chrome.storage.local.get({ layoutPresets: {} });
+      const presets = config.layoutPresets || {};
+
+      if (presets.enabled === false) {
+        showShortcutFeedback("Layout presets disabled");
+        return;
+      }
+
+      const presetNames = Object.keys(presets.presets || {});
+      if (presetNames.length === 0) {
+        showShortcutFeedback("No presets available");
+        return;
+      }
+
+      // Find current preset
+      const currentPreset = presets.activePreset;
+      const currentIndex = currentPreset
+        ? presetNames.indexOf(currentPreset)
+        : -1;
+
+      // Cycle to next preset (or first if at end or none active)
+      const nextIndex = (currentIndex + 1) % (presetNames.length + 1);
+
+      if (nextIndex === presetNames.length) {
+        // Clear preset (use individual settings)
+        presets.activePreset = null;
+        await chrome.storage.local.set({ layoutPresets: presets });
+        showShortcutFeedback("Preset: None");
+      } else {
+        const nextPreset = presetNames[nextIndex];
+        presets.activePreset = nextPreset;
+        await chrome.storage.local.set({ layoutPresets: presets });
+        showShortcutFeedback(`Preset: ${nextPreset}`);
+      }
+
+      // Re-apply the layout
+      await applyLayoutPreset();
+    } catch (error) {
+      console.error("[ORR] Error cycling layout preset:", error);
+    }
+  }
+
+  /**
+   * ============================================================================
+   * DEPRECATED: JUMP TO TOP KEYBOARD SHORTCUT (OLD)
+   * Replaced by customizable keyboard shortcuts system
+   * ============================================================================
+   */
+
+  /**
+   * DEPRECATED: Initialize jump-to-top keyboard shortcut (OLD)
+   */
+  /*
+  async function initJumpToTopKeyboard() {
+    try {
+      const { commentEnhancements } = await chrome.storage.sync.get([
+        "commentEnhancements",
+      ]);
+      const enhancements = commentEnhancements || {};
+
+      if (!enhancements.jumpToTopShortcut) return;
+
+      document.addEventListener("keydown", handleJumpToTopKeyboard);
+    } catch (error) {
+      console.warn("[ORR] Failed to initialize jump-to-top keyboard:", error);
+    }
+  }
+  */
+
+  /**
+   * DEPRECATED: Handle Shift+Home keyboard shortcut to jump to top (OLD)
+   * @param {KeyboardEvent} event - Keyboard event
+   */
+  /*
+  function handleJumpToTopKeyboard(event) {
+    // Check for Shift+Home
+    if (event.shiftKey && event.key === "Home") {
+      event.preventDefault();
+
+      // Check user's motion preference
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      // Scroll to top with appropriate behavior
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+
+      // Accessibility: Announce to screen readers
+      const announcement = document.createElement("div");
+      announcement.setAttribute("role", "status");
+      announcement.setAttribute("aria-live", "polite");
+      announcement.textContent = "Scrolled to top of page";
+      announcement.style.cssText =
+        "position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;";
+      document.body.appendChild(announcement);
+      setTimeout(() => announcement.remove(), 1000);
+
+      // Visual feedback
+      document.body.classList.add("orr-jumped-to-top");
+      setTimeout(
+        () => document.body.classList.remove("orr-jumped-to-top"),
+        1000
+      );
+    }
+  }
+  */
+
+  /**
+   * ============================================================================
+   * CUSTOMIZABLE KEYBOARD SHORTCUTS
+   * Dynamic keyboard shortcut system with user-defined mappings
+   * ============================================================================
+   */
+
+  // Keyboard shortcut state
+  const shortcutRegistry = new Map();
+  let chordBuffer = [];
+  let chordTimeout = null;
+  let chordTimeoutDuration = 1000;
+  let shortcutsEnabled = true;
+
+  /**
+   * Check if a key is a modifier key
+   * @param {string} key - Key name
+   * @returns {boolean} True if modifier key
+   */
+  function isModifierKey(key) {
+    const modifiers = [
+      "Control",
+      "Alt",
+      "Shift",
+      "Meta",
+      "AltGraph",
+      "CapsLock",
+      "NumLock",
+      "ScrollLock",
+      "Ctrl",
+      "Command",
+      "Option",
+    ];
+    return modifiers.includes(key);
+  }
+
+  /**
+   * Build a key string from a KeyboardEvent
+   * @param {KeyboardEvent} event - Keyboard event
+   * @returns {string} Key string (e.g., "Ctrl+K", "Shift+J", "D")
+   */
+  function buildKeyString(event) {
+    // Don't process modifier-only key presses
+    if (isModifierKey(event.key)) {
+      return "";
+    }
+
+    const parts = [];
+
+    // Add modifiers in consistent order
+    if (event.ctrlKey) parts.push("Ctrl");
+    if (event.altKey) parts.push("Alt");
+    if (event.shiftKey) parts.push("Shift");
+    if (event.metaKey) parts.push("Meta");
+
+    // Add the main key
+    let key = event.key;
+
+    // Normalize special keys
+    if (key === " ") {
+      key = "Space";
+    } else if (key.length === 1) {
+      // Single character - capitalize
+      key = key.toUpperCase();
+    }
+
+    parts.push(key);
+
+    return parts.join("+");
+  }
+
+  /**
+   * Check if the event target is in an input context
+   * @param {Element} target - Event target element
+   * @returns {boolean} True if in input context
+   */
+  function isInputContext(target) {
+    if (!target) return false;
+
+    const tagName = target.tagName.toLowerCase();
+
+    // Check if it's an input element
+    if (tagName === "input" || tagName === "textarea" || tagName === "select") {
+      return true;
+    }
+
+    // Check if it's contenteditable
+    if (
+      target.isContentEditable ||
+      target.getAttribute("contenteditable") === "true"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Get the current page context
+   * @returns {string} Context ("feed", "comments", "any")
+   */
+  function getCurrentContext() {
+    // Check if we're on a comments page
+    if (
+      window.location.pathname.includes("/comments/") ||
+      document.querySelector(".commentarea")
+    ) {
+      return "comments";
+    }
+
+    // Check if we're on a feed page
+    if (
+      window.location.pathname === "/" ||
+      window.location.pathname.match(/^\/r\/[^/]+\/?$/) ||
+      window.location.pathname.match(/^\/r\/(all|popular)/)
+    ) {
+      return "feed";
+    }
+
+    // Default to "any" for other pages
+    return "any";
+  }
+
+  /**
+   * Check if a shortcut should be active in the current context
+   * @param {string} shortcutContext - Shortcut's context requirement
+   * @param {string} currentContext - Current page context
+   * @returns {boolean} True if shortcut should be active
+   */
+  function isContextMatch(shortcutContext, currentContext) {
+    if (shortcutContext === "any") return true;
+    if (currentContext === "any") return true;
+    return shortcutContext === currentContext;
+  }
+
+  /**
+   * Clear the chord buffer
+   */
+  function clearChordBuffer() {
+    chordBuffer = [];
+    if (chordTimeout) {
+      clearTimeout(chordTimeout);
+      chordTimeout = null;
+    }
+  }
+
+  /**
+   * Show visual feedback for shortcut execution
+   * @param {string} message - Message to display
+   */
+  function showShortcutFeedback(message) {
+    // Remove existing feedback
+    const existing = document.getElementById("orr-shortcut-feedback");
+    if (existing) existing.remove();
+
+    // Create feedback element
+    const feedback = document.createElement("div");
+    feedback.id = "orr-shortcut-feedback";
+    feedback.className = "orr-shortcut-feedback";
+    feedback.textContent = message;
+    document.body.appendChild(feedback);
+
+    // Accessibility announcement
+    const announcement = document.createElement("div");
+    announcement.setAttribute("role", "status");
+    announcement.setAttribute("aria-live", "polite");
+    announcement.textContent = message;
+    announcement.style.cssText =
+      "position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;";
+    document.body.appendChild(announcement);
+
+    // Auto-dismiss after 2 seconds
+    setTimeout(() => {
+      feedback.classList.add("orr-fade-out");
+      setTimeout(() => {
+        feedback.remove();
+        announcement.remove();
+      }, 300);
+    }, 2000);
+  }
+
+  /**
+   * Execute a shortcut action
+   * @param {string} actionId - The action ID to execute
+   */
+  async function executeShortcutAction(actionId) {
+    switch (actionId) {
+      case "nav-next-comment":
+        navigateToNext();
+        break;
+
+      case "nav-prev-comment":
+        navigateToPrevious();
+        break;
+
+      case "nav-jump-top":
+      case "vim-jump-top":
+      case "go-top-vim":
+      case "jump-to-top":
+        // Use existing jump to top logic
+        {
+          const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+          ).matches;
+          window.scrollTo({
+            top: 0,
+            behavior: prefersReducedMotion ? "auto" : "smooth",
+          });
+          showShortcutFeedback("Jumped to top");
+        }
+        break;
+
+      case "toggle-dark-mode":
+        await toggleDarkMode();
+        break;
+
+      case "toggle-compact":
+        await toggleCompactMode();
+        break;
+
+      case "toggle-text-only":
+        await toggleTextOnlyMode();
+        break;
+
+      case "cycle-palette":
+        await cycleColorPalette();
+        break;
+
+      case "toggle-images":
+        await toggleInlineImages();
+        break;
+
+      case "show-help":
+        showKeyboardHelp();
+        break;
+
+      case "cycle-layout-preset":
+        await cycleLayoutPreset();
+        break;
+
+      default:
+        console.warn(`[ORR] Unknown shortcut action: ${actionId}`);
+    }
+  }
+
+  /**
+   * Toggle dark mode
+   */
+  async function toggleDarkMode() {
+    try {
+      const result = await chrome.storage.local.get({ darkMode: {} });
+      const darkMode = result.darkMode || {};
+
+      // Cycle through modes: light -> dark -> oled -> light
+      const modes = ["light", "dark", "oled"];
+      const currentIndex = modes.indexOf(darkMode.enabled || "auto");
+      const nextIndex = (currentIndex + 1) % modes.length;
+      const nextMode = modes[nextIndex];
+
+      darkMode.enabled = nextMode;
+      await chrome.storage.local.set({ darkMode });
+
+      // Apply immediately
+      await applyDarkMode();
+
+      const modeNames = { light: "Light", dark: "Dark", oled: "OLED" };
+      showShortcutFeedback(`Dark mode: ${modeNames[nextMode]}`);
+    } catch (error) {
+      console.error("[ORR] Failed to toggle dark mode:", error);
+    }
+  }
+
+  /**
+   * Toggle compact mode
+   */
+  async function toggleCompactMode() {
+    try {
+      const result = await chrome.storage.sync.get({ ui: {} });
+      const ui = result.ui || {};
+
+      ui.compactMode = !ui.compactMode;
+      await chrome.storage.sync.set({ ui });
+
+      // Apply compact mode class
+      if (ui.compactMode) {
+        document.body.classList.add("orr-compact-mode");
+      } else {
+        document.body.classList.remove("orr-compact-mode");
+      }
+
+      showShortcutFeedback(`Compact mode: ${ui.compactMode ? "ON" : "OFF"}`);
+    } catch (error) {
+      console.error("[ORR] Failed to toggle compact mode:", error);
+    }
+  }
+
+  /**
+   * Toggle text-only mode
+   */
+  async function toggleTextOnlyMode() {
+    try {
+      const result = await chrome.storage.sync.get({ ui: {} });
+      const ui = result.ui || {};
+
+      ui.textOnly = !ui.textOnly;
+      await chrome.storage.sync.set({ ui });
+
+      // Apply text-only mode class
+      if (ui.textOnly) {
+        document.body.classList.add("orr-text-only");
+      } else {
+        document.body.classList.remove("orr-text-only");
+      }
+
+      showShortcutFeedback(`Text-only mode: ${ui.textOnly ? "ON" : "OFF"}`);
+    } catch (error) {
+      console.error("[ORR] Failed to toggle text-only mode:", error);
+    }
+  }
+
+  /**
+   * Cycle color palette for color-coded comments
+   */
+  async function cycleColorPalette() {
+    try {
+      const result = await chrome.storage.sync.get({ commentEnhancements: {} });
+      const enhancements = result.commentEnhancements || {};
+
+      // Cycle through palettes
+      const palettes = ["rainbow", "colorblind"];
+      const currentIndex = palettes.indexOf(
+        enhancements.colorPalette || "rainbow"
+      );
+      const nextIndex = (currentIndex + 1) % palettes.length;
+      const nextPalette = palettes[nextIndex];
+
+      enhancements.colorPalette = nextPalette;
+      await chrome.storage.sync.set({ commentEnhancements: enhancements });
+
+      // Reapply color coding
+      await applyColorCodedComments();
+
+      const paletteNames = {
+        rainbow: "Rainbow",
+        colorblind: "Colorblind-friendly",
+      };
+      showShortcutFeedback(`Palette: ${paletteNames[nextPalette]}`);
+    } catch (error) {
+      console.error("[ORR] Failed to cycle color palette:", error);
+    }
+  }
+
+  /**
+   * Toggle inline images
+   */
+  async function toggleInlineImages() {
+    try {
+      const result = await chrome.storage.sync.get({ commentEnhancements: {} });
+      const enhancements = result.commentEnhancements || {};
+
+      enhancements.inlineImages = !enhancements.inlineImages;
+      await chrome.storage.sync.set({ commentEnhancements: enhancements });
+
+      // Reapply inline images
+      await applyInlineImages();
+
+      showShortcutFeedback(
+        `Inline images: ${enhancements.inlineImages ? "ON" : "OFF"}`
+      );
+    } catch (error) {
+      console.error("[ORR] Failed to toggle inline images:", error);
+    }
+  }
+
+  /**
+   * Show keyboard shortcuts help overlay
+   */
+  function showKeyboardHelp() {
+    // Remove existing overlay
+    const existing = document.getElementById("orr-keyboard-help");
+    if (existing) {
+      existing.remove();
+      return;
+    }
+
+    // Create overlay
+    const overlay = document.createElement("div");
+    overlay.id = "orr-keyboard-help";
+    overlay.className = "orr-keyboard-help-overlay";
+
+    const shortcuts = Array.from(shortcutRegistry.values());
+    const groupedShortcuts = {
+      Navigation: [],
+      Appearance: [],
+      Content: [],
+      Help: [],
+    };
+
+    // Group shortcuts by type
+    shortcuts.forEach((sc) => {
+      if (!sc.enabled) return;
+
+      const item = {
+        keys: sc.keys,
+        description: sc.description,
+      };
+
+      if (
+        sc.id.includes("nav-") ||
+        sc.id.includes("jump") ||
+        sc.id.includes("vim-")
+      ) {
+        groupedShortcuts.Navigation.push(item);
+      } else if (
+        sc.id.includes("dark") ||
+        sc.id.includes("compact") ||
+        sc.id.includes("text") ||
+        sc.id.includes("palette")
+      ) {
+        groupedShortcuts.Appearance.push(item);
+      } else if (sc.id.includes("images")) {
+        groupedShortcuts.Content.push(item);
+      } else if (sc.id.includes("help")) {
+        groupedShortcuts.Help.push(item);
+      }
+    });
+
+    let html = `
+      <div class="orr-keyboard-help-modal">
+        <div class="orr-keyboard-help-header">
+          <h2>Keyboard Shortcuts</h2>
+          <button class="orr-keyboard-help-close" title="Close (ESC)">×</button>
+        </div>
+        <div class="orr-keyboard-help-content">
+    `;
+
+    // Render each group
+    for (const [group, items] of Object.entries(groupedShortcuts)) {
+      if (items.length === 0) continue;
+
+      html += `<div class="orr-keyboard-help-group">`;
+      html += `<h3>${group}</h3>`;
+      html += `<dl>`;
+
+      items.forEach((item) => {
+        html += `<dt><kbd>${item.keys.replace(/\+/g, "</kbd>+<kbd>")}</kbd></dt>`;
+        html += `<dd>${item.description}</dd>`;
+      });
+
+      html += `</dl></div>`;
+    }
+
+    html += `
+        </div>
+        <div class="orr-keyboard-help-footer">
+          <p>Press <kbd>Shift</kbd>+<kbd>/</kbd> to toggle this help</p>
+          <p><a href="#" class="orr-customize-shortcuts">Customize shortcuts in settings</a></p>
+        </div>
+      </div>
+    `;
+
+    overlay.innerHTML = html;
+    document.body.appendChild(overlay);
+
+    // Event listeners
+    overlay
+      .querySelector(".orr-keyboard-help-close")
+      .addEventListener("click", () => overlay.remove());
+
+    overlay
+      .querySelector(".orr-customize-shortcuts")
+      .addEventListener("click", (e) => {
+        e.preventDefault();
+        chrome.runtime.sendMessage({ action: "openOptions" });
+        overlay.remove();
+      });
+
+    // Close on ESC
+    const escHandler = (e) => {
+      if (e.key === "Escape") {
+        overlay.remove();
+        document.removeEventListener("keydown", escHandler);
+      }
+    };
+    document.addEventListener("keydown", escHandler);
+
+    // Close on overlay click
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+  }
+
+  /**
+   * Handle keyboard shortcut events
+   * @param {KeyboardEvent} event - Keyboard event
+   */
+  function handleKeyboardShortcut(event) {
+    // Skip if shortcuts are disabled
+    if (!shortcutsEnabled) return;
+
+    // Skip in input contexts (except for specific shortcuts)
+    if (isInputContext(event.target)) return;
+
+    // Build key string from event
+    const keyString = buildKeyString(event);
+    if (!keyString) return;
+
+    const currentContext = getCurrentContext();
+
+    // Add to chord buffer
+    chordBuffer.push(keyString);
+
+    // Reset chord timeout
+    if (chordTimeout) clearTimeout(chordTimeout);
+    chordTimeout = setTimeout(clearChordBuffer, chordTimeoutDuration);
+
+    // Try to match current chord buffer
+    const chordString = chordBuffer.join(" ");
+
+    // Check for exact match
+    for (const [id, shortcut] of shortcutRegistry) {
+      if (!shortcut.enabled) continue;
+      if (shortcut.keys !== chordString) continue;
+      if (!isContextMatch(shortcut.context, currentContext)) continue;
+
+      // Match found!
+      event.preventDefault();
+      clearChordBuffer();
+      executeShortcutAction(id);
+      return;
+    }
+
+    // Check if this could be the start of a chord
+    const isPotentialChord = Array.from(shortcutRegistry.values()).some(
+      (sc) => sc.enabled && sc.keys.startsWith(chordString + " ")
+    );
+
+    if (!isPotentialChord) {
+      // No potential match, clear buffer
+      clearChordBuffer();
+    }
+  }
+
+  /**
+   * Initialize keyboard shortcuts system
+   */
+  async function initKeyboardShortcuts() {
+    try {
+      // Load keyboard shortcuts configuration
+      const result = await chrome.storage.sync.get({
+        keyboardShortcuts: null,
+      });
+
+      if (!result.keyboardShortcuts) {
+        console.log("[ORR] Keyboard shortcuts not configured, using defaults");
+        return;
+      }
+
+      const config = result.keyboardShortcuts;
+      shortcutsEnabled = config.enabled !== false;
+      chordTimeoutDuration = config.chordTimeout || 1000;
+
+      if (!shortcutsEnabled) {
+        console.log("[ORR] Keyboard shortcuts disabled");
+        return;
+      }
+
+      // Build shortcut registry
+      shortcutRegistry.clear();
+      for (const [id, shortcut] of Object.entries(config.shortcuts || {})) {
+        shortcutRegistry.set(id, { id, ...shortcut });
+      }
+
+      // Add global keyboard listener
+      document.addEventListener("keydown", handleKeyboardShortcut);
+
+      console.log(
+        `[ORR] Initialized ${shortcutRegistry.size} keyboard shortcuts`
+      );
+    } catch (error) {
+      console.error("[ORR] Failed to initialize keyboard shortcuts:", error);
+    }
+  }
+
+  /**
+   * ============================================================================
+   * TRACKING PROTECTION
+   * Remove tracking parameters from URLs and control referrer information
+   * ============================================================================
+   */
+
+  /**
+   * Remove tracking parameters from a URL
+   * @param {string} url - URL to clean
+   * @param {string[]} trackingParams - List of parameter names to remove
+   * @returns {string} - Cleaned URL
+   */
+  function removeTrackingParams(url, trackingParams) {
+    try {
+      const urlObj = new URL(url);
+      let removed = 0;
+      const removedTypes = { utm: 0, facebook: 0, google: 0, other: 0 };
+
+      // Track which params were removed for statistics
+      trackingParams.forEach((param) => {
+        if (urlObj.searchParams.has(param)) {
+          urlObj.searchParams.delete(param);
+          removed++;
+
+          // Categorize the parameter
+          if (param.startsWith("utm_")) {
+            removedTypes.utm++;
+          } else if (
+            param === "fbclid" ||
+            param === "igshid" ||
+            param === "li_fat_id"
+          ) {
+            removedTypes.facebook++;
+          } else if (param === "gclid" || param === "_ga") {
+            removedTypes.google++;
+          } else {
+            removedTypes.other++;
+          }
+        }
+      });
+
+      if (removed > 0) {
+        // Send stats to background script
+        chrome.runtime.sendMessage({
+          type: "TRACKING_CLEANED",
+          data: removedTypes,
+        });
+
+        return urlObj.toString();
+      }
+
+      return url;
+    } catch (e) {
+      console.warn("Failed to remove tracking params:", e);
+      return url;
+    }
+  }
+
+  /**
+   * Handle link clicks to remove tracking parameters
+   * @param {Event} event - Click event
+   */
+  function handleLinkClick(event) {
+    const link = event.target.closest("a");
+    if (!link || !link.href) return;
+
+    // Get current privacy settings
+    chrome.storage.sync.get(["privacy"], (result) => {
+      const privacy = result.privacy || {};
+      if (!privacy.removeTracking) return;
+
+      const trackingParams = privacy.trackingParams || [];
+      if (trackingParams.length === 0) return;
+
+      const cleanUrl = removeTrackingParams(link.href, trackingParams);
+      if (cleanUrl !== link.href) {
+        // Update the link href
+        link.href = cleanUrl;
+
+        // If it's a middle-click or ctrl-click, the browser will use the updated href
+        // If it's a normal click, prevent default and navigate
+        if (!event.ctrlKey && !event.metaKey && event.button === 0) {
+          event.preventDefault();
+          window.location.href = cleanUrl;
+        }
+      }
+    });
+  }
+
+  /**
+   * Initialize tracking protection
+   */
+  async function initTrackingProtection() {
+    try {
+      const { privacy } = await chrome.storage.sync.get(["privacy"]);
+      if (!privacy || !privacy.removeTracking) return;
+
+      // Add click listener with capture phase to intercept before navigation
+      document.addEventListener("click", handleLinkClick, true);
+
+      // Apply referrer policy
+      applyReferrerPolicy(privacy.referrerPolicy);
+    } catch (e) {
+      console.warn("Failed to initialize tracking protection:", e);
+    }
+  }
+
+  /**
+   * Apply referrer policy to the page
+   * @param {string} policy - Referrer policy value
+   */
+  function applyReferrerPolicy(policy) {
+    if (!policy || policy === "default") {
+      // Remove any existing policy meta tag we added
+      const existing = document.querySelector(
+        'meta[name="referrer"][data-orr]'
+      );
+      if (existing) {
+        existing.remove();
+      }
+      return;
+    }
+
+    // Check if our meta tag already exists
+    let meta = document.querySelector('meta[name="referrer"][data-orr]');
+    if (!meta) {
+      // Create new meta tag
+      meta = document.createElement("meta");
+      meta.name = "referrer";
+      meta.setAttribute("data-orr", "true");
+      document.head.appendChild(meta);
+    }
+
+    // Update content
+    meta.content = policy;
+  }
+
+  /**
    * Listen for messages from popup/background
    */
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "REFRESH_DARK_MODE") {
       applyDarkMode();
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_ACCESSIBILITY") {
+      applyAccessibility();
       sendResponse({ success: true });
     } else if (message.type === "REFRESH_NAG_BLOCKING") {
       applyNagBlocking();
@@ -885,6 +2429,9 @@
       sendResponse({ success: true });
     } else if (message.type === "REFRESH_DOMAIN_FILTERING") {
       applyDomainFiltering();
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_USER_MUTING") {
+      applyUserMuting();
       sendResponse({ success: true });
     } else if (message.type === "REFRESH_COLOR_CODED_COMMENTS") {
       applyColorCodedComments();
@@ -904,6 +2451,29 @@
       if (message.username) {
         refreshUsernameTags(message.username);
       }
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_FEED_ENHANCEMENTS") {
+      applyFeedEnhancements();
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_LAYOUT_PRESETS") {
+      applyLayoutPreset();
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_PRIVACY") {
+      // Re-initialize tracking protection with new settings
+      const privacy = message.privacy || {};
+      applyReferrerPolicy(privacy.referrerPolicy);
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_READING_HISTORY") {
+      // Re-apply visited post indicators
+      markVisitedPosts();
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_NSFW_CONTROLS") {
+      // Re-apply NSFW content controls
+      applyNsfwControls();
+      sendResponse({ success: true });
+    } else if (message.type === "REFRESH_COMMENT_MINIMAP") {
+      // Re-initialize comment minimap
+      initCommentMinimap();
       sendResponse({ success: true });
     }
   });
@@ -1474,6 +3044,537 @@
     }
   }
 
+  // =========================================================================
+  // Reading History
+  // =========================================================================
+
+  /**
+   * Track current post in reading history
+   */
+  async function trackReadingHistory() {
+    try {
+      const prefs = await chrome.storage.local.get({
+        readingHistory: { enabled: true },
+      });
+
+      if (!prefs.readingHistory?.enabled) return;
+
+      // Check if we're on a comments page (post page)
+      const isCommentsPage = /\/comments\/[a-z0-9]+/i.test(
+        window.location.pathname
+      );
+      if (!isCommentsPage) return;
+
+      // Extract post ID from URL
+      const match = window.location.pathname.match(/\/comments\/([a-z0-9]+)/i);
+      if (!match) return;
+
+      const postId = match[1];
+
+      // Get post details from the page
+      const titleElement = document.querySelector(".top-matter .title a.title");
+      const title = titleElement?.textContent?.trim() || "Untitled";
+
+      const subredditElement = document.querySelector(".top-matter .subreddit");
+      const subreddit =
+        subredditElement?.textContent?.replace(/^r\//, "").trim() || "";
+
+      const commentsElement = document.querySelector(
+        ".commentarea .panestack-title .title"
+      );
+      const commentMatch =
+        commentsElement?.textContent?.match(/(\d+)\s*comments?/i);
+      const commentCount = commentMatch ? parseInt(commentMatch[1], 10) : 0;
+
+      // Add to reading history via storage
+      await window.Storage.addReadingHistoryEntry({
+        id: postId,
+        title: title,
+        subreddit: subreddit,
+        url: window.location.href,
+        commentCount: commentCount,
+      });
+
+      logger.debug(`Tracked post in reading history: ${postId}`);
+    } catch (error) {
+      logger.error("Error tracking reading history:", error);
+    }
+  }
+
+  /**
+   * Mark visited posts in the feed
+   */
+  async function markVisitedPosts() {
+    try {
+      const prefs = await chrome.storage.local.get({
+        readingHistory: { enabled: true, showVisitedIndicator: true },
+      });
+
+      if (
+        !prefs.readingHistory?.enabled ||
+        !prefs.readingHistory?.showVisitedIndicator
+      ) {
+        // Remove any existing indicators if disabled
+        document
+          .querySelectorAll(".orr-visited-indicator")
+          .forEach((el) => el.remove());
+        document.querySelectorAll(".thing.orr-visited").forEach((el) => {
+          el.classList.remove("orr-visited");
+        });
+        return;
+      }
+
+      // Get read post IDs
+      const readIds = await window.Storage.getReadPostIds();
+      if (readIds.size === 0) return;
+
+      // Find all posts on the page
+      const posts = document.querySelectorAll(".thing.link:not(.promoted)");
+
+      for (const post of posts) {
+        // Extract post ID from data-fullname (e.g., "t3_abc123" -> "abc123")
+        const fullname = post.getAttribute("data-fullname");
+        if (!fullname) continue;
+
+        const postId = fullname.replace(/^t3_/, "");
+
+        if (readIds.has(postId)) {
+          // Mark as visited if not already marked
+          if (!post.classList.contains("orr-visited")) {
+            post.classList.add("orr-visited");
+
+            // Add visited indicator icon if not already present
+            const titleLink = post.querySelector(".entry .title a.title");
+            if (
+              titleLink &&
+              !titleLink.querySelector(".orr-visited-indicator")
+            ) {
+              const indicator = document.createElement("span");
+              indicator.className = "orr-visited-indicator";
+              indicator.textContent = "✓";
+              indicator.title = "You've read this post";
+              titleLink.insertBefore(indicator, titleLink.firstChild);
+            }
+          }
+        } else {
+          // Remove visited class if post is no longer in history
+          post.classList.remove("orr-visited");
+          const indicator = post.querySelector(".orr-visited-indicator");
+          if (indicator) indicator.remove();
+        }
+      }
+    } catch (error) {
+      logger.error("Error marking visited posts:", error);
+    }
+  }
+
+  // =========================================================================
+  // Navigation Enhancements
+  // =========================================================================
+
+  // Session storage key for collapsed comments
+  const COLLAPSED_COMMENTS_KEY = "orr-collapsed-comments";
+
+  /**
+   * Highlight comment linked via permalink
+   */
+  function highlightPermalinkComment() {
+    try {
+      // Check for comment ID in URL hash or path
+      const hash = window.location.hash;
+      const path = window.location.pathname;
+
+      let targetId = null;
+
+      // Check hash (e.g., #thing_t1_abc123)
+      if (hash && hash.startsWith("#")) {
+        const hashId = hash.substring(1);
+        // Handle thing_t1_xxx format
+        if (hashId.startsWith("thing_t1_")) {
+          targetId = hashId;
+        } else if (hashId.startsWith("t1_")) {
+          targetId = "thing_" + hashId;
+        }
+      }
+
+      // Check path for direct comment link (e.g., /comments/xxx/title/abc123)
+      if (!targetId) {
+        const commentMatch = path.match(
+          /\/comments\/[^\/]+\/[^\/]*\/([a-z0-9]+)\/?$/i
+        );
+        if (commentMatch) {
+          targetId = "thing_t1_" + commentMatch[1];
+        }
+      }
+
+      if (!targetId) return;
+
+      // Find the comment element
+      const comment = document.getElementById(targetId);
+      if (!comment || !comment.classList.contains("comment")) return;
+
+      // Add highlight class
+      comment.classList.add("orr-permalink-highlight");
+
+      // Scroll into view with offset for fixed headers
+      setTimeout(() => {
+        const rect = comment.getBoundingClientRect();
+        const offset = 80; // Account for potential fixed header
+        if (rect.top < offset || rect.bottom > window.innerHeight) {
+          window.scrollTo({
+            top: window.scrollY + rect.top - offset,
+            behavior: "smooth",
+          });
+        }
+      }, 100);
+
+      // Remove highlight class after animation
+      setTimeout(() => {
+        comment.classList.remove("orr-permalink-highlight");
+      }, 2500);
+
+      logger.debug(`Highlighted permalink comment: ${targetId}`);
+    } catch (error) {
+      logger.error("Error highlighting permalink comment:", error);
+    }
+  }
+
+  /**
+   * Add parent navigation buttons to nested comments
+   */
+  function addParentNavButtons() {
+    try {
+      // Only run on comment pages
+      if (!window.location.pathname.includes("/comments/")) return;
+
+      const comments = document.querySelectorAll(
+        ".comment:not(.orr-parent-nav-added)"
+      );
+
+      for (const comment of comments) {
+        // Check if comment has a parent (is nested)
+        const parentComment = comment.parentElement?.closest(".comment");
+        if (!parentComment) continue; // Top-level comment, skip
+
+        // Find the tagline to add the button
+        const tagline = comment.querySelector(".entry > .tagline");
+        if (!tagline) continue;
+
+        // Check if button already exists
+        if (tagline.querySelector(".orr-parent-nav-btn")) continue;
+
+        // Create parent nav button
+        const btn = document.createElement("button");
+        btn.className = "orr-parent-nav-btn";
+        btn.textContent = "↑ parent";
+        btn.title = "Jump to parent comment";
+        btn.setAttribute("aria-label", "Jump to parent comment");
+
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // Scroll to parent comment
+          const rect = parentComment.getBoundingClientRect();
+          const offset = 80;
+          window.scrollTo({
+            top: window.scrollY + rect.top - offset,
+            behavior: "smooth",
+          });
+
+          // Add brief highlight to parent
+          parentComment.classList.add("orr-parent-highlight");
+          setTimeout(() => {
+            parentComment.classList.remove("orr-parent-highlight");
+          }, 1000);
+        });
+
+        tagline.appendChild(btn);
+        comment.classList.add("orr-parent-nav-added");
+      }
+    } catch (error) {
+      logger.error("Error adding parent nav buttons:", error);
+    }
+  }
+
+  /**
+   * Get collapsed comment IDs from session storage
+   */
+  function getCollapsedComments() {
+    try {
+      const stored = sessionStorage.getItem(COLLAPSED_COMMENTS_KEY);
+      if (stored) {
+        return new Set(JSON.parse(stored));
+      }
+    } catch (_e) {
+      // Ignore parse errors
+    }
+    return new Set();
+  }
+
+  /**
+   * Save collapsed comment IDs to session storage
+   */
+  function saveCollapsedComments(ids) {
+    try {
+      sessionStorage.setItem(COLLAPSED_COMMENTS_KEY, JSON.stringify([...ids]));
+    } catch (_e) {
+      // Ignore storage errors
+    }
+  }
+
+  /**
+   * Initialize comment collapse memory
+   */
+  function initCollapseMemory() {
+    try {
+      // Only run on comment pages
+      if (!window.location.pathname.includes("/comments/")) return;
+
+      const collapsedIds = getCollapsedComments();
+
+      // Restore collapsed state
+      for (const id of collapsedIds) {
+        const comment = document.getElementById(id);
+        if (comment && comment.classList.contains("comment")) {
+          // Find and click the collapse button if not already collapsed
+          if (!comment.classList.contains("collapsed")) {
+            const expandBtn = comment.querySelector(".expand");
+            if (expandBtn) {
+              expandBtn.click();
+            }
+          }
+        }
+      }
+
+      // Watch for collapse/expand clicks
+      document.addEventListener("click", (e) => {
+        const expandBtn = e.target.closest(".expand");
+        if (!expandBtn) return;
+
+        const comment = expandBtn.closest(".comment");
+        if (!comment) return;
+
+        const commentId = comment.id;
+        if (!commentId) return;
+
+        const collapsed = getCollapsedComments();
+
+        // Toggle collapsed state after a brief delay (wait for Reddit's JS)
+        setTimeout(() => {
+          if (comment.classList.contains("collapsed")) {
+            collapsed.add(commentId);
+          } else {
+            collapsed.delete(commentId);
+          }
+          saveCollapsedComments(collapsed);
+        }, 50);
+      });
+
+      logger.debug(
+        `Collapse memory initialized, ${collapsedIds.size} comments restored`
+      );
+    } catch (error) {
+      logger.error("Error initializing collapse memory:", error);
+    }
+  }
+
+  // =========================================================================
+  // COMMENT MINIMAP (Phase 14)
+  // Visual navigation aid for comment threads
+  // =========================================================================
+
+  let minimapInstance = null;
+
+  /**
+   * Initialize and render comment minimap
+   */
+  async function initCommentMinimap() {
+    // Only run on comment pages
+    if (!window.location.pathname.includes("/comments/")) {
+      return;
+    }
+
+    const prefs = await chrome.storage.local.get({
+      commentMinimap: {
+        enabled: true,
+        position: "right",
+        width: 120,
+        opacity: 0.9,
+        showViewportIndicator: true,
+        useDepthColors: true,
+        collapsedIndicator: true,
+        autoHide: false,
+      },
+    });
+    const config = prefs.commentMinimap || {};
+
+    if (!config.enabled) {
+      // Remove existing minimap if disabled
+      if (minimapInstance) {
+        minimapInstance.remove();
+        minimapInstance = null;
+      }
+      return;
+    }
+
+    // Remove existing minimap before creating new one
+    const existing = document.getElementById("orr-comment-minimap");
+    if (existing) {
+      existing.remove();
+    }
+
+    // Get all comments
+    const comments = document.querySelectorAll(".thing.comment");
+    if (comments.length === 0) {
+      return;
+    }
+
+    // Create minimap container
+    const minimap = document.createElement("div");
+    minimap.id = "orr-comment-minimap";
+    minimap.className = `orr-minimap-${config.position}`;
+    minimap.style.width = `${config.width}px`;
+    minimap.style.opacity = config.opacity;
+
+    if (config.autoHide) {
+      minimap.classList.add("orr-minimap-autohide");
+    }
+
+    // Create minimap header
+    const header = document.createElement("div");
+    header.className = "orr-minimap-header";
+    header.innerHTML = `<span class="orr-minimap-title">Comments</span><span class="orr-minimap-count">${comments.length}</span>`;
+    minimap.appendChild(header);
+
+    // Create viewport indicator
+    let viewportIndicator = null;
+    if (config.showViewportIndicator) {
+      viewportIndicator = document.createElement("div");
+      viewportIndicator.className = "orr-minimap-viewport";
+      minimap.appendChild(viewportIndicator);
+    }
+
+    // Create minimap content area
+    const content = document.createElement("div");
+    content.className = "orr-minimap-content";
+    minimap.appendChild(content);
+
+    // Color palette for depth (matches color-coded comments)
+    const depthColors = [
+      "#ff4500", // Level 1 - Reddit orange
+      "#0079d3", // Level 2 - Blue
+      "#46d160", // Level 3 - Green
+      "#ff8b60", // Level 4 - Light orange
+      "#7193ff", // Level 5 - Light blue
+      "#ffd635", // Level 6 - Yellow
+      "#ff66ac", // Level 7 - Pink
+      "#9147ff", // Level 8 - Purple
+      "#00d5fa", // Level 9 - Cyan
+      "#cccccc", // Level 10+ - Gray
+    ];
+
+    // Calculate total document height for scaling
+    const docHeight = document.documentElement.scrollHeight;
+    const viewportHeight = window.innerHeight;
+    const minimapContentHeight = 400; // Fixed height for minimap content
+
+    // Build minimap entries
+    comments.forEach((comment) => {
+      const entry = document.createElement("div");
+      entry.className = "orr-minimap-entry";
+
+      // Get comment depth
+      const depth = calculateCommentDepth(comment);
+      const depthIndex = Math.min(depth, depthColors.length - 1);
+
+      // Calculate position based on comment's position in document
+      const rect = comment.getBoundingClientRect();
+      const commentTop = window.scrollY + rect.top;
+      const relativePosition = commentTop / docHeight;
+      const entryTop = relativePosition * minimapContentHeight;
+
+      // Calculate entry height based on comment size
+      const commentHeight = rect.height;
+      const relativeHeight = Math.max(
+        2,
+        (commentHeight / docHeight) * minimapContentHeight
+      );
+
+      entry.style.top = `${entryTop}px`;
+      entry.style.height = `${Math.min(relativeHeight, 20)}px`;
+      entry.style.left = `${depth * 4}px`;
+      entry.style.width = `${config.width - 20 - depth * 4}px`;
+
+      if (config.useDepthColors) {
+        entry.style.backgroundColor = depthColors[depthIndex];
+      }
+
+      // Check if comment is collapsed
+      const isCollapsed = comment.classList.contains("collapsed");
+      if (isCollapsed && config.collapsedIndicator) {
+        entry.classList.add("orr-minimap-collapsed");
+      }
+
+      // Add click handler to navigate to comment
+      entry.addEventListener("click", () => {
+        const targetTop = commentTop - 80; // Offset for header
+        window.scrollTo({
+          top: targetTop,
+          behavior: "smooth",
+        });
+
+        // Briefly highlight the comment
+        comment.classList.add("orr-minimap-highlight");
+        setTimeout(() => {
+          comment.classList.remove("orr-minimap-highlight");
+        }, 1500);
+      });
+
+      // Add hover tooltip
+      const authorEl = comment.querySelector("a.author");
+      const author = authorEl ? authorEl.textContent : "unknown";
+      entry.title = `${author} (depth ${depth + 1})`;
+
+      content.appendChild(entry);
+    });
+
+    // Set content height
+    content.style.height = `${minimapContentHeight}px`;
+
+    // Update viewport indicator on scroll
+    if (viewportIndicator) {
+      const updateViewportIndicator = () => {
+        const scrollTop = window.scrollY;
+        const viewportTop = (scrollTop / docHeight) * minimapContentHeight;
+        const viewportSize =
+          (viewportHeight / docHeight) * minimapContentHeight;
+
+        viewportIndicator.style.top = `${viewportTop + 30}px`; // +30 for header
+        viewportIndicator.style.height = `${Math.max(10, viewportSize)}px`;
+      };
+
+      updateViewportIndicator();
+      window.addEventListener("scroll", updateViewportIndicator, {
+        passive: true,
+      });
+    }
+
+    // Add to page
+    document.body.appendChild(minimap);
+    minimapInstance = minimap;
+  }
+
+  /**
+   * Apply all navigation enhancements
+   */
+  function applyNavigationEnhancements() {
+    highlightPermalinkComment();
+    addParentNavButtons();
+    initCollapseMemory();
+    initCommentMinimap();
+  }
+
   // Run on page load
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", async () => {
@@ -1481,20 +3582,27 @@
       lastSort = getCurrentSort(); // Initialize lastSort
       showRedirectNotice();
       applyDarkMode();
+      applyAccessibility();
       applyNagBlocking();
       applySubredditMuting();
       applyKeywordFiltering();
       applyDomainFiltering();
+      applyUserMuting();
+      applyNsfwControls();
       applyColorCodedComments();
       applyCommentNavigation();
       applyInlineImages();
       applyUserTags();
+      applyFeedEnhancements();
+      applyLayoutPreset();
+      initTrackingProtection();
+      initKeyboardShortcuts();
+      trackReadingHistory();
+      markVisitedPosts();
+      applyNavigationEnhancements();
       watchColorScheme();
       watchForDynamicContent();
       autoCollapseBotComments();
-
-      // Add keyboard navigation listener
-      document.addEventListener("keydown", handleNavigationKeyboard);
     });
   } else {
     (async () => {
@@ -1502,20 +3610,27 @@
       lastSort = getCurrentSort(); // Initialize lastSort
       showRedirectNotice();
       applyDarkMode();
+      applyAccessibility();
       applyNagBlocking();
       applySubredditMuting();
       applyKeywordFiltering();
       applyDomainFiltering();
+      applyUserMuting();
+      applyNsfwControls();
       applyColorCodedComments();
       applyCommentNavigation();
       applyInlineImages();
       applyUserTags();
+      applyFeedEnhancements();
+      applyLayoutPreset();
+      initTrackingProtection();
+      initKeyboardShortcuts();
+      trackReadingHistory();
+      markVisitedPosts();
+      applyNavigationEnhancements();
       watchColorScheme();
       watchForDynamicContent();
       autoCollapseBotComments();
-
-      // Add keyboard navigation listener
-      document.addEventListener("keydown", handleNavigationKeyboard);
     })();
   }
 })();

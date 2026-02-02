@@ -28,6 +28,628 @@ body.orr-oled-mode {
   --orr-bg-tertiary: #1a1a1a;
 }
 
+/* High Contrast mode (WCAG AAA compliant) */
+body.orr-high-contrast-mode {
+  --orr-bg-primary: #000000;
+  --orr-bg-secondary: #000000;
+  --orr-bg-tertiary: #1a1a1a;
+  --orr-text-primary: #ffffff;
+  --orr-text-secondary: #ffff00;
+  --orr-border-color: #ffffff;
+  --orr-link-color: #00ffff;
+  --orr-link-hover: #ffff00;
+  --orr-reddit-orange: #ff6600;
+}
+
+body.orr-high-contrast-mode {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+body.orr-high-contrast-mode a {
+  color: #00ffff !important;
+  text-decoration: underline !important;
+}
+
+body.orr-high-contrast-mode a:hover,
+body.orr-high-contrast-mode a:focus {
+  color: #ffff00 !important;
+  outline: 2px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+body.orr-high-contrast-mode .thing {
+  background-color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  color: #ffffff !important;
+}
+
+body.orr-high-contrast-mode .thing .title {
+  color: #ffffff !important;
+  font-weight: bold !important;
+}
+
+body.orr-high-contrast-mode .comment {
+  border-left: 3px solid #ffffff !important;
+}
+
+body.orr-high-contrast-mode input,
+body.orr-high-contrast-mode textarea,
+body.orr-high-contrast-mode select {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+}
+
+body.orr-high-contrast-mode input:focus,
+body.orr-high-contrast-mode textarea:focus,
+body.orr-high-contrast-mode select:focus {
+  outline: 3px solid #ffff00 !important;
+  outline-offset: 2px !important;
+}
+
+body.orr-high-contrast-mode button,
+body.orr-high-contrast-mode .button {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #ffffff !important;
+  font-weight: bold !important;
+}
+
+body.orr-high-contrast-mode button:hover,
+body.orr-high-contrast-mode button:focus,
+body.orr-high-contrast-mode .button:hover,
+body.orr-high-contrast-mode .button:focus {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+  outline: 3px solid #ffffff !important;
+}
+
+/* ============================================
+   Font Size Controls (Accessibility)
+   ============================================ */
+
+/* Font size CSS variables */
+body.orr-font-small {
+  --orr-font-scale: 0.875;
+}
+
+body.orr-font-medium {
+  --orr-font-scale: 1;
+}
+
+body.orr-font-large {
+  --orr-font-scale: 1.125;
+}
+
+body.orr-font-x-large {
+  --orr-font-scale: 1.25;
+}
+
+/* Apply font scaling to content */
+body[class*="orr-font-"] .thing .title {
+  font-size: calc(16px * var(--orr-font-scale, 1)) !important;
+  line-height: 1.4 !important;
+}
+
+body[class*="orr-font-"] .thing .tagline {
+  font-size: calc(12px * var(--orr-font-scale, 1)) !important;
+}
+
+body[class*="orr-font-"] .comment .md {
+  font-size: calc(14px * var(--orr-font-scale, 1)) !important;
+  line-height: 1.6 !important;
+}
+
+body[class*="orr-font-"] .flat-list {
+  font-size: calc(12px * var(--orr-font-scale, 1)) !important;
+}
+
+body[class*="orr-font-"] .side {
+  font-size: calc(13px * var(--orr-font-scale, 1)) !important;
+}
+
+body[class*="orr-font-"] .md p,
+body[class*="orr-font-"] .md li {
+  font-size: calc(14px * var(--orr-font-scale, 1)) !important;
+  line-height: 1.6 !important;
+}
+
+/* ============================================
+   Reduce Motion (Accessibility)
+   ============================================ */
+
+/* Disable all animations and transitions when reduce motion is enabled */
+body.orr-reduce-motion,
+body.orr-reduce-motion * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ============================================
+   Reading History - Visited Post Indicators
+   ============================================ */
+
+/* Visited post styling */
+.thing.link.orr-visited .entry .title a.title {
+  opacity: 0.7;
+}
+
+.thing.link.orr-visited .entry .tagline {
+  opacity: 0.7;
+}
+
+/* Visited indicator checkmark */
+.orr-visited-indicator {
+  display: inline-block;
+  margin-right: 6px;
+  color: #46d160;
+  font-size: 0.85em;
+  font-weight: bold;
+  opacity: 0.9;
+}
+
+/* Dark mode visited styling */
+body.orr-dark-mode .thing.link.orr-visited .entry .title a.title,
+body.orr-oled-mode .thing.link.orr-visited .entry .title a.title,
+body.orr-high-contrast-mode .thing.link.orr-visited .entry .title a.title {
+  opacity: 0.6;
+}
+
+body.orr-dark-mode .orr-visited-indicator,
+body.orr-oled-mode .orr-visited-indicator,
+body.orr-high-contrast-mode .orr-visited-indicator {
+  color: #46d160;
+}
+
+/* ============================================
+   Navigation Enhancements
+   ============================================ */
+
+/* Permalink highlight animation */
+.comment.orr-permalink-highlight {
+  animation: orr-highlight-pulse 2s ease-out;
+}
+
+@keyframes orr-highlight-pulse {
+  0% {
+    background-color: rgba(255, 69, 0, 0.3);
+    box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.4);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+/* Dark mode permalink highlight */
+body.orr-dark-mode .comment.orr-permalink-highlight,
+body.orr-oled-mode .comment.orr-permalink-highlight {
+  animation: orr-highlight-pulse-dark 2s ease-out;
+}
+
+@keyframes orr-highlight-pulse-dark {
+  0% {
+    background-color: rgba(255, 69, 0, 0.25);
+    box-shadow: 0 0 0 3px rgba(255, 69, 0, 0.35);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+/* Parent navigation button */
+.orr-parent-nav-btn {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 6px;
+  font-size: 10px;
+  color: #898989;
+  background: transparent;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  vertical-align: middle;
+}
+
+.comment:hover .orr-parent-nav-btn {
+  opacity: 1;
+}
+
+.orr-parent-nav-btn:hover {
+  color: #ff4500;
+  border-color: #ff4500;
+  background-color: rgba(255, 69, 0, 0.1);
+}
+
+/* Dark mode parent nav button */
+body.orr-dark-mode .orr-parent-nav-btn,
+body.orr-oled-mode .orr-parent-nav-btn {
+  color: #818384;
+  border-color: #343536;
+}
+
+body.orr-dark-mode .orr-parent-nav-btn:hover,
+body.orr-oled-mode .orr-parent-nav-btn:hover {
+  color: #ff4500;
+  border-color: #ff4500;
+  background-color: rgba(255, 69, 0, 0.15);
+}
+
+/* Parent highlight (brief flash when jumping) */
+.comment.orr-parent-highlight {
+  animation: orr-parent-flash 0.8s ease-out;
+}
+
+@keyframes orr-parent-flash {
+  0% {
+    background-color: rgba(0, 121, 211, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+/* Collapsed comment indicator */
+.comment.orr-remembered-collapsed > .entry > .tagline::after {
+  content: " (collapsed)";
+  color: #898989;
+  font-size: 10px;
+  font-style: italic;
+}
+
+/* ============================================
+   NSFW Content Controls (Phase 13)
+   ============================================ */
+
+/* CSS variable for configurable blur intensity */
+:root {
+  --orr-nsfw-blur: 10px;
+}
+
+/* NSFW blur mode - blur thumbnails and post content */
+body.orr-nsfw-blur .thing.over18 .thumbnail img,
+body.orr-nsfw-blur .thing[data-nsfw="true"] .thumbnail img,
+body.orr-nsfw-blur .thing.orr-nsfw-blurred .thumbnail img {
+  filter: blur(var(--orr-nsfw-blur));
+  transition: filter 0.3s ease;
+}
+
+body.orr-nsfw-blur .thing.over18 .expando .media-preview,
+body.orr-nsfw-blur .thing[data-nsfw="true"] .expando .media-preview,
+body.orr-nsfw-blur .thing.orr-nsfw-blurred .expando .media-preview {
+  filter: blur(var(--orr-nsfw-blur));
+  transition: filter 0.3s ease;
+}
+
+/* Reveal on hover when enabled */
+body.orr-nsfw-blur.orr-nsfw-reveal-hover .thing.over18:hover .thumbnail img,
+body.orr-nsfw-blur.orr-nsfw-reveal-hover
+  .thing[data-nsfw="true"]:hover
+  .thumbnail
+  img,
+body.orr-nsfw-blur.orr-nsfw-reveal-hover
+  .thing.orr-nsfw-blurred:hover
+  .thumbnail
+  img,
+body.orr-nsfw-blur.orr-nsfw-reveal-hover
+  .thing.over18:hover
+  .expando
+  .media-preview,
+body.orr-nsfw-blur.orr-nsfw-reveal-hover
+  .thing[data-nsfw="true"]:hover
+  .expando
+  .media-preview,
+body.orr-nsfw-blur.orr-nsfw-reveal-hover
+  .thing.orr-nsfw-blurred:hover
+  .expando
+  .media-preview {
+  filter: blur(0);
+}
+
+/* Manual reveal class (click to reveal) */
+.thing.orr-nsfw-revealed .thumbnail img,
+.thing.orr-nsfw-revealed .expando .media-preview {
+  filter: blur(0) !important;
+}
+
+/* NSFW hide mode - completely hide posts */
+body.orr-nsfw-hide .thing.over18,
+body.orr-nsfw-hide .thing[data-nsfw="true"],
+.thing.orr-nsfw-hidden {
+  display: none !important;
+}
+
+/* Allowed subreddits bypass NSFW controls */
+.thing.orr-nsfw-allowed .thumbnail img,
+.thing.orr-nsfw-allowed .expando .media-preview {
+  filter: none !important;
+}
+
+.thing.orr-nsfw-allowed {
+  display: block !important;
+}
+
+/* NSFW warning overlay */
+.orr-nsfw-warning {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+  text-align: center;
+  border-radius: 4px;
+}
+
+.orr-nsfw-warning-icon {
+  font-size: 14px;
+  font-weight: bold;
+  background: #ff4500;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+
+.orr-nsfw-warning-text {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.orr-nsfw-warning:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.orr-nsfw-warning:hover::after {
+  content: "Click to reveal";
+  display: block;
+  font-size: 9px;
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+/* Hide warning on revealed posts */
+.thing.orr-nsfw-revealed .orr-nsfw-warning {
+  display: none;
+}
+
+/* Dark mode NSFW warning */
+body.orr-dark-mode .orr-nsfw-warning,
+body.orr-oled-mode .orr-nsfw-warning {
+  background: rgba(26, 26, 27, 0.85);
+}
+
+body.orr-dark-mode .orr-nsfw-warning:hover,
+body.orr-oled-mode .orr-nsfw-warning:hover {
+  background: rgba(26, 26, 27, 0.65);
+}
+
+/* ============================================
+   Comment Minimap (Phase 14)
+   ============================================ */
+
+#orr-comment-minimap {
+  position: fixed;
+  top: 100px;
+  z-index: 9999;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+
+#orr-comment-minimap.orr-minimap-right {
+  right: 10px;
+}
+
+#orr-comment-minimap.orr-minimap-left {
+  left: 10px;
+}
+
+#orr-comment-minimap.orr-minimap-autohide {
+  opacity: 0.3;
+}
+
+#orr-comment-minimap.orr-minimap-autohide:hover {
+  opacity: 1;
+}
+
+.orr-minimap-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: #f6f7f8;
+  border-bottom: 1px solid #edeff1;
+  font-weight: 600;
+}
+
+.orr-minimap-title {
+  color: #1a1a1b;
+}
+
+.orr-minimap-count {
+  color: #7c7c7c;
+  font-size: 10px;
+  background: #edeff1;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.orr-minimap-content {
+  position: relative;
+  overflow: hidden;
+  padding: 5px;
+}
+
+.orr-minimap-entry {
+  position: absolute;
+  border-radius: 2px;
+  cursor: pointer;
+  background: #0079d3;
+  opacity: 0.7;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  min-height: 2px;
+}
+
+.orr-minimap-entry:hover {
+  opacity: 1;
+  transform: scaleX(1.1);
+  z-index: 10;
+}
+
+.orr-minimap-entry.orr-minimap-collapsed {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.2) 2px,
+    rgba(0, 0, 0, 0.2) 4px
+  );
+  opacity: 0.4;
+}
+
+.orr-minimap-viewport {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  background: rgba(0, 121, 211, 0.15);
+  border: 1px solid rgba(0, 121, 211, 0.4);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Highlight effect when clicking minimap entry */
+.comment.orr-minimap-highlight {
+  animation: orr-minimap-pulse 1.5s ease-out;
+}
+
+@keyframes orr-minimap-pulse {
+  0% {
+    background-color: rgba(0, 121, 211, 0.3);
+    box-shadow: 0 0 0 0 rgba(0, 121, 211, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(0, 121, 211, 0.2);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 0 rgba(0, 121, 211, 0);
+  }
+}
+
+/* Dark mode minimap */
+body.orr-dark-mode #orr-comment-minimap,
+body.orr-oled-mode #orr-comment-minimap {
+  background: #1a1a1b;
+  border-color: #343536;
+}
+
+body.orr-dark-mode .orr-minimap-header,
+body.orr-oled-mode .orr-minimap-header {
+  background: #272729;
+  border-bottom-color: #343536;
+}
+
+body.orr-dark-mode .orr-minimap-title,
+body.orr-oled-mode .orr-minimap-title {
+  color: #d7dadc;
+}
+
+body.orr-dark-mode .orr-minimap-count,
+body.orr-oled-mode .orr-minimap-count {
+  color: #818384;
+  background: #343536;
+}
+
+body.orr-dark-mode .orr-minimap-viewport,
+body.orr-oled-mode .orr-minimap-viewport {
+  background: rgba(95, 153, 207, 0.15);
+  border-color: rgba(95, 153, 207, 0.4);
+}
+
+body.orr-dark-mode .comment.orr-minimap-highlight,
+body.orr-oled-mode .comment.orr-minimap-highlight {
+  animation: orr-minimap-pulse-dark 1.5s ease-out;
+}
+
+@keyframes orr-minimap-pulse-dark {
+  0% {
+    background-color: rgba(95, 153, 207, 0.3);
+    box-shadow: 0 0 0 0 rgba(95, 153, 207, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(95, 153, 207, 0.2);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 0 rgba(95, 153, 207, 0);
+  }
+}
+
+/* Hide minimap on small screens */
+@media (max-width: 1200px) {
+  #orr-comment-minimap {
+    display: none;
+  }
+}
+
+/* ============================================
+   High Contrast UI Elements (Accessibility)
+   ============================================ */
+
+/* Enhanced borders and outlines for better visibility */
+body.orr-high-contrast-ui button,
+body.orr-high-contrast-ui .button,
+body.orr-high-contrast-ui input,
+body.orr-high-contrast-ui select,
+body.orr-high-contrast-ui textarea {
+  border: 2px solid currentColor !important;
+}
+
+body.orr-high-contrast-ui button:focus,
+body.orr-high-contrast-ui .button:focus,
+body.orr-high-contrast-ui input:focus,
+body.orr-high-contrast-ui select:focus,
+body.orr-high-contrast-ui textarea:focus {
+  outline: 3px solid #0079d3 !important;
+  outline-offset: 2px !important;
+}
+
+body.orr-high-contrast-ui a:focus {
+  outline: 3px solid #0079d3 !important;
+  outline-offset: 2px !important;
+}
+
+body.orr-high-contrast-ui .thing {
+  border: 2px solid #666 !important;
+}
+
+body.orr-high-contrast-ui .comment {
+  border-left-width: 3px !important;
+}
+
 /* Main page background */
 body.orr-dark-mode,
 body.orr-oled-mode {
@@ -998,4 +1620,419 @@ body.orr-oled-mode .orr-color-option.selected {
     width: 36px;
     height: 36px;
   }
+}
+
+/* ============================================
+   Feed Enhancements
+   ============================================ */
+
+/* Compact feed mode */
+body.orr-compact-feed .thing {
+  margin-bottom: 4px !important;
+  padding: 4px !important;
+}
+
+body.orr-compact-feed .entry {
+  padding: 4px 8px !important;
+}
+
+body.orr-compact-feed .thumbnail {
+  margin: 4px !important;
+}
+
+body.orr-compact-feed .thing .title {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+}
+
+body.orr-compact-feed .tagline {
+  font-size: 11px !important;
+}
+
+body.orr-compact-feed .flat-list {
+  font-size: 11px !important;
+}
+
+/* Text-only mode */
+body.orr-text-only .thumbnail,
+body.orr-text-only .expando-button,
+body.orr-text-only .media-preview-content,
+body.orr-text-only .thumbnail img {
+  display: none !important;
+}
+
+body.orr-text-only .thing {
+  margin-left: 0 !important;
+}
+
+body.orr-text-only .entry {
+  margin-left: 0 !important;
+}
+
+/* Uncropped image thumbnails */
+body.orr-uncrop-images .thumbnail img {
+  max-width: none !important;
+  max-height: 140px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+body.orr-uncrop-images .thumbnail {
+  width: auto !important;
+  height: auto !important;
+  max-height: 140px !important;
+}
+
+/* Hide join buttons */
+body.orr-hide-join .subscribe-button,
+body.orr-hide-join .fancy-toggle-button {
+  display: none !important;
+}
+
+/* Hide action links until hover */
+body.orr-hide-actions .entry .buttons a:not(.comments) {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+body.orr-hide-actions .entry:hover .buttons a {
+  opacity: 1;
+}
+
+/* Keep comments link always visible */
+body.orr-hide-actions .entry .buttons a.comments {
+  opacity: 1 !important;
+}
+
+/* Dark mode compatibility for feed enhancements */
+body.orr-dark-mode.orr-compact-feed .thing,
+body.orr-oled-mode.orr-compact-feed .thing {
+  margin-bottom: 4px !important;
+}
+
+body.orr-dark-mode.orr-text-only .thing,
+body.orr-oled-mode.orr-text-only .thing {
+  margin-left: 0 !important;
+}
+
+/* ============================================================================
+ * JUMP TO TOP VISUAL FEEDBACK
+ * Orange flash bar animation when jumping to top via Shift+Home
+ * ============================================================================ */
+
+/* Orange flash bar at top of page */
+body.orr-jumped-to-top::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff4500, #ff8717, #ff4500);
+  animation: orr-jump-flash 1s ease-out;
+  z-index: 999999;
+}
+
+@keyframes orr-jump-flash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: No animation */
+@media (prefers-reduced-motion: reduce) {
+  body.orr-jumped-to-top::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ============================================================================
+   KEYBOARD SHORTCUTS FEEDBACK & HELP
+   ============================================================================ */
+
+/* Shortcut feedback toast */
+.orr-shortcut-feedback {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 999999;
+  animation: orr-feedback-slide-in 0.3s ease-out;
+  pointer-events: none;
+}
+
+.orr-shortcut-feedback.orr-fade-out {
+  animation: orr-feedback-fade-out 0.3s ease-out forwards;
+}
+
+@keyframes orr-feedback-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes orr-feedback-fade-out {
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* Dark mode adjustments for feedback */
+body.orr-dark .orr-shortcut-feedback {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1a1a1b;
+}
+
+/* Keyboard help overlay */
+.orr-keyboard-help-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: orr-overlay-fade-in 0.2s ease-out;
+}
+
+@keyframes orr-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.orr-keyboard-help-modal {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: orr-modal-slide-in 0.3s ease-out;
+}
+
+@keyframes orr-modal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.orr-keyboard-help-header {
+  padding: 24px;
+  border-bottom: 1px solid #edeff1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.orr-keyboard-help-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1b;
+}
+
+.orr-keyboard-help-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  color: #7c7c7c;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.orr-keyboard-help-close:hover {
+  background: #f6f7f8;
+}
+
+.orr-keyboard-help-content {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.orr-keyboard-help-group {
+  margin-bottom: 24px;
+}
+
+.orr-keyboard-help-group:last-child {
+  margin-bottom: 0;
+}
+
+.orr-keyboard-help-group h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #7c7c7c;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.orr-keyboard-help-group dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  align-items: center;
+}
+
+.orr-keyboard-help-group dt {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.orr-keyboard-help-group dd {
+  margin: 0;
+  color: #1a1a1b;
+}
+
+.orr-keyboard-help-group kbd {
+  display: inline-block;
+  padding: 3px 7px;
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: #1a1a1b;
+  background: #f6f7f8;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.orr-keyboard-help-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #edeff1;
+  background: #f6f7f8;
+  border-radius: 0 0 8px 8px;
+  text-align: center;
+}
+
+.orr-keyboard-help-footer p {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #7c7c7c;
+}
+
+.orr-keyboard-help-footer p:first-child {
+  margin-top: 0;
+}
+
+.orr-keyboard-help-footer p:last-child {
+  margin-bottom: 0;
+}
+
+.orr-keyboard-help-footer a {
+  color: #0079d3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.orr-keyboard-help-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Dark mode adjustments */
+body.orr-dark .orr-keyboard-help-modal {
+  background: #1a1a1b;
+}
+
+body.orr-dark .orr-keyboard-help-header {
+  border-bottom-color: #343536;
+}
+
+body.orr-dark .orr-keyboard-help-header h2 {
+  color: #d7dadc;
+}
+
+body.orr-dark .orr-keyboard-help-close {
+  color: #818384;
+}
+
+body.orr-dark .orr-keyboard-help-close:hover {
+  background: #272729;
+}
+
+body.orr-dark .orr-keyboard-help-group h3 {
+  color: #818384;
+}
+
+body.orr-dark .orr-keyboard-help-group dd {
+  color: #d7dadc;
+}
+
+body.orr-dark .orr-keyboard-help-group kbd {
+  color: #d7dadc;
+  background: #272729;
+  border-color: #343536;
+}
+
+body.orr-dark .orr-keyboard-help-footer {
+  background: #272729;
+  border-top-color: #343536;
+}
+
+body.orr-dark .orr-keyboard-help-footer p {
+  color: #818384;
+}
+
+/* Compact mode styles */
+body.orr-compact-mode .link {
+  margin-bottom: 4px !important;
+}
+
+body.orr-compact-mode .entry {
+  padding: 4px !important;
+}
+
+body.orr-compact-mode .thumbnail {
+  margin-right: 8px !important;
+}
+
+/* Text-only mode styles */
+body.orr-text-only .thumbnail,
+body.orr-text-only .preview-img,
+body.orr-text-only img.preview,
+body.orr-text-only .expando-button {
+  display: none !important;
 }

@@ -7,39 +7,88 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="popup-container">
-      <header class="popup-header">
-        <img src="img/icon32.png" alt="" class="popup-logo" />
+    <div
+      class="popup-container"
+      role="main"
+      aria-label="Old Reddit Redirect popup"
+    >
+      <header class="popup-header" role="banner">
+        <img
+          src="img/icon32.png"
+          alt="Old Reddit Redirect logo"
+          class="popup-logo"
+        />
         <h1>Old Reddit Redirect</h1>
       </header>
 
       <main class="popup-main">
         <!-- Main Toggle Section -->
-        <section class="toggle-section">
-          <label class="toggle-row">
-            <span class="toggle-label">Enable Redirect</span>
-            <div class="switch">
-              <input type="checkbox" id="main-toggle" checked />
-              <span class="slider"></span>
+        <section
+          class="toggle-section"
+          role="region"
+          aria-labelledby="toggle-label"
+        >
+          <label class="toggle-row" id="toggle-label-container">
+            <span class="toggle-label" id="toggle-label">Enable Redirect</span>
+            <div
+              class="switch"
+              role="switch"
+              aria-checked="true"
+              aria-labelledby="toggle-label"
+            >
+              <input
+                type="checkbox"
+                id="main-toggle"
+                checked
+                aria-describedby="status-text"
+              />
+              <span class="slider" aria-hidden="true"></span>
             </div>
           </label>
-          <p class="toggle-status" id="status-text">
+          <p class="toggle-status" id="status-text" aria-live="polite">
             Redirecting to old.reddit.com
           </p>
         </section>
 
         <!-- Temporary Disable Section (hidden by default) -->
-        <section class="temp-disable-section" id="temp-disable-section" hidden>
-          <p class="countdown-text">
-            ⏱️ Re-enabling in <span id="countdown">0:00</span>
+        <section
+          class="temp-disable-section"
+          id="temp-disable-section"
+          hidden
+          role="region"
+          aria-labelledby="temp-disable-heading"
+        >
+          <h2 id="temp-disable-heading" class="visually-hidden">
+            Temporary Disable Status
+          </h2>
+          <p class="countdown-text" aria-live="polite" aria-atomic="true">
+            Re-enabling in <span id="countdown">0:00</span>
           </p>
-          <button class="cancel-button" id="cancel-temp-disable">Cancel</button>
+          <button
+            class="cancel-button"
+            id="cancel-temp-disable"
+            aria-label="Cancel temporary disable and re-enable redirect"
+          >
+            Cancel
+          </button>
         </section>
 
         <!-- Disable Duration Dropdown -->
-        <section class="duration-section" id="duration-section">
+        <section
+          class="duration-section"
+          id="duration-section"
+          role="region"
+          aria-labelledby="duration-heading"
+        >
+          <h2 id="duration-heading" class="visually-hidden">
+            Temporary Disable
+          </h2>
           <label for="disable-duration">Disable for:</label>
-          <select id="disable-duration" class="duration-select">
+          <select
+            id="disable-duration"
+            class="duration-select"
+            aria-label="Select duration to temporarily disable redirect"
+          >
             <option value="">Choose duration...</option>
             <option value="300000">5 minutes</option>
             <option value="900000">15 minutes</option>
@@ -49,13 +98,25 @@
         </section>
 
         <!-- Dark Mode Section -->
-        <section class="dark-mode-section">
+        <section
+          class="dark-mode-section"
+          role="region"
+          aria-labelledby="dark-mode-popup-heading"
+        >
+          <h2 id="dark-mode-popup-heading" class="visually-hidden">
+            Dark Mode
+          </h2>
           <label for="dark-mode-select">Dark Mode:</label>
-          <select id="dark-mode-select" class="duration-select">
+          <select
+            id="dark-mode-select"
+            class="duration-select"
+            aria-label="Select dark mode theme"
+          >
             <option value="auto">Auto (follow system)</option>
             <option value="light">Light</option>
             <option value="dark">Dark</option>
             <option value="oled">OLED Black</option>
+            <option value="high-contrast">High Contrast</option>
           </select>
         </section>
 
@@ -71,38 +132,63 @@
         </section>
 
         <!-- Statistics Section -->
-        <section class="stats-section">
+        <section
+          class="stats-section"
+          role="region"
+          aria-labelledby="stats-popup-heading"
+        >
+          <h2 id="stats-popup-heading" class="visually-hidden">
+            Redirect Statistics
+          </h2>
           <div class="stat-item">
-            <span class="stat-value" id="redirect-count">0</span>
-            <span class="stat-label">redirects today</span>
+            <span
+              class="stat-value"
+              id="redirect-count"
+              aria-label="Redirects today"
+              >0</span
+            >
+            <span class="stat-label" aria-hidden="true">redirects today</span>
           </div>
-          <div class="stat-divider"></div>
+          <div class="stat-divider" aria-hidden="true"></div>
           <div class="stat-item">
-            <span class="stat-value" id="total-count">0</span>
-            <span class="stat-label">total</span>
+            <span
+              class="stat-value"
+              id="total-count"
+              aria-label="Total redirects"
+              >0</span
+            >
+            <span class="stat-label" aria-hidden="true">total</span>
           </div>
-          <div class="stat-divider"></div>
+          <div class="stat-divider" aria-hidden="true"></div>
           <!-- Mini sparkline showing 7-day trend -->
-          <div class="sparkline-container">
-            <div class="sparkline" id="mini-sparkline">
+          <div
+            class="sparkline-container"
+            role="img"
+            aria-label="7-day redirect trend chart"
+          >
+            <div class="sparkline" id="mini-sparkline" aria-hidden="true">
               <!-- Populated by JS -->
             </div>
-            <span class="sparkline-label">7-day trend</span>
+            <span class="sparkline-label" aria-hidden="true">7-day trend</span>
           </div>
         </section>
 
         <!-- Action Buttons -->
-        <section class="actions-section">
-          <button class="action-btn" id="open-options">
-            <span class="action-icon">⚙️</span>
+        <section class="actions-section" role="region" aria-label="Actions">
+          <button
+            class="action-btn"
+            id="open-options"
+            aria-label="Open extension options page"
+          >
+            <span class="action-icon" aria-hidden="true">⚙️</span>
             <span>Options</span>
           </button>
         </section>
       </main>
 
       <!-- Footer -->
-      <footer class="popup-footer">
-        <span class="shortcut-hint" id="shortcut-hint">
+      <footer class="popup-footer" role="contentinfo">
+        <span class="shortcut-hint" id="shortcut-hint" aria-live="polite">
           Loading shortcut...
         </span>
       </footer>

@@ -4,6 +4,90 @@
   padding: 0;
 }
 
+/* ============================================================================
+   ACCESSIBILITY UTILITIES
+   ============================================================================ */
+
+/* Visually hidden but accessible to screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #ff4500;
+  color: white;
+  padding: 8px 16px;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Enhanced focus indicators for all interactive elements */
+:focus-visible {
+  outline: 3px solid #0079d3;
+  outline-offset: 2px;
+}
+
+/* Focus indicator for buttons */
+.button:focus-visible,
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.danger-button:focus-visible {
+  outline: 3px solid #0079d3;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 121, 211, 0.3);
+}
+
+/* Focus indicator for inputs */
+.text-input:focus-visible,
+.select-input:focus-visible,
+.search-input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #0079d3;
+  outline-offset: 0;
+  border-color: #0079d3;
+}
+
+/* Focus indicator for checkboxes */
+input[type="checkbox"]:focus-visible {
+  outline: 3px solid #0079d3;
+  outline-offset: 2px;
+}
+
+/* Focus indicator for radio buttons */
+input[type="radio"]:focus-visible {
+  outline: 3px solid #0079d3;
+  outline-offset: 2px;
+}
+
+/* Focus indicator for switches */
+.switch input:focus-visible + .slider {
+  outline: 3px solid #0079d3;
+  outline-offset: 2px;
+}
+
+/* Focus indicator for links */
+a:focus-visible {
+  outline: 3px solid #0079d3;
+  outline-offset: 2px;
+}
+
 body {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
@@ -168,6 +252,113 @@ h3 {
   color: #818384;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.stat-value-small {
+  font-size: 12px !important;
+}
+
+/* Privacy Score */
+.privacy-score-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  background-color: #1a1a1b;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.privacy-score-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.privacy-score-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.privacy-score-bg {
+  fill: none;
+  stroke: #343536;
+  stroke-width: 3;
+}
+
+.privacy-score-fill {
+  fill: none;
+  stroke: #ff4500;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.privacy-score-fill.score-low {
+  stroke: #ea0027;
+}
+
+.privacy-score-fill.score-medium {
+  stroke: #ff8717;
+}
+
+.privacy-score-fill.score-high {
+  stroke: #46d160;
+}
+
+.privacy-score-value {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 28px;
+  font-weight: 700;
+  color: #d7dadc;
+}
+
+.privacy-score-info {
+  flex: 1;
+}
+
+.privacy-score-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #d7dadc;
+  margin-bottom: 4px;
+}
+
+.privacy-score-status {
+  font-size: 14px;
+  color: #818384;
+  margin-bottom: 8px;
+}
+
+.privacy-score-status.score-low {
+  color: #ea0027;
+}
+
+.privacy-score-status.score-medium {
+  color: #ff8717;
+}
+
+.privacy-score-status.score-high {
+  color: #46d160;
+}
+
+.privacy-recommendations {
+  font-size: 12px;
+  color: #818384;
+}
+
+.privacy-recommendations ul {
+  margin: 8px 0 0 16px;
+  padding: 0;
+}
+
+.privacy-recommendations li {
+  margin-bottom: 4px;
 }
 
 .stats-detail {
@@ -1140,4 +1331,610 @@ footer a:hover {
 
 [hidden] {
   display: none !important;
+}
+
+/* Feed Enhancements Section */
+.custom-css-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #343536;
+}
+
+.custom-css-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #d7dadc;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.custom-css-section .section-description {
+  margin-bottom: 16px;
+}
+
+.custom-css-section .warning {
+  color: #ff8b60;
+  font-size: 14px;
+}
+
+.custom-css-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 12px;
+  margin: 16px 0;
+  background-color: #1a1a1b;
+  color: #d7dadc;
+  border: 1px solid #343536;
+  border-radius: 4px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.custom-css-textarea:focus {
+  outline: none;
+  border-color: #0079d3;
+  box-shadow: 0 0 0 2px rgba(0, 121, 211, 0.2);
+}
+
+.custom-css-textarea::placeholder {
+  color: #818384;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.primary-button {
+  background-color: #0079d3;
+  color: white;
+}
+
+.primary-button:hover {
+  background-color: #0060a8;
+}
+
+.primary-button:active {
+  transform: scale(0.98);
+}
+
+.secondary-button {
+  background-color: #272729;
+  color: #d7dadc;
+  border: 1px solid #343536;
+}
+
+.secondary-button:hover {
+  background-color: #343536;
+}
+
+.secondary-button:active {
+  transform: scale(0.98);
+}
+
+/* ============================================================================
+ * Privacy & Tracking Protection
+ * ============================================================================ */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.stat-card {
+  background-color: #1a1a1b;
+  border: 1px solid #343536;
+  border-radius: 4px;
+  padding: 15px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #818384;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #d7dadc;
+}
+
+.subsection {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #343536;
+}
+
+.subsection h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #d7dadc;
+  margin-bottom: 10px;
+}
+
+.radio-label {
+  display: block;
+  padding: 12px 15px;
+  margin: 8px 0;
+  background-color: #1a1a1b;
+  border: 1px solid #343536;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.radio-label:hover {
+  background-color: #272729;
+  border-color: #4a4a4b;
+}
+
+.radio-label input[type="radio"] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"]:checked ~ span {
+  color: #4fbcff;
+}
+
+.radio-label strong {
+  color: #d7dadc;
+}
+
+/* ============================================================================
+   KEYBOARD SHORTCUTS SECTION
+   ============================================================================ */
+
+.shortcuts-table-container {
+  margin: 20px 0;
+  overflow-x: auto;
+  border: 1px solid #343536;
+  border-radius: 4px;
+}
+
+.shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1a1a1b;
+}
+
+.shortcuts-table thead {
+  background: #272729;
+}
+
+.shortcuts-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #d7dadc;
+  border-bottom: 2px solid #343536;
+}
+
+.shortcuts-table td {
+  padding: 12px;
+  border-bottom: 1px solid #343536;
+  color: #d7dadc;
+}
+
+.shortcuts-table tbody tr:hover {
+  background: #272729;
+}
+
+.shortcuts-table tbody tr.conflict-row {
+  background: rgba(255, 69, 0, 0.1);
+}
+
+.shortcut-description {
+  font-weight: 500;
+  color: #d7dadc;
+}
+
+.shortcut-keys {
+  font-family: "Courier New", monospace;
+  font-weight: 600;
+  color: #4fbcff;
+}
+
+.shortcut-context {
+  color: #818384;
+  font-size: 14px;
+}
+
+.shortcut-context-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #272729;
+  border: 1px solid #343536;
+}
+
+.shortcut-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.shortcut-edit-btn,
+.shortcut-toggle-btn {
+  padding: 4px 12px;
+  font-size: 13px;
+  background: #4fbcff;
+  color: #1a1a1b;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.shortcut-edit-btn:hover {
+  background: #6bcfff;
+}
+
+.shortcut-toggle-btn {
+  background: #343536;
+  color: #d7dadc;
+}
+
+.shortcut-toggle-btn:hover {
+  background: #4a4a4b;
+}
+
+.shortcut-toggle-btn.disabled {
+  opacity: 0.5;
+}
+
+.keyboard-shortcuts-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.warning-banner {
+  background: rgba(255, 69, 0, 0.15);
+  border: 1px solid #ff4500;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 16px 0;
+}
+
+.warning-banner strong {
+  color: #ff4500;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.warning-banner p {
+  color: #d7dadc;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+}
+
+/* Keyboard Edit Modal */
+.keyboard-action-display,
+.keyboard-context-display {
+  color: #818384;
+  font-size: 14px;
+  margin: 4px 0;
+}
+
+.keyboard-capture-container {
+  margin-top: 8px;
+}
+
+.keyboard-capture-input {
+  width: 100%;
+  padding: 10px;
+  background: #272729;
+  border: 2px solid #343536;
+  border-radius: 4px;
+  color: #d7dadc;
+  font-family: "Courier New", monospace;
+  font-size: 16px;
+  font-weight: 600;
+  transition: border-color 0.2s;
+}
+
+.keyboard-capture-input:focus {
+  outline: none;
+  border-color: #4fbcff;
+}
+
+.keyboard-capture-hint {
+  color: #818384;
+  font-size: 13px;
+  margin: 6px 0 0 0;
+}
+
+.validation-message {
+  color: #ff4500;
+  font-size: 13px;
+  margin: 6px 0 0 0;
+  min-height: 18px;
+}
+
+.validation-message.success {
+  color: #46d160;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: #d7dadc;
+}
+
+.checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.danger-button {
+  background: #ff4500;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.danger-button:hover {
+  background: #ff5722;
+}
+
+/* Modal improvements */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #343536;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #d7dadc;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  color: #818384;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.modal-close:hover {
+  background: #272729;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 20px;
+  border-top: 1px solid #343536;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  color: #d7dadc;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+/* ============================================================================
+   STORAGE MANAGEMENT (Phase 6)
+   ============================================================================ */
+
+.health-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  background: #343536;
+}
+
+.health-banner.warning {
+  background: #3d3800;
+  border: 1px solid #ffd000;
+}
+
+.health-banner.critical {
+  background: #3d0000;
+  border: 1px solid #ff4500;
+}
+
+.health-icon {
+  font-size: 18px;
+}
+
+.health-message {
+  flex: 1;
+  font-size: 13px;
+  color: #d7dadc;
+}
+
+.storage-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.storage-meters {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.storage-meter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.meter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meter-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #d7dadc;
+}
+
+.meter-value {
+  font-size: 12px;
+  color: #818384;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #1a1a1b;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #0079d3, #00a8e8);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-fill.warning {
+  background: linear-gradient(90deg, #ffa500, #ffd000);
+}
+
+.progress-fill.critical {
+  background: linear-gradient(90deg, #ff4500, #ff6b35);
+}
+
+.storage-breakdown h3,
+.storage-counts h3,
+.storage-actions h3 {
+  margin-bottom: 12px;
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #1a1a1b;
+  border-radius: 4px;
+}
+
+.breakdown-key {
+  font-size: 12px;
+  color: #d7dadc;
+}
+
+.breakdown-value {
+  font-size: 12px;
+  color: #818384;
+  font-family: monospace;
+}
+
+.counts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.count-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  background: #1a1a1b;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.count-label {
+  font-size: 11px;
+  color: #818384;
+  text-transform: uppercase;
+}
+
+.count-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d7dadc;
+  font-family: monospace;
+}
+
+.storage-actions {
+  padding-top: 8px;
+  border-top: 1px solid #343536;
+}
+
+.cleanup-result {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #1a1a1b;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #818384;
+}
+
+.cleanup-result.success {
+  background: #0d3d0d;
+  color: #4caf50;
 }
