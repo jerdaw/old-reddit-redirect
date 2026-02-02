@@ -2820,11 +2820,12 @@
       // Remove null/undefined values from objects
       const compactObject = (obj) => {
         if (!obj || typeof obj !== "object") return obj;
-        if (Array.isArray(obj)) return obj.filter((v) => v != null);
+        if (Array.isArray(obj))
+          return obj.filter((v) => v !== null && v !== undefined);
 
         const compacted = {};
         for (const [key, value] of Object.entries(obj)) {
-          if (value != null) {
+          if (value !== null && value !== undefined) {
             compacted[key] =
               typeof value === "object" ? compactObject(value) : value;
           }

@@ -234,7 +234,7 @@ describe("Navigation Enhancements", () => {
         if (stored) {
           ids = new Set(JSON.parse(stored));
         }
-      } catch (e) {
+      } catch (_e) {
         ids = new Set();
       }
 

@@ -683,7 +683,7 @@
       });
 
       showToast(`Imported ${imported} new history entries`);
-    } catch (error) {
+    } catch (_error) {
       showToast("Failed to import: Invalid file format");
     }
 

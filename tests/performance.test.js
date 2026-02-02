@@ -5,7 +5,7 @@
  * Tests for storage quota monitoring, cleanup utilities, and DOM optimization
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Mock chrome API
 const mockChrome = {
@@ -36,7 +36,7 @@ const mockChrome = {
 global.chrome = mockChrome;
 
 // Import Storage after mocking chrome
-const { default: Storage } = await import("../storage.js").catch(() => {
+const { default: _Storage } = await import("../storage.js").catch(() => {
   // Return a mock Storage for testing
   return {
     default: {
@@ -313,7 +313,7 @@ describe("Storage Cleanup Utilities", () => {
 
       const compacted = {};
       for (const [key, value] of Object.entries(obj)) {
-        if (value != null) {
+        if (value !== null && value !== undefined) {
           compacted[key] = value;
         }
       }
@@ -325,7 +325,7 @@ describe("Storage Cleanup Utilities", () => {
 
     it("should filter null values from arrays", () => {
       const arr = ["a", null, "b", undefined, "c"];
-      const filtered = arr.filter((v) => v != null);
+      const filtered = arr.filter((v) => v !== null && v !== undefined);
 
       expect(filtered).toHaveLength(3);
       expect(filtered).toEqual(["a", "b", "c"]);
@@ -345,11 +345,12 @@ describe("Storage Cleanup Utilities", () => {
 
       const compactObject = (o) => {
         if (!o || typeof o !== "object") return o;
-        if (Array.isArray(o)) return o.filter((v) => v != null);
+        if (Array.isArray(o))
+          return o.filter((v) => v !== null && v !== undefined);
 
         const result = {};
         for (const [key, value] of Object.entries(o)) {
-          if (value != null) {
+          if (value !== null && value !== undefined) {
             result[key] =
               typeof value === "object" ? compactObject(value) : value;
           }
