@@ -38,6 +38,11 @@
   - **Email verification** - Remove email verification nag banners
   - **Premium banners** - Block Reddit Premium/Gold promotional content
   - **App prompts** - Hide mobile app download prompts
+  - **AI-generated content** - Future-proof blocking of AI answers and overviews
+  - **Trending posts** - Remove trending subreddits and posts sections
+  - **Recommended communities** - Hide subreddit recommendations
+  - **Community highlights** - Block featured posts and spotlight content
+  - **More posts suggestions** - Remove "More posts you may like" sections
   - **Smart blocking** - MutationObserver catches dynamically inserted nags
   - **Individual toggles** - Enable/disable each category independently
 
@@ -53,6 +58,11 @@
   - Supports multi-word phrases
   - Up to 200 muted keywords
   - Import/export keyword lists
+  - **Advanced filtering** (v12.1.0):
+    - Regular expression support for powerful pattern matching
+    - Filter post content (body text), not just titles
+    - Flair-based filtering (hide by post flair)
+    - Score-based filtering (hide posts below threshold)
 - **Domain muting** - Filter posts linking to specific websites
   - Wildcard subdomain support (\*.example.com matches all subdomains)
   - Automatic domain normalization (removes https://, www., etc.)
@@ -68,8 +78,13 @@
 - **Comment navigation** - Floating buttons to navigate between top-level comments
   - "Next" and "Previous" parent comment buttons
   - "Back to top" button
-  - Keyboard shortcuts (Shift+J/K)
+  - Keyboard shortcuts (Shift+J/K for navigation, Shift+Home for jump to top)
   - Customizable position
+- **Jump to top shortcut** - Quick keyboard shortcut to scroll to top
+  - Press Shift+Home on any page to smoothly scroll to top
+  - Respects reduced motion preferences
+  - Screen reader announcements for accessibility
+  - Visual feedback with orange flash bar
 - **Inline image expansion** - View images directly in comments without opening new tabs
   - Supports imgur, i.redd.it, and other common hosts
   - Click to expand/collapse
@@ -87,11 +102,60 @@
   - Tags display next to usernames everywhere
   - Tag management in options page
   - Up to 500 tags with LRU eviction
+- **User muting** - Hide posts and comments from specific users
+  - Right-click any username to mute via context menu
+  - Hide posts from muted users on all pages
+  - Hide comments from muted users in threads
+  - Optional reason for each muted user
+  - Import/export muted user lists
+  - Up to 500 muted users with LRU eviction
 - **Scroll position memory** - Remember scroll position when navigating back
   - Auto-saves on page unload
   - Auto-restores when returning via back button
   - 24-hour retention with automatic cleanup
   - LRU eviction at 100 entries
+- **Customizable keyboard shortcuts** - Fully remappable keyboard shortcuts for all features
+  - 11 default shortcuts (4 existing + 7 new actions)
+  - Chord support for Vim/Emacs-style sequences (e.g., `G G` to jump to top)
+  - New shortcuts: Dark mode (`D`), Compact mode (`C`), Text-only (`T`), Cycle palette (`P`), Inline images (`I`), Help overlay (`Shift+/`)
+  - Conflict detection with visual warnings
+  - Complete management UI in options page
+  - Import/export shortcut configurations
+  - Configurable chord timeout (500-3000ms)
+  - <1ms handler latency with Map-based registry
+
+### Privacy & Tracking Protection
+
+- **Tracking parameter removal** - Automatically strip tracking parameters from URLs
+  - Removes 32 default tracking parameters (UTM, Facebook, Google, Reddit-specific, etc.)
+  - Works on normal clicks, Ctrl+click, and middle-click
+  - Optional shield badge (🛡️) when tracking is removed
+  - Customizable parameter list (add/remove tracking params)
+  - Reset to defaults button
+- **Tracking statistics dashboard** - Transparent reporting of cleaned URLs
+  - Total URLs cleaned counter
+  - Last cleaned timestamp
+  - Breakdown by tracker type (UTM, Facebook, Google, Other)
+  - Clear statistics button
+- **Referrer control** - Manage referrer information sent when leaving Reddit
+  - Default: Browser's default behavior
+  - Same Origin: Only send referrer within Reddit (recommended)
+  - Origin Only: Only send domain (high privacy)
+  - No Referrer: Don't send any referrer (maximum privacy)
+
+### Feed Enhancements
+
+- **Compact feed mode** - Reduce vertical spacing to show more posts per screen
+  - 20-30% more posts visible per page
+- **Text-only mode** - Hide images for focused reading and bandwidth savings
+  - Removes all thumbnails and preview images
+- **Uncropped image thumbnails** - Show full-aspect-ratio thumbnails instead of cropped squares
+  - Better representation of linked content
+- **Hide clutter** - Remove join buttons and action links
+  - Separate toggles for buttons and action links
+- **Custom CSS injection** - Advanced users can inject custom styles
+  - Full CSS editor with validation
+  - Save/Clear/Validate buttons
 
 ### URL Handling
 

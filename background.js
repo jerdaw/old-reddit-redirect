@@ -15,6 +15,10 @@ if (typeof importScripts === "function") {
   // In-memory set for tracking disabled tabs (session-based)
   const disabledTabs = new Set();
 
+  // Badge timeout for tracking protection indicator
+  const TRACKING_BADGE_TIMEOUT = 3000; // 3 seconds
+  let trackingBadgeTimeout = null;
+
   function handleLastError(context) {
     Logger.handleChromeError(context);
   }
@@ -81,6 +85,39 @@ if (typeof importScripts === "function") {
         handleLastError();
       });
       await new Promise((r) => setTimeout(r, 100));
+    }
+  }
+
+  /**
+   * Show tracking protection badge temporarily
+   * @param {number} tabId - Tab ID where tracking was cleaned
+   */
+  async function showTrackingBadge(tabId) {
+    try {
+      const privacy = await Storage.getPrivacy();
+      if (!privacy.showTrackingBadge) return;
+
+      // Clear any existing timeout
+      if (trackingBadgeTimeout) {
+        clearTimeout(trackingBadgeTimeout);
+      }
+
+      // Show shield badge
+      chrome.action.setBadgeText({ text: "🛡️", tabId }, () => {
+        handleLastError();
+      });
+
+      chrome.action.setBadgeBackgroundColor({ color: "#2196F3", tabId }, () => {
+        handleLastError();
+      });
+
+      // Reset badge after timeout
+      trackingBadgeTimeout = setTimeout(async () => {
+        await updateActionUi(tabId);
+        trackingBadgeTimeout = null;
+      }, TRACKING_BADGE_TIMEOUT);
+    } catch (error) {
+      Logger.error("Failed to show tracking badge:", error);
     }
   }
 
@@ -560,6 +597,26 @@ if (typeof importScripts === "function") {
           handleLastError();
         }
       );
+
+      // Mute user
+      chrome.contextMenus.create(
+        {
+          id: "mute-user",
+          title: "Mute this User",
+          contexts: ["link"],
+          targetUrlPatterns: [
+            "*://old.reddit.com/user/*",
+            "*://www.reddit.com/user/*",
+            "*://reddit.com/user/*",
+            "*://old.reddit.com/u/*",
+            "*://www.reddit.com/u/*",
+            "*://reddit.com/u/*",
+          ],
+        },
+        () => {
+          handleLastError();
+        }
+      );
     });
   }
 
@@ -640,6 +697,39 @@ if (typeof importScripts === "function") {
             iconUrl: "img/icon128.png",
             title: "Old Reddit Redirect",
             message: `r/${subreddit} muted from /r/all and /r/popular`,
+            silent: true,
+          });
+        }
+      }
+    } else if (info.menuItemId === "mute-user") {
+      const match = url.pathname.match(/\/u(?:ser)?\/([^/?#]+)/);
+      if (match) {
+        const username = match[1];
+        await Storage.setMutedUser(username, {
+          reason: "Muted via context menu",
+        });
+
+        // Notify all old.reddit.com tabs to refresh muting
+        chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+          tabs.forEach((tab) => {
+            chrome.tabs.sendMessage(
+              tab.id,
+              { type: "REFRESH_USER_MUTING" },
+              () => {
+                void chrome.runtime.lastError;
+              }
+            );
+          });
+        });
+
+        // Show notification
+        const prefs = await Storage.getUIPreferences();
+        if (prefs.showNotifications) {
+          chrome.notifications.create({
+            type: "basic",
+            iconUrl: "img/icon128.png",
+            title: "Old Reddit Redirect",
+            message: `u/${username} has been muted`,
             silent: true,
           });
         }
@@ -791,6 +881,15 @@ if (typeof importScripts === "function") {
 
           case "UPDATE_ICON_BEHAVIOR":
             await configureIconBehavior(message.behavior);
+            sendResponse({ success: true });
+            break;
+
+          case "TRACKING_CLEANED":
+            // Update tracking stats and show badge
+            await Storage.updateTrackingStats(message.data);
+            if (sender.tab && sender.tab.id) {
+              await showTrackingBadge(sender.tab.id);
+            }
             sendResponse({ success: true });
             break;
 

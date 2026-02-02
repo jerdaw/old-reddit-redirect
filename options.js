@@ -53,11 +53,33 @@
     navButtonPosition: document.getElementById("nav-button-position"),
     inlineImages: document.getElementById("inline-images"),
     maxImageWidth: document.getElementById("max-image-width"),
+    jumpToTopShortcut: document.getElementById("jump-to-top-shortcut"),
+    // Comment Minimap
+    minimapEnabled: document.getElementById("minimap-enabled"),
+    minimapPosition: document.getElementById("minimap-position"),
+    minimapPositionRow: document.getElementById("minimap-position-row"),
+    minimapWidth: document.getElementById("minimap-width"),
+    minimapWidthValue: document.getElementById("minimap-width-value"),
+    minimapWidthRow: document.getElementById("minimap-width-row"),
+    minimapOpacity: document.getElementById("minimap-opacity"),
+    minimapOpacityValue: document.getElementById("minimap-opacity-value"),
+    minimapOpacityRow: document.getElementById("minimap-opacity-row"),
+    minimapViewport: document.getElementById("minimap-viewport"),
+    minimapDepthColors: document.getElementById("minimap-depth-colors"),
+    minimapCollapsed: document.getElementById("minimap-collapsed"),
+    minimapAutohide: document.getElementById("minimap-autohide"),
     nagBlockingEnabled: document.getElementById("nag-blocking-enabled"),
     blockLoginPrompts: document.getElementById("block-login-prompts"),
     blockEmailVerification: document.getElementById("block-email-verification"),
     blockPremiumBanners: document.getElementById("block-premium-banners"),
     blockAppPrompts: document.getElementById("block-app-prompts"),
+    blockAIContent: document.getElementById("block-ai-content"),
+    blockTrending: document.getElementById("block-trending"),
+    blockRecommended: document.getElementById("block-recommended"),
+    blockCommunityHighlights: document.getElementById(
+      "block-community-highlights"
+    ),
+    blockMorePosts: document.getElementById("block-more-posts"),
     mutedSubredditInput: document.getElementById("muted-subreddit-input"),
     addMutedSubreddit: document.getElementById("add-muted-subreddit"),
     mutedList: document.getElementById("muted-list"),
@@ -80,6 +102,120 @@
     exportDomains: document.getElementById("export-domains"),
     importDomains: document.getElementById("import-domains"),
     importDomainsFile: document.getElementById("import-domains-file"),
+    feedCompactMode: document.getElementById("feed-compact-mode"),
+    feedTextOnly: document.getElementById("feed-text-only"),
+    feedUncropImages: document.getElementById("feed-uncrop-images"),
+    feedHideJoin: document.getElementById("feed-hide-join"),
+    feedHideActions: document.getElementById("feed-hide-actions"),
+    customCSSEnabled: document.getElementById("custom-css-enabled"),
+    customCSS: document.getElementById("custom-css"),
+    saveCustomCSS: document.getElementById("save-custom-css"),
+    clearCustomCSS: document.getElementById("clear-custom-css"),
+    validateCustomCSS: document.getElementById("validate-custom-css"),
+    trackingRemovalEnabled: document.getElementById("tracking-removal-enabled"),
+    trackingBadgeEnabled: document.getElementById("tracking-badge-enabled"),
+    trackingTotalCleaned: document.getElementById("tracking-total-cleaned"),
+    trackingLastCleaned: document.getElementById("tracking-last-cleaned"),
+    trackingUtmCount: document.getElementById("tracking-utm-count"),
+    trackingSocialCount: document.getElementById("tracking-social-count"),
+    trackingAnalyticsCount: document.getElementById("tracking-analytics-count"),
+    trackingAffiliateCount: document.getElementById("tracking-affiliate-count"),
+    trackingRedditCount: document.getElementById("tracking-reddit-count"),
+    trackingOtherCount: document.getElementById("tracking-other-count"),
+    clearTrackingStats: document.getElementById("clear-tracking-stats"),
+    exportPrivacyReport: document.getElementById("export-privacy-report"),
+    privacyScoreValue: document.getElementById("privacy-score-value"),
+    privacyScoreFill: document.getElementById("privacy-score-fill"),
+    privacyScoreStatus: document.getElementById("privacy-score-status"),
+    privacyRecommendations: document.getElementById("privacy-recommendations"),
+    referrerDefault: document.getElementById("referrer-default"),
+    referrerSameOrigin: document.getElementById("referrer-same-origin"),
+    referrerOrigin: document.getElementById("referrer-origin"),
+    referrerNoReferrer: document.getElementById("referrer-no-referrer"),
+    trackingParams: document.getElementById("tracking-params"),
+    saveTrackingParams: document.getElementById("save-tracking-params"),
+    resetTrackingParams: document.getElementById("reset-tracking-params"),
+    // Layout Presets
+    layoutPresetsEnabled: document.getElementById("layout-presets-enabled"),
+    newPresetName: document.getElementById("new-preset-name"),
+    createPresetBtn: document.getElementById("create-preset-btn"),
+    presetCount: document.getElementById("preset-count"),
+    presetMax: document.getElementById("preset-max"),
+    presetsTable: document.getElementById("presets-table"),
+    presetsTbody: document.getElementById("presets-tbody"),
+    presetsEmpty: document.getElementById("presets-empty"),
+    exportPresets: document.getElementById("export-presets"),
+    importPresets: document.getElementById("import-presets"),
+    clearAllPresets: document.getElementById("clear-all-presets"),
+    activePresetSelect: document.getElementById("active-preset-select"),
+    mappingSubreddit: document.getElementById("mapping-subreddit"),
+    mappingPreset: document.getElementById("mapping-preset"),
+    addMappingBtn: document.getElementById("add-mapping-btn"),
+    mappingCount: document.getElementById("mapping-count"),
+    mappingMax: document.getElementById("mapping-max"),
+    mappingsTable: document.getElementById("mappings-table"),
+    mappingsTbody: document.getElementById("mappings-tbody"),
+    mappingsEmpty: document.getElementById("mappings-empty"),
+    clearAllMappings: document.getElementById("clear-all-mappings"),
+    // Accessibility
+    fontSize: document.getElementById("font-size"),
+    reduceMotion: document.getElementById("reduce-motion"),
+    highContrastElements: document.getElementById("high-contrast-elements"),
+    // Reading History
+    readingHistoryEnabled: document.getElementById("reading-history-enabled"),
+    showVisitedIndicator: document.getElementById("show-visited-indicator"),
+    historyRetentionDays: document.getElementById("history-retention-days"),
+    historyEntryCount: document.getElementById("history-entry-count"),
+    historyLastViewed: document.getElementById("history-last-viewed"),
+    historySearch: document.getElementById("history-search"),
+    historyTable: document.getElementById("history-table"),
+    historyTbody: document.getElementById("history-tbody"),
+    historyEmpty: document.getElementById("history-empty"),
+    clearReadingHistory: document.getElementById("clear-reading-history"),
+    exportReadingHistory: document.getElementById("export-reading-history"),
+    importReadingHistoryBtn: document.getElementById(
+      "import-reading-history-btn"
+    ),
+    importReadingHistoryFile: document.getElementById(
+      "import-reading-history-file"
+    ),
+    // NSFW Controls
+    nsfwControlsEnabled: document.getElementById("nsfw-controls-enabled"),
+    nsfwVisibility: document.getElementById("nsfw-visibility"),
+    nsfwVisibilityRow: document.getElementById("nsfw-visibility-row"),
+    nsfwBlurIntensity: document.getElementById("nsfw-blur-intensity"),
+    nsfwBlurIntensityValue: document.getElementById(
+      "nsfw-blur-intensity-value"
+    ),
+    nsfwBlurOptions: document.getElementById("nsfw-blur-options"),
+    nsfwRevealHover: document.getElementById("nsfw-reveal-hover"),
+    nsfwHoverRow: document.getElementById("nsfw-hover-row"),
+    nsfwShowWarning: document.getElementById("nsfw-show-warning"),
+    nsfwWarningRow: document.getElementById("nsfw-warning-row"),
+    nsfwAllowedSubreddit: document.getElementById("nsfw-allowed-subreddit"),
+    addNsfwAllowed: document.getElementById("add-nsfw-allowed"),
+    nsfwAllowedList: document.getElementById("nsfw-allowed-list"),
+    nsfwAllowedEmpty: document.getElementById("nsfw-allowed-empty"),
+    clearNsfwAllowed: document.getElementById("clear-nsfw-allowed"),
+    // Storage Management
+    storageHealthBanner: document.getElementById("storage-health-banner"),
+    storageHealthIcon: document.getElementById("storage-health-icon"),
+    storageHealthMessage: document.getElementById("storage-health-message"),
+    localStorageValue: document.getElementById("local-storage-value"),
+    localStorageBar: document.getElementById("local-storage-bar"),
+    syncStorageValue: document.getElementById("sync-storage-value"),
+    syncStorageBar: document.getElementById("sync-storage-bar"),
+    storageBreakdownGrid: document.getElementById("storage-breakdown-grid"),
+    countUserTags: document.getElementById("count-user-tags"),
+    countMutedUsers: document.getElementById("count-muted-users"),
+    countSortPrefs: document.getElementById("count-sort-prefs"),
+    countScrollPos: document.getElementById("count-scroll-pos"),
+    countPresets: document.getElementById("count-presets"),
+    countMutedSubs: document.getElementById("count-muted-subs"),
+    runStorageCleanup: document.getElementById("run-storage-cleanup"),
+    runStorageMaintenance: document.getElementById("run-storage-maintenance"),
+    refreshStorageStats: document.getElementById("refresh-storage-stats"),
+    cleanupResult: document.getElementById("cleanup-result"),
   };
 
   function handleLastError() {
@@ -121,6 +257,7 @@
   async function init() {
     await loadAllSettings();
     attachListeners();
+    initKeyboardShortcutsUI();
   }
 
   /**
@@ -131,15 +268,26 @@
     await loadStats();
     await loadUIPreferences();
     await loadDarkModeSettings();
+    await loadAccessibilitySettings();
+    await loadReadingHistorySettings();
+    await loadNsfwControlsSettings();
     await loadCommentEnhancementsSettings();
+    await loadCommentMinimapSettings();
     await loadSortPreferences();
     await loadUserTags();
+    await loadMutedUsers();
     await loadScrollPositions();
+    await loadFeedEnhancements();
+    await loadLayoutPresets();
+    await loadPrivacySettings();
     await loadNagBlockingSettings();
     await loadFrontendOptions();
+    await loadStorageManagement();
     await loadWhitelist();
     await loadMutedSubreddits();
     await loadKeywordFiltering();
+    await loadFlairFiltering();
+    await loadScoreFiltering();
     await loadDomainFiltering();
     await loadSuggestions();
     await loadShortcut();
@@ -294,6 +442,463 @@
   }
 
   /**
+   * Load accessibility settings
+   */
+  async function loadAccessibilitySettings() {
+    const accessibility = await window.Storage.getAccessibility();
+
+    if (elements.fontSize) {
+      elements.fontSize.value = accessibility.fontSize || "medium";
+    }
+    if (elements.reduceMotion) {
+      elements.reduceMotion.value = accessibility.reduceMotion || "auto";
+    }
+    if (elements.highContrastElements) {
+      elements.highContrastElements.checked =
+        accessibility.highContrast === true;
+    }
+  }
+
+  // =========================================================================
+  // Reading History
+  // =========================================================================
+
+  /**
+   * Load reading history settings
+   */
+  async function loadReadingHistorySettings() {
+    const config = await window.Storage.getReadingHistory();
+
+    if (elements.readingHistoryEnabled) {
+      elements.readingHistoryEnabled.checked = config.enabled !== false;
+    }
+    if (elements.showVisitedIndicator) {
+      elements.showVisitedIndicator.checked =
+        config.showVisitedIndicator !== false;
+    }
+    if (elements.historyRetentionDays) {
+      elements.historyRetentionDays.value = String(config.retentionDays || 30);
+    }
+
+    // Load stats and entries
+    await refreshReadingHistoryDisplay();
+  }
+
+  /**
+   * Refresh reading history display (stats and table)
+   */
+  async function refreshReadingHistoryDisplay() {
+    const entries = await window.Storage.getReadingHistoryEntries();
+
+    // Update stats
+    if (elements.historyEntryCount) {
+      elements.historyEntryCount.textContent = formatNumber(entries.length);
+    }
+    if (elements.historyLastViewed && entries.length > 0) {
+      const mostRecent = entries[0];
+      elements.historyLastViewed.textContent = new Date(
+        mostRecent.timestamp
+      ).toLocaleString();
+    } else if (elements.historyLastViewed) {
+      elements.historyLastViewed.textContent = "Never";
+    }
+
+    // Refresh table
+    await refreshReadingHistoryTable();
+  }
+
+  /**
+   * Refresh reading history table
+   */
+  async function refreshReadingHistoryTable(filter = "") {
+    if (!elements.historyTbody) return;
+
+    const entries = await window.Storage.getReadingHistoryEntries(100); // Show max 100
+    const tbody = elements.historyTbody;
+    tbody.innerHTML = "";
+
+    // Filter entries if search term provided
+    const filterLower = filter.toLowerCase();
+    const filteredEntries = filter
+      ? entries.filter(
+          (e) =>
+            e.title.toLowerCase().includes(filterLower) ||
+            e.subreddit.toLowerCase().includes(filterLower)
+        )
+      : entries;
+
+    if (filteredEntries.length === 0) {
+      if (elements.historyTable) elements.historyTable.style.display = "none";
+      if (elements.historyEmpty) elements.historyEmpty.style.display = "block";
+      return;
+    }
+
+    if (elements.historyTable) elements.historyTable.style.display = "table";
+    if (elements.historyEmpty) elements.historyEmpty.style.display = "none";
+
+    for (const entry of filteredEntries) {
+      const row = document.createElement("tr");
+
+      // Post title (linked)
+      const titleCell = document.createElement("td");
+      const titleLink = document.createElement("a");
+      titleLink.href =
+        entry.url || `https://old.reddit.com/comments/${entry.id}`;
+      titleLink.textContent =
+        entry.title.length > 60
+          ? entry.title.substring(0, 60) + "..."
+          : entry.title;
+      titleLink.target = "_blank";
+      titleLink.rel = "noopener";
+      titleCell.appendChild(titleLink);
+      row.appendChild(titleCell);
+
+      // Subreddit
+      const subCell = document.createElement("td");
+      subCell.textContent = entry.subreddit ? `r/${entry.subreddit}` : "-";
+      row.appendChild(subCell);
+
+      // Timestamp
+      const timeCell = document.createElement("td");
+      timeCell.textContent = new Date(entry.timestamp).toLocaleDateString();
+      row.appendChild(timeCell);
+
+      // Actions
+      const actionsCell = document.createElement("td");
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.className = "small-button danger-button";
+      removeBtn.addEventListener("click", async () => {
+        await window.Storage.removeReadingHistoryEntry(entry.id);
+        await refreshReadingHistoryDisplay();
+        showToast("Entry removed from history");
+      });
+      actionsCell.appendChild(removeBtn);
+      row.appendChild(actionsCell);
+
+      tbody.appendChild(row);
+    }
+  }
+
+  /**
+   * Handle reading history toggle
+   */
+  async function handleReadingHistoryToggle(e) {
+    const config = await window.Storage.getReadingHistory();
+
+    if (e.target === elements.readingHistoryEnabled) {
+      config.enabled = e.target.checked;
+    } else if (e.target === elements.showVisitedIndicator) {
+      config.showVisitedIndicator = e.target.checked;
+    }
+
+    await window.Storage.setReadingHistory(config);
+
+    // Notify content scripts
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_READING_HISTORY" });
+      });
+    });
+
+    showToast("Reading history settings updated");
+  }
+
+  /**
+   * Handle retention days change
+   */
+  async function handleRetentionDaysChange() {
+    const config = await window.Storage.getReadingHistory();
+    config.retentionDays =
+      parseInt(elements.historyRetentionDays.value, 10) || 30;
+    await window.Storage.setReadingHistory(config);
+
+    // Cleanup expired entries
+    const removed = await window.Storage.cleanupReadingHistory();
+    if (removed > 0) {
+      await refreshReadingHistoryDisplay();
+      showToast(`Retention updated, ${removed} old entries removed`);
+    } else {
+      showToast("Retention period updated");
+    }
+  }
+
+  /**
+   * Handle clear reading history
+   */
+  async function handleClearReadingHistory() {
+    if (!confirm("Clear all reading history? This cannot be undone.")) return;
+
+    await window.Storage.clearReadingHistory();
+    await refreshReadingHistoryDisplay();
+
+    // Notify content scripts
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_READING_HISTORY" });
+      });
+    });
+
+    showToast("Reading history cleared");
+  }
+
+  /**
+   * Handle export reading history
+   */
+  async function handleExportReadingHistory() {
+    const data = await window.Storage.exportReadingHistory();
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `reading-history-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast(`Exported ${data.entryCount} history entries`);
+  }
+
+  /**
+   * Handle import reading history
+   */
+  async function handleImportReadingHistory(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+
+      const imported = await window.Storage.importReadingHistory(data, true);
+      await refreshReadingHistoryDisplay();
+
+      // Notify content scripts
+      chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+        tabs.forEach((tab) => {
+          chrome.tabs.sendMessage(tab.id, { type: "REFRESH_READING_HISTORY" });
+        });
+      });
+
+      showToast(`Imported ${imported} new history entries`);
+    } catch (error) {
+      showToast("Failed to import: Invalid file format");
+    }
+
+    // Reset file input
+    e.target.value = "";
+  }
+
+  // =========================================================================
+  // NSFW Controls
+  // =========================================================================
+
+  /**
+   * Load NSFW controls settings
+   */
+  async function loadNsfwControlsSettings() {
+    const config = await window.Storage.getNsfwControls();
+
+    if (elements.nsfwControlsEnabled) {
+      elements.nsfwControlsEnabled.checked = config.enabled === true;
+    }
+    if (elements.nsfwVisibility) {
+      elements.nsfwVisibility.value = config.visibility || "show";
+    }
+    if (elements.nsfwBlurIntensity) {
+      elements.nsfwBlurIntensity.value = config.blurIntensity || 10;
+      updateNsfwBlurIntensityDisplay();
+    }
+    if (elements.nsfwRevealHover) {
+      elements.nsfwRevealHover.checked = config.revealOnHover !== false;
+    }
+    if (elements.nsfwShowWarning) {
+      elements.nsfwShowWarning.checked = config.showWarning !== false;
+    }
+
+    // Update visibility of dependent options
+    updateNsfwOptionsVisibility();
+
+    // Load allowed subreddits
+    await refreshNsfwAllowedList();
+  }
+
+  /**
+   * Update NSFW blur intensity display
+   */
+  function updateNsfwBlurIntensityDisplay() {
+    if (elements.nsfwBlurIntensityValue && elements.nsfwBlurIntensity) {
+      elements.nsfwBlurIntensityValue.textContent = `${elements.nsfwBlurIntensity.value}px`;
+    }
+  }
+
+  /**
+   * Update visibility of NSFW-dependent options
+   */
+  function updateNsfwOptionsVisibility() {
+    const enabled = elements.nsfwControlsEnabled?.checked;
+    const visibility = elements.nsfwVisibility?.value;
+    const isBlurMode = visibility === "blur";
+
+    // Hide all options when disabled
+    if (elements.nsfwVisibilityRow) {
+      elements.nsfwVisibilityRow.style.display = enabled ? "" : "none";
+    }
+    if (elements.nsfwBlurOptions) {
+      elements.nsfwBlurOptions.style.display =
+        enabled && isBlurMode ? "" : "none";
+    }
+    if (elements.nsfwHoverRow) {
+      elements.nsfwHoverRow.style.display = enabled && isBlurMode ? "" : "none";
+    }
+    if (elements.nsfwWarningRow) {
+      elements.nsfwWarningRow.style.display =
+        enabled && isBlurMode ? "" : "none";
+    }
+  }
+
+  /**
+   * Refresh NSFW allowed subreddits list
+   */
+  async function refreshNsfwAllowedList() {
+    const allowed = await window.Storage.getNsfwAllowedSubreddits();
+
+    if (!elements.nsfwAllowedList) return;
+
+    elements.nsfwAllowedList.innerHTML = "";
+
+    if (allowed.length === 0) {
+      if (elements.nsfwAllowedEmpty) {
+        elements.nsfwAllowedEmpty.style.display = "block";
+      }
+      return;
+    }
+
+    if (elements.nsfwAllowedEmpty) {
+      elements.nsfwAllowedEmpty.style.display = "none";
+    }
+
+    for (const subreddit of allowed) {
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.innerHTML = `
+        <span class="tag-text">r/${escapeHtml(subreddit)}</span>
+        <button class="tag-remove" data-subreddit="${escapeHtml(subreddit)}" aria-label="Remove r/${escapeHtml(subreddit)}">×</button>
+      `;
+      elements.nsfwAllowedList.appendChild(tag);
+    }
+
+    // Add event listeners for remove buttons
+    elements.nsfwAllowedList.querySelectorAll(".tag-remove").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const subreddit = btn.getAttribute("data-subreddit");
+        await window.Storage.removeNsfwAllowedSubreddit(subreddit);
+        await refreshNsfwAllowedList();
+        notifyContentScripts();
+        showToast(`Removed r/${subreddit} from allowed list`);
+      });
+    });
+  }
+
+  /**
+   * Handle NSFW controls toggle
+   */
+  async function handleNsfwControlsToggle(e) {
+    const config = await window.Storage.getNsfwControls();
+
+    if (e.target === elements.nsfwControlsEnabled) {
+      config.enabled = e.target.checked;
+      updateNsfwOptionsVisibility();
+    } else if (e.target === elements.nsfwRevealHover) {
+      config.revealOnHover = e.target.checked;
+    } else if (e.target === elements.nsfwShowWarning) {
+      config.showWarning = e.target.checked;
+    }
+
+    await window.Storage.setNsfwControls(config);
+    notifyContentScripts();
+  }
+
+  /**
+   * Handle NSFW visibility change
+   */
+  async function handleNsfwVisibilityChange(e) {
+    const config = await window.Storage.getNsfwControls();
+    config.visibility = e.target.value;
+    await window.Storage.setNsfwControls(config);
+    updateNsfwOptionsVisibility();
+    notifyContentScripts();
+  }
+
+  /**
+   * Handle NSFW blur intensity change
+   */
+  async function handleNsfwBlurIntensityChange() {
+    const config = await window.Storage.getNsfwControls();
+    config.blurIntensity = parseInt(elements.nsfwBlurIntensity.value, 10);
+    await window.Storage.setNsfwControls(config);
+    updateNsfwBlurIntensityDisplay();
+    notifyContentScripts();
+  }
+
+  /**
+   * Handle adding NSFW allowed subreddit
+   */
+  async function handleAddNsfwAllowed() {
+    const input = elements.nsfwAllowedSubreddit;
+    if (!input) return;
+
+    const subreddit = input.value.trim().toLowerCase().replace(/^r\//, "");
+    if (!subreddit) {
+      showToast("Please enter a subreddit name", "error");
+      return;
+    }
+
+    // Validate subreddit name
+    if (!/^[a-z0-9_]+$/i.test(subreddit)) {
+      showToast("Invalid subreddit name", "error");
+      return;
+    }
+
+    await window.Storage.addNsfwAllowedSubreddit(subreddit);
+    input.value = "";
+    await refreshNsfwAllowedList();
+    notifyContentScripts();
+    showToast(`Added r/${subreddit} to allowed list`);
+  }
+
+  /**
+   * Handle clearing all NSFW allowed subreddits
+   */
+  async function handleClearNsfwAllowed() {
+    if (
+      !confirm(
+        "Clear all allowed subreddits? NSFW controls will apply everywhere."
+      )
+    ) {
+      return;
+    }
+
+    await window.Storage.clearNsfwAllowedSubreddits();
+    await refreshNsfwAllowedList();
+    notifyContentScripts();
+    showToast("Cleared all allowed subreddits");
+  }
+
+  /**
+   * Notify content scripts of settings change
+   */
+  function notifyContentScripts() {
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_NSFW_CONTROLS" });
+      });
+    });
+  }
+
+  /**
    * Load comment enhancements settings
    */
   async function loadCommentEnhancementsSettings() {
@@ -309,6 +914,51 @@
       enhancements.navButtonPosition || "bottom-right";
     elements.inlineImages.checked = enhancements.inlineImages !== false;
     elements.maxImageWidth.value = String(enhancements.maxImageWidth || 600);
+    // v11.2.0: Jump to top keyboard shortcut
+    elements.jumpToTopShortcut.checked =
+      enhancements.jumpToTopShortcut !== false;
+  }
+
+  /**
+   * Load comment minimap settings
+   */
+  async function loadCommentMinimapSettings() {
+    const config = await window.Storage.getCommentMinimap();
+
+    elements.minimapEnabled.checked = config.enabled !== false;
+    elements.minimapPosition.value = config.position || "right";
+    elements.minimapWidth.value = String(config.width || 120);
+    elements.minimapWidthValue.textContent = `${config.width || 120}px`;
+    elements.minimapOpacity.value = String(
+      Math.round((config.opacity || 0.9) * 100)
+    );
+    elements.minimapOpacityValue.textContent = `${Math.round((config.opacity || 0.9) * 100)}%`;
+    elements.minimapViewport.checked = config.showViewportIndicator !== false;
+    elements.minimapDepthColors.checked = config.useDepthColors !== false;
+    elements.minimapCollapsed.checked = config.collapsedIndicator !== false;
+    elements.minimapAutohide.checked = config.autoHide === true;
+
+    // Toggle visibility of dependent settings
+    updateMinimapDependentSettings(config.enabled !== false);
+  }
+
+  /**
+   * Update visibility of minimap dependent settings
+   * @param {boolean} enabled - Whether minimap is enabled
+   */
+  function updateMinimapDependentSettings(enabled) {
+    const dependentElements = [
+      elements.minimapPositionRow,
+      elements.minimapWidthRow,
+      elements.minimapOpacityRow,
+    ];
+
+    dependentElements.forEach((el) => {
+      if (el) {
+        el.style.opacity = enabled ? "1" : "0.5";
+        el.style.pointerEvents = enabled ? "auto" : "none";
+      }
+    });
   }
 
   /**
@@ -813,6 +1463,230 @@
   }
 
   /**
+   * Load muted users settings
+   */
+  async function loadMutedUsers() {
+    const config = await window.Storage.getMutedUsers();
+
+    // Set toggle state
+    document.getElementById("user-muting-enabled").checked =
+      config.enabled !== false;
+
+    // Refresh the list
+    await refreshMutedUsersList();
+  }
+
+  /**
+   * Refresh the muted users list
+   */
+  async function refreshMutedUsersList() {
+    const config = await window.Storage.getMutedUsers();
+    const users = config.users || {};
+    const listContainer = document.getElementById("muted-users-list");
+    const emptyState = document.getElementById("muted-users-empty");
+    const countSpan = document.getElementById("muted-users-count");
+
+    const entries = Object.entries(users);
+
+    // Sort by timestamp (newest first)
+    entries.sort((a, b) => b[1].timestamp - a[1].timestamp);
+
+    countSpan.textContent = entries.length;
+
+    if (entries.length === 0) {
+      listContainer.innerHTML = "";
+      emptyState.style.display = "block";
+      return;
+    }
+
+    emptyState.style.display = "none";
+
+    listContainer.innerHTML = entries
+      .map(([username, data]) => {
+        const dateDisplay = formatDate(data.timestamp);
+        const reason = data.reason ? escapeHtml(data.reason) : "No reason";
+
+        return `
+        <div class="item-row" data-username="${escapeHtml(username)}">
+          <div class="item-info">
+            <a href="https://old.reddit.com/user/${escapeHtml(username)}"
+               target="_blank"
+               rel="noopener"
+               class="item-link">
+              u/${escapeHtml(username)}
+            </a>
+            <span class="item-meta">${reason} &middot; ${dateDisplay}</span>
+          </div>
+          <button class="button secondary remove-muted-user"
+                  data-username="${escapeHtml(username)}">
+            Unmute
+          </button>
+        </div>
+      `;
+      })
+      .join("");
+
+    // Attach delete handlers
+    listContainer.querySelectorAll(".remove-muted-user").forEach((btn) => {
+      btn.addEventListener("click", handleRemoveMutedUser);
+    });
+  }
+
+  /**
+   * Handle user muting toggle
+   */
+  async function handleUserMutingToggle(e) {
+    const enabled = e.target.checked;
+    const config = await window.Storage.getMutedUsers();
+    config.enabled = enabled;
+    await window.Storage.setMutedUsers(config);
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_MUTING" });
+      }
+    });
+  }
+
+  /**
+   * Handle add muted user
+   */
+  async function handleAddMutedUser() {
+    const usernameInput = document.getElementById("new-muted-user");
+    const reasonInput = document.getElementById("mute-reason");
+    const username = usernameInput.value.trim().replace(/^u\//, "");
+    const reason = reasonInput.value.trim();
+
+    if (!username) {
+      alert("Please enter a username");
+      return;
+    }
+
+    await window.Storage.setMutedUser(username, {
+      reason: reason || "No reason",
+    });
+
+    usernameInput.value = "";
+    reasonInput.value = "";
+    await refreshMutedUsersList();
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_MUTING" });
+      }
+    });
+  }
+
+  /**
+   * Handle remove individual muted user
+   */
+  async function handleRemoveMutedUser(e) {
+    const username = e.target.dataset.username;
+
+    if (!confirm(`Unmute u/${username}?`)) {
+      return;
+    }
+
+    await window.Storage.deleteMutedUser(username);
+    await refreshMutedUsersList();
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_MUTING" });
+      }
+    });
+  }
+
+  /**
+   * Handle clear all muted users
+   */
+  async function handleClearAllMutedUsers() {
+    const config = await window.Storage.getMutedUsers();
+    const count = Object.keys(config.users || {}).length;
+
+    if (count === 0) {
+      alert("No muted users to clear.");
+      return;
+    }
+
+    if (!confirm(`Unmute all ${count} users? This cannot be undone.`)) {
+      return;
+    }
+
+    await window.Storage.clearMutedUsers();
+    await refreshMutedUsersList();
+
+    // Notify content script to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_MUTING" });
+      }
+    });
+  }
+
+  /**
+   * Handle export muted users
+   */
+  async function handleExportMutedUsers() {
+    const config = await window.Storage.getMutedUsers();
+    const users = config.users || {};
+    const json = JSON.stringify(users, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `muted-users-${Date.now()}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Handle import muted users
+   */
+  async function handleImportMutedUsers() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+
+        // Validate structure
+        if (typeof imported !== "object" || imported === null) {
+          throw new Error("Invalid format");
+        }
+
+        const config = await window.Storage.getMutedUsers();
+        config.users = { ...config.users, ...imported };
+
+        await window.Storage.setMutedUsers(config);
+        await refreshMutedUsersList();
+
+        // Notify content script to refresh
+        chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+          for (const tab of tabs) {
+            chrome.tabs.sendMessage(tab.id, { type: "REFRESH_USER_MUTING" });
+          }
+        });
+      } catch (err) {
+        alert("Failed to import muted users: " + err.message);
+      }
+    };
+
+    input.click();
+  }
+
+  /**
    * Load scroll positions settings
    */
   async function loadScrollPositions() {
@@ -846,6 +1720,1433 @@
   }
 
   /**
+   * Load feed enhancements settings
+   */
+  async function loadFeedEnhancements() {
+    const config = await window.Storage.getFeedEnhancements();
+
+    elements.feedCompactMode.checked = config.compactMode || false;
+    elements.feedTextOnly.checked = config.textOnlyMode || false;
+    elements.feedUncropImages.checked = config.uncropImages || false;
+    elements.feedHideJoin.checked = config.hideJoinButtons || false;
+    elements.feedHideActions.checked = config.hideActionLinks || false;
+    elements.customCSSEnabled.checked = config.customCSSEnabled || false;
+    elements.customCSS.value = config.customCSS || "";
+  }
+
+  /**
+   * Handle feed enhancement toggle
+   */
+  async function handleFeedEnhancementToggle(e) {
+    const config = await window.Storage.getFeedEnhancements();
+
+    if (e.target === elements.feedCompactMode) {
+      config.compactMode = e.target.checked;
+    } else if (e.target === elements.feedTextOnly) {
+      config.textOnlyMode = e.target.checked;
+    } else if (e.target === elements.feedUncropImages) {
+      config.uncropImages = e.target.checked;
+    } else if (e.target === elements.feedHideJoin) {
+      config.hideJoinButtons = e.target.checked;
+    } else if (e.target === elements.feedHideActions) {
+      config.hideActionLinks = e.target.checked;
+    } else if (e.target === elements.customCSSEnabled) {
+      config.customCSSEnabled = e.target.checked;
+    }
+
+    await window.Storage.setFeedEnhancements(config);
+
+    // Notify content scripts to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "REFRESH_FEED_ENHANCEMENTS",
+        });
+      });
+    });
+
+    showToast("Feed enhancements updated");
+  }
+
+  /**
+   * Handle save custom CSS
+   */
+  async function handleSaveCustomCSS() {
+    const css = elements.customCSS.value.trim();
+    const config = await window.Storage.getFeedEnhancements();
+
+    config.customCSS = css;
+    await window.Storage.setFeedEnhancements(config);
+
+    // Notify content scripts to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "REFRESH_FEED_ENHANCEMENTS",
+        });
+      });
+    });
+
+    showToast("Custom CSS saved");
+  }
+
+  /**
+   * Handle clear custom CSS
+   */
+  async function handleClearCustomCSS() {
+    if (!confirm("Clear custom CSS?")) return;
+
+    elements.customCSS.value = "";
+    const config = await window.Storage.getFeedEnhancements();
+    config.customCSS = "";
+    await window.Storage.setFeedEnhancements(config);
+
+    // Notify content scripts to refresh
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "REFRESH_FEED_ENHANCEMENTS",
+        });
+      });
+    });
+
+    showToast("Custom CSS cleared");
+  }
+
+  /**
+   * Handle validate custom CSS
+   */
+  async function handleValidateCustomCSS() {
+    const css = elements.customCSS.value.trim();
+
+    if (!css) {
+      showToast("No CSS to validate", "error");
+      return;
+    }
+
+    try {
+      // Basic CSS validation by trying to create a style element
+      const style = document.createElement("style");
+      style.textContent = css;
+      document.head.appendChild(style);
+      document.head.removeChild(style);
+
+      showToast("CSS is valid!", "success");
+    } catch (error) {
+      showToast("CSS validation failed: " + error.message, "error");
+    }
+  }
+
+  /**
+   * ============================================================================
+   * STORAGE MANAGEMENT (Phase 6)
+   * Monitor storage usage and perform cleanup operations
+   * ============================================================================
+   */
+
+  /**
+   * Load storage management section
+   */
+  async function loadStorageManagement() {
+    await refreshStorageStats();
+  }
+
+  /**
+   * Refresh storage statistics display
+   */
+  async function refreshStorageStats() {
+    try {
+      // Get storage usage and health report
+      const usage = await window.Storage.getStorageUsage();
+      const healthReport = await window.Storage.getStorageHealthReport();
+
+      // Update local storage meter
+      if (elements.localStorageValue) {
+        const localKB = (usage.local.used / 1024).toFixed(1);
+        const localMB = (usage.local.quota / 1024 / 1024).toFixed(0);
+        elements.localStorageValue.textContent = `${localKB} KB / ${localMB} MB`;
+      }
+      if (elements.localStorageBar) {
+        elements.localStorageBar.style.width = `${usage.local.percentage}%`;
+        elements.localStorageBar.className = `progress-fill ${getProgressClass(usage.local.percentage)}`;
+      }
+
+      // Update sync storage meter
+      if (elements.syncStorageValue) {
+        const syncKB = (usage.sync.used / 1024).toFixed(1);
+        const quotaKB = (usage.sync.quota / 1024).toFixed(0);
+        elements.syncStorageValue.textContent = `${syncKB} KB / ${quotaKB} KB`;
+      }
+      if (elements.syncStorageBar) {
+        elements.syncStorageBar.style.width = `${usage.sync.percentage}%`;
+        elements.syncStorageBar.className = `progress-fill ${getProgressClass(usage.sync.percentage)}`;
+      }
+
+      // Update storage breakdown
+      if (elements.storageBreakdownGrid) {
+        const breakdown = usage.breakdown;
+        const items = Object.entries(breakdown)
+          .filter(([key]) => !key.startsWith("_"))
+          .slice(0, 8) // Top 8 items
+          .map(([key, bytes]) => {
+            const kb = (bytes / 1024).toFixed(1);
+            return `
+              <div class="breakdown-item">
+                <span class="breakdown-key">${formatStorageKey(key)}</span>
+                <span class="breakdown-value">${kb} KB</span>
+              </div>
+            `;
+          })
+          .join("");
+
+        elements.storageBreakdownGrid.innerHTML = items || "<p>No data</p>";
+      }
+
+      // Update feature counts
+      if (healthReport.counts) {
+        const counts = healthReport.counts;
+        if (elements.countUserTags) {
+          elements.countUserTags.textContent = `${counts.userTags}/500`;
+        }
+        if (elements.countMutedUsers) {
+          elements.countMutedUsers.textContent = `${counts.mutedUsers}/500`;
+        }
+        if (elements.countSortPrefs) {
+          elements.countSortPrefs.textContent = `${counts.sortPreferences}/100`;
+        }
+        if (elements.countScrollPos) {
+          elements.countScrollPos.textContent = `${counts.scrollPositions}/100`;
+        }
+        if (elements.countPresets) {
+          elements.countPresets.textContent = `${counts.layoutPresets}/20`;
+        }
+        if (elements.countMutedSubs) {
+          elements.countMutedSubs.textContent = `${counts.mutedSubreddits}/100`;
+        }
+      }
+
+      // Update health banner
+      updateStorageHealthBanner(healthReport);
+    } catch (error) {
+      console.error("[ORR] Failed to load storage stats:", error);
+    }
+  }
+
+  /**
+   * Get progress bar class based on percentage
+   */
+  function getProgressClass(percentage) {
+    if (percentage >= 90) return "critical";
+    if (percentage >= 70) return "warning";
+    return "";
+  }
+
+  /**
+   * Format storage key for display
+   */
+  function formatStorageKey(key) {
+    const keyNames = {
+      stats: "Statistics",
+      userTags: "User Tags",
+      mutedUsers: "Muted Users",
+      sortPreferences: "Sort Prefs",
+      scrollPositions: "Scroll Pos",
+      keyboardShortcuts: "Shortcuts",
+      layoutPresets: "Presets",
+      contentFiltering: "Filtering",
+      subredditOverrides: "Overrides",
+      darkMode: "Dark Mode",
+      nagBlocking: "Nag Block",
+      commentEnhancements: "Comments",
+      feedEnhancements: "Feed",
+      privacy: "Privacy",
+      ui: "UI",
+      frontend: "Frontend",
+    };
+    return keyNames[key] || key;
+  }
+
+  /**
+   * Update storage health banner
+   */
+  function updateStorageHealthBanner(healthReport) {
+    if (!elements.storageHealthBanner) return;
+
+    if (healthReport.status === "healthy") {
+      elements.storageHealthBanner.style.display = "none";
+      return;
+    }
+
+    elements.storageHealthBanner.style.display = "flex";
+    elements.storageHealthBanner.className = `health-banner ${healthReport.status}`;
+
+    if (elements.storageHealthIcon) {
+      elements.storageHealthIcon.textContent =
+        healthReport.status === "critical" ? "⚠️" : "⚡";
+    }
+
+    if (elements.storageHealthMessage) {
+      elements.storageHealthMessage.textContent =
+        healthReport.issues.join(". ");
+    }
+  }
+
+  /**
+   * Run storage cleanup
+   */
+  async function handleStorageCleanup() {
+    try {
+      if (elements.runStorageCleanup) {
+        elements.runStorageCleanup.disabled = true;
+        elements.runStorageCleanup.textContent = "Cleaning...";
+      }
+
+      const results = await window.Storage.cleanupExpiredData();
+
+      // Show results
+      if (elements.cleanupResult) {
+        const bytesFree = (results.totalBytesFreed / 1024).toFixed(1);
+        const items = results.scrollPositions + results.sortPreferences;
+
+        if (results.totalBytesFreed > 0) {
+          elements.cleanupResult.textContent = `Cleaned ${items} items, freed ${bytesFree} KB`;
+          elements.cleanupResult.className = "cleanup-result success";
+        } else {
+          elements.cleanupResult.textContent = "No expired data to clean up";
+          elements.cleanupResult.className = "cleanup-result";
+        }
+        elements.cleanupResult.style.display = "block";
+      }
+
+      // Refresh stats
+      await refreshStorageStats();
+      showToast("Cleanup completed", "success");
+    } catch (error) {
+      console.error("[ORR] Cleanup failed:", error);
+      showToast("Cleanup failed: " + error.message, "error");
+    } finally {
+      if (elements.runStorageCleanup) {
+        elements.runStorageCleanup.disabled = false;
+        elements.runStorageCleanup.textContent = "Run Cleanup";
+      }
+    }
+  }
+
+  /**
+   * Run full storage maintenance
+   */
+  async function handleStorageMaintenance() {
+    try {
+      if (elements.runStorageMaintenance) {
+        elements.runStorageMaintenance.disabled = true;
+        elements.runStorageMaintenance.textContent = "Running...";
+      }
+
+      const results = await window.Storage.runMaintenance();
+
+      // Show results
+      if (elements.cleanupResult) {
+        const bytesFree = results.cleanup
+          ? (results.cleanup.totalBytesFreed / 1024).toFixed(1)
+          : "0";
+        const compactBytes = results.compact
+          ? (results.compact.bytesFreed / 1024).toFixed(1)
+          : "0";
+
+        elements.cleanupResult.textContent = `Maintenance complete. Freed: ${bytesFree} KB (cleanup) + ${compactBytes} KB (compact)`;
+        elements.cleanupResult.className = "cleanup-result success";
+        elements.cleanupResult.style.display = "block";
+      }
+
+      // Refresh stats
+      await refreshStorageStats();
+      showToast("Maintenance completed", "success");
+    } catch (error) {
+      console.error("[ORR] Maintenance failed:", error);
+      showToast("Maintenance failed: " + error.message, "error");
+    } finally {
+      if (elements.runStorageMaintenance) {
+        elements.runStorageMaintenance.disabled = false;
+        elements.runStorageMaintenance.textContent = "Full Maintenance";
+      }
+    }
+  }
+
+  /**
+   * Attach storage management event listeners
+   */
+  function attachStorageManagementListeners() {
+    if (elements.runStorageCleanup) {
+      elements.runStorageCleanup.addEventListener(
+        "click",
+        handleStorageCleanup
+      );
+    }
+    if (elements.runStorageMaintenance) {
+      elements.runStorageMaintenance.addEventListener(
+        "click",
+        handleStorageMaintenance
+      );
+    }
+    if (elements.refreshStorageStats) {
+      elements.refreshStorageStats.addEventListener("click", async () => {
+        await refreshStorageStats();
+        showToast("Storage stats refreshed", "success");
+      });
+    }
+  }
+
+  /**
+   * ============================================================================
+   * LAYOUT PRESETS
+   * Save and manage layout presets for quick switching
+   * ============================================================================
+   */
+
+  /**
+   * Load layout presets settings
+   */
+  async function loadLayoutPresets() {
+    const config = await window.Storage.getLayoutPresets();
+
+    // Set toggle state
+    if (elements.layoutPresetsEnabled) {
+      elements.layoutPresetsEnabled.checked = config.enabled !== false;
+    }
+
+    // Update counts
+    if (elements.presetCount) {
+      elements.presetCount.textContent = Object.keys(
+        config.presets || {}
+      ).length;
+    }
+    if (elements.presetMax) {
+      elements.presetMax.textContent = config.maxPresets || 20;
+    }
+    if (elements.mappingCount) {
+      elements.mappingCount.textContent = Object.keys(
+        config.subredditLayouts || {}
+      ).length;
+    }
+    if (elements.mappingMax) {
+      elements.mappingMax.textContent = config.maxSubredditMappings || 100;
+    }
+
+    // Refresh lists
+    await refreshPresetsList();
+    await refreshActivePresetSelect();
+    await refreshMappingsList();
+  }
+
+  /**
+   * Refresh the presets list table
+   */
+  async function refreshPresetsList() {
+    const config = await window.Storage.getLayoutPresets();
+    const presets = config.presets || {};
+    const entries = Object.entries(presets);
+
+    // Sort by timestamp (newest first)
+    entries.sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0));
+
+    // Update count
+    if (elements.presetCount) {
+      elements.presetCount.textContent = entries.length;
+    }
+
+    if (entries.length === 0) {
+      if (elements.presetsTbody) elements.presetsTbody.innerHTML = "";
+      if (elements.presetsEmpty) elements.presetsEmpty.style.display = "block";
+      if (elements.presetsTable) elements.presetsTable.style.display = "none";
+      return;
+    }
+
+    if (elements.presetsEmpty) elements.presetsEmpty.style.display = "none";
+    if (elements.presetsTable) elements.presetsTable.style.display = "table";
+
+    if (elements.presetsTbody) {
+      elements.presetsTbody.innerHTML = entries
+        .map(([name, data]) => {
+          const settings = formatPresetSettings(data);
+          const dateDisplay = formatDate(data.timestamp);
+          const isActive = config.activePreset === name;
+
+          return `
+          <tr data-preset="${escapeHtml(name)}" class="${isActive ? "active-preset" : ""}">
+            <td class="preset-name-cell">
+              <span class="preset-name">${escapeHtml(name)}</span>
+              ${isActive ? '<span class="active-badge">Active</span>' : ""}
+            </td>
+            <td class="preset-settings">${settings}</td>
+            <td>${dateDisplay}</td>
+            <td class="preset-actions">
+              <button class="secondary-button apply-preset"
+                      data-preset="${escapeHtml(name)}"
+                      title="Apply this preset now">
+                Apply
+              </button>
+              <button class="secondary-button edit-preset"
+                      data-preset="${escapeHtml(name)}"
+                      title="Edit preset settings">
+                Edit
+              </button>
+              <button class="secondary-button delete-preset"
+                      data-preset="${escapeHtml(name)}"
+                      title="Delete preset">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+        })
+        .join("");
+
+      // Attach event handlers
+      elements.presetsTbody.querySelectorAll(".apply-preset").forEach((btn) => {
+        btn.addEventListener("click", handleApplyPreset);
+      });
+      elements.presetsTbody.querySelectorAll(".edit-preset").forEach((btn) => {
+        btn.addEventListener("click", handleEditPreset);
+      });
+      elements.presetsTbody
+        .querySelectorAll(".delete-preset")
+        .forEach((btn) => {
+          btn.addEventListener("click", handleDeletePreset);
+        });
+    }
+  }
+
+  /**
+   * Format preset settings for display
+   */
+  function formatPresetSettings(data) {
+    const features = [];
+    if (data.darkMode) features.push("Dark");
+    if (data.darkModeType === "oled") features.push("OLED");
+    if (data.compactMode) features.push("Compact");
+    if (data.textOnlyMode) features.push("Text-only");
+    if (data.uncropImages) features.push("Uncrop");
+    if (data.hideJoinButtons) features.push("No join");
+    if (data.hideActionLinks) features.push("No actions");
+    if (data.colorCodedComments) features.push("Color comments");
+    if (data.customCSS) features.push("Custom CSS");
+
+    return features.length > 0 ? features.join(", ") : "Default";
+  }
+
+  /**
+   * Refresh the active preset dropdown
+   */
+  async function refreshActivePresetSelect() {
+    const config = await window.Storage.getLayoutPresets();
+    const presets = config.presets || {};
+    const names = Object.keys(presets).sort();
+
+    if (elements.activePresetSelect) {
+      // Keep the first option (None)
+      const firstOption = elements.activePresetSelect.options[0];
+      elements.activePresetSelect.innerHTML = "";
+      elements.activePresetSelect.appendChild(firstOption);
+
+      // Add preset options
+      names.forEach((name) => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        elements.activePresetSelect.appendChild(option);
+      });
+
+      // Set current value
+      elements.activePresetSelect.value = config.activePreset || "";
+    }
+
+    // Also update the mapping preset dropdown
+    if (elements.mappingPreset) {
+      const firstOption = elements.mappingPreset.options[0];
+      elements.mappingPreset.innerHTML = "";
+      elements.mappingPreset.appendChild(firstOption);
+
+      names.forEach((name) => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        elements.mappingPreset.appendChild(option);
+      });
+    }
+  }
+
+  /**
+   * Refresh the subreddit mappings list
+   */
+  async function refreshMappingsList() {
+    const config = await window.Storage.getLayoutPresets();
+    const mappings = config.subredditLayouts || {};
+    const entries = Object.entries(mappings);
+
+    // Sort alphabetically
+    entries.sort((a, b) => a[0].localeCompare(b[0]));
+
+    // Update count
+    if (elements.mappingCount) {
+      elements.mappingCount.textContent = entries.length;
+    }
+
+    if (entries.length === 0) {
+      if (elements.mappingsTbody) elements.mappingsTbody.innerHTML = "";
+      if (elements.mappingsEmpty)
+        elements.mappingsEmpty.style.display = "block";
+      if (elements.mappingsTable) elements.mappingsTable.style.display = "none";
+      return;
+    }
+
+    if (elements.mappingsEmpty) elements.mappingsEmpty.style.display = "none";
+    if (elements.mappingsTable) elements.mappingsTable.style.display = "table";
+
+    if (elements.mappingsTbody) {
+      elements.mappingsTbody.innerHTML = entries
+        .map(([subreddit, presetName]) => {
+          return `
+          <tr data-subreddit="${escapeHtml(subreddit)}">
+            <td>
+              <a href="https://old.reddit.com/r/${escapeHtml(subreddit)}/"
+                 target="_blank" rel="noopener">
+                r/${escapeHtml(subreddit)}
+              </a>
+            </td>
+            <td>${escapeHtml(presetName)}</td>
+            <td>
+              <button class="secondary-button delete-mapping"
+                      data-subreddit="${escapeHtml(subreddit)}"
+                      title="Remove mapping">
+                Remove
+              </button>
+            </td>
+          </tr>
+        `;
+        })
+        .join("");
+
+      // Attach event handlers
+      elements.mappingsTbody
+        .querySelectorAll(".delete-mapping")
+        .forEach((btn) => {
+          btn.addEventListener("click", handleDeleteMapping);
+        });
+    }
+  }
+
+  /**
+   * Handle layout presets toggle
+   */
+  async function handleLayoutPresetsToggle(e) {
+    const config = await window.Storage.getLayoutPresets();
+    config.enabled = e.target.checked;
+    await window.Storage.setLayoutPresets(config);
+
+    // Notify content scripts
+    notifyContentScripts("REFRESH_LAYOUT_PRESETS");
+    showToast(`Layout presets ${config.enabled ? "enabled" : "disabled"}`);
+  }
+
+  /**
+   * Handle create preset from current settings
+   */
+  async function handleCreatePreset() {
+    const name = elements.newPresetName?.value.trim();
+
+    if (!name) {
+      showToast("Please enter a preset name", "error");
+      return;
+    }
+
+    if (name.length > 50) {
+      showToast("Preset name is too long (max 50 characters)", "error");
+      return;
+    }
+
+    // Check if preset already exists
+    const existing = await window.Storage.getLayoutPreset(name);
+    if (existing) {
+      if (!confirm(`Preset "${name}" already exists. Overwrite it?`)) {
+        return;
+      }
+    }
+
+    // Get current settings
+    const feedConfig = await window.Storage.getFeedEnhancements();
+    const darkModeConfig = await window.Storage.getDarkMode();
+    const commentConfig = await window.Storage.getCommentEnhancements();
+
+    const presetData = {
+      darkMode:
+        darkModeConfig.enabled === "dark" || darkModeConfig.enabled === "oled",
+      darkModeType: darkModeConfig.enabled === "oled" ? "oled" : "dark",
+      compactMode: feedConfig.compactMode || false,
+      textOnlyMode: feedConfig.textOnlyMode || false,
+      uncropImages: feedConfig.uncropImages || false,
+      hideJoinButtons: feedConfig.hideJoinButtons || false,
+      hideActionLinks: feedConfig.hideActionLinks || false,
+      colorCodedComments: commentConfig.colorCodedComments !== false,
+      colorPalette: commentConfig.colorPalette || "standard",
+      customCSS: feedConfig.customCSS || "",
+    };
+
+    await window.Storage.setLayoutPreset(name, presetData);
+
+    // Clear input
+    if (elements.newPresetName) {
+      elements.newPresetName.value = "";
+    }
+
+    // Refresh UI
+    await loadLayoutPresets();
+    showToast(`Preset "${name}" created`);
+  }
+
+  /**
+   * Handle apply preset
+   */
+  async function handleApplyPreset(e) {
+    const presetName = e.target.dataset.preset;
+    await applyPresetToCurrentSettings(presetName);
+    showToast(`Preset "${presetName}" applied`);
+  }
+
+  /**
+   * Apply a preset to current settings
+   */
+  async function applyPresetToCurrentSettings(presetName) {
+    const preset = await window.Storage.getLayoutPreset(presetName);
+    if (!preset) {
+      showToast(`Preset "${presetName}" not found`, "error");
+      return;
+    }
+
+    // Apply dark mode settings
+    const darkModeConfig = await window.Storage.getDarkMode();
+    if (preset.darkMode) {
+      darkModeConfig.enabled = preset.darkModeType || "dark";
+    } else {
+      darkModeConfig.enabled = "light";
+    }
+    await window.Storage.setDarkMode(darkModeConfig);
+
+    // Apply feed enhancements
+    const feedConfig = await window.Storage.getFeedEnhancements();
+    feedConfig.compactMode = preset.compactMode || false;
+    feedConfig.textOnlyMode = preset.textOnlyMode || false;
+    feedConfig.uncropImages = preset.uncropImages || false;
+    feedConfig.hideJoinButtons = preset.hideJoinButtons || false;
+    feedConfig.hideActionLinks = preset.hideActionLinks || false;
+    if (preset.customCSS) {
+      feedConfig.customCSS = preset.customCSS;
+      feedConfig.customCSSEnabled = true;
+    }
+    await window.Storage.setFeedEnhancements(feedConfig);
+
+    // Apply comment enhancements
+    const commentConfig = await window.Storage.getCommentEnhancements();
+    commentConfig.colorCodedComments = preset.colorCodedComments !== false;
+    commentConfig.colorPalette = preset.colorPalette || "standard";
+    await window.Storage.setCommentEnhancements(commentConfig);
+
+    // Set as active preset
+    await window.Storage.setActivePreset(presetName);
+
+    // Reload settings in UI
+    await loadDarkModeSettings();
+    await loadFeedEnhancements();
+    await loadCommentEnhancementsSettings();
+    await refreshPresetsList();
+    await refreshActivePresetSelect();
+
+    // Notify content scripts
+    notifyContentScripts("REFRESH_DARK_MODE");
+    notifyContentScripts("REFRESH_FEED_ENHANCEMENTS");
+    notifyContentScripts("REFRESH_COLOR_CODED_COMMENTS");
+  }
+
+  /**
+   * Handle edit preset
+   */
+  async function handleEditPreset(e) {
+    const presetName = e.target.dataset.preset;
+    const preset = await window.Storage.getLayoutPreset(presetName);
+
+    if (!preset) {
+      showToast(`Preset "${presetName}" not found`, "error");
+      return;
+    }
+
+    // Show modal
+    const modal = document.getElementById("preset-edit-modal");
+    if (!modal) return;
+
+    // Populate fields
+    document.getElementById("preset-edit-name").value = presetName;
+    document.getElementById("preset-dark-mode").checked =
+      preset.darkMode || false;
+    document.getElementById("preset-dark-mode-type").value =
+      preset.darkModeType || "dark";
+    document.getElementById("preset-compact-mode").checked =
+      preset.compactMode || false;
+    document.getElementById("preset-text-only").checked =
+      preset.textOnlyMode || false;
+    document.getElementById("preset-uncrop-images").checked =
+      preset.uncropImages || false;
+    document.getElementById("preset-hide-join").checked =
+      preset.hideJoinButtons || false;
+    document.getElementById("preset-hide-actions").checked =
+      preset.hideActionLinks || false;
+    document.getElementById("preset-color-comments").checked =
+      preset.colorCodedComments !== false;
+    document.getElementById("preset-color-palette").value =
+      preset.colorPalette || "standard";
+    document.getElementById("preset-custom-css").value = preset.customCSS || "";
+
+    // Store original name for rename detection
+    modal.dataset.originalName = presetName;
+
+    // Show modal
+    modal.style.display = "flex";
+  }
+
+  /**
+   * Handle save preset from edit modal
+   */
+  async function handleSavePresetEdit() {
+    const modal = document.getElementById("preset-edit-modal");
+    if (!modal) return;
+
+    const originalName = modal.dataset.originalName;
+    const newName = document.getElementById("preset-edit-name").value.trim();
+
+    if (!newName) {
+      showToast("Preset name is required", "error");
+      return;
+    }
+
+    // Check for rename collision
+    if (newName !== originalName) {
+      const existing = await window.Storage.getLayoutPreset(newName);
+      if (existing) {
+        showToast(`Preset "${newName}" already exists`, "error");
+        return;
+      }
+    }
+
+    const presetData = {
+      darkMode: document.getElementById("preset-dark-mode").checked,
+      darkModeType: document.getElementById("preset-dark-mode-type").value,
+      compactMode: document.getElementById("preset-compact-mode").checked,
+      textOnlyMode: document.getElementById("preset-text-only").checked,
+      uncropImages: document.getElementById("preset-uncrop-images").checked,
+      hideJoinButtons: document.getElementById("preset-hide-join").checked,
+      hideActionLinks: document.getElementById("preset-hide-actions").checked,
+      colorCodedComments: document.getElementById("preset-color-comments")
+        .checked,
+      colorPalette: document.getElementById("preset-color-palette").value,
+      customCSS: document.getElementById("preset-custom-css").value,
+    };
+
+    // If renamed, delete old and create new
+    if (newName !== originalName) {
+      await window.Storage.deleteLayoutPreset(originalName);
+    }
+
+    await window.Storage.setLayoutPreset(newName, presetData);
+
+    // Close modal
+    modal.style.display = "none";
+
+    // Refresh UI
+    await loadLayoutPresets();
+    showToast(`Preset "${newName}" saved`);
+  }
+
+  /**
+   * Handle delete preset
+   */
+  async function handleDeletePreset(e) {
+    const presetName = e.target.dataset.preset;
+
+    if (!confirm(`Delete preset "${presetName}"? This cannot be undone.`)) {
+      return;
+    }
+
+    await window.Storage.deleteLayoutPreset(presetName);
+    await loadLayoutPresets();
+    showToast(`Preset "${presetName}" deleted`);
+  }
+
+  /**
+   * Handle active preset change
+   */
+  async function handleActivePresetChange(e) {
+    const presetName = e.target.value || null;
+
+    if (presetName) {
+      await applyPresetToCurrentSettings(presetName);
+    } else {
+      await window.Storage.setActivePreset(null);
+      await refreshPresetsList();
+    }
+  }
+
+  /**
+   * Handle add subreddit mapping
+   */
+  async function handleAddMapping() {
+    const subreddit = elements.mappingSubreddit?.value
+      .trim()
+      .toLowerCase()
+      .replace(/^r\//, "");
+    const presetName = elements.mappingPreset?.value;
+
+    if (!subreddit) {
+      showToast("Please enter a subreddit name", "error");
+      return;
+    }
+
+    if (!presetName) {
+      showToast("Please select a preset", "error");
+      return;
+    }
+
+    try {
+      await window.Storage.setSubredditLayout(subreddit, presetName);
+
+      // Clear inputs
+      if (elements.mappingSubreddit) elements.mappingSubreddit.value = "";
+      if (elements.mappingPreset) elements.mappingPreset.value = "";
+
+      await refreshMappingsList();
+      notifyContentScripts("REFRESH_LAYOUT_PRESETS");
+      showToast(`Layout set for r/${subreddit}`);
+    } catch (error) {
+      showToast(error.message, "error");
+    }
+  }
+
+  /**
+   * Handle delete subreddit mapping
+   */
+  async function handleDeleteMapping(e) {
+    const subreddit = e.target.dataset.subreddit;
+
+    if (!confirm(`Remove layout for r/${subreddit}?`)) {
+      return;
+    }
+
+    await window.Storage.deleteSubredditLayout(subreddit);
+    await refreshMappingsList();
+    notifyContentScripts("REFRESH_LAYOUT_PRESETS");
+    showToast(`Layout removed for r/${subreddit}`);
+  }
+
+  /**
+   * Handle clear all mappings
+   */
+  async function handleClearAllMappings() {
+    const config = await window.Storage.getLayoutPresets();
+    const count = Object.keys(config.subredditLayouts || {}).length;
+
+    if (count === 0) {
+      showToast("No mappings to clear");
+      return;
+    }
+
+    if (!confirm(`Clear all ${count} subreddit layout mappings?`)) {
+      return;
+    }
+
+    await window.Storage.clearSubredditLayouts();
+    await refreshMappingsList();
+    notifyContentScripts("REFRESH_LAYOUT_PRESETS");
+    showToast("All subreddit mappings cleared");
+  }
+
+  /**
+   * Handle clear all presets
+   */
+  async function handleClearAllPresets() {
+    const config = await window.Storage.getLayoutPresets();
+    const count = Object.keys(config.presets || {}).length;
+
+    if (count === 0) {
+      showToast("No presets to clear");
+      return;
+    }
+
+    if (
+      !confirm(
+        `Clear all ${count} presets and their subreddit mappings? This cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    await window.Storage.clearLayoutPresets();
+    await loadLayoutPresets();
+    showToast("All presets cleared");
+  }
+
+  /**
+   * Handle export presets
+   */
+  async function handleExportPresets() {
+    const config = await window.Storage.getLayoutPresets();
+    const exportData = {
+      _exportVersion: 1,
+      _exportDate: new Date().toISOString(),
+      presets: config.presets || {},
+      subredditLayouts: config.subredditLayouts || {},
+      activePreset: config.activePreset,
+    };
+
+    const json = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `layout-presets-${Date.now()}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+    showToast("Presets exported");
+  }
+
+  /**
+   * Handle import presets
+   */
+  async function handleImportPresets() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+
+        // Validate structure
+        if (!imported.presets || typeof imported.presets !== "object") {
+          throw new Error("Invalid format: missing presets");
+        }
+
+        const config = await window.Storage.getLayoutPresets();
+
+        // Merge presets
+        config.presets = { ...config.presets, ...imported.presets };
+
+        // Merge subreddit layouts if present
+        if (imported.subredditLayouts) {
+          config.subredditLayouts = {
+            ...config.subredditLayouts,
+            ...imported.subredditLayouts,
+          };
+        }
+
+        await window.Storage.setLayoutPresets(config);
+        await loadLayoutPresets();
+
+        const presetCount = Object.keys(imported.presets).length;
+        showToast(
+          `Imported ${presetCount} preset${presetCount !== 1 ? "s" : ""}`
+        );
+      } catch (err) {
+        showToast("Failed to import: " + err.message, "error");
+      }
+    };
+
+    input.click();
+  }
+
+  /**
+   * Notify content scripts of changes
+   */
+  function notifyContentScripts(messageType, data = {}) {
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, { type: messageType, ...data });
+      });
+    });
+  }
+
+  /**
+   * Initialize layout presets event listeners
+   */
+  function initLayoutPresetsListeners() {
+    // Toggle
+    if (elements.layoutPresetsEnabled) {
+      elements.layoutPresetsEnabled.addEventListener(
+        "change",
+        handleLayoutPresetsToggle
+      );
+    }
+
+    // Create preset
+    if (elements.createPresetBtn) {
+      elements.createPresetBtn.addEventListener("click", handleCreatePreset);
+    }
+
+    // Active preset
+    if (elements.activePresetSelect) {
+      elements.activePresetSelect.addEventListener(
+        "change",
+        handleActivePresetChange
+      );
+    }
+
+    // Add mapping
+    if (elements.addMappingBtn) {
+      elements.addMappingBtn.addEventListener("click", handleAddMapping);
+    }
+
+    // Clear all mappings
+    if (elements.clearAllMappings) {
+      elements.clearAllMappings.addEventListener(
+        "click",
+        handleClearAllMappings
+      );
+    }
+
+    // Clear all presets
+    if (elements.clearAllPresets) {
+      elements.clearAllPresets.addEventListener("click", handleClearAllPresets);
+    }
+
+    // Export/Import
+    if (elements.exportPresets) {
+      elements.exportPresets.addEventListener("click", handleExportPresets);
+    }
+    if (elements.importPresets) {
+      elements.importPresets.addEventListener("click", handleImportPresets);
+    }
+
+    // Preset edit modal
+    const modal = document.getElementById("preset-edit-modal");
+    if (modal) {
+      const closeBtn = document.getElementById("preset-edit-close");
+      const saveBtn = document.getElementById("preset-edit-save");
+      const cancelBtn = document.getElementById("preset-edit-cancel");
+
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+        });
+      }
+      if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+          modal.style.display = "none";
+        });
+      }
+      if (saveBtn) {
+        saveBtn.addEventListener("click", handleSavePresetEdit);
+      }
+
+      // Close on overlay click
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+    }
+  }
+
+  /**
+   * Load privacy settings
+   */
+  async function loadPrivacySettings() {
+    const privacy = await window.Storage.getPrivacy();
+    const stats = await window.Storage.getTrackingStats();
+
+    // Toggles
+    elements.trackingRemovalEnabled.checked = privacy.removeTracking !== false;
+    elements.trackingBadgeEnabled.checked = privacy.showTrackingBadge !== false;
+
+    // Referrer policy
+    const policy = privacy.referrerPolicy || "same-origin";
+    if (policy === "default") {
+      elements.referrerDefault.checked = true;
+    } else if (policy === "same-origin") {
+      elements.referrerSameOrigin.checked = true;
+    } else if (policy === "origin") {
+      elements.referrerOrigin.checked = true;
+    } else if (policy === "no-referrer") {
+      elements.referrerNoReferrer.checked = true;
+    }
+
+    // Tracking parameters
+    const params = privacy.trackingParams || [];
+    elements.trackingParams.value = params.join("\n");
+
+    // Statistics by category
+    elements.trackingTotalCleaned.textContent = formatNumber(
+      stats.totalCleaned || 0
+    );
+    elements.trackingLastCleaned.textContent = stats.lastCleaned
+      ? new Date(stats.lastCleaned).toLocaleString()
+      : "Never";
+    elements.trackingUtmCount.textContent = formatNumber(
+      stats.byType?.utm || 0
+    );
+    if (elements.trackingSocialCount) {
+      elements.trackingSocialCount.textContent = formatNumber(
+        stats.byType?.social || 0
+      );
+    }
+    if (elements.trackingAnalyticsCount) {
+      elements.trackingAnalyticsCount.textContent = formatNumber(
+        stats.byType?.analytics || 0
+      );
+    }
+    if (elements.trackingAffiliateCount) {
+      elements.trackingAffiliateCount.textContent = formatNumber(
+        stats.byType?.affiliate || 0
+      );
+    }
+    if (elements.trackingRedditCount) {
+      elements.trackingRedditCount.textContent = formatNumber(
+        stats.byType?.reddit || 0
+      );
+    }
+    elements.trackingOtherCount.textContent = formatNumber(
+      stats.byType?.other || 0
+    );
+
+    // Load privacy score
+    await updatePrivacyScore();
+  }
+
+  /**
+   * Update privacy score display
+   */
+  async function updatePrivacyScore() {
+    if (!elements.privacyScoreValue) return;
+
+    const score = await window.Storage.getPrivacyScore();
+    const recommendations = await window.Storage.getPrivacyRecommendations();
+
+    // Update score value
+    elements.privacyScoreValue.textContent = score;
+
+    // Update circle fill (100 = full circle)
+    if (elements.privacyScoreFill) {
+      elements.privacyScoreFill.style.strokeDasharray = `${score}, 100`;
+
+      // Update color class based on score
+      elements.privacyScoreFill.classList.remove(
+        "score-low",
+        "score-medium",
+        "score-high"
+      );
+      if (score < 40) {
+        elements.privacyScoreFill.classList.add("score-low");
+      } else if (score < 70) {
+        elements.privacyScoreFill.classList.add("score-medium");
+      } else {
+        elements.privacyScoreFill.classList.add("score-high");
+      }
+    }
+
+    // Update status text
+    if (elements.privacyScoreStatus) {
+      let statusText = "";
+      let statusClass = "";
+      if (score < 40) {
+        statusText = "Needs improvement";
+        statusClass = "score-low";
+      } else if (score < 70) {
+        statusText = "Good protection";
+        statusClass = "score-medium";
+      } else {
+        statusText = "Excellent protection";
+        statusClass = "score-high";
+      }
+      elements.privacyScoreStatus.textContent = statusText;
+      elements.privacyScoreStatus.className =
+        "privacy-score-status " + statusClass;
+    }
+
+    // Update recommendations
+    if (elements.privacyRecommendations && recommendations.length > 0) {
+      const html =
+        "<strong>Tips:</strong><ul>" +
+        recommendations.map((r) => `<li>${escapeHtml(r)}</li>`).join("") +
+        "</ul>";
+      elements.privacyRecommendations.innerHTML = html;
+    } else if (elements.privacyRecommendations) {
+      elements.privacyRecommendations.innerHTML = "";
+    }
+  }
+
+  /**
+   * Export privacy report as JSON
+   */
+  async function exportPrivacyReport() {
+    const report = await window.Storage.getPrivacyReport();
+
+    const blob = new Blob([JSON.stringify(report, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `privacy-report-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast("Privacy report exported");
+  }
+
+  /**
+   * Handle privacy toggle
+   */
+  async function handlePrivacyToggle(e) {
+    const privacy = await window.Storage.getPrivacy();
+
+    if (e.target === elements.trackingRemovalEnabled) {
+      privacy.removeTracking = e.target.checked;
+    } else if (e.target === elements.trackingBadgeEnabled) {
+      privacy.showTrackingBadge = e.target.checked;
+    }
+
+    await window.Storage.setPrivacy(privacy);
+
+    // Update privacy score
+    await updatePrivacyScore();
+
+    // Notify content scripts
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "REFRESH_PRIVACY",
+          privacy: privacy,
+        });
+      });
+    });
+
+    showToast("Privacy settings updated");
+  }
+
+  /**
+   * Handle referrer policy change
+   */
+  async function handleReferrerPolicyChange(e) {
+    const privacy = await window.Storage.getPrivacy();
+    privacy.referrerPolicy = e.target.value;
+
+    await window.Storage.setPrivacy(privacy);
+
+    // Update privacy score
+    await updatePrivacyScore();
+
+    // Notify content scripts
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, {
+          type: "REFRESH_PRIVACY",
+          privacy: privacy,
+        });
+      });
+    });
+
+    showToast("Referrer policy updated");
+  }
+
+  /**
+   * Handle save tracking parameters
+   */
+  async function handleSaveTrackingParams() {
+    const text = elements.trackingParams.value.trim();
+    const params = text
+      .split("\n")
+      .map((p) => p.trim())
+      .filter((p) => p.length > 0);
+
+    if (params.length === 0) {
+      showToast("Please enter at least one tracking parameter", "error");
+      return;
+    }
+
+    const privacy = await window.Storage.getPrivacy();
+    privacy.trackingParams = params;
+
+    await window.Storage.setPrivacy(privacy);
+
+    showToast(`Saved ${params.length} tracking parameters`);
+  }
+
+  /**
+   * Handle reset tracking parameters to defaults
+   */
+  async function handleResetTrackingParams() {
+    if (!confirm("Reset tracking parameters to defaults?")) return;
+
+    const privacy = await window.Storage.getPrivacy();
+
+    // Get default tracking params from storage.js defaults
+    const defaults = [
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "utm_term",
+      "utm_content",
+      "utm_name",
+      "utm_cid",
+      "fbclid",
+      "gclid",
+      "msclkid",
+      "twclid",
+      "li_fat_id",
+      "igshid",
+      "ref",
+      "ref_source",
+      "ref_url",
+      "referrer",
+      "share_id",
+      "shared",
+      "click_id",
+      "clickid",
+      "_ga",
+      "rdt_cid",
+      "$deep_link",
+      "$3p",
+      "_branch_match_id",
+      "_branch_referrer",
+      "mc_cid",
+      "mc_eid",
+      "yclid",
+      "zanpid",
+      "rb_clickid",
+    ];
+
+    privacy.trackingParams = defaults;
+    await window.Storage.setPrivacy(privacy);
+
+    elements.trackingParams.value = defaults.join("\n");
+
+    showToast("Tracking parameters reset to defaults");
+  }
+
+  /**
+   * Handle clear tracking statistics
+   */
+  async function handleClearTrackingStats() {
+    if (!confirm("Clear all tracking statistics?")) return;
+
+    await window.Storage.clearTrackingStats();
+    await loadPrivacySettings();
+
+    showToast("Tracking statistics cleared");
+  }
+
+  /**
    * Load nag blocking settings
    */
   async function loadNagBlockingSettings() {
@@ -859,6 +3160,13 @@
     elements.blockPremiumBanners.checked =
       nagBlocking.blockPremiumBanners !== false;
     elements.blockAppPrompts.checked = nagBlocking.blockAppPrompts !== false;
+    // v11.2.0: Advanced content blocking
+    elements.blockAIContent.checked = nagBlocking.blockAIContent !== false;
+    elements.blockTrending.checked = nagBlocking.blockTrending !== false;
+    elements.blockRecommended.checked = nagBlocking.blockRecommended !== false;
+    elements.blockCommunityHighlights.checked =
+      nagBlocking.blockCommunityHighlights !== false;
+    elements.blockMorePosts.checked = nagBlocking.blockMorePosts !== false;
   }
 
   /**
@@ -924,6 +3232,17 @@
     const filtering = await window.Storage.getContentFiltering();
 
     elements.caseSensitive.checked = filtering.caseSensitive || false;
+
+    // v12.1.0: Advanced filtering options
+    if (document.getElementById("use-regex")) {
+      document.getElementById("use-regex").checked =
+        filtering.useRegex || false;
+    }
+    if (document.getElementById("filter-content")) {
+      document.getElementById("filter-content").checked =
+        filtering.filterContent || false;
+    }
+
     elements.keywordList.innerHTML = "";
     elements.keywordEmpty.hidden = filtering.mutedKeywords.length > 0;
 
@@ -944,6 +3263,63 @@
         removeMutedKeyword(keyword);
       });
     });
+  }
+
+  /**
+   * Load flair filtering settings
+   */
+  async function loadFlairFiltering() {
+    const filtering = await window.Storage.getContentFiltering();
+
+    const filterByFlair = document.getElementById("filter-by-flair");
+    const flairList = document.getElementById("flair-list");
+    const flairEmpty = document.getElementById("flair-empty");
+
+    if (filterByFlair) {
+      filterByFlair.checked = filtering.filterByFlair || false;
+    }
+
+    if (flairList) {
+      flairList.innerHTML = "";
+      const flairs = filtering.mutedFlairs || [];
+      flairEmpty.hidden = flairs.length > 0;
+
+      for (const flair of flairs) {
+        const li = document.createElement("li");
+        li.className = "tag";
+        li.innerHTML = `
+          ${escapeHtml(flair)}
+          <button class="remove" data-flair="${escapeHtml(flair)}">×</button>
+        `;
+        flairList.appendChild(li);
+      }
+
+      // Attach remove handlers
+      flairList.querySelectorAll(".remove").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const flair = btn.dataset.flair;
+          removeMutedFlair(flair);
+        });
+      });
+    }
+  }
+
+  /**
+   * Load score filtering settings
+   */
+  async function loadScoreFiltering() {
+    const filtering = await window.Storage.getContentFiltering();
+
+    const filterByScore = document.getElementById("filter-by-score");
+    const minScore = document.getElementById("min-score");
+
+    if (filterByScore) {
+      filterByScore.checked = filtering.filterByScore || false;
+    }
+
+    if (minScore) {
+      minScore.value = filtering.minScore || 0;
+    }
   }
 
   /**
@@ -1208,6 +3584,35 @@
   }
 
   /**
+   * Handle accessibility preference changes
+   */
+  async function handleAccessibilityChange() {
+    const accessibility = {
+      fontSize: elements.fontSize?.value || "medium",
+      reduceMotion: elements.reduceMotion?.value || "auto",
+      highContrast: elements.highContrastElements?.checked || false,
+    };
+
+    await window.Storage.setAccessibility(accessibility);
+
+    // Notify all old.reddit.com tabs to refresh accessibility settings
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_ACCESSIBILITY" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Accessibility settings saved");
+  }
+
+  /**
    * Handle comment enhancements preference changes
    */
   async function handleCommentEnhancementsChange() {
@@ -1219,6 +3624,8 @@
       navButtonPosition: elements.navButtonPosition.value,
       inlineImages: elements.inlineImages.checked,
       maxImageWidth: parseInt(elements.maxImageWidth.value, 10),
+      // v11.2.0: Jump to top keyboard shortcut
+      jumpToTopShortcut: elements.jumpToTopShortcut.checked,
     };
 
     await window.Storage.setCommentEnhancements(enhancements);
@@ -1255,6 +3662,47 @@
   }
 
   /**
+   * Handle comment minimap preference changes
+   */
+  async function handleCommentMinimapChange() {
+    const config = {
+      enabled: elements.minimapEnabled.checked,
+      position: elements.minimapPosition.value,
+      width: parseInt(elements.minimapWidth.value, 10),
+      opacity: parseInt(elements.minimapOpacity.value, 10) / 100,
+      showViewportIndicator: elements.minimapViewport.checked,
+      useDepthColors: elements.minimapDepthColors.checked,
+      collapsedIndicator: elements.minimapCollapsed.checked,
+      autoHide: elements.minimapAutohide.checked,
+    };
+
+    await window.Storage.setCommentMinimap(config);
+
+    // Update dependent settings visibility
+    updateMinimapDependentSettings(config.enabled);
+
+    // Update display values
+    elements.minimapWidthValue.textContent = `${config.width}px`;
+    elements.minimapOpacityValue.textContent = `${Math.round(config.opacity * 100)}%`;
+
+    // Notify all old.reddit.com tabs to refresh minimap
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_COMMENT_MINIMAP" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Comment minimap settings saved");
+  }
+
+  /**
    * Handle nag blocking preference changes
    */
   async function handleNagBlockingChange() {
@@ -1264,6 +3712,12 @@
       blockEmailVerification: elements.blockEmailVerification.checked,
       blockPremiumBanners: elements.blockPremiumBanners.checked,
       blockAppPrompts: elements.blockAppPrompts.checked,
+      // v11.2.0: Advanced content blocking
+      blockAIContent: elements.blockAIContent.checked,
+      blockTrending: elements.blockTrending.checked,
+      blockRecommended: elements.blockRecommended.checked,
+      blockCommunityHighlights: elements.blockCommunityHighlights.checked,
+      blockMorePosts: elements.blockMorePosts.checked,
     };
 
     await window.Storage.setNagBlocking(nagBlocking);
@@ -1601,6 +4055,290 @@
     });
 
     showToast("Case sensitivity updated");
+  }
+
+  /**
+   * Handle use regex toggle
+   */
+  async function handleUseRegexChange() {
+    const filtering = await window.Storage.getContentFiltering();
+    filtering.useRegex = document.getElementById("use-regex").checked;
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Regex mode updated");
+  }
+
+  /**
+   * Handle filter content toggle
+   */
+  async function handleFilterContentChange() {
+    const filtering = await window.Storage.getContentFiltering();
+    filtering.filterContent = document.getElementById("filter-content").checked;
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Content filtering updated");
+  }
+
+  /**
+   * Handle filter by flair toggle
+   */
+  async function handleFilterByFlairChange() {
+    const filtering = await window.Storage.getContentFiltering();
+    filtering.filterByFlair =
+      document.getElementById("filter-by-flair").checked;
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Flair filtering updated");
+  }
+
+  /**
+   * Handle filter by score toggle
+   */
+  async function handleFilterByScoreChange() {
+    const filtering = await window.Storage.getContentFiltering();
+    filtering.filterByScore =
+      document.getElementById("filter-by-score").checked;
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast("Score filtering updated");
+  }
+
+  /**
+   * Handle min score change
+   */
+  async function handleMinScoreChange() {
+    const filtering = await window.Storage.getContentFiltering();
+    const minScore = parseInt(document.getElementById("min-score").value, 10);
+    filtering.minScore = isNaN(minScore) ? 0 : minScore;
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    showToast(`Minimum score set to ${filtering.minScore}`);
+  }
+
+  /**
+   * Add flair to mute list
+   */
+  async function handleAddFlair() {
+    const flairInput = document.getElementById("flair-input");
+    const flair = flairInput.value.trim();
+
+    if (!flair) {
+      showToast("Please enter a flair text", "error");
+      return;
+    }
+
+    const filtering = await window.Storage.getContentFiltering();
+    const flairs = filtering.mutedFlairs || [];
+
+    if (flairs.includes(flair)) {
+      showToast("Flair already muted", "error");
+      return;
+    }
+
+    if (flairs.length >= 100) {
+      showToast("Maximum 100 flairs allowed", "error");
+      return;
+    }
+
+    flairs.push(flair);
+    filtering.mutedFlairs = flairs;
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    flairInput.value = "";
+    await loadFlairFiltering();
+
+    showToast(`"${flair}" flair muted`);
+  }
+
+  /**
+   * Remove flair from mute list
+   */
+  async function removeMutedFlair(flair) {
+    const filtering = await window.Storage.getContentFiltering();
+    filtering.mutedFlairs = (filtering.mutedFlairs || []).filter(
+      (f) => f !== flair
+    );
+    await window.Storage.setContentFiltering(filtering);
+
+    // Notify tabs
+    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+      handleLastError();
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(
+          tab.id,
+          { type: "REFRESH_KEYWORD_FILTERING" },
+          () => {
+            void chrome.runtime.lastError;
+          }
+        );
+      });
+    });
+
+    await loadFlairFiltering();
+    showToast(`"${flair}" flair unmuted`);
+  }
+
+  /**
+   * Export flairs list
+   */
+  async function handleExportFlairs() {
+    const filtering = await window.Storage.getContentFiltering();
+    const flairs = filtering.mutedFlairs || [];
+
+    const blob = new Blob([JSON.stringify(flairs, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `orr-muted-flairs-${new Date().toISOString().split("T")[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast("Flair list exported");
+  }
+
+  /**
+   * Import flairs list
+   */
+  async function handleImportFlairs() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+
+    input.onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const text = await file.text();
+        const imported = JSON.parse(text);
+
+        if (!Array.isArray(imported)) {
+          showToast("Invalid format: must be JSON array", "error");
+          return;
+        }
+
+        const filtering = await window.Storage.getContentFiltering();
+        const existing = filtering.mutedFlairs || [];
+        const newFlairs = imported.filter(
+          (f) => typeof f === "string" && !existing.includes(f)
+        );
+
+        if (newFlairs.length === 0) {
+          showToast("All flairs already muted", "error");
+          return;
+        }
+
+        filtering.mutedFlairs = [...existing, ...newFlairs];
+        await window.Storage.setContentFiltering(filtering);
+
+        // Notify tabs
+        chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
+          handleLastError();
+          tabs.forEach((tab) => {
+            chrome.tabs.sendMessage(
+              tab.id,
+              { type: "REFRESH_KEYWORD_FILTERING" },
+              () => {
+                void chrome.runtime.lastError;
+              }
+            );
+          });
+        });
+
+        await loadFlairFiltering();
+        showToast(`${newFlairs.length} flairs imported`);
+      } catch (error) {
+        showToast(`Import failed: ${error.message}`, "error");
+      }
+    };
+
+    input.click();
   }
 
   /**
@@ -2372,6 +5110,119 @@
       handleDarkModeChange
     );
 
+    // Accessibility
+    if (elements.fontSize) {
+      elements.fontSize.addEventListener("change", handleAccessibilityChange);
+    }
+    if (elements.reduceMotion) {
+      elements.reduceMotion.addEventListener(
+        "change",
+        handleAccessibilityChange
+      );
+    }
+    if (elements.highContrastElements) {
+      elements.highContrastElements.addEventListener(
+        "change",
+        handleAccessibilityChange
+      );
+    }
+
+    // Reading History
+    if (elements.readingHistoryEnabled) {
+      elements.readingHistoryEnabled.addEventListener(
+        "change",
+        handleReadingHistoryToggle
+      );
+    }
+    if (elements.showVisitedIndicator) {
+      elements.showVisitedIndicator.addEventListener(
+        "change",
+        handleReadingHistoryToggle
+      );
+    }
+    if (elements.historyRetentionDays) {
+      elements.historyRetentionDays.addEventListener(
+        "change",
+        handleRetentionDaysChange
+      );
+    }
+    if (elements.historySearch) {
+      elements.historySearch.addEventListener("input", (e) => {
+        refreshReadingHistoryTable(e.target.value);
+      });
+    }
+    if (elements.clearReadingHistory) {
+      elements.clearReadingHistory.addEventListener(
+        "click",
+        handleClearReadingHistory
+      );
+    }
+    if (elements.exportReadingHistory) {
+      elements.exportReadingHistory.addEventListener(
+        "click",
+        handleExportReadingHistory
+      );
+    }
+    if (elements.importReadingHistoryBtn) {
+      elements.importReadingHistoryBtn.addEventListener("click", () => {
+        elements.importReadingHistoryFile.click();
+      });
+    }
+    if (elements.importReadingHistoryFile) {
+      elements.importReadingHistoryFile.addEventListener(
+        "change",
+        handleImportReadingHistory
+      );
+    }
+
+    // NSFW Controls
+    if (elements.nsfwControlsEnabled) {
+      elements.nsfwControlsEnabled.addEventListener(
+        "change",
+        handleNsfwControlsToggle
+      );
+    }
+    if (elements.nsfwVisibility) {
+      elements.nsfwVisibility.addEventListener(
+        "change",
+        handleNsfwVisibilityChange
+      );
+    }
+    if (elements.nsfwBlurIntensity) {
+      elements.nsfwBlurIntensity.addEventListener(
+        "input",
+        handleNsfwBlurIntensityChange
+      );
+    }
+    if (elements.nsfwRevealHover) {
+      elements.nsfwRevealHover.addEventListener(
+        "change",
+        handleNsfwControlsToggle
+      );
+    }
+    if (elements.nsfwShowWarning) {
+      elements.nsfwShowWarning.addEventListener(
+        "change",
+        handleNsfwControlsToggle
+      );
+    }
+    if (elements.addNsfwAllowed) {
+      elements.addNsfwAllowed.addEventListener("click", handleAddNsfwAllowed);
+    }
+    if (elements.nsfwAllowedSubreddit) {
+      elements.nsfwAllowedSubreddit.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          handleAddNsfwAllowed();
+        }
+      });
+    }
+    if (elements.clearNsfwAllowed) {
+      elements.clearNsfwAllowed.addEventListener(
+        "click",
+        handleClearNsfwAllowed
+      );
+    }
+
     // Comment enhancements
     elements.colorCodedComments.addEventListener(
       "change",
@@ -2401,6 +5252,42 @@
       "change",
       handleCommentEnhancementsChange
     );
+    // v11.2.0: Jump to top keyboard shortcut
+    elements.jumpToTopShortcut.addEventListener(
+      "change",
+      handleCommentEnhancementsChange
+    );
+
+    // Comment minimap (v19.0.0)
+    elements.minimapEnabled.addEventListener(
+      "change",
+      handleCommentMinimapChange
+    );
+    elements.minimapPosition.addEventListener(
+      "change",
+      handleCommentMinimapChange
+    );
+    elements.minimapWidth.addEventListener("input", handleCommentMinimapChange);
+    elements.minimapOpacity.addEventListener(
+      "input",
+      handleCommentMinimapChange
+    );
+    elements.minimapViewport.addEventListener(
+      "change",
+      handleCommentMinimapChange
+    );
+    elements.minimapDepthColors.addEventListener(
+      "change",
+      handleCommentMinimapChange
+    );
+    elements.minimapCollapsed.addEventListener(
+      "change",
+      handleCommentMinimapChange
+    );
+    elements.minimapAutohide.addEventListener(
+      "change",
+      handleCommentMinimapChange
+    );
 
     // Nag blocking
     elements.nagBlockingEnabled.addEventListener(
@@ -2423,6 +5310,18 @@
       "change",
       handleNagBlockingChange
     );
+    // v11.2.0: Advanced content blocking
+    elements.blockAIContent.addEventListener("change", handleNagBlockingChange);
+    elements.blockTrending.addEventListener("change", handleNagBlockingChange);
+    elements.blockRecommended.addEventListener(
+      "change",
+      handleNagBlockingChange
+    );
+    elements.blockCommunityHighlights.addEventListener(
+      "change",
+      handleNagBlockingChange
+    );
+    elements.blockMorePosts.addEventListener("change", handleNagBlockingChange);
 
     // Subreddit whitelist
     elements.addSubreddit.addEventListener("click", handleAddSubreddit);
@@ -2463,6 +5362,58 @@
       "change",
       handleImportKeywordsFile
     );
+
+    // Advanced keyword filtering (v12.1.0)
+    const useRegexEl = document.getElementById("use-regex");
+    if (useRegexEl) {
+      useRegexEl.addEventListener("change", handleUseRegexChange);
+    }
+
+    const filterContentEl = document.getElementById("filter-content");
+    if (filterContentEl) {
+      filterContentEl.addEventListener("change", handleFilterContentChange);
+    }
+
+    // Flair filtering
+    const filterByFlairEl = document.getElementById("filter-by-flair");
+    if (filterByFlairEl) {
+      filterByFlairEl.addEventListener("change", handleFilterByFlairChange);
+    }
+
+    const addFlairEl = document.getElementById("add-flair");
+    if (addFlairEl) {
+      addFlairEl.addEventListener("click", handleAddFlair);
+    }
+
+    const flairInputEl = document.getElementById("flair-input");
+    if (flairInputEl) {
+      flairInputEl.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          handleAddFlair();
+        }
+      });
+    }
+
+    const exportFlairsEl = document.getElementById("export-flairs");
+    if (exportFlairsEl) {
+      exportFlairsEl.addEventListener("click", handleExportFlairs);
+    }
+
+    const importFlairsEl = document.getElementById("import-flairs");
+    if (importFlairsEl) {
+      importFlairsEl.addEventListener("click", handleImportFlairs);
+    }
+
+    // Score filtering
+    const filterByScoreEl = document.getElementById("filter-by-score");
+    if (filterByScoreEl) {
+      filterByScoreEl.addEventListener("change", handleFilterByScoreChange);
+    }
+
+    const minScoreEl = document.getElementById("min-score");
+    if (minScoreEl) {
+      minScoreEl.addEventListener("change", handleMinScoreChange);
+    }
 
     // Domain filtering
     elements.addDomain.addEventListener("click", handleAddDomain);
@@ -2528,6 +5479,27 @@
       .getElementById("import-tags")
       .addEventListener("click", handleImportTags);
 
+    // Muted Users
+    document
+      .getElementById("user-muting-enabled")
+      .addEventListener("change", handleUserMutingToggle);
+
+    document
+      .getElementById("add-muted-user")
+      .addEventListener("click", handleAddMutedUser);
+
+    document
+      .getElementById("clear-muted-users")
+      .addEventListener("click", handleClearAllMutedUsers);
+
+    document
+      .getElementById("export-muted-users")
+      .addEventListener("click", handleExportMutedUsers);
+
+    document
+      .getElementById("import-muted-users")
+      .addEventListener("click", handleImportMutedUsers);
+
     // Scroll Positions
     document
       .getElementById("scroll-positions-enabled")
@@ -2536,6 +5508,88 @@
     document
       .getElementById("clear-scroll-positions")
       .addEventListener("click", handleClearScrollPositions);
+
+    // Feed Enhancements
+    elements.feedCompactMode.addEventListener(
+      "change",
+      handleFeedEnhancementToggle
+    );
+    elements.feedTextOnly.addEventListener(
+      "change",
+      handleFeedEnhancementToggle
+    );
+    elements.feedUncropImages.addEventListener(
+      "change",
+      handleFeedEnhancementToggle
+    );
+    elements.feedHideJoin.addEventListener(
+      "change",
+      handleFeedEnhancementToggle
+    );
+    elements.feedHideActions.addEventListener(
+      "change",
+      handleFeedEnhancementToggle
+    );
+    elements.customCSSEnabled.addEventListener(
+      "change",
+      handleFeedEnhancementToggle
+    );
+    elements.saveCustomCSS.addEventListener("click", handleSaveCustomCSS);
+    elements.clearCustomCSS.addEventListener("click", handleClearCustomCSS);
+    elements.validateCustomCSS.addEventListener(
+      "click",
+      handleValidateCustomCSS
+    );
+
+    // Layout Presets
+    initLayoutPresetsListeners();
+
+    // Storage Management
+    attachStorageManagementListeners();
+
+    // Privacy & Tracking Protection
+    elements.trackingRemovalEnabled.addEventListener(
+      "change",
+      handlePrivacyToggle
+    );
+    elements.trackingBadgeEnabled.addEventListener(
+      "change",
+      handlePrivacyToggle
+    );
+    elements.clearTrackingStats.addEventListener(
+      "click",
+      handleClearTrackingStats
+    );
+    if (elements.exportPrivacyReport) {
+      elements.exportPrivacyReport.addEventListener(
+        "click",
+        exportPrivacyReport
+      );
+    }
+    elements.referrerDefault.addEventListener(
+      "change",
+      handleReferrerPolicyChange
+    );
+    elements.referrerSameOrigin.addEventListener(
+      "change",
+      handleReferrerPolicyChange
+    );
+    elements.referrerOrigin.addEventListener(
+      "change",
+      handleReferrerPolicyChange
+    );
+    elements.referrerNoReferrer.addEventListener(
+      "change",
+      handleReferrerPolicyChange
+    );
+    elements.saveTrackingParams.addEventListener(
+      "click",
+      handleSaveTrackingParams
+    );
+    elements.resetTrackingParams.addEventListener(
+      "click",
+      handleResetTrackingParams
+    );
 
     // Keyboard shortcut
     elements.customizeShortcut.addEventListener(
@@ -2581,6 +5635,578 @@
         }
       }
     });
+  }
+
+  /**
+   * ============================================================================
+   * KEYBOARD SHORTCUTS MANAGEMENT
+   * ============================================================================
+   */
+
+  let currentEditingShortcutId = null;
+  let keyboardShortcutsCache = null;
+
+  /**
+   * Load keyboard shortcuts settings
+   */
+  async function loadKeyboardShortcuts() {
+    try {
+      const result = await chrome.storage.sync.get({ keyboardShortcuts: null });
+
+      if (!result.keyboardShortcuts) {
+        // Initialize with defaults from storage.js
+        const defaults = await storage.getDefaults();
+        keyboardShortcutsCache = defaults.keyboardShortcuts;
+      } else {
+        keyboardShortcutsCache = result.keyboardShortcuts;
+      }
+
+      // Update UI
+      updateKeyboardShortcutsUI();
+    } catch (error) {
+      console.error("[ORR] Failed to load keyboard shortcuts:", error);
+      showToast("Failed to load keyboard shortcuts", "error");
+    }
+  }
+
+  /**
+   * Update keyboard shortcuts UI
+   */
+  function updateKeyboardShortcutsUI() {
+    if (!keyboardShortcutsCache) return;
+
+    // Update toggle
+    const enabled = keyboardShortcutsCache.enabled !== false;
+    document.getElementById("keyboard-shortcuts-enabled").checked = enabled;
+
+    // Show/hide settings
+    document.getElementById("keyboard-shortcuts-settings").style.display =
+      enabled ? "block" : "none";
+
+    // Update chord timeout
+    document.getElementById("chord-timeout").value =
+      keyboardShortcutsCache.chordTimeout || 1000;
+
+    // Populate shortcuts table
+    populateShortcutsTable();
+
+    // Check for conflicts
+    detectAndDisplayConflicts();
+  }
+
+  /**
+   * Populate shortcuts table
+   */
+  function populateShortcutsTable() {
+    const tbody = document.getElementById("shortcuts-table-body");
+    tbody.innerHTML = "";
+
+    const shortcuts = keyboardShortcutsCache.shortcuts || {};
+
+    // Group shortcuts by type
+    const groups = {
+      Navigation: [],
+      Appearance: [],
+      Content: [],
+      Help: [],
+    };
+
+    for (const [id, shortcut] of Object.entries(shortcuts)) {
+      const item = { id, ...shortcut };
+
+      if (id.includes("nav-") || id.includes("jump") || id.includes("vim-")) {
+        groups.Navigation.push(item);
+      } else if (
+        id.includes("dark") ||
+        id.includes("compact") ||
+        id.includes("text") ||
+        id.includes("palette")
+      ) {
+        groups.Appearance.push(item);
+      } else if (id.includes("images")) {
+        groups.Content.push(item);
+      } else if (id.includes("help")) {
+        groups.Help.push(item);
+      }
+    }
+
+    // Render each group
+    for (const [groupName, items] of Object.entries(groups)) {
+      if (items.length === 0) continue;
+
+      // Group header
+      const headerRow = document.createElement("tr");
+      headerRow.innerHTML = `
+        <td colspan="5" style="background: #272729; font-weight: 600; color: #818384; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">
+          ${groupName}
+        </td>
+      `;
+      tbody.appendChild(headerRow);
+
+      // Shortcuts in group
+      items.forEach((shortcut) => {
+        const row = document.createElement("tr");
+        row.dataset.shortcutId = shortcut.id;
+
+        const contextBadge = getContextBadge(shortcut.context);
+
+        row.innerHTML = `
+          <td class="shortcut-description">${shortcut.description}</td>
+          <td class="shortcut-keys">${escapeHtml(shortcut.keys)}</td>
+          <td class="shortcut-context">${contextBadge}</td>
+          <td>
+            <label class="switch" style="margin: 0;">
+              <input type="checkbox" ${shortcut.enabled ? "checked" : ""}
+                     onchange="toggleShortcut('${shortcut.id}', this.checked)" />
+              <span class="slider"></span>
+            </label>
+          </td>
+          <td class="shortcut-actions">
+            <button class="shortcut-edit-btn" onclick="editShortcut('${shortcut.id}')">
+              Edit
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+  }
+
+  /**
+   * Get context badge HTML
+   */
+  function getContextBadge(context) {
+    const labels = {
+      any: "All pages",
+      feed: "Feed only",
+      comments: "Comments only",
+    };
+    return `<span class="shortcut-context-badge">${labels[context] || context}</span>`;
+  }
+
+  /**
+   * Escape HTML
+   */
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  /**
+   * Toggle shortcut enabled state
+   */
+  window.toggleShortcut = async function (id, enabled) {
+    try {
+      keyboardShortcutsCache.shortcuts[id].enabled = enabled;
+      await chrome.storage.sync.set({
+        keyboardShortcuts: keyboardShortcutsCache,
+      });
+      detectAndDisplayConflicts();
+      showToast(`Shortcut ${enabled ? "enabled" : "disabled"}`, "success");
+    } catch (error) {
+      console.error("[ORR] Failed to toggle shortcut:", error);
+      showToast("Failed to update shortcut", "error");
+    }
+  };
+
+  /**
+   * Edit shortcut
+   */
+  window.editShortcut = function (id) {
+    currentEditingShortcutId = id;
+    const shortcut = keyboardShortcutsCache.shortcuts[id];
+
+    if (!shortcut) return;
+
+    // Populate modal
+    document.getElementById("keyboard-edit-action-name").textContent =
+      shortcut.description;
+    document.getElementById("keyboard-edit-keys").value = shortcut.keys;
+    document.getElementById("keyboard-edit-context").textContent =
+      getContextBadge(shortcut.context).replace(/<[^>]*>/g, "");
+    document.getElementById("keyboard-edit-enabled").checked = shortcut.enabled;
+    document.getElementById("keyboard-edit-validation").textContent = "";
+
+    // Show modal
+    document.getElementById("keyboard-edit-modal").style.display = "flex";
+  };
+
+  /**
+   * Initialize key capture for edit modal
+   */
+  function initKeyCapture() {
+    const input = document.getElementById("keyboard-edit-keys");
+    let isCapturing = false;
+
+    input.addEventListener("keydown", (e) => {
+      if (isCapturing) {
+        e.preventDefault();
+
+        // Build key string
+        const parts = [];
+        if (e.ctrlKey) parts.push("Ctrl");
+        if (e.altKey) parts.push("Alt");
+        if (e.shiftKey) parts.push("Shift");
+        if (e.metaKey) parts.push("Meta");
+
+        let key = e.key;
+
+        // Normalize special keys
+        if (key === " ") key = "Space";
+        else if (key.length === 1) key = key.toUpperCase();
+
+        // Don't include modifier-only presses
+        const modifiers = ["Control", "Alt", "Shift", "Meta"];
+        if (!modifiers.includes(key)) {
+          parts.push(key);
+          input.value = parts.join("+");
+          validateShortcutKeys(input.value);
+        }
+      }
+    });
+
+    input.addEventListener("focus", () => {
+      isCapturing = true;
+    });
+
+    input.addEventListener("blur", () => {
+      isCapturing = false;
+    });
+  }
+
+  /**
+   * Validate shortcut keys
+   */
+  function validateShortcutKeys(keys) {
+    const validation = document.getElementById("keyboard-edit-validation");
+
+    if (!keys || keys.trim().length === 0) {
+      validation.textContent = "Keys cannot be empty";
+      validation.className = "validation-message";
+      return false;
+    }
+
+    // Check for conflicts (except with current shortcut)
+    const shortcuts = keyboardShortcutsCache.shortcuts;
+    for (const [id, shortcut] of Object.entries(shortcuts)) {
+      if (id === currentEditingShortcutId) continue;
+      if (!shortcut.enabled) continue;
+
+      if (shortcut.keys.toLowerCase() === keys.toLowerCase()) {
+        const currentContext =
+          shortcuts[currentEditingShortcutId]?.context || "any";
+        if (
+          shortcut.context === currentContext ||
+          shortcut.context === "any" ||
+          currentContext === "any"
+        ) {
+          validation.textContent = `Conflicts with: ${shortcut.description}`;
+          validation.className = "validation-message";
+          return false;
+        }
+      }
+    }
+
+    validation.textContent = "✓ Valid";
+    validation.className = "validation-message success";
+    return true;
+  }
+
+  /**
+   * Save edited shortcut
+   */
+  async function saveEditedShortcut() {
+    const keys = document.getElementById("keyboard-edit-keys").value.trim();
+    const enabled = document.getElementById("keyboard-edit-enabled").checked;
+
+    if (!validateShortcutKeys(keys)) {
+      return;
+    }
+
+    try {
+      keyboardShortcutsCache.shortcuts[currentEditingShortcutId].keys = keys;
+      keyboardShortcutsCache.shortcuts[currentEditingShortcutId].enabled =
+        enabled;
+
+      await chrome.storage.sync.set({
+        keyboardShortcuts: keyboardShortcutsCache,
+      });
+
+      closeEditModal();
+      updateKeyboardShortcutsUI();
+      showToast("Shortcut updated successfully", "success");
+    } catch (error) {
+      console.error("[ORR] Failed to save shortcut:", error);
+      showToast("Failed to save shortcut", "error");
+    }
+  }
+
+  /**
+   * Reset shortcut to default
+   */
+  async function resetShortcut() {
+    if (!confirm("Reset this shortcut to its default?")) return;
+
+    try {
+      const defaults = await storage.getDefaults();
+      const defaultShortcut =
+        defaults.keyboardShortcuts.shortcuts[currentEditingShortcutId];
+
+      if (defaultShortcut) {
+        keyboardShortcutsCache.shortcuts[currentEditingShortcutId] = {
+          ...defaultShortcut,
+        };
+        await chrome.storage.sync.set({
+          keyboardShortcuts: keyboardShortcutsCache,
+        });
+
+        closeEditModal();
+        updateKeyboardShortcutsUI();
+        showToast("Shortcut reset to default", "success");
+      }
+    } catch (error) {
+      console.error("[ORR] Failed to reset shortcut:", error);
+      showToast("Failed to reset shortcut", "error");
+    }
+  }
+
+  /**
+   * Close edit modal
+   */
+  function closeEditModal() {
+    document.getElementById("keyboard-edit-modal").style.display = "none";
+    currentEditingShortcutId = null;
+  }
+
+  /**
+   * Detect and display conflicts
+   */
+  function detectAndDisplayConflicts() {
+    const conflicts = [];
+    const shortcuts = keyboardShortcutsCache.shortcuts;
+    const entries = Object.entries(shortcuts);
+
+    for (let i = 0; i < entries.length; i++) {
+      for (let j = i + 1; j < entries.length; j++) {
+        const [id1, sc1] = entries[i];
+        const [id2, sc2] = entries[j];
+
+        if (!sc1.enabled || !sc2.enabled) continue;
+
+        if (sc1.keys.toLowerCase() === sc2.keys.toLowerCase()) {
+          // Check context overlap
+          if (
+            sc1.context === sc2.context ||
+            sc1.context === "any" ||
+            sc2.context === "any"
+          ) {
+            conflicts.push({
+              keys: sc1.keys,
+              shortcuts: [sc1.description, sc2.description],
+              ids: [id1, id2],
+            });
+          }
+        }
+      }
+    }
+
+    // Update UI
+    const banner = document.getElementById("keyboard-conflicts-warning");
+    const message = document.getElementById("keyboard-conflicts-message");
+
+    if (conflicts.length > 0) {
+      banner.style.display = "block";
+      const conflictList = conflicts
+        .map((c) => `<strong>${c.keys}</strong>: ${c.shortcuts.join(" and ")}`)
+        .join("<br>");
+      message.innerHTML = `The following shortcuts have conflicts:<br>${conflictList}`;
+
+      // Highlight conflicting rows
+      conflicts.forEach((c) => {
+        c.ids.forEach((id) => {
+          const row = document.querySelector(`tr[data-shortcut-id="${id}"]`);
+          if (row) row.classList.add("conflict-row");
+        });
+      });
+    } else {
+      banner.style.display = "none";
+      // Remove conflict highlights
+      document.querySelectorAll(".conflict-row").forEach((row) => {
+        row.classList.remove("conflict-row");
+      });
+    }
+  }
+
+  /**
+   * Export keyboard shortcuts
+   */
+  async function exportKeyboardShortcuts() {
+    try {
+      const data = {
+        version: "1.0",
+        exported: new Date().toISOString(),
+        shortcuts: keyboardShortcutsCache.shortcuts,
+        chordTimeout: keyboardShortcutsCache.chordTimeout,
+      };
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `keyboard-shortcuts-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast("Shortcuts exported successfully", "success");
+    } catch (error) {
+      console.error("[ORR] Failed to export shortcuts:", error);
+      showToast("Failed to export shortcuts", "error");
+    }
+  }
+
+  /**
+   * Import keyboard shortcuts
+   */
+  async function importKeyboardShortcuts(file) {
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+
+      // Validate structure
+      if (!data.shortcuts) {
+        throw new Error("Invalid shortcuts file");
+      }
+
+      // Confirm overwrite
+      if (!confirm("This will overwrite your current shortcuts. Continue?")) {
+        return;
+      }
+
+      // Merge shortcuts
+      keyboardShortcutsCache.shortcuts = { ...data.shortcuts };
+      if (data.chordTimeout) {
+        keyboardShortcutsCache.chordTimeout = data.chordTimeout;
+      }
+
+      await chrome.storage.sync.set({
+        keyboardShortcuts: keyboardShortcutsCache,
+      });
+
+      updateKeyboardShortcutsUI();
+      showToast("Shortcuts imported successfully", "success");
+    } catch (error) {
+      console.error("[ORR] Failed to import shortcuts:", error);
+      showToast("Failed to import shortcuts: " + error.message, "error");
+    }
+  }
+
+  /**
+   * Reset all shortcuts to defaults
+   */
+  async function resetAllShortcuts() {
+    if (
+      !confirm(
+        "Reset all keyboard shortcuts to defaults? This cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const defaults = await storage.getDefaults();
+      keyboardShortcutsCache = { ...defaults.keyboardShortcuts };
+
+      await chrome.storage.sync.set({
+        keyboardShortcuts: keyboardShortcutsCache,
+      });
+
+      updateKeyboardShortcutsUI();
+      showToast("All shortcuts reset to defaults", "success");
+    } catch (error) {
+      console.error("[ORR] Failed to reset shortcuts:", error);
+      showToast("Failed to reset shortcuts", "error");
+    }
+  }
+
+  /**
+   * Initialize keyboard shortcuts UI
+   */
+  function initKeyboardShortcutsUI() {
+    // Master toggle
+    document
+      .getElementById("keyboard-shortcuts-enabled")
+      .addEventListener("change", async (e) => {
+        keyboardShortcutsCache.enabled = e.target.checked;
+        await chrome.storage.sync.set({
+          keyboardShortcuts: keyboardShortcutsCache,
+        });
+        updateKeyboardShortcutsUI();
+      });
+
+    // Chord timeout
+    document
+      .getElementById("chord-timeout")
+      .addEventListener("change", async (e) => {
+        keyboardShortcutsCache.chordTimeout = parseInt(e.target.value);
+        await chrome.storage.sync.set({
+          keyboardShortcuts: keyboardShortcutsCache,
+        });
+        showToast("Chord timeout updated", "success");
+      });
+
+    // Export button
+    document
+      .getElementById("keyboard-export-btn")
+      .addEventListener("click", exportKeyboardShortcuts);
+
+    // Import button
+    document
+      .getElementById("keyboard-import-btn")
+      .addEventListener("click", () => {
+        document.getElementById("keyboard-import-file").click();
+      });
+
+    document
+      .getElementById("keyboard-import-file")
+      .addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          importKeyboardShortcuts(file);
+          e.target.value = ""; // Reset file input
+        }
+      });
+
+    // Reset all button
+    document
+      .getElementById("keyboard-reset-all-btn")
+      .addEventListener("click", resetAllShortcuts);
+
+    // Edit modal buttons
+    document
+      .getElementById("keyboard-edit-save")
+      .addEventListener("click", saveEditedShortcut);
+
+    document
+      .getElementById("keyboard-edit-reset")
+      .addEventListener("click", resetShortcut);
+
+    document
+      .getElementById("keyboard-edit-cancel")
+      .addEventListener("click", closeEditModal);
+
+    document
+      .getElementById("keyboard-edit-close")
+      .addEventListener("click", closeEditModal);
+
+    // Initialize key capture
+    initKeyCapture();
+
+    // Load initial data
+    loadKeyboardShortcuts();
   }
 
   // Initialize

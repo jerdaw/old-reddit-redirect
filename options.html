@@ -11,24 +11,34 @@
       <h1>Old Reddit Redirect</h1>
 
       <!-- Main Toggle -->
-      <section class="setting">
+      <section
+        class="setting"
+        role="region"
+        aria-labelledby="main-toggle-heading"
+      >
+        <h2 id="main-toggle-heading" class="visually-hidden">Main Toggle</h2>
         <div class="setting-row">
           <div class="setting-info">
             <label for="toggle-redirect">Enable Redirect</label>
-            <p class="description">
+            <p class="description" id="toggle-redirect-desc">
               Automatically redirect Reddit URLs to old.reddit.com
             </p>
           </div>
-          <label class="switch">
-            <input type="checkbox" id="toggle-redirect" checked />
-            <span class="slider"></span>
+          <label class="switch" aria-label="Toggle redirect">
+            <input
+              type="checkbox"
+              id="toggle-redirect"
+              checked
+              aria-describedby="toggle-redirect-desc"
+            />
+            <span class="slider" aria-hidden="true"></span>
           </label>
         </div>
       </section>
 
       <!-- Statistics -->
-      <section class="setting">
-        <h2>Statistics</h2>
+      <section class="setting" role="region" aria-labelledby="stats-heading">
+        <h2 id="stats-heading">Statistics</h2>
         <div class="stats-grid">
           <div class="stat-card">
             <span class="stat-number" id="total-redirects">0</span>
@@ -68,8 +78,12 @@
       </section>
 
       <!-- Visual Preferences -->
-      <section class="setting">
-        <h2>Visual Preferences</h2>
+      <section
+        class="setting"
+        role="region"
+        aria-labelledby="visual-prefs-heading"
+      >
+        <h2 id="visual-prefs-heading">Visual Preferences</h2>
 
         <div class="option-row">
           <label for="icon-click-behavior">Icon Click Behavior</label>
@@ -128,8 +142,12 @@
       </section>
 
       <!-- Dark Mode -->
-      <section class="setting">
-        <h2>Dark Mode for old.reddit.com</h2>
+      <section
+        class="setting"
+        role="region"
+        aria-labelledby="dark-mode-heading"
+      >
+        <h2 id="dark-mode-heading">Dark Mode for old.reddit.com</h2>
         <p class="section-description">
           Apply a dark theme to old Reddit that respects your system
           preferences.
@@ -137,16 +155,22 @@
 
         <div class="option-row">
           <label for="dark-mode">Dark Mode</label>
-          <select id="dark-mode" class="select-input">
+          <select
+            id="dark-mode"
+            class="select-input"
+            aria-describedby="dark-mode-desc"
+          >
             <option value="auto">Auto (follow system preference)</option>
             <option value="light">Light</option>
             <option value="dark">Dark</option>
             <option value="oled">OLED Black</option>
+            <option value="high-contrast">High Contrast (Accessibility)</option>
           </select>
-          <p class="option-description">
+          <p class="option-description" id="dark-mode-desc">
             Choose when to apply dark mode. "Auto" follows your system's
             light/dark preference. "OLED Black" uses pure black for OLED
-            screens.
+            screens. "High Contrast" provides maximum visibility for users with
+            visual impairments.
           </p>
         </div>
 
@@ -162,9 +186,68 @@
         </div>
       </section>
 
+      <!-- Accessibility -->
+      <section class="setting" aria-labelledby="accessibility-heading">
+        <h2 id="accessibility-heading">Accessibility</h2>
+        <p class="section-description">
+          Customize the extension for better accessibility. These settings help
+          users with visual impairments or motor disabilities.
+        </p>
+
+        <div class="option-row">
+          <label for="font-size">Content Font Size</label>
+          <select
+            id="font-size"
+            class="select-input"
+            aria-describedby="font-size-desc"
+          >
+            <option value="small">Small (87.5%)</option>
+            <option value="medium">Medium (Default)</option>
+            <option value="large">Large (112.5%)</option>
+            <option value="x-large">Extra Large (125%)</option>
+          </select>
+          <p class="option-description" id="font-size-desc">
+            Adjust the font size of Reddit content. Affects post titles,
+            comments, and other text on old.reddit.com.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="reduce-motion">Reduce Motion</label>
+          <select
+            id="reduce-motion"
+            class="select-input"
+            aria-describedby="reduce-motion-desc"
+          >
+            <option value="auto">Auto (follow system preference)</option>
+            <option value="always">Always reduce motion</option>
+            <option value="never">Never reduce motion</option>
+          </select>
+          <p class="option-description" id="reduce-motion-desc">
+            Control animations and transitions. "Auto" respects your system's
+            reduced motion setting. Helpful for users with vestibular disorders.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              id="high-contrast-elements"
+              aria-describedby="high-contrast-desc"
+            />
+            <span>High contrast UI elements</span>
+          </label>
+          <p class="option-description" id="high-contrast-desc">
+            Add extra-visible borders and outlines to buttons, inputs, and other
+            interactive elements. Works alongside any theme.
+          </p>
+        </div>
+      </section>
+
       <!-- Comment Enhancements -->
-      <section class="setting">
-        <h2>Comment Enhancements</h2>
+      <section class="setting" aria-labelledby="comment-heading">
+        <h2 id="comment-heading">Comment Enhancements</h2>
         <p class="section-description">
           Improve the comment reading experience with visual enhancements.
         </p>
@@ -249,6 +332,125 @@
           <p class="option-description">
             Maximum width for expanded images. "Full Width" uses the comment
             area width.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="jump-to-top-shortcut" checked />
+            <span>Jump to top keyboard shortcut (Shift+Home)</span>
+          </label>
+          <p class="option-description">
+            Press Shift+Home to smoothly scroll to the top of any page. Respects
+            reduced motion preferences.
+          </p>
+        </div>
+      </section>
+
+      <!-- Comment Minimap -->
+      <section class="setting" role="region" aria-labelledby="minimap-heading">
+        <h2 id="minimap-heading">Comment Thread Minimap</h2>
+        <p class="section-description">
+          A visual navigation aid that shows an overview of the comment thread.
+          Click on the minimap to quickly jump to any comment.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="minimap-enabled" checked />
+            <span>Enable comment minimap</span>
+          </label>
+          <p class="option-description">
+            Show a minimap on comment pages for easy thread navigation.
+          </p>
+        </div>
+
+        <div class="option-row" id="minimap-position-row">
+          <label for="minimap-position">Minimap Position</label>
+          <select
+            id="minimap-position"
+            class="select-input"
+            aria-describedby="minimap-position-desc"
+          >
+            <option value="right">Right side</option>
+            <option value="left">Left side</option>
+          </select>
+          <p class="option-description" id="minimap-position-desc">
+            Choose which side of the screen to display the minimap.
+          </p>
+        </div>
+
+        <div class="option-row" id="minimap-width-row">
+          <label for="minimap-width">Minimap Width</label>
+          <div class="range-container">
+            <input
+              type="range"
+              id="minimap-width"
+              min="80"
+              max="200"
+              value="120"
+              class="range-input"
+            />
+            <span id="minimap-width-value">120px</span>
+          </div>
+          <p class="help-text">Width of the minimap in pixels.</p>
+        </div>
+
+        <div class="option-row" id="minimap-opacity-row">
+          <label for="minimap-opacity">Minimap Opacity</label>
+          <div class="range-container">
+            <input
+              type="range"
+              id="minimap-opacity"
+              min="50"
+              max="100"
+              value="90"
+              class="range-input"
+            />
+            <span id="minimap-opacity-value">90%</span>
+          </div>
+          <p class="help-text">Transparency of the minimap.</p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="minimap-viewport" checked />
+            <span>Show viewport indicator</span>
+          </label>
+          <p class="option-description">
+            Highlight the currently visible portion of the thread in the
+            minimap.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="minimap-depth-colors" checked />
+            <span>Use depth colors</span>
+          </label>
+          <p class="option-description">
+            Color-code minimap entries by comment depth (matches color-coded
+            comments).
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="minimap-collapsed" checked />
+            <span>Show collapsed indicator</span>
+          </label>
+          <p class="option-description">
+            Visually distinguish collapsed comments in the minimap.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="minimap-autohide" />
+            <span>Auto-hide when not hovering</span>
+          </label>
+          <p class="option-description">
+            Fade out the minimap when not in use to reduce visual clutter.
           </p>
         </div>
       </section>
@@ -419,6 +621,67 @@
         </div>
       </section>
 
+      <!-- Muted Users -->
+      <section class="setting">
+        <h2>User Muting</h2>
+        <p class="section-description">
+          Hide posts and comments from specific users. Muted users are
+          completely hidden from your feed and comment threads.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="user-muting-enabled" checked />
+            <span>Enable user muting</span>
+          </label>
+          <p class="option-description">
+            Hide posts and comments from muted users. Right-click any username
+            to mute them via context menu.
+          </p>
+        </div>
+
+        <div class="muted-users-container">
+          <div class="list-header">
+            <h3>Muted Users (<span id="muted-users-count">0</span>/500)</h3>
+            <div class="list-actions">
+              <button class="button secondary" id="import-muted-users">
+                Import
+              </button>
+              <button class="button secondary" id="export-muted-users">
+                Export
+              </button>
+              <button class="button secondary" id="clear-muted-users">
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <div class="add-user-form">
+            <input
+              type="text"
+              id="new-muted-user"
+              placeholder="Enter username (without u/)"
+              class="text-input"
+            />
+            <input
+              type="text"
+              id="mute-reason"
+              placeholder="Reason (optional)"
+              class="text-input"
+            />
+            <button class="button" id="add-muted-user">Add</button>
+          </div>
+
+          <div id="muted-users-list" class="item-list">
+            <!-- Populated by JS -->
+          </div>
+          <p class="empty-state" id="muted-users-empty">
+            No muted users. Right-click any username to mute them or add one
+            manually above.
+          </p>
+        </div>
+      </section>
+
       <!-- Scroll Position Memory -->
       <section class="setting">
         <h2>Scroll Position Memory</h2>
@@ -507,6 +770,635 @@
           <p class="option-description">
             Remove banners asking you to download the mobile app
           </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-ai-content" checked />
+            <span>Block AI-generated content</span>
+          </label>
+          <p class="option-description">
+            Hide AI answers, summaries, and overviews. Future-proofed against
+            Reddit's AI features.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-trending" checked />
+            <span>Block trending posts sections</span>
+          </label>
+          <p class="option-description">
+            Remove trending subreddits and posts widgets
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-recommended" checked />
+            <span>Block recommended communities</span>
+          </label>
+          <p class="option-description">
+            Hide recommended subreddits and community suggestions
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-community-highlights" checked />
+            <span>Block community highlights</span>
+          </label>
+          <p class="option-description">
+            Remove featured posts and spotlight content
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="block-more-posts" checked />
+            <span>Block "More posts you may like"</span>
+          </label>
+          <p class="option-description">
+            Hide recommended posts and "continue browsing" sections
+          </p>
+        </div>
+      </section>
+
+      <!-- Feed Enhancements -->
+      <section class="setting">
+        <h2>Feed Enhancements</h2>
+        <p class="section-description">
+          Customize the appearance and layout of Reddit feeds for better
+          readability and information density.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="feed-compact-mode" />
+            <span>Compact mode</span>
+          </label>
+          <p class="option-description">
+            Reduce spacing to show more posts per screen (~30% smaller posts)
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="feed-text-only" />
+            <span>Text-only mode</span>
+          </label>
+          <p class="option-description">
+            Hide all images and thumbnails for focused reading and bandwidth
+            savings
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="feed-uncrop-images" />
+            <span>Uncropped thumbnails</span>
+          </label>
+          <p class="option-description">
+            Show full-aspect-ratio thumbnails instead of cropped squares
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="feed-hide-join" />
+            <span>Hide join buttons</span>
+          </label>
+          <p class="option-description">
+            Remove subreddit join/subscribe buttons from feed
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="feed-hide-actions" />
+            <span>Hide action links</span>
+          </label>
+          <p class="option-description">
+            Hide share/save/hide/report links until you hover over a post
+            (comments link always visible)
+          </p>
+        </div>
+
+        <div class="option-row custom-css-section">
+          <h3>Custom CSS (Advanced)</h3>
+          <p class="section-description warning">
+            ⚠️ Advanced feature: Custom CSS can break page layout. Use at your
+            own risk.
+          </p>
+
+          <label class="checkbox-label">
+            <input type="checkbox" id="custom-css-enabled" />
+            <span>Enable custom CSS</span>
+          </label>
+
+          <textarea
+            id="custom-css"
+            rows="10"
+            placeholder="/* Your custom CSS here */&#10;.thing { ... }"
+            spellcheck="false"
+            class="custom-css-textarea"
+          ></textarea>
+
+          <div class="button-row">
+            <button id="save-custom-css" class="primary-button">
+              Save CSS
+            </button>
+            <button id="clear-custom-css" class="secondary-button">
+              Clear
+            </button>
+            <button id="validate-custom-css" class="secondary-button">
+              Validate
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Layout Presets -->
+      <section class="setting">
+        <h2>Layout Presets</h2>
+        <p class="section-description">
+          Save combinations of visual settings as presets for quick switching.
+          Apply different layouts to specific subreddits automatically.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="layout-presets-enabled" checked />
+            <span>Enable layout presets</span>
+          </label>
+          <p class="option-description">
+            Save and apply custom layout configurations as reusable presets
+          </p>
+        </div>
+
+        <div id="layout-presets-container">
+          <!-- Create New Preset -->
+          <div class="subsection">
+            <h3>Create New Preset</h3>
+            <div class="create-preset-form">
+              <div class="form-row">
+                <input
+                  type="text"
+                  id="new-preset-name"
+                  class="text-input"
+                  placeholder="Preset name (e.g., Night Mode, Compact Reading)"
+                  maxlength="50"
+                />
+                <button class="button" id="create-preset-btn">
+                  Create from Current
+                </button>
+              </div>
+              <p class="help-text">
+                Creates a preset from your current feed enhancement and dark
+                mode settings.
+              </p>
+            </div>
+          </div>
+
+          <!-- Saved Presets -->
+          <div class="subsection">
+            <div class="presets-header">
+              <h3>
+                Saved Presets
+                <span class="preset-count"
+                  >(<span id="preset-count">0</span>/<span id="preset-max"
+                    >20</span
+                  >)</span
+                >
+              </h3>
+              <div class="presets-controls">
+                <button
+                  id="export-presets"
+                  class="secondary-button"
+                  title="Export presets as JSON"
+                >
+                  Export
+                </button>
+                <button
+                  id="import-presets"
+                  class="secondary-button"
+                  title="Import presets from JSON"
+                >
+                  Import
+                </button>
+                <button
+                  id="clear-all-presets"
+                  class="danger-button"
+                  title="Clear all saved presets"
+                >
+                  Clear All
+                </button>
+              </div>
+            </div>
+
+            <div id="presets-list-container">
+              <table id="presets-table" class="data-table">
+                <thead>
+                  <tr>
+                    <th>Preset Name</th>
+                    <th>Settings</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="presets-tbody">
+                  <!-- Populated by JavaScript -->
+                </tbody>
+              </table>
+
+              <p class="empty-state" id="presets-empty">
+                No presets saved yet. Create a preset from your current settings
+                using the form above.
+              </p>
+            </div>
+          </div>
+
+          <!-- Active Preset -->
+          <div class="subsection">
+            <h3>Active Preset</h3>
+            <div class="active-preset-row">
+              <select id="active-preset-select" class="select-input">
+                <option value="">None (use individual settings)</option>
+                <!-- Populated by JavaScript -->
+              </select>
+              <p class="help-text">
+                The active preset is applied globally. Subreddit-specific
+                layouts override this.
+              </p>
+            </div>
+          </div>
+
+          <!-- Subreddit Layouts -->
+          <div class="subsection">
+            <div class="subreddit-layouts-header">
+              <h3>
+                Subreddit-Specific Layouts
+                <span class="mapping-count"
+                  >(<span id="mapping-count">0</span>/<span id="mapping-max"
+                    >100</span
+                  >)</span
+                >
+              </h3>
+            </div>
+
+            <div class="add-mapping-form">
+              <div class="form-row">
+                <span class="input-prefix">r/</span>
+                <input
+                  type="text"
+                  id="mapping-subreddit"
+                  class="text-input"
+                  placeholder="subreddit name"
+                />
+                <select id="mapping-preset" class="select-input">
+                  <option value="">Select preset...</option>
+                  <!-- Populated by JavaScript -->
+                </select>
+                <button class="button" id="add-mapping-btn">Add</button>
+              </div>
+              <p class="help-text">
+                Apply a specific layout preset when visiting a subreddit.
+              </p>
+            </div>
+
+            <div id="mappings-list-container">
+              <table id="mappings-table" class="data-table">
+                <thead>
+                  <tr>
+                    <th>Subreddit</th>
+                    <th>Preset</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="mappings-tbody">
+                  <!-- Populated by JavaScript -->
+                </tbody>
+              </table>
+
+              <p class="empty-state" id="mappings-empty">
+                No subreddit layouts configured. Add a mapping above to apply
+                different presets to specific subreddits.
+              </p>
+            </div>
+
+            <div class="mapping-actions">
+              <button
+                id="clear-all-mappings"
+                class="secondary-button"
+                title="Clear all subreddit mappings"
+              >
+                Clear All Mappings
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Preset Edit Modal -->
+      <div id="preset-edit-modal" class="modal" style="display: none">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Edit Preset</h3>
+            <button class="modal-close" id="preset-edit-close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="preset-edit-name">Preset Name</label>
+              <input
+                type="text"
+                id="preset-edit-name"
+                class="text-input"
+                maxlength="50"
+              />
+            </div>
+
+            <h4>Visual Settings</h4>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="preset-dark-mode" />
+                Dark mode enabled
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="preset-dark-mode-type">Dark Mode Type</label>
+              <select id="preset-dark-mode-type" class="select-input">
+                <option value="dark">Dark</option>
+                <option value="oled">OLED Black</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="preset-compact-mode" />
+                Compact mode
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="preset-text-only" />
+                Text-only mode
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="preset-uncrop-images" />
+                Uncropped thumbnails
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="preset-hide-join" />
+                Hide join buttons
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="preset-hide-actions" />
+                Hide action links
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="preset-color-comments" />
+                Color-coded comments
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="preset-color-palette">Comment Color Palette</label>
+              <select id="preset-color-palette" class="select-input">
+                <option value="standard">Standard (Rainbow)</option>
+                <option value="colorblind">Color-Blind Friendly</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="preset-custom-css">Custom CSS (optional)</label>
+              <textarea
+                id="preset-custom-css"
+                rows="5"
+                class="custom-css-textarea"
+                placeholder="/* Custom CSS for this preset */"
+              ></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="preset-edit-save" class="primary-button">Save</button>
+            <button id="preset-edit-cancel" class="secondary-button">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy & Tracking Protection -->
+      <section class="setting">
+        <h2>Privacy & Tracking Protection</h2>
+        <p class="section-description">
+          Protect your privacy by removing tracking parameters from URLs and
+          controlling referrer information sent when leaving Reddit.
+        </p>
+
+        <!-- Privacy Score -->
+        <div class="privacy-score-container">
+          <div class="privacy-score-circle">
+            <svg viewBox="0 0 36 36" class="privacy-score-ring">
+              <path
+                class="privacy-score-bg"
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                class="privacy-score-fill"
+                id="privacy-score-fill"
+                stroke-dasharray="0, 100"
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
+            <div class="privacy-score-value" id="privacy-score-value">0</div>
+          </div>
+          <div class="privacy-score-info">
+            <div class="privacy-score-label">Privacy Score</div>
+            <div class="privacy-score-status" id="privacy-score-status">
+              Calculating...
+            </div>
+            <div
+              class="privacy-recommendations"
+              id="privacy-recommendations"
+            ></div>
+          </div>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="tracking-removal-enabled" />
+            <span>Remove tracking parameters from URLs</span>
+          </label>
+          <p class="help-text">
+            Automatically strips tracking parameters like utm_source, fbclid,
+            gclid, and 55+ others when you click links.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="tracking-badge-enabled" />
+            <span>Show shield badge when tracking is removed</span>
+          </label>
+          <p class="help-text">
+            Display a temporary 🛡️ badge in the extension icon when tracking
+            parameters are cleaned (lasts 3 seconds).
+          </p>
+        </div>
+
+        <div class="subsection">
+          <h3>Tracking Statistics by Category</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label">Total URLs Cleaned</div>
+              <div class="stat-value" id="tracking-total-cleaned">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Last Cleaned</div>
+              <div
+                class="stat-value stat-value-small"
+                id="tracking-last-cleaned"
+              >
+                Never
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">UTM Parameters</div>
+              <div class="stat-value" id="tracking-utm-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Social Media</div>
+              <div class="stat-value" id="tracking-social-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Analytics</div>
+              <div class="stat-value" id="tracking-analytics-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Affiliate/Referral</div>
+              <div class="stat-value" id="tracking-affiliate-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Reddit-Specific</div>
+              <div class="stat-value" id="tracking-reddit-count">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Other Trackers</div>
+              <div class="stat-value" id="tracking-other-count">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-row" style="margin-top: 15px">
+          <button id="clear-tracking-stats" class="secondary-button">
+            Clear Statistics
+          </button>
+          <button id="export-privacy-report" class="secondary-button">
+            Export Privacy Report
+          </button>
+        </div>
+
+        <div class="subsection">
+          <h3>Referrer Control</h3>
+          <p class="help-text" style="margin-bottom: 10px">
+            Choose what referrer information is sent when you leave Reddit.
+            Higher privacy may break some website features.
+          </p>
+
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="referrer-policy"
+              value="default"
+              id="referrer-default"
+            />
+            <span>
+              <strong>Default</strong> - Use browser's default behavior
+            </span>
+          </label>
+
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="referrer-policy"
+              value="same-origin"
+              id="referrer-same-origin"
+            />
+            <span>
+              <strong>Same Origin (Recommended)</strong> - Only send referrer
+              within Reddit
+            </span>
+          </label>
+
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="referrer-policy"
+              value="origin"
+              id="referrer-origin"
+            />
+            <span>
+              <strong>Origin Only</strong> - Only send domain (high privacy)
+            </span>
+          </label>
+
+          <label class="radio-label">
+            <input
+              type="radio"
+              name="referrer-policy"
+              value="no-referrer"
+              id="referrer-no-referrer"
+            />
+            <span>
+              <strong>No Referrer</strong> - Don't send any referrer (maximum
+              privacy)
+            </span>
+          </label>
+        </div>
+
+        <div class="subsection">
+          <h3>Custom Tracking Parameters</h3>
+          <p class="help-text">
+            Add or remove tracking parameters (one per line). Changes take
+            effect immediately.
+          </p>
+
+          <textarea
+            id="tracking-params"
+            rows="8"
+            placeholder="utm_source&#10;fbclid&#10;gclid&#10;..."
+            spellcheck="false"
+            class="custom-css-textarea"
+          ></textarea>
+
+          <div class="button-row">
+            <button id="save-tracking-params" class="primary-button">
+              Save Parameters
+            </button>
+            <button id="reset-tracking-params" class="secondary-button">
+              Reset to Defaults
+            </button>
+          </div>
         </div>
       </section>
 
@@ -664,6 +1556,28 @@
             </label>
           </div>
 
+          <div class="option-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="use-regex" />
+              <span>Use regular expressions (advanced)</span>
+            </label>
+            <p class="option-description">
+              Treat keywords as regex patterns instead of plain text. Requires
+              valid regex syntax.
+            </p>
+          </div>
+
+          <div class="option-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="filter-content" />
+              <span>Filter post content (not just titles)</span>
+            </label>
+            <p class="option-description">
+              Check post body text for keywords, not just titles. Works with
+              self-posts that have visible content.
+            </p>
+          </div>
+
           <ul id="keyword-list" class="tag-list">
             <!-- Populated by JS -->
           </ul>
@@ -686,6 +1600,91 @@
             accept=".json"
             style="display: none"
           />
+        </div>
+      </section>
+
+      <!-- Flair Filtering -->
+      <section class="setting">
+        <h2>Flair Filtering</h2>
+        <p class="section-description">
+          Hide posts with specific post flairs. Many subreddits use flairs to
+          categorize posts (e.g., "Meme", "Discussion", "NSFW").
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="filter-by-flair" />
+            <span>Enable flair filtering</span>
+          </label>
+          <p class="option-description">
+            Hide posts based on their flair text. Flair text must match exactly
+            (case-insensitive).
+          </p>
+        </div>
+
+        <div class="whitelist-container">
+          <div class="whitelist-input-row">
+            <input
+              type="text"
+              id="flair-input"
+              class="text-input"
+              placeholder="Flair text (e.g., Meme, Spoiler)"
+            />
+            <button class="button" id="add-flair">Mute</button>
+          </div>
+
+          <ul id="flair-list" class="tag-list">
+            <!-- Populated by JS -->
+          </ul>
+
+          <p class="empty-state" id="flair-empty">
+            No muted flairs. All posts regardless of flair will be shown.
+          </p>
+        </div>
+
+        <div class="muted-actions">
+          <button class="button secondary" id="export-flairs">
+            📥 Export List
+          </button>
+          <button class="button secondary" id="import-flairs">
+            📤 Import List
+          </button>
+        </div>
+      </section>
+
+      <!-- Score Filtering -->
+      <section class="setting">
+        <h2>Score Filtering</h2>
+        <p class="section-description">
+          Hide posts with scores below a threshold. Useful for filtering low
+          quality or unpopular content.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="filter-by-score" />
+            <span>Enable score filtering</span>
+          </label>
+          <p class="option-description">
+            Hide posts with scores below the minimum threshold.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="min-score">Minimum score threshold</label>
+          <input
+            type="number"
+            id="min-score"
+            class="text-input"
+            placeholder="0"
+            min="-999"
+            max="999999"
+            style="max-width: 150px"
+          />
+          <p class="option-description">
+            Posts with scores below this value will be hidden. Default: 0 (hide
+            negative posts).
+          </p>
         </div>
       </section>
 
@@ -731,6 +1730,345 @@
             accept=".json"
             style="display: none"
           />
+        </div>
+      </section>
+
+      <!-- Reading History -->
+      <section
+        class="setting"
+        role="region"
+        aria-labelledby="reading-history-heading"
+      >
+        <h2 id="reading-history-heading">Reading History</h2>
+        <p class="section-description">
+          Track posts you've read for easy reference. All history is stored
+          locally and never leaves your browser.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="reading-history-enabled" />
+            <span>Enable reading history</span>
+          </label>
+          <p class="help-text">
+            Track which posts you've viewed. History is stored locally only.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="show-visited-indicator" />
+            <span>Show visited indicator on posts</span>
+          </label>
+          <p class="help-text">
+            Display a checkmark (✓) next to posts you've already read.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="history-retention-days">Keep history for</label>
+          <select id="history-retention-days" class="select-input">
+            <option value="7">7 days</option>
+            <option value="14">14 days</option>
+            <option value="30">30 days</option>
+            <option value="60">60 days</option>
+            <option value="90">90 days</option>
+          </select>
+        </div>
+
+        <div class="stats-grid" style="margin-top: 15px">
+          <div class="stat-card">
+            <div class="stat-label">Posts in History</div>
+            <div class="stat-value" id="history-entry-count">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Most Recent</div>
+            <div class="stat-value stat-value-small" id="history-last-viewed">
+              Never
+            </div>
+          </div>
+        </div>
+
+        <!-- History Table -->
+        <div class="subsection">
+          <h3>Recent History</h3>
+          <div class="search-box">
+            <input
+              type="text"
+              id="history-search"
+              class="search-input"
+              placeholder="Search history..."
+            />
+          </div>
+          <div id="history-table-container">
+            <table id="history-table" class="data-table">
+              <thead>
+                <tr>
+                  <th>Post</th>
+                  <th>Subreddit</th>
+                  <th>Viewed</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody">
+                <!-- History entries will be inserted here -->
+              </tbody>
+            </table>
+            <p id="history-empty" class="empty-message" style="display: none">
+              No posts in reading history yet.
+            </p>
+          </div>
+        </div>
+
+        <div class="button-row" style="margin-top: 15px">
+          <button id="clear-reading-history" class="secondary-button">
+            Clear All History
+          </button>
+          <button id="export-reading-history" class="secondary-button">
+            Export History
+          </button>
+          <button id="import-reading-history-btn" class="secondary-button">
+            Import History
+          </button>
+          <input
+            type="file"
+            id="import-reading-history-file"
+            accept=".json"
+            style="display: none"
+          />
+        </div>
+      </section>
+
+      <!-- NSFW Controls -->
+      <section
+        class="setting"
+        role="region"
+        aria-labelledby="nsfw-controls-heading"
+      >
+        <h2 id="nsfw-controls-heading">NSFW Content Controls</h2>
+        <p class="section-description">
+          Control how NSFW (Not Safe For Work) content is displayed on Reddit.
+          You can blur, hide, or show NSFW posts, with options for per-subreddit
+          exceptions.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="nsfw-controls-enabled" />
+            <span>Enable NSFW content controls</span>
+          </label>
+          <p class="help-text">
+            When disabled, NSFW content is shown normally (Reddit's default
+            behavior).
+          </p>
+        </div>
+
+        <div class="option-row" id="nsfw-visibility-row">
+          <label for="nsfw-visibility">NSFW Visibility</label>
+          <select
+            id="nsfw-visibility"
+            class="select-input"
+            aria-describedby="nsfw-visibility-desc"
+          >
+            <option value="show">Show (no filtering)</option>
+            <option value="blur">Blur (images are blurred)</option>
+            <option value="hide">Hide (posts are hidden)</option>
+          </select>
+          <p class="option-description" id="nsfw-visibility-desc">
+            Choose how to handle NSFW content. "Blur" obscures images but keeps
+            posts visible. "Hide" removes NSFW posts from your feed entirely.
+          </p>
+        </div>
+
+        <div class="option-row" id="nsfw-blur-options">
+          <label for="nsfw-blur-intensity">Blur Intensity</label>
+          <div class="range-container">
+            <input
+              type="range"
+              id="nsfw-blur-intensity"
+              min="5"
+              max="20"
+              value="10"
+              class="range-input"
+            />
+            <span id="nsfw-blur-intensity-value">10px</span>
+          </div>
+          <p class="help-text">
+            How much to blur NSFW images. Higher values = more blur.
+          </p>
+        </div>
+
+        <div class="option-row" id="nsfw-hover-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="nsfw-reveal-hover" checked />
+            <span>Reveal on hover</span>
+          </label>
+          <p class="help-text">
+            Temporarily reveal blurred NSFW content when hovering over it.
+          </p>
+        </div>
+
+        <div class="option-row" id="nsfw-warning-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="nsfw-show-warning" checked />
+            <span>Show NSFW warning overlay</span>
+          </label>
+          <p class="help-text">
+            Display a "18+ NSFW" badge on blurred thumbnails. Click to
+            temporarily reveal.
+          </p>
+        </div>
+
+        <!-- NSFW Allowed Subreddits -->
+        <div class="subsection">
+          <h3>Allowed Subreddits</h3>
+          <p class="help-text">
+            NSFW content will always be shown (not blurred/hidden) in these
+            subreddits. Use this for subreddits you trust or where NSFW tagging
+            is inconsistent.
+          </p>
+          <div class="input-group">
+            <input
+              type="text"
+              id="nsfw-allowed-subreddit"
+              placeholder="Enter subreddit name (e.g., art)"
+              class="text-input"
+              aria-label="Subreddit name to allow"
+            />
+            <button id="add-nsfw-allowed" class="primary-button">Add</button>
+          </div>
+          <div class="tag-list" id="nsfw-allowed-list">
+            <!-- Populated by JavaScript -->
+          </div>
+          <p id="nsfw-allowed-empty" class="empty-message">
+            No subreddits added yet. NSFW controls apply everywhere.
+          </p>
+        </div>
+
+        <div class="button-row" style="margin-top: 15px">
+          <button id="clear-nsfw-allowed" class="secondary-button">
+            Clear All Allowed Subreddits
+          </button>
+        </div>
+      </section>
+
+      <!-- Storage Management -->
+      <section class="setting">
+        <h2>Storage Management</h2>
+        <p class="section-description">
+          Monitor storage usage and optimize performance. The extension uses
+          both local storage and sync storage (when enabled).
+        </p>
+
+        <!-- Storage Health Status -->
+        <div
+          id="storage-health-banner"
+          class="health-banner"
+          style="display: none"
+        >
+          <span class="health-icon" id="storage-health-icon"></span>
+          <span class="health-message" id="storage-health-message"></span>
+        </div>
+
+        <!-- Storage Usage Overview -->
+        <div class="storage-overview">
+          <div class="storage-meters">
+            <div class="storage-meter-group">
+              <div class="meter-header">
+                <span class="meter-label">Local Storage</span>
+                <span class="meter-value" id="local-storage-value"
+                  >0 KB / 5 MB</span
+                >
+              </div>
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  id="local-storage-bar"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+
+            <div class="storage-meter-group">
+              <div class="meter-header">
+                <span class="meter-label">Sync Storage</span>
+                <span class="meter-value" id="sync-storage-value"
+                  >0 KB / 100 KB</span
+                >
+              </div>
+              <div class="progress-bar">
+                <div
+                  class="progress-fill"
+                  id="sync-storage-bar"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Storage Breakdown -->
+          <div class="storage-breakdown">
+            <h3>Storage Breakdown</h3>
+            <div class="breakdown-grid" id="storage-breakdown-grid">
+              <!-- Populated by JavaScript -->
+            </div>
+          </div>
+
+          <!-- Item Counts -->
+          <div class="storage-counts">
+            <h3>Feature Usage</h3>
+            <div class="counts-grid">
+              <div class="count-item">
+                <span class="count-label">User Tags</span>
+                <span class="count-value" id="count-user-tags">0/500</span>
+              </div>
+              <div class="count-item">
+                <span class="count-label">Muted Users</span>
+                <span class="count-value" id="count-muted-users">0/500</span>
+              </div>
+              <div class="count-item">
+                <span class="count-label">Sort Preferences</span>
+                <span class="count-value" id="count-sort-prefs">0/100</span>
+              </div>
+              <div class="count-item">
+                <span class="count-label">Scroll Positions</span>
+                <span class="count-value" id="count-scroll-pos">0/100</span>
+              </div>
+              <div class="count-item">
+                <span class="count-label">Layout Presets</span>
+                <span class="count-value" id="count-presets">0/20</span>
+              </div>
+              <div class="count-item">
+                <span class="count-label">Muted Subreddits</span>
+                <span class="count-value" id="count-muted-subs">0/100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cleanup Actions -->
+          <div class="storage-actions">
+            <h3>Optimization</h3>
+            <p class="help-text">
+              Clean up expired data to free storage space and improve
+              performance.
+            </p>
+            <div class="button-row">
+              <button id="run-storage-cleanup" class="button">
+                Run Cleanup
+              </button>
+              <button id="run-storage-maintenance" class="secondary-button">
+                Full Maintenance
+              </button>
+              <button id="refresh-storage-stats" class="secondary-button">
+                Refresh Stats
+              </button>
+            </div>
+            <p
+              class="cleanup-result"
+              id="cleanup-result"
+              style="display: none"
+            ></p>
+          </div>
         </div>
       </section>
 
@@ -822,6 +2160,164 @@
           <!-- "Last synced: 2 minutes ago" or "Not synced" -->
         </p>
       </section>
+
+      <!-- Keyboard Shortcuts -->
+      <section class="setting">
+        <h2>Keyboard Shortcuts</h2>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="keyboard-shortcuts-enabled"
+              >Enable keyboard shortcuts</label
+            >
+            <p class="description">
+              Use keyboard shortcuts to quickly navigate and control the
+              extension
+            </p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="keyboard-shortcuts-enabled" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div id="keyboard-shortcuts-settings" style="display: none">
+          <!-- Chord timeout setting -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="chord-timeout">Chord timeout (ms)</label>
+              <p class="description">
+                Time to wait between keys in chord shortcuts (e.g., "g g")
+              </p>
+            </div>
+            <input
+              type="number"
+              id="chord-timeout"
+              min="500"
+              max="3000"
+              step="100"
+              style="
+                width: 100px;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+              "
+            />
+          </div>
+
+          <!-- Conflict warning banner -->
+          <div
+            id="keyboard-conflicts-warning"
+            class="warning-banner"
+            style="display: none"
+          >
+            <strong>⚠️ Keyboard Shortcut Conflicts Detected</strong>
+            <p id="keyboard-conflicts-message"></p>
+          </div>
+
+          <!-- Shortcuts table -->
+          <div class="shortcuts-table-container">
+            <table class="shortcuts-table">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Keys</th>
+                  <th>Context</th>
+                  <th>Enabled</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="shortcuts-table-body">
+                <!-- Populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="keyboard-shortcuts-actions">
+            <button id="keyboard-export-btn" class="secondary-button">
+              Export Shortcuts
+            </button>
+            <button id="keyboard-import-btn" class="secondary-button">
+              Import Shortcuts
+            </button>
+            <button id="keyboard-reset-all-btn" class="danger-button">
+              Reset All to Defaults
+            </button>
+          </div>
+          <input
+            type="file"
+            id="keyboard-import-file"
+            accept=".json"
+            style="display: none"
+          />
+        </div>
+
+        <p class="help-text">
+          Customize keyboard shortcuts to match your preferences. Press Shift+/
+          on any Reddit page to see the help overlay.
+        </p>
+      </section>
+
+      <!-- Keyboard Shortcut Edit Modal -->
+      <div id="keyboard-edit-modal" class="modal" style="display: none">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Edit Keyboard Shortcut</h3>
+            <button class="modal-close" id="keyboard-edit-close">
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Action</label>
+              <p
+                id="keyboard-edit-action-name"
+                class="keyboard-action-display"
+              ></p>
+            </div>
+            <div class="form-group">
+              <label for="keyboard-edit-keys">Keys</label>
+              <div class="keyboard-capture-container">
+                <input
+                  type="text"
+                  id="keyboard-edit-keys"
+                  class="keyboard-capture-input"
+                  placeholder="Press keys or type combination..."
+                  autocomplete="off"
+                />
+                <p class="keyboard-capture-hint">
+                  Click and press your desired key combination, or type it
+                  manually (e.g., "Ctrl+K", "G G")
+                </p>
+              </div>
+              <p id="keyboard-edit-validation" class="validation-message"></p>
+            </div>
+            <div class="form-group">
+              <label>Context</label>
+              <p
+                id="keyboard-edit-context"
+                class="keyboard-context-display"
+              ></p>
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="keyboard-edit-enabled" />
+                Enable this shortcut
+              </label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="keyboard-edit-save" class="primary-button">Save</button>
+            <button id="keyboard-edit-reset" class="secondary-button">
+              Reset to Default
+            </button>
+            <button id="keyboard-edit-cancel" class="secondary-button">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- Footer -->
       <footer>
