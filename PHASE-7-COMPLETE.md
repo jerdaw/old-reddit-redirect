@@ -15,6 +15,7 @@ Phase 7 removes all legacy IIFE code from content-script.js and makes modular lo
 **After:** 25 lines (simple module loader import)
 
 **New content-script.js:**
+
 ```javascript
 "use strict";
 
@@ -129,16 +130,17 @@ content-script.js             (25 lines) [Phase 7]
 
 ## Build Size Analysis
 
-| Phase   | Zip Size | Change from Previous | Change from Start | Notes                              |
-| ------- | -------- | -------------------- | ----------------- | ---------------------------------- |
-| Phase 1 | 154KB    | Baseline             | -                 | Foundation + feature flag          |
-| Phase 2 | 161KB    | +7KB                 | +7KB              | Core modules extracted             |
-| Phase 3 | 169KB    | +8KB                 | +15KB             | Comment modules extracted          |
-| Phase 4 | 177KB    | +8KB                 | +23KB             | Optional features extracted        |
-| Phase 5 | 181KB    | +4KB                 | +27KB             | Feed modules extracted             |
-| Phase 7 | 156KB    | **-25KB**            | **+2KB**          | Legacy code removed (final)        |
+| Phase   | Zip Size | Change from Previous | Change from Start | Notes                       |
+| ------- | -------- | -------------------- | ----------------- | --------------------------- |
+| Phase 1 | 154KB    | Baseline             | -                 | Foundation + feature flag   |
+| Phase 2 | 161KB    | +7KB                 | +7KB              | Core modules extracted      |
+| Phase 3 | 169KB    | +8KB                 | +15KB             | Comment modules extracted   |
+| Phase 4 | 177KB    | +8KB                 | +23KB             | Optional features extracted |
+| Phase 5 | 181KB    | +4KB                 | +27KB             | Feed modules extracted      |
+| Phase 7 | 156KB    | **-25KB**            | **+2KB**          | Legacy code removed (final) |
 
 **Key Insights:**
+
 - Phases 1-5: Size increased as modular code was added alongside legacy code
 - Phase 7: Size decreased by 25KB (13.8%) by removing duplicate legacy code
 - Final size (156KB) is only 2KB more than Phase 1 baseline (154KB)
@@ -147,26 +149,31 @@ content-script.js             (25 lines) [Phase 7]
 ## Performance Impact
 
 ### Bundle Size Reduction
+
 - **From Phase 5:** 181KB → 156KB = **25KB reduction (13.8%)**
 - **From legacy baseline:** ~3,674 lines of duplicate code eliminated
 
 ### Runtime Benefits (Maintained from Phases 1-5)
 
 **Feed Pages:**
+
 - Comment modules NOT loaded (756 lines saved)
 - Only enabled optional features load
 - Typical savings: 1,000+ lines not executed
 
 **Comment Pages:**
+
 - Feed modules minimally loaded (sort preferences still useful)
 - Only enabled optional features load
 - Typical savings: 500+ lines not executed
 
 **Average User:**
+
 - 2-3 optional features enabled (not all 4)
 - ~400 lines not loaded per session
 
 ### Memory Savings
+
 - **Heap reduction:** ~40KB less JavaScript in memory
 - **Parse time:** 100-150ms faster initial load
 - **Module cache:** Browser caches modules between page loads
@@ -180,6 +187,7 @@ content-script.js             (25 lines) [Phase 7]
 - Zero regressions
 
 **Code quality:**
+
 - ✅ ESLint: No errors
 - ✅ Prettier: All files formatted
 - ✅ Build: Extension packages successfully (156KB)
@@ -189,6 +197,7 @@ content-script.js             (25 lines) [Phase 7]
 **Backward compatibility:** ❌ Intentionally removed
 
 The legacy IIFE code path has been permanently removed. However:
+
 - All functionality maintained through modular code
 - Thoroughly tested through 5 previous phases
 - Backup file available if emergency rollback needed
@@ -216,6 +225,7 @@ Module load failures are caught and reported, but there's no fallback to legacy 
 ## Files Modified
 
 ### Modified (3 files):
+
 1. **content-script.js** (3,699 → 25 lines, -99.3%)
    - Removed async wrapper
    - Removed feature flag check
@@ -229,6 +239,7 @@ Module load failures are caught and reported, but there's no fallback to legacy 
    - Removed `experimental` object with `useModularLoading` flag
 
 ### Created (1 file):
+
 - **content-script.js.backup-phase7** (3,699 lines, safety backup)
 
 ## Success Criteria - All Met ✅
@@ -247,15 +258,18 @@ Module load failures are caught and reported, but there's no fallback to legacy 
 ## Final Performance Summary
 
 ### Code Reduction
+
 - **content-script.js:** 3,699 → 25 lines (99.3% reduction)
 - **Total codebase:** 3,699 → 3,002 lines (18.8% reduction)
 - **Duplicate code eliminated:** 3,674 lines
 
 ### Size Reduction
+
 - **From Phase 5:** 181KB → 156KB (-25KB, -13.8%)
 - **From Phase 1:** 154KB → 156KB (+2KB overhead for modular architecture)
 
 ### Runtime Efficiency
+
 - **Feed pages:** ~1,000 lines not loaded/executed
 - **Comment pages:** ~500 lines not loaded/executed
 - **Memory savings:** ~40KB heap reduction
@@ -264,23 +278,27 @@ Module load failures are caught and reported, but there's no fallback to legacy 
 ## Architecture Benefits Achieved
 
 ### 1. Lazy Loading ✅
+
 - Page-level: Comment modules only on /comments/ pages
 - Page-level: Feed modules only on feed/subreddit pages
 - Feature-level: Optional features only when enabled
 
 ### 2. Maintainability ✅
+
 - Features isolated in dedicated modules
 - Clear module boundaries and responsibilities
 - Shared utilities reduce code duplication
 - Easy to add/remove features
 
 ### 3. Performance ✅
+
 - Smaller initial bundle (156KB vs legacy baseline)
 - Faster parse/execute time
 - Lower memory footprint
 - Browser module caching
 
 ### 4. Native ES Modules ✅
+
 - No bundler required (Chrome 91+, Firefox 130+)
 - Dynamic import() for lazy loading
 - Simple build process
@@ -293,6 +311,7 @@ Module load failures are caught and reported, but there's no fallback to legacy 
 The plan included an optional Phase 6 to extract keyboard shortcuts (~450 lines) into a separate module. However:
 
 **Reasons to defer:**
+
 1. Keyboard shortcuts integrate deeply with comment navigation
 2. Already well-organized in keyboard-utils.js
 3. Minimal size benefit (only ~450 lines)
@@ -344,29 +363,37 @@ The plan included an optional Phase 6 to extract keyboard shortcuts (~450 lines)
 ## Next Steps (Optional Future Work)
 
 ### 1. Module Preloading (Performance++)
+
 Add `<link rel="modulepreload">` to hint browser about critical modules:
+
 ```html
-<link rel="modulepreload" href="modules/loader.js">
-<link rel="modulepreload" href="modules/core/dark-mode.js">
+<link rel="modulepreload" href="modules/loader.js" />
+<link rel="modulepreload" href="modules/core/dark-mode.js" />
 ```
 
 ### 2. Code Splitting 2.0 (Advanced)
+
 Further split large modules:
+
 - content-filtering.js (280 lines) → separate subreddit/keyword/domain files
 - user-tags.js (295 lines) → split tag UI from tag storage
 
 ### 3. Tree Shaking (Bundler)
+
 If bundle size becomes critical:
+
 - Add Rollup/esbuild
 - Enable tree shaking
 - Target: ~120KB (additional 25% reduction)
 
 ### 4. Module Documentation
+
 - Add JSDoc comments to all exported functions
 - Generate API documentation
 - Create module dependency diagram
 
 ### 5. Performance Monitoring
+
 - Add telemetry for module load times
 - Track which features users actually enable
 - Identify candidates for further optimization
