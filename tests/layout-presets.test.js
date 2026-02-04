@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 
 describe("Layout Presets - Storage Schema", () => {
   it("should have getLayoutPresets in storage API", async () => {
-    const storage = await import("../storage.js");
+    const storage = await import("../src/core/storage.js");
 
     expect(storage.default).toBeDefined();
     expect(typeof storage.default.getLayoutPresets).toBe("function");

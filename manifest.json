@@ -19,7 +19,7 @@
     "128": "img/icon128.png"
   },
   "action": {
-    "default_popup": "popup.html",
+    "default_popup": "src/pages/popup/popup.html",
     "default_title": "Old Reddit Redirect"
   },
   "commands": {
@@ -31,17 +31,17 @@
     }
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/core/background.js"
   },
   "options_ui": {
-    "page": "options.html",
+    "page": "src/pages/options/options.html",
     "open_in_tab": true
   },
   "content_scripts": [
     {
       "matches": ["https://old.reddit.com/*"],
-      "css": ["styles.css"],
-      "js": ["content-script.js"],
+      "css": ["src/content/styles.css"],
+      "js": ["src/content/content-script.js"],
       "run_at": "document_end",
       "type": "module"
     }

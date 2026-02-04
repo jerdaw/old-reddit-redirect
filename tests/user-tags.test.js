@@ -3,7 +3,7 @@ import { JSDOM } from "jsdom";
 
 describe("User Tags - Storage Schema", () => {
   it("should have userTags in storage schema", async () => {
-    const storage = await import("../storage.js");
+    const storage = await import("../src/core/storage.js");
 
     // Check that storage methods exist
     expect(storage.default).toBeDefined();

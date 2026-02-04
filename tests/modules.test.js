@@ -298,7 +298,7 @@ describe("Modular Loading - Phase 1", () => {
   describe("Feature Flag Integration", () => {
     it("should have experimental flag in storage schema", async () => {
       // Import storage.js and check for experimental flag
-      const _storageModule = await import("../storage.js");
+      const _storageModule = await import("../src/core/storage.js");
 
       // The DEFAULTS should be accessible (though in an IIFE, we can test via chrome.storage mock)
       expect(true).toBe(true); // Placeholder - actual test would check chrome.storage.local.get defaults
