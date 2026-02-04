@@ -577,6 +577,25 @@ After Phase 5 & 9.1-9.2 completion, potential future enhancements organized by p
 
 ---
 
+## 🔄 Deferred Features Summary
+
+Features planned for future releases but deferred from their original phases:
+
+### Performance & Optimization (Phase 6)
+- **6.1 Code Splitting & Lazy Loading** - Split optional features into separate modules, load on-demand
+- **6.2 Performance Profiling Dashboard** - Track extension performance metrics and identify bottlenecks
+
+### Accessibility & Internationalization (Phase 7)
+- **7.5 Multi-Language Support** - Internationalize options page UI, translate help text, RTL language support
+
+### Privacy & Security (Phase 10)
+- **10.3 Anti-Fingerprinting** - Canvas fingerprinting protection, user agent randomization
+- **10.4 Local-First Architecture** - Encrypted storage option for sensitive data
+
+**Status**: All deferred features are planned for future releases when resources and community demand align.
+
+---
+
 ## Lower Priority Ideas
 
 ### Navigation Enhancements
