@@ -36,7 +36,7 @@ const mockChrome = {
 global.chrome = mockChrome;
 
 // Import Storage after mocking chrome
-const { default: _Storage } = await import("../storage.js").catch(() => {
+const { default: _Storage } = await import("../src/core/storage.js").catch(() => {
   // Return a mock Storage for testing
   return {
     default: {

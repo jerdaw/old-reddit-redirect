@@ -8,7 +8,7 @@
  */
 
 // Import and initialize module loader
-import("./modules/loader.js").catch((error) => {
+import("../../modules/loader.js").catch((error) => {
   console.error("[ORR] Failed to load modules:", error);
 
   // Report error to background for telemetry

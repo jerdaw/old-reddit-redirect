@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 
 describe("Feed Enhancements - Storage Schema", () => {
   it("should have getFeedEnhancements in storage API", async () => {
-    const storage = await import("../storage.js");
+    const storage = await import("../src/core/storage.js");
 
     expect(storage.default).toBeDefined();
     expect(typeof storage.default.getFeedEnhancements).toBe("function");

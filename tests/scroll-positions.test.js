@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 
 describe("Scroll Positions - Storage Schema", () => {
   it("should have scrollPositions in storage schema", async () => {
-    const storage = await import("../storage.js");
+    const storage = await import("../src/core/storage.js");
 
     expect(storage.default).toBeDefined();
     expect(typeof storage.default.getScrollPositions).toBe("function");

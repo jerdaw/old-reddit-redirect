@@ -9,7 +9,7 @@ import {
   contextsOverlap,
   isContextMatch,
   validateKeyString,
-} from "../keyboard-utils.js";
+} from "../src/content/keyboard-utils.js";
 
 describe("Keyboard Shortcuts - Phase 1", () => {
   describe("Storage Schema", () => {

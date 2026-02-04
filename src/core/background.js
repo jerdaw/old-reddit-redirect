@@ -748,7 +748,7 @@ if (typeof importScripts === "function") {
 
     try {
       await chrome.offscreen.createDocument({
-        url: "offscreen.html",
+        url: "src/content/offscreen.html",
         reasons: ["CLIPBOARD"],
         justification: "Copy Reddit link to clipboard",
       });
@@ -992,7 +992,7 @@ if (typeof importScripts === "function") {
     if (details.reason === "install") {
       const complete = await Storage.get("onboardingComplete", false);
       if (!complete) {
-        chrome.tabs.create({ url: "onboarding.html" });
+        chrome.tabs.create({ url: "src/pages/onboarding/onboarding.html" });
       }
     }
 

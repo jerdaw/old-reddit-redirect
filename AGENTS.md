@@ -51,19 +51,23 @@ AI coding agent instructions for this repository. This file provides guidance fo
 
 ### Core Files
 
-| File                     | Purpose                                                      |
-| ------------------------ | ------------------------------------------------------------ |
-| `manifest.json`          | Extension manifest (V3) with ES module support               |
-| `rules.json`             | Declarative net request redirect rules                       |
-| `background.js`          | Service worker (toggle, stats, context menus)                |
-| `storage.js`             | Centralized storage abstraction with sync                    |
-| `logger.js`              | Logging utility with configurable levels                     |
-| `content-script.js`      | Entry point (25 lines) that imports modular loader           |
-| `modules/`               | Modular features (24 ES6 modules, lazy + conditional loaded) |
-| `styles.css`             | Content script CSS (themes, nag blocking)                    |
-| `popup.html/js/css`      | Extension popup UI                                           |
-| `options.html/js/css`    | Full options page                                            |
-| `onboarding.html/js/css` | First-run experience                                         |
+| File                                  | Purpose                                                      |
+| ------------------------------------- | ------------------------------------------------------------ |
+| `manifest.json`                       | Extension manifest (V3) with ES module support               |
+| `rules.json`                          | Declarative net request redirect rules                       |
+| `src/core/background.js`              | Service worker (toggle, stats, context menus)                |
+| `src/core/storage.js`                 | Centralized storage abstraction with sync                    |
+| `src/core/logger.js`                  | Logging utility with configurable levels                     |
+| `src/core/frontends.js`               | Alternative frontend configurations                          |
+| `src/content/content-script.js`       | Entry point (25 lines) that imports modular loader           |
+| `src/content/styles.css`              | Content script CSS (themes, nag blocking)                    |
+| `src/content/keyboard-utils.js`       | Keyboard utilities and shortcut handling                     |
+| `src/content/suggestions.js`          | Subreddit suggestions                                        |
+| `src/content/offscreen.html/js`       | Clipboard access (MV3)                                       |
+| `modules/`                            | Modular features (24 ES6 modules, lazy + conditional loaded) |
+| `src/pages/popup/`                    | Extension popup UI (HTML/JS/CSS)                             |
+| `src/pages/options/`                  | Full options page (HTML/JS/CSS)                              |
+| `src/pages/onboarding/`               | First-run experience (HTML/JS/CSS)                           |
 
 ### Modular Architecture (v19.0.0+)
 
@@ -288,11 +292,23 @@ GitHub Actions (`.github/workflows/ci.yml`):
 ```
 ├── manifest.json          # Extension manifest (V3, ES modules)
 ├── rules.json             # Redirect rules
-├── background.js          # Service worker
-├── storage.js             # Storage layer
-├── logger.js              # Logging utility
-├── content-script.js      # Entry point (25 lines, imports loader)
-├── styles.css             # Injected CSS
+├── src/                   # Source code
+│   ├── core/              # Core modules
+│   │   ├── background.js  # Service worker
+│   │   ├── storage.js     # Storage layer
+│   │   ├── logger.js      # Logging utility
+│   │   └── frontends.js   # Alternative frontend configs
+│   ├── content/           # Content scripts
+│   │   ├── content-script.js  # Entry point (25 lines, imports loader)
+│   │   ├── styles.css         # Injected CSS
+│   │   ├── keyboard-utils.js  # Keyboard utilities
+│   │   ├── suggestions.js     # Subreddit suggestions
+│   │   ├── offscreen.html     # Clipboard access (MV3)
+│   │   └── offscreen.js
+│   └── pages/             # UI pages
+│       ├── popup/         # Extension popup (HTML/JS/CSS)
+│       ├── options/       # Options page (HTML/JS/CSS)
+│       └── onboarding/    # First-run UX (HTML/JS/CSS)
 ├── modules/               # Modular features (24 files)
 │   ├── loader.js          # Module orchestrator
 │   ├── shared/            # Shared utilities (3 files)
@@ -300,15 +316,12 @@ GitHub Actions (`.github/workflows/ci.yml`):
 │   ├── comments/          # Lazy-loaded for /comments/ (5 files)
 │   ├── feed/              # Lazy-loaded for feeds (3 files)
 │   └── optional/          # Conditionally loaded (5 files)
-├── popup.html/js/css      # Popup UI
-├── options.html/js/css    # Options page
-├── onboarding.html/js/css # First-run UX
-├── suggestions.js         # Subreddit suggestions
-├── offscreen.html/js      # Clipboard access (MV3)
-├── keyboard-utils.js      # Keyboard utilities
 ├── img/                   # Icons (16-128px)
 ├── tests/                 # Test suites (830 tests)
 ├── scripts/               # Build scripts
 ├── store/                 # Store metadata
 └── docs/                  # Documentation
+    ├── migration/         # Modular architecture migration docs
+    ├── testing/           # Manual test checklists
+    └── archive/           # Historical planning documents
 ```
