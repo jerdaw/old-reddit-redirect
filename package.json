@@ -1,6 +1,6 @@
 {
   "name": "old-reddit-redirect",
-  "version": "12.2.0",
+  "version": "19.0.0",
   "private": true,
   "type": "module",
   "description": "Browser extension to redirect Reddit to old.reddit.com",
