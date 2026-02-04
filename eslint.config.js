@@ -56,6 +56,20 @@ export default [
     },
   },
   {
+    files: ["modules/**/*.js"],
+    languageOptions: {
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        ...globals.webextensions,
+      },
+    },
+    rules: {
+      strict: "off",
+      "no-implicit-globals": "off",
+    },
+  },
+  {
     ignores: [
       "node_modules/**",
       "*.zip",
