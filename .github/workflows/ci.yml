@@ -33,9 +33,6 @@ jobs:
           node -e "JSON.parse(require('fs').readFileSync('./rules.json'))"
           echo "✓ rules.json is valid"
 
-      - name: Validate JavaScript syntax
-        run: node -c background.js && node -c options.js
-
       - name: Run ESLint
         run: npm run lint
 
