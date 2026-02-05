@@ -7,6 +7,7 @@ import {
   getCurrentSubreddit,
   isSubredditPage,
 } from "../shared/page-detection.js";
+import { debugLog } from "../shared/debug-helpers.js";
 
 /**
  * Get current sort order from URL
@@ -92,7 +93,7 @@ async function applySortPreference() {
     // Mark redirect to prevent loop
     sessionStorage.setItem("orr-sort-redirected", "true");
 
-    console.log(
+    debugLog(
       `[ORR] Applying sort preference for /r/${subreddit}: ${preference.sort}${preference.time ? ` (${preference.time})` : ""}`
     );
 
@@ -141,7 +142,7 @@ async function detectSortChange() {
       // Clear redirect flag (user is manually navigating)
       sessionStorage.removeItem("orr-sort-redirected");
 
-      console.log(
+      debugLog(
         `[ORR] Saved sort preference for /r/${subreddit}: ${currentSort.sort}${currentSort.time ? ` (${currentSort.time})` : ""}`
       );
     }

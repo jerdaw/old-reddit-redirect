@@ -5,6 +5,7 @@
 
 import { getStorage } from "../shared/storage-helpers.js";
 import { $, $$ } from "../shared/dom-helpers.js";
+import { debugLog } from "../shared/debug-helpers.js";
 
 /**
  * Track current post in reading history
@@ -52,7 +53,7 @@ async function trackReadingHistory() {
         commentCount: commentCount,
       });
 
-      console.log(`[ORR] Tracked post in reading history: ${postId}`);
+      debugLog(`[ORR] Tracked post in reading history: ${postId}`);
     }
   } catch (error) {
     console.error("[ORR] Error tracking reading history:", error);

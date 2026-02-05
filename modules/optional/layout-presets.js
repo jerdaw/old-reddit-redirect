@@ -5,6 +5,7 @@
 
 import { getStorage } from "../shared/storage-helpers.js";
 import { getCurrentSubreddit } from "../shared/page-detection.js";
+import { debugLog } from "../shared/debug-helpers.js";
 
 /**
  * Inject preset-specific custom CSS
@@ -127,7 +128,7 @@ async function applyLayoutPreset() {
       removePresetCSS();
     }
 
-    console.log(`[ORR] Applied layout preset: ${presetName}`);
+    debugLog(`[ORR] Applied layout preset: ${presetName}`);
   } catch (error) {
     console.error("[ORR] Error applying layout preset:", error);
   }

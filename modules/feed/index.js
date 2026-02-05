@@ -4,13 +4,14 @@
  */
 
 import { getStorage } from "../shared/storage-helpers.js";
+import { debugLog } from "../shared/debug-helpers.js";
 
 /**
  * Initialize feed features
  */
 export async function initFeedFeatures() {
   try {
-    console.log("[ORR] Loading feed features");
+    debugLog("[ORR] Loading feed features");
 
     // Get preferences to determine which features to load
     const prefs = await getStorage({
@@ -31,13 +32,13 @@ export async function initFeedFeatures() {
         prefs.feedEnhancements?.customCSS);
 
     if (hasFeedEnhancements) {
-      console.log("[ORR] Loading feed modes");
+      debugLog("[ORR] Loading feed modes");
       loaders.push(import("./feed-modes.js").then((m) => m.initFeedModes()));
     }
 
     // Sort preferences - check if enabled
     if (prefs.sortPreferences?.enabled !== false) {
-      console.log("[ORR] Loading sort preferences");
+      debugLog("[ORR] Loading sort preferences");
       loaders.push(
         import("./sort-preferences.js").then((m) => m.initSortPreferences())
       );
@@ -47,9 +48,9 @@ export async function initFeedFeatures() {
     await Promise.allSettled(loaders);
 
     if (loaders.length > 0) {
-      console.log(`[ORR] Loaded ${loaders.length} feed features`);
+      debugLog(`[ORR] Loaded ${loaders.length} feed features`);
     } else {
-      console.log("[ORR] No feed features enabled");
+      debugLog("[ORR] No feed features enabled");
     }
   } catch (error) {
     console.error("[ORR] Feed features initialization failed:", error);

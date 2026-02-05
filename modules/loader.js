@@ -10,19 +10,20 @@ import {
   isSubredditPage,
   isFrontPage,
 } from "./shared/page-detection.js";
+import { debugLog } from "./shared/debug-helpers.js";
 
 /**
  * Initialize all features with modular loading
  */
 export async function initializeFeatures() {
   try {
-    console.log("[ORR] Module loader: Starting feature initialization");
+    debugLog("[ORR] Module loader: Starting feature initialization");
 
     // Get user preferences (will be used in later phases)
     const _prefs = await getStorage({});
 
     // Phase 2: Core modules (always load)
-    console.log("[ORR] Module loader: Loading core features");
+    debugLog("[ORR] Module loader: Loading core features");
     const { initDarkMode } = await import("./core/dark-mode.js");
     const { initAccessibility } = await import("./core/accessibility.js");
     const { initNagBlocking } = await import("./core/nag-blocking.js");
@@ -37,16 +38,14 @@ export async function initializeFeatures() {
 
     // Phase 3: Comment modules (lazy load for comment pages)
     if (isCommentsPage()) {
-      console.log(
-        "[ORR] Module loader: Comments page detected, loading features"
-      );
+      debugLog("[ORR] Module loader: Comments page detected, loading features");
       const { initCommentFeatures } = await import("./comments/index.js");
       await initCommentFeatures();
     }
 
     // Phase 5: Feed modules (lazy load for feed pages)
     if (isSubredditPage() || isFrontPage()) {
-      console.log("[ORR] Module loader: Feed page detected, loading features");
+      debugLog("[ORR] Module loader: Feed page detected, loading features");
       const { initFeedFeatures } = await import("./feed/index.js");
       await initFeedFeatures();
     }
@@ -59,7 +58,7 @@ export async function initializeFeatures() {
     const { autoCollapseBotComments } = await import("./core/dark-mode.js");
     await autoCollapseBotComments();
 
-    console.log("[ORR] Module loader: Initialization complete");
+    debugLog("[ORR] Module loader: Initialization complete");
   } catch (error) {
     console.error("[ORR] Module loader: Initialization failed:", error);
     // Report error to background for telemetry

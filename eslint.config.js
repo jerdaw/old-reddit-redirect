@@ -47,6 +47,7 @@ export default [
       "scripts/**/*.js",
       "vitest.config.js",
       "src/content/keyboard-utils.js",
+      "src/core/constants.js",
     ],
     languageOptions: {
       sourceType: "module",
