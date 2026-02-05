@@ -51,23 +51,23 @@ AI coding agent instructions for this repository. This file provides guidance fo
 
 ### Core Files
 
-| File                                  | Purpose                                                      |
-| ------------------------------------- | ------------------------------------------------------------ |
-| `manifest.json`                       | Extension manifest (V3) with ES module support               |
-| `rules.json`                          | Declarative net request redirect rules                       |
-| `src/core/background.js`              | Service worker (toggle, stats, context menus)                |
-| `src/core/storage.js`                 | Centralized storage abstraction with sync                    |
-| `src/core/logger.js`                  | Logging utility with configurable levels                     |
-| `src/core/frontends.js`               | Alternative frontend configurations                          |
-| `src/content/content-script.js`       | Entry point (25 lines) that imports modular loader           |
-| `src/content/styles.css`              | Content script CSS (themes, nag blocking)                    |
-| `src/content/keyboard-utils.js`       | Keyboard utilities and shortcut handling                     |
-| `src/content/suggestions.js`          | Subreddit suggestions                                        |
-| `src/content/offscreen.html/js`       | Clipboard access (MV3)                                       |
-| `modules/`                            | Modular features (24 ES6 modules, lazy + conditional loaded) |
-| `src/pages/popup/`                    | Extension popup UI (HTML/JS/CSS)                             |
-| `src/pages/options/`                  | Full options page (HTML/JS/CSS)                              |
-| `src/pages/onboarding/`               | First-run experience (HTML/JS/CSS)                           |
+| File                            | Purpose                                                      |
+| ------------------------------- | ------------------------------------------------------------ |
+| `manifest.json`                 | Extension manifest (V3) with ES module support               |
+| `rules.json`                    | Declarative net request redirect rules                       |
+| `src/core/background.js`        | Service worker (toggle, stats, context menus)                |
+| `src/core/storage.js`           | Centralized storage abstraction with sync                    |
+| `src/core/logger.js`            | Logging utility with configurable levels                     |
+| `src/core/frontends.js`         | Alternative frontend configurations                          |
+| `src/content/content-script.js` | Entry point (25 lines) that imports modular loader           |
+| `src/content/styles.css`        | Content script CSS (themes, nag blocking)                    |
+| `src/content/keyboard-utils.js` | Keyboard utilities and shortcut handling                     |
+| `src/content/suggestions.js`    | Subreddit suggestions                                        |
+| `src/content/offscreen.html/js` | Clipboard access (MV3)                                       |
+| `modules/`                      | Modular features (24 ES6 modules, lazy + conditional loaded) |
+| `src/pages/popup/`              | Extension popup UI (HTML/JS/CSS)                             |
+| `src/pages/options/`            | Full options page (HTML/JS/CSS)                              |
+| `src/pages/onboarding/`         | First-run experience (HTML/JS/CSS)                           |
 
 ### Modular Architecture (v19.0.0+)
 
