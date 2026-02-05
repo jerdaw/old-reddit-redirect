@@ -1208,19 +1208,13 @@
   }
 
   /**
-   * Refresh the user tags list
+   * Filter and sort user tags by search term
+   * @param {Object} tags - Tags object from storage
+   * @param {string} searchTerm - Search term to filter by
+   * @returns {Array} - Filtered and sorted tag entries
    */
-  async function refreshUserTagsList() {
-    const config = await window.Storage.getUserTags();
-    const tags = config.tags || {};
-    const tbody = document.getElementById("tags-tbody");
-    const emptyState = document.getElementById("tags-empty");
-    const countSpan = document.getElementById("tag-count");
-    const maxSpan = document.getElementById("tag-max");
-    const searchInput = document.getElementById("tag-search");
-
+  function filterAndSortTags(tags, searchTerm) {
     const entries = Object.entries(tags);
-    const searchTerm = (searchInput.value || "").toLowerCase();
 
     // Filter by search term
     const filtered = entries.filter(([username]) =>
@@ -1230,24 +1224,32 @@
     // Sort by timestamp (newest first)
     filtered.sort((a, b) => b[1].timestamp - a[1].timestamp);
 
-    countSpan.textContent = entries.length;
-    maxSpan.textContent = config.maxTags || 500;
+    return filtered;
+  }
 
-    if (filtered.length === 0) {
-      tbody.innerHTML = "";
-      emptyState.style.display = "block";
-      document.getElementById("tags-table").style.display = "none";
-      return;
-    }
+  /**
+   * Update tag count display
+   * @param {number} currentCount - Current number of tags
+   * @param {number} maxCount - Maximum allowed tags
+   */
+  function updateTagCountDisplay(currentCount, maxCount) {
+    const countSpan = document.getElementById("tag-count");
+    const maxSpan = document.getElementById("tag-max");
 
-    emptyState.style.display = "none";
-    document.getElementById("tags-table").style.display = "table";
+    countSpan.textContent = currentCount;
+    maxSpan.textContent = maxCount;
+  }
 
-    tbody.innerHTML = filtered
-      .map(([username, data]) => {
-        const dateDisplay = formatDate(data.timestamp);
+  /**
+   * Render a single tag row HTML
+   * @param {string} username - Reddit username
+   * @param {Object} data - Tag data (text, color, timestamp)
+   * @returns {string} - HTML string for table row
+   */
+  function renderTagRow(username, data) {
+    const dateDisplay = formatDate(data.timestamp);
 
-        return `
+    return `
       <tr data-username="${escapeHtml(username)}">
         <td class="username-cell">
           <a href="https://old.reddit.com/user/${escapeHtml(username)}"
@@ -1279,9 +1281,13 @@
         </td>
       </tr>
     `;
-      })
-      .join("");
+  }
 
+  /**
+   * Attach event handlers to tag action buttons
+   * @param {HTMLElement} tbody - Table body element
+   */
+  function attachTagActionHandlers(tbody) {
     // Attach edit handlers
     tbody.querySelectorAll(".edit-tag").forEach((btn) => {
       btn.addEventListener("click", handleEditTag);
@@ -1291,6 +1297,38 @@
     tbody.querySelectorAll(".delete-tag").forEach((btn) => {
       btn.addEventListener("click", handleDeleteTag);
     });
+  }
+
+  /**
+   * Refresh the user tags list (main coordinator function)
+   */
+  async function refreshUserTagsList() {
+    const config = await window.Storage.getUserTags();
+    const tags = config.tags || {};
+    const tbody = document.getElementById("tags-tbody");
+    const emptyState = document.getElementById("tags-empty");
+    const searchInput = document.getElementById("tag-search");
+
+    const searchTerm = (searchInput.value || "").toLowerCase();
+    const filtered = filterAndSortTags(tags, searchTerm);
+
+    updateTagCountDisplay(Object.keys(tags).length, config.maxTags || 500);
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = "";
+      emptyState.style.display = "block";
+      document.getElementById("tags-table").style.display = "none";
+      return;
+    }
+
+    emptyState.style.display = "none";
+    document.getElementById("tags-table").style.display = "table";
+
+    tbody.innerHTML = filtered
+      .map(([username, data]) => renderTagRow(username, data))
+      .join("");
+
+    attachTagActionHandlers(tbody);
   }
 
   /**
@@ -1852,7 +1890,90 @@
   }
 
   /**
-   * Refresh storage statistics display
+   * Update local storage meter display
+   * @param {Object} localUsage - Local storage usage data
+   */
+  function updateLocalStorageMeter(localUsage) {
+    if (elements.localStorageValue) {
+      const localKB = (localUsage.used / 1024).toFixed(1);
+      const localMB = (localUsage.quota / 1024 / 1024).toFixed(0);
+      elements.localStorageValue.textContent = `${localKB} KB / ${localMB} MB`;
+    }
+    if (elements.localStorageBar) {
+      elements.localStorageBar.style.width = `${localUsage.percentage}%`;
+      elements.localStorageBar.className = `progress-fill ${getProgressClass(localUsage.percentage)}`;
+    }
+  }
+
+  /**
+   * Update sync storage meter display
+   * @param {Object} syncUsage - Sync storage usage data
+   */
+  function updateSyncStorageMeter(syncUsage) {
+    if (elements.syncStorageValue) {
+      const syncKB = (syncUsage.used / 1024).toFixed(1);
+      const quotaKB = (syncUsage.quota / 1024).toFixed(0);
+      elements.syncStorageValue.textContent = `${syncKB} KB / ${quotaKB} KB`;
+    }
+    if (elements.syncStorageBar) {
+      elements.syncStorageBar.style.width = `${syncUsage.percentage}%`;
+      elements.syncStorageBar.className = `progress-fill ${getProgressClass(syncUsage.percentage)}`;
+    }
+  }
+
+  /**
+   * Update storage breakdown grid
+   * @param {Object} breakdown - Storage breakdown by key
+   */
+  function updateStorageBreakdown(breakdown) {
+    if (!elements.storageBreakdownGrid) return;
+
+    const items = Object.entries(breakdown)
+      .filter(([key]) => !key.startsWith("_"))
+      .slice(0, 8) // Top 8 items
+      .map(([key, bytes]) => {
+        const kb = (bytes / 1024).toFixed(1);
+        return `
+          <div class="breakdown-item">
+            <span class="breakdown-key">${formatStorageKey(key)}</span>
+            <span class="breakdown-value">${kb} KB</span>
+          </div>
+        `;
+      })
+      .join("");
+
+    elements.storageBreakdownGrid.innerHTML = items || "<p>No data</p>";
+  }
+
+  /**
+   * Update feature count displays
+   * @param {Object} counts - Feature usage counts
+   */
+  function updateFeatureCounts(counts) {
+    if (!counts) return;
+
+    if (elements.countUserTags) {
+      elements.countUserTags.textContent = `${counts.userTags}/500`;
+    }
+    if (elements.countMutedUsers) {
+      elements.countMutedUsers.textContent = `${counts.mutedUsers}/500`;
+    }
+    if (elements.countSortPrefs) {
+      elements.countSortPrefs.textContent = `${counts.sortPreferences}/100`;
+    }
+    if (elements.countScrollPos) {
+      elements.countScrollPos.textContent = `${counts.scrollPositions}/100`;
+    }
+    if (elements.countPresets) {
+      elements.countPresets.textContent = `${counts.layoutPresets}/20`;
+    }
+    if (elements.countMutedSubs) {
+      elements.countMutedSubs.textContent = `${counts.mutedSubreddits}/100`;
+    }
+  }
+
+  /**
+   * Refresh storage statistics display (main coordinator function)
    */
   async function refreshStorageStats() {
     try {
@@ -1860,72 +1981,11 @@
       const usage = await window.Storage.getStorageUsage();
       const healthReport = await window.Storage.getStorageHealthReport();
 
-      // Update local storage meter
-      if (elements.localStorageValue) {
-        const localKB = (usage.local.used / 1024).toFixed(1);
-        const localMB = (usage.local.quota / 1024 / 1024).toFixed(0);
-        elements.localStorageValue.textContent = `${localKB} KB / ${localMB} MB`;
-      }
-      if (elements.localStorageBar) {
-        elements.localStorageBar.style.width = `${usage.local.percentage}%`;
-        elements.localStorageBar.className = `progress-fill ${getProgressClass(usage.local.percentage)}`;
-      }
-
-      // Update sync storage meter
-      if (elements.syncStorageValue) {
-        const syncKB = (usage.sync.used / 1024).toFixed(1);
-        const quotaKB = (usage.sync.quota / 1024).toFixed(0);
-        elements.syncStorageValue.textContent = `${syncKB} KB / ${quotaKB} KB`;
-      }
-      if (elements.syncStorageBar) {
-        elements.syncStorageBar.style.width = `${usage.sync.percentage}%`;
-        elements.syncStorageBar.className = `progress-fill ${getProgressClass(usage.sync.percentage)}`;
-      }
-
-      // Update storage breakdown
-      if (elements.storageBreakdownGrid) {
-        const breakdown = usage.breakdown;
-        const items = Object.entries(breakdown)
-          .filter(([key]) => !key.startsWith("_"))
-          .slice(0, 8) // Top 8 items
-          .map(([key, bytes]) => {
-            const kb = (bytes / 1024).toFixed(1);
-            return `
-              <div class="breakdown-item">
-                <span class="breakdown-key">${formatStorageKey(key)}</span>
-                <span class="breakdown-value">${kb} KB</span>
-              </div>
-            `;
-          })
-          .join("");
-
-        elements.storageBreakdownGrid.innerHTML = items || "<p>No data</p>";
-      }
-
-      // Update feature counts
-      if (healthReport.counts) {
-        const counts = healthReport.counts;
-        if (elements.countUserTags) {
-          elements.countUserTags.textContent = `${counts.userTags}/500`;
-        }
-        if (elements.countMutedUsers) {
-          elements.countMutedUsers.textContent = `${counts.mutedUsers}/500`;
-        }
-        if (elements.countSortPrefs) {
-          elements.countSortPrefs.textContent = `${counts.sortPreferences}/100`;
-        }
-        if (elements.countScrollPos) {
-          elements.countScrollPos.textContent = `${counts.scrollPositions}/100`;
-        }
-        if (elements.countPresets) {
-          elements.countPresets.textContent = `${counts.layoutPresets}/20`;
-        }
-        if (elements.countMutedSubs) {
-          elements.countMutedSubs.textContent = `${counts.mutedSubreddits}/100`;
-        }
-      }
-
-      // Update health banner
+      // Update all displays
+      updateLocalStorageMeter(usage.local);
+      updateSyncStorageMeter(usage.sync);
+      updateStorageBreakdown(usage.breakdown);
+      updateFeatureCounts(healthReport.counts);
       updateStorageHealthBanner(healthReport);
     } catch (error) {
       console.error("[ORR] Failed to load storage stats:", error);
@@ -2778,9 +2838,9 @@
   }
 
   /**
-   * Initialize layout presets event listeners
+   * Attach listeners for preset CRUD operations
    */
-  function initLayoutPresetsListeners() {
+  function attachPresetCrudListeners() {
     // Toggle
     if (elements.layoutPresetsEnabled) {
       elements.layoutPresetsEnabled.addEventListener(
@@ -2801,7 +2861,12 @@
         handleActivePresetChange
       );
     }
+  }
 
+  /**
+   * Attach listeners for preset mapping operations
+   */
+  function attachPresetMappingListeners() {
     // Add mapping
     if (elements.addMappingBtn) {
       elements.addMappingBtn.addEventListener("click", handleAddMapping);
@@ -2819,43 +2884,61 @@
     if (elements.clearAllPresets) {
       elements.clearAllPresets.addEventListener("click", handleClearAllPresets);
     }
+  }
 
-    // Export/Import
+  /**
+   * Attach listeners for preset import/export
+   */
+  function attachPresetImportExportListeners() {
     if (elements.exportPresets) {
       elements.exportPresets.addEventListener("click", handleExportPresets);
     }
     if (elements.importPresets) {
       elements.importPresets.addEventListener("click", handleImportPresets);
     }
+  }
 
-    // Preset edit modal
+  /**
+   * Attach listeners for preset edit modal
+   */
+  function attachPresetModalListeners() {
     const modal = document.getElementById("preset-edit-modal");
-    if (modal) {
-      const closeBtn = document.getElementById("preset-edit-close");
-      const saveBtn = document.getElementById("preset-edit-save");
-      const cancelBtn = document.getElementById("preset-edit-cancel");
+    if (!modal) return;
 
-      if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-          modal.style.display = "none";
-        });
-      }
-      if (cancelBtn) {
-        cancelBtn.addEventListener("click", () => {
-          modal.style.display = "none";
-        });
-      }
-      if (saveBtn) {
-        saveBtn.addEventListener("click", handleSavePresetEdit);
-      }
+    const closeBtn = document.getElementById("preset-edit-close");
+    const saveBtn = document.getElementById("preset-edit-save");
+    const cancelBtn = document.getElementById("preset-edit-cancel");
 
-      // Close on overlay click
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.style.display = "none";
-        }
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        modal.style.display = "none";
       });
     }
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+    }
+    if (saveBtn) {
+      saveBtn.addEventListener("click", handleSavePresetEdit);
+    }
+
+    // Close on overlay click
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  }
+
+  /**
+   * Initialize layout presets event listeners (main coordinator function)
+   */
+  function initLayoutPresetsListeners() {
+    attachPresetCrudListeners();
+    attachPresetMappingListeners();
+    attachPresetImportExportListeners();
+    attachPresetModalListeners();
   }
 
   /**
@@ -4751,39 +4834,60 @@
   }
 
   /**
-   * Test if a URL would be redirected
+   * Display test result in the UI
+   * @param {string} iconClass - CSS class for result icon (error|allow|redirect)
+   * @param {string} message - Main result message
+   * @param {string} detail - Detailed explanation
    */
-  async function handleTestUrl() {
-    const url = elements.testUrlInput.value.trim();
+  function displayTestResult(iconClass, message, detail) {
+    elements.testResult.hidden = false;
+    elements.resultIcon.className = `result-icon ${iconClass}`;
+    elements.resultMessage.textContent = message;
+    elements.resultDetail.textContent = detail;
+  }
 
+  /**
+   * Validate URL input
+   * @param {string} url - URL string to validate
+   * @returns {URL|null} - Parsed URL object or null if invalid
+   */
+  function validateTestUrl(url) {
     if (!url) {
       showToast("Please enter a URL", "error");
-      return;
+      return null;
     }
 
-    // Validate URL
     let urlObj;
     try {
       urlObj = new URL(url);
     } catch {
-      elements.testResult.hidden = false;
-      elements.resultIcon.className = "result-icon error";
-      elements.resultMessage.textContent = "Invalid URL";
-      elements.resultDetail.textContent =
-        "Please enter a valid URL starting with https://";
-      return;
+      displayTestResult(
+        "error",
+        "Invalid URL",
+        "Please enter a valid URL starting with https://"
+      );
+      return null;
     }
 
-    // Check if URL is Reddit-related
     if (!urlObj.hostname.includes("reddit")) {
-      elements.testResult.hidden = false;
-      elements.resultIcon.className = "result-icon error";
-      elements.resultMessage.textContent = "Not a Reddit URL";
-      elements.resultDetail.textContent = "This tool only tests Reddit URLs";
-      return;
+      displayTestResult(
+        "error",
+        "Not a Reddit URL",
+        "This tool only tests Reddit URLs"
+      );
+      return null;
     }
 
-    // Test against allowlist rules (priority 3)
+    return urlObj;
+  }
+
+  /**
+   * Check if URL matches allowlist rules
+   * @param {URL} urlObj - Parsed URL object
+   * @param {string} url - Original URL string
+   * @returns {boolean} - True if allowlisted
+   */
+  function checkAllowlistRules(urlObj, url) {
     const allowlistPatterns = [
       /^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/(media|mod|poll|settings|topics|community-points|appeals?|answers|vault|avatar|talk|coins|premium|predictions|rpan)(\/$|\?|$)/,
       /^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/(notifications|message\/compose)(\/$|\?|$)/,
@@ -4797,59 +4901,84 @@
 
     // Check allowlist domains
     if (allowlistDomains.includes(urlObj.hostname)) {
-      elements.testResult.hidden = false;
-      elements.resultIcon.className = "result-icon allow";
-      elements.resultMessage.textContent = "Not redirected (allowlisted)";
-      elements.resultDetail.textContent = `${urlObj.hostname} stays on new Reddit by design`;
-      return;
+      displayTestResult(
+        "allow",
+        "Not redirected (allowlisted)",
+        `${urlObj.hostname} stays on new Reddit by design`
+      );
+      return true;
     }
 
     // Check allowlist patterns
     for (const pattern of allowlistPatterns) {
       if (pattern.test(url)) {
-        elements.testResult.hidden = false;
-        elements.resultIcon.className = "result-icon allow";
-        elements.resultMessage.textContent = "Not redirected (allowlisted)";
-        elements.resultDetail.textContent =
-          "This path stays on new Reddit by design";
-        return;
+        displayTestResult(
+          "allow",
+          "Not redirected (allowlisted)",
+          "This path stays on new Reddit by design"
+        );
+        return true;
       }
     }
 
-    // Check if already on old.reddit.com
-    if (urlObj.hostname === "old.reddit.com") {
-      elements.testResult.hidden = false;
-      elements.resultIcon.className = "result-icon allow";
-      elements.resultMessage.textContent = "Already on Old Reddit";
-      elements.resultDetail.textContent = "No redirect needed";
-      return;
-    }
+    return false;
+  }
 
-    // Check gallery redirect (priority 2)
+  /**
+   * Check if URL is already on old Reddit
+   * @param {URL} urlObj - Parsed URL object
+   * @returns {boolean} - True if already on old Reddit
+   */
+  function checkAlreadyOldReddit(urlObj) {
+    if (urlObj.hostname === "old.reddit.com") {
+      displayTestResult("allow", "Already on Old Reddit", "No redirect needed");
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Check for special redirects (gallery, video)
+   * @param {string} url - URL string to check
+   * @returns {boolean} - True if special redirect applies
+   */
+  function checkSpecialRedirects(url) {
+    // Check gallery redirect
     const galleryMatch = url.match(
       /^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/gallery\/([a-zA-Z0-9_-]+)\/?$/
     );
     if (galleryMatch) {
-      elements.testResult.hidden = false;
-      elements.resultIcon.className = "result-icon redirect";
-      elements.resultMessage.textContent = "Would redirect to Old Reddit";
-      elements.resultDetail.textContent = `old.reddit.com/comments/${galleryMatch[2]}`;
-      return;
+      displayTestResult(
+        "redirect",
+        "Would redirect to Old Reddit",
+        `old.reddit.com/comments/${galleryMatch[2]}`
+      );
+      return true;
     }
 
-    // Check video redirect (priority 2)
+    // Check video redirect
     const videoMatch = url.match(
       /^https:\/\/(www|np|nr|ns|amp|i|m)?\.?reddit\.com\/videos?\/([a-zA-Z0-9_-]+)\/?$/
     );
     if (videoMatch) {
-      elements.testResult.hidden = false;
-      elements.resultIcon.className = "result-icon redirect";
-      elements.resultMessage.textContent = "Would redirect to Old Reddit";
-      elements.resultDetail.textContent = `old.reddit.com/comments/${videoMatch[2]}`;
-      return;
+      displayTestResult(
+        "redirect",
+        "Would redirect to Old Reddit",
+        `old.reddit.com/comments/${videoMatch[2]}`
+      );
+      return true;
     }
 
-    // Check domain redirects (priority 1)
+    return false;
+  }
+
+  /**
+   * Check for domain-level redirects with subreddit override support
+   * @param {URL} urlObj - Parsed URL object
+   * @param {string} url - Original URL string
+   * @returns {Promise<boolean>} - True if domain redirect applies
+   */
+  async function checkDomainRedirect(urlObj, url) {
     const redirectDomains = [
       "www.reddit.com",
       "np.reddit.com",
@@ -4872,30 +5001,51 @@
         const overrides = await window.Storage.getSubredditOverrides();
 
         if (overrides.whitelist.includes(subreddit)) {
-          elements.testResult.hidden = false;
-          elements.resultIcon.className = "result-icon allow";
-          elements.resultMessage.textContent = "Not redirected (whitelisted)";
-          elements.resultDetail.textContent = `r/${subreddit} is in your exceptions list`;
-          return;
+          displayTestResult(
+            "allow",
+            "Not redirected (whitelisted)",
+            `r/${subreddit} is in your exceptions list`
+          );
+          return true;
         }
       }
 
       // Would redirect
       const newUrl = new URL(url);
       newUrl.hostname = "old.reddit.com";
-      elements.testResult.hidden = false;
-      elements.resultIcon.className = "result-icon redirect";
-      elements.resultMessage.textContent = "Would redirect to Old Reddit";
-      elements.resultDetail.textContent = newUrl.toString();
-      return;
+      displayTestResult(
+        "redirect",
+        "Would redirect to Old Reddit",
+        newUrl.toString()
+      );
+      return true;
     }
 
+    return false;
+  }
+
+  /**
+   * Test if a URL would be redirected (main coordinator function)
+   */
+  async function handleTestUrl() {
+    const url = elements.testUrlInput.value.trim();
+
+    // Validate input
+    const urlObj = validateTestUrl(url);
+    if (!urlObj) return;
+
+    // Check rules in priority order
+    if (checkAllowlistRules(urlObj, url)) return;
+    if (checkAlreadyOldReddit(urlObj)) return;
+    if (checkSpecialRedirects(url)) return;
+    if (await checkDomainRedirect(urlObj, url)) return;
+
     // Unknown/not handled
-    elements.testResult.hidden = false;
-    elements.resultIcon.className = "result-icon error";
-    elements.resultMessage.textContent = "Not handled";
-    elements.resultDetail.textContent =
-      "This URL doesn't match any redirect rules";
+    displayTestResult(
+      "error",
+      "Not handled",
+      "This URL doesn't match any redirect rules"
+    );
   }
 
   /**
@@ -5077,9 +5227,9 @@
   }
 
   /**
-   * Attach event listeners
+   * Attach listeners for basic settings (main toggle, stats, UI preferences)
    */
-  function attachListeners() {
+  function attachBasicSettingsListeners() {
     // Main toggle
     elements.toggleRedirect.addEventListener("change", handleToggleRedirect);
 
@@ -5102,7 +5252,12 @@
       "change",
       handleUIPreferenceChange
     );
+  }
 
+  /**
+   * Attach listeners for appearance settings (dark mode, accessibility)
+   */
+  function attachAppearanceListeners() {
     // Dark mode
     elements.darkMode.addEventListener("change", handleDarkModeChange);
     elements.autoCollapseAutomod.addEventListener(
@@ -5126,8 +5281,12 @@
         handleAccessibilityChange
       );
     }
+  }
 
-    // Reading History
+  /**
+   * Attach listeners for reading history feature
+   */
+  function attachReadingHistoryListeners() {
     if (elements.readingHistoryEnabled) {
       elements.readingHistoryEnabled.addEventListener(
         "change",
@@ -5174,8 +5333,12 @@
         handleImportReadingHistory
       );
     }
+  }
 
-    // NSFW Controls
+  /**
+   * Attach listeners for NSFW controls
+   */
+  function attachNsfwControlsListeners() {
     if (elements.nsfwControlsEnabled) {
       elements.nsfwControlsEnabled.addEventListener(
         "change",
@@ -5222,7 +5385,12 @@
         handleClearNsfwAllowed
       );
     }
+  }
 
+  /**
+   * Attach listeners for comment enhancements
+   */
+  function attachCommentEnhancementsListeners() {
     // Comment enhancements
     elements.colorCodedComments.addEventListener(
       "change",
@@ -5252,13 +5420,12 @@
       "change",
       handleCommentEnhancementsChange
     );
-    // v11.2.0: Jump to top keyboard shortcut
     elements.jumpToTopShortcut.addEventListener(
       "change",
       handleCommentEnhancementsChange
     );
 
-    // Comment minimap (v19.0.0)
+    // Comment minimap
     elements.minimapEnabled.addEventListener(
       "change",
       handleCommentMinimapChange
@@ -5288,7 +5455,12 @@
       "change",
       handleCommentMinimapChange
     );
+  }
 
+  /**
+   * Attach listeners for content filtering (nag blocking, subreddits, keywords, domains)
+   */
+  function attachContentFilteringListeners() {
     // Nag blocking
     elements.nagBlockingEnabled.addEventListener(
       "change",
@@ -5310,7 +5482,6 @@
       "change",
       handleNagBlockingChange
     );
-    // v11.2.0: Advanced content blocking
     elements.blockAIContent.addEventListener("change", handleNagBlockingChange);
     elements.blockTrending.addEventListener("change", handleNagBlockingChange);
     elements.blockRecommended.addEventListener(
@@ -5363,7 +5534,7 @@
       handleImportKeywordsFile
     );
 
-    // Advanced keyword filtering (v12.1.0)
+    // Advanced keyword filtering
     const useRegexEl = document.getElementById("use-regex");
     if (useRegexEl) {
       useRegexEl.addEventListener("change", handleUseRegexChange);
@@ -5436,7 +5607,12 @@
         handleTestUrl();
       }
     });
+  }
 
+  /**
+   * Attach listeners for user management features (sort prefs, tags, muted users, scroll)
+   */
+  function attachUserManagementListeners() {
     // Sort Preferences
     document
       .getElementById("sort-preferences-enabled")
@@ -5508,7 +5684,12 @@
     document
       .getElementById("clear-scroll-positions")
       .addEventListener("click", handleClearScrollPositions);
+  }
 
+  /**
+   * Attach listeners for feed enhancements and privacy settings
+   */
+  function attachFeedAndPrivacyListeners() {
     // Feed Enhancements
     elements.feedCompactMode.addEventListener(
       "change",
@@ -5540,12 +5721,6 @@
       "click",
       handleValidateCustomCSS
     );
-
-    // Layout Presets
-    initLayoutPresetsListeners();
-
-    // Storage Management
-    attachStorageManagementListeners();
 
     // Privacy & Tracking Protection
     elements.trackingRemovalEnabled.addEventListener(
@@ -5590,7 +5765,12 @@
       "click",
       handleResetTrackingParams
     );
+  }
 
+  /**
+   * Attach listeners for global settings (keyboard shortcuts, import/export, sync, frontend)
+   */
+  function attachGlobalSettingsListeners() {
     // Keyboard shortcut
     elements.customizeShortcut.addEventListener(
       "click",
@@ -5612,8 +5792,12 @@
         handleSaveCustomDomain();
       }
     });
+  }
 
-    // Listen for storage changes (debounced for performance)
+  /**
+   * Attach listeners for storage change events
+   */
+  function attachStorageChangeListeners() {
     let statsUpdateTimeout = null;
     let enabledUpdateTimeout = null;
 
@@ -5635,6 +5819,30 @@
         }
       }
     });
+  }
+
+  /**
+   * Attach all event listeners (main coordinator function)
+   */
+  function attachListeners() {
+    attachBasicSettingsListeners();
+    attachAppearanceListeners();
+    attachReadingHistoryListeners();
+    attachNsfwControlsListeners();
+    attachCommentEnhancementsListeners();
+    attachContentFilteringListeners();
+    attachUserManagementListeners();
+    attachFeedAndPrivacyListeners();
+    attachGlobalSettingsListeners();
+
+    // Layout Presets (has its own sub-function)
+    initLayoutPresetsListeners();
+
+    // Storage Management (has its own sub-function)
+    attachStorageManagementListeners();
+
+    // Storage change listeners
+    attachStorageChangeListeners();
   }
 
   /**
