@@ -29,6 +29,7 @@
     "frontend",
     "subredditOverrides",
     "ui",
+    "debug",
     "darkMode",
     "nagBlocking",
     "contentFiltering",
@@ -48,6 +49,9 @@
   const DEFAULTS = {
     _schemaVersion: SCHEMA_VERSION,
     enabled: true,
+    debug: {
+      enabled: false, // Enable debug logging (console.log statements)
+    },
     stats: {
       totalRedirects: 0,
       todayRedirects: 0,

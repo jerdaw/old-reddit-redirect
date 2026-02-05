@@ -4,13 +4,14 @@
  */
 
 import { getStorage } from "../shared/storage-helpers.js";
+import { debugLog } from "../shared/debug-helpers.js";
 
 /**
  * Initialize all comment features
  */
 export async function initCommentFeatures() {
   try {
-    console.log("[ORR] Loading comment features");
+    debugLog("[ORR] Loading comment features");
 
     // Get preferences to determine which features to load
     const prefs = await getStorage({
@@ -55,7 +56,7 @@ export async function initCommentFeatures() {
     // Load all enabled features in parallel
     await Promise.allSettled(loaders);
 
-    console.log("[ORR] Comment features loaded");
+    debugLog("[ORR] Comment features loaded");
   } catch (error) {
     console.error("[ORR] Comment features initialization failed:", error);
     throw error;

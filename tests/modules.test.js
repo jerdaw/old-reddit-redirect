@@ -254,7 +254,7 @@ describe("Modular Loading - Phase 1", () => {
       global.chrome = {
         storage: {
           local: {
-            get: vi.fn(() => Promise.resolve({})),
+            get: vi.fn(() => Promise.resolve({ debug: { enabled: true } })),
           },
         },
         runtime: {
