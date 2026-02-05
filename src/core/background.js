@@ -2,7 +2,13 @@
 
 // Import storage and logger (for service worker, use importScripts)
 if (typeof importScripts === "function") {
-  importScripts("logger.js", "storage.js");
+  importScripts(
+    "logger.js",
+    "storage-schema.js",
+    "storage-operations.js",
+    "storage-migration.js",
+    "storage.js"
+  );
 }
 
 (function () {

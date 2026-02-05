@@ -178,6 +178,10 @@ describe("Sort Preferences - URL Parsing", () => {
 
 describe("Sort Preferences - Storage Schema", () => {
   it("should have sortPreferences in storage schema", async () => {
+    // Import dependencies first (in order)
+    await import("../src/core/storage-schema.js");
+    await import("../src/core/storage-operations.js");
+    await import("../src/core/storage-migration.js");
     const storage = await import("../src/core/storage.js");
 
     // Check that storage methods exist
