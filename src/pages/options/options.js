@@ -8,7 +8,9 @@
 
   // Check that options-constants.js loaded successfully
   if (!window.OptionsConstants) {
-    console.error("[ORR] OptionsConstants not loaded! Ensure options-constants.js loads before options.js");
+    console.error(
+      "[ORR] OptionsConstants not loaded! Ensure options-constants.js loads before options.js"
+    );
   }
 
   // Original UI_STRINGS object removed - now imported from options-constants.js

@@ -66,7 +66,7 @@ AI coding agent instructions for this repository. This file provides guidance fo
 | `src/content/offscreen.html/js` | Clipboard access (MV3)                                       |
 | `modules/`                      | Modular features (24 ES6 modules, lazy + conditional loaded) |
 | `src/pages/popup/`              | Extension popup UI (HTML/JS/CSS)                             |
-| `src/pages/options/`            | Full options page (HTML/JS/CSS)                              |
+| `src/pages/options/`            | Full options page (HTML/JS/CSS + constants module)           |
 | `src/pages/onboarding/`         | First-run experience (HTML/JS/CSS)                           |
 
 ### Modular Architecture (v19.0.0+)
@@ -83,7 +83,7 @@ content-script.js (25 lines) → modules/loader.js → Feature modules
 - **Comments** (lazy: /comments/ only): color-coding, navigation, inline-images, minimap
 - **Feed** (lazy: feed pages): feed-modes, sort-preferences
 - **Optional** (conditional: when enabled): user-tags, nsfw-controls, layout-presets, reading-history
-- **Shared** (imported by all): page-detection, dom-helpers, storage-helpers
+- **Shared** (imported by all): page-detection, dom-helpers, storage-helpers, constants, debug-helpers
 
 **Benefits:**
 
@@ -92,7 +92,10 @@ content-script.js (25 lines) → modules/loader.js → Feature modules
 - 100-150ms faster page load
 - ~40KB lower memory usage
 
-**Documentation:** `MIGRATION-COMPLETE.md`, `PHASE-1-COMPLETE.md` through `PHASE-7-COMPLETE.md`
+**Documentation:**
+
+- `modules/README.md` - Comprehensive guide to modular architecture
+- `MIGRATION-COMPLETE.md`, `PHASE-1-COMPLETE.md` through `PHASE-7-COMPLETE.md`
 
 ### Redirect Rule Priority System
 
