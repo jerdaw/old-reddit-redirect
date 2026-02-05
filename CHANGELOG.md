@@ -9,6 +9,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+#### Code Quality Improvements (2026-02-04)
+
+- **Dependency Updates**: Updated all dev dependencies to latest versions
+  - vitest: 2.1.9 → 4.0.18 (fixed security vulnerability CVE GHSA-67mh-4wv8-2f99)
+  - jsdom: 27.4.0 → 28.0.0
+  - globals: 15.15.0 → 17.3.0
+  - eslint-config-prettier: 9.1.2 → 10.1.8
+
+- **Constants Extraction**: Centralized 13 hardcoded values in storage.js
+  - MAX_USER_TAGS (500), MAX_MUTED_USERS (500), MAX_SORT_PREFERENCES (100)
+  - MAX_SCROLL_POSITIONS (100), MAX_SUBREDDIT_MAPPINGS (100), MAX_LAYOUT_PRESETS (20)
+  - MAX_READING_HISTORY (500), SCROLL_RETENTION_HOURS (24), READING_HISTORY_RETENTION_DAYS (30)
+  - KEYBOARD_CHORD_TIMEOUT_MS (1000), MAX_INLINE_IMAGE_WIDTH (600)
+  - COLOR_STRIPE_WIDTH (3), MINIMAP_DEFAULT_WIDTH (120)
+  - Single source of truth for configuration values
+
+- **Debug Mode**: Added conditional logging system
+  - Created `modules/shared/debug-helpers.js` with `debugLog()` function
+  - Replaced 23 `console.log` statements with conditional `debugLog()`
+  - Debug mode disabled by default (cleaner production console)
+  - Users can enable debug logging in settings for troubleshooting
+
+- **JSDoc Documentation**: Added comprehensive JSDoc to 50+ exported functions
+  - Feed modules (6 functions), Optional modules (21 functions)
+  - Core modules (12 functions), Comments modules (11 functions)
+  - Module loader (1 function)
+  - Improved IDE autocomplete and developer documentation
+
+- **Function Refactoring**: Split large functions in options.js
+  - Refactored 5 functions (100-557 lines) into focused helpers
+  - attachListeners(): 557 → 15 lines (10 helper functions)
+  - handleTestUrl(): 144 → 16 lines (7 helper functions)
+  - refreshUserTagsList(): 82 → 16 lines (5 helper functions)
+  - refreshStorageStats(): 77 → 12 lines (5 helper functions)
+  - initLayoutPresetsListeners(): 77 → 6 lines (5 helper functions)
+  - 73% reduction in largest function size
+  - Applied Coordinator Pattern throughout
+
+- **Build System Fixes**: Updated for new directory structure
+  - Fixed Makefile to work with src/ and modules/ directories
+  - Removed outdated CI validation steps
+  - Fixed ESLint configuration for keyboard-utils.js
+  - Updated package.json validate script
+
 #### Phase 6.1: Code Splitting & Modular Architecture
 
 - **Modular ES6 Architecture**: Migrated from monolithic 3,699-line content script to modular architecture
