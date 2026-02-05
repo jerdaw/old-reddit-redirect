@@ -13,6 +13,7 @@ Documentation of the modular architecture migration (v19.0.0):
 - **PHASE-7-COMPLETE.md** - Legacy code removal and finalization
 
 Key outcomes:
+
 - 13.8% smaller bundle (181KB → 156KB)
 - 33-53% fewer lines executed per page
 - Native ES6 modules with lazy loading
@@ -32,7 +33,7 @@ Historical planning and implementation documents:
 
 - **IMPLEMENTATION-LOG.md** - Development history and decisions
 - **IMPLEMENTATION-PLAN-v7.md** through **v12.3.md** - Version planning docs
-- **PHASE-*-SUMMARY.md** - Phase completion summaries
+- **PHASE-\*-SUMMARY.md** - Phase completion summaries
 - **SINK-IT-FEATURE-ANALYSIS.md** - Feature comparison analysis
 
 These documents are kept for historical reference but represent completed work.

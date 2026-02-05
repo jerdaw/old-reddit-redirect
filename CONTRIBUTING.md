@@ -64,10 +64,12 @@ See `CLAUDE.md` for complete architectural details and patterns.
 ### Key Files
 
 **Core Configuration:**
+
 - `manifest.json` - Extension manifest (Manifest V3, ES module support)
 - `rules.json` - Declarative net request redirect rules with priority system
 
 **Source Code (`src/`):**
+
 - `src/core/background.js` - Service worker (toggle, stats, context menus)
 - `src/core/storage.js` - Centralized storage abstraction with sync
 - `src/core/logger.js` - Logging utility with configurable levels
@@ -79,6 +81,7 @@ See `CLAUDE.md` for complete architectural details and patterns.
 - `src/pages/onboarding/` - First-run experience
 
 **Modular Features (`modules/`):**
+
 - `modules/loader.js` - Module orchestrator for lazy/conditional loading
 - `modules/shared/` - Shared utilities (page-detection, dom-helpers, storage-helpers)
 - `modules/core/` - Always-loaded features (dark-mode, accessibility, nag-blocking, content-filtering)
@@ -87,6 +90,7 @@ See `CLAUDE.md` for complete architectural details and patterns.
 - `modules/optional/` - Conditionally loaded when enabled (user-tags, nsfw-controls, layout-presets, reading-history)
 
 **Testing & Documentation:**
+
 - `tests/` - Comprehensive test suite (830 tests across 24 suites)
 - `CLAUDE.md` - Complete architecture guide for AI coding assistants
 - `MIGRATION-COMPLETE.md` - Modular architecture migration summary
@@ -136,6 +140,7 @@ When adding new features to the extension, follow the modular architecture patte
    - `modules/optional/` - Optional features (conditionally loaded)
 
 2. **Create your feature module:**
+
    ```javascript
    // modules/optional/my-feature.js
    import { getStorage } from "../shared/storage-helpers.js";
@@ -163,6 +168,7 @@ When adding new features to the extension, follow the modular architecture patte
    - Update `ROADMAP.md` with version and phase info
 
 **Key patterns:**
+
 - Use `Promise.allSettled()` for parallel loading (fail gracefully)
 - Import shared utilities to prevent code duplication
 - Export both init functions AND individual functions (for cross-module integration)

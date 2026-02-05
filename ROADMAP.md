@@ -24,22 +24,23 @@
 
 All core features have been implemented and are production-ready:
 
-| Phase | Version | Theme | Key Features | Tests |
-|-------|---------|-------|--------------|-------|
-| **1-2** | v6.0.0 | Dark Mode & Filtering | Dark mode (4 themes), nag blocking, subreddit/keyword/domain muting | +70 |
-| **3** | v7.0-7.2 | Comment Enhancements | Color-coded depth, navigation shortcuts (Shift+J/K), inline images | +77 |
-| **4** | v8.0-10.0 | UX Polish | Sort memory, user tagging, scroll position memory | +71 |
-| **5** | v11.0-11.2 | Feed & Privacy | Compact/text-only modes, tracker removal (58 params), referrer control | +70 |
-| **6** | v13.0, v19.0 | Performance | Storage optimization, DOM batching, modular architecture (-13.8% bundle) | +28 |
-| **7** | v14.0 | Accessibility | WCAG 2.1 compliance, high contrast, font sizing, reduce motion | +38 |
-| **9** | v12.0-12.3 | Power Users | User muting, regex filtering, keyboard shortcuts, layout presets | +214 |
-| **10** | v15.0 | Privacy | Enhanced tracker blocking, privacy dashboard with scoring | +39 |
-| **11** | v16.0 | Reading History | Post tracking, visited indicators, history management | +28 |
-| **12** | v17.0 | Navigation | Permalink highlighting, parent navigation, collapse memory | +28 |
-| **13** | v18.0 | NSFW Controls | Blur/hide modes, subreddit allowlist, warning overlays | +39 |
-| **14** | v19.0 | Thread Minimap | Visual overview, viewport indicator, depth colors | +46 |
+| Phase   | Version      | Theme                 | Key Features                                                             | Tests |
+| ------- | ------------ | --------------------- | ------------------------------------------------------------------------ | ----- |
+| **1-2** | v6.0.0       | Dark Mode & Filtering | Dark mode (4 themes), nag blocking, subreddit/keyword/domain muting      | +70   |
+| **3**   | v7.0-7.2     | Comment Enhancements  | Color-coded depth, navigation shortcuts (Shift+J/K), inline images       | +77   |
+| **4**   | v8.0-10.0    | UX Polish             | Sort memory, user tagging, scroll position memory                        | +71   |
+| **5**   | v11.0-11.2   | Feed & Privacy        | Compact/text-only modes, tracker removal (58 params), referrer control   | +70   |
+| **6**   | v13.0, v19.0 | Performance           | Storage optimization, DOM batching, modular architecture (-13.8% bundle) | +28   |
+| **7**   | v14.0        | Accessibility         | WCAG 2.1 compliance, high contrast, font sizing, reduce motion           | +38   |
+| **9**   | v12.0-12.3   | Power Users           | User muting, regex filtering, keyboard shortcuts, layout presets         | +214  |
+| **10**  | v15.0        | Privacy               | Enhanced tracker blocking, privacy dashboard with scoring                | +39   |
+| **11**  | v16.0        | Reading History       | Post tracking, visited indicators, history management                    | +28   |
+| **12**  | v17.0        | Navigation            | Permalink highlighting, parent navigation, collapse memory               | +28   |
+| **13**  | v18.0        | NSFW Controls         | Blur/hide modes, subreddit allowlist, warning overlays                   | +39   |
+| **14**  | v19.0        | Thread Minimap        | Visual overview, viewport indicator, depth colors                        | +46   |
 
 **Total Impact**:
+
 - 50+ features from 14 phases
 - 830 comprehensive tests
 - 156KB optimized bundle
@@ -52,11 +53,13 @@ All core features have been implemented and are production-ready:
 ### Phase 1-2: Dark Mode & Content Filtering (v6.0.0)
 
 **Dark Mode**:
+
 - 4 themes: Auto, Light, Dark, OLED
 - Nag blocking (login prompts, app banners, etc.)
 - Auto-collapse 13 bot accounts (AutoModerator, etc.)
 
 **Content Filtering**:
+
 - Subreddit muting (up to 100, with wildcards)
 - Keyword muting (up to 200, case-insensitive)
 - Domain muting (up to 100, wildcard support)
@@ -78,6 +81,7 @@ All core features have been implemented and are production-ready:
 ### Phase 5: Feed Enhancements & Privacy (v11.0-11.2)
 
 **Feed Enhancements**:
+
 - Compact mode (reduce spacing)
 - Text-only mode (hide all images)
 - Uncropped thumbnails (full aspect ratio)
@@ -85,6 +89,7 @@ All core features have been implemented and are production-ready:
 - Custom CSS injection
 
 **Privacy & Tracking**:
+
 - Strip 58 tracking parameters (utm, fbclid, gclid, etc.)
 - Referrer control (4 policies: default, no-referrer, origin, same-origin)
 - AI overview blocking
@@ -93,18 +98,21 @@ All core features have been implemented and are production-ready:
 ### Phase 6: Performance & Optimization (v13.0, v19.0)
 
 **Storage Optimization (v13.0)**:
+
 - Quota monitoring (local + sync)
 - Health reports (healthy/warning/critical)
 - Automatic cleanup of expired data
 - Storage compaction
 
 **DOM Optimization (v13.0)**:
+
 - Batched updates (requestAnimationFrame)
 - Idle callbacks for non-critical work
 - Adaptive throttling
 - Smart mutation filtering
 
 **Modular Architecture (v19.0)**:
+
 - 24 ES6 modules (core, comments, feed, optional)
 - Page-level lazy loading (/comments/ only)
 - Feature-level conditional loading
@@ -125,24 +133,28 @@ All core features have been implemented and are production-ready:
 ### Phase 9: Advanced User Features (v12.0-12.3)
 
 **User Muting (v12.0)**:
+
 - Hide posts/comments from specific users
 - Context menu integration (right-click username)
 - 500 user limit with LRU eviction
 - Import/export lists
 
 **Advanced Filtering (v12.1)**:
+
 - Regex support for keywords
 - Post content filtering (not just titles)
 - Flair-based filtering (100 flairs)
 - Score-based filtering (-999 to 999999)
 
 **Keyboard Shortcuts (v12.2)**:
+
 - 11 customizable shortcuts
 - Chord support (e.g., G G for jump to top)
 - Conflict detection with visual warnings
 - Import/export configurations
 
 **Layout Presets (v12.3)**:
+
 - Save custom feed layouts
 - Quick-switch between presets
 - Per-subreddit preferences
@@ -208,12 +220,12 @@ All core features have been implemented and are production-ready:
 
 Features postponed from their original phases (planned for future releases):
 
-| Feature | Original Phase | Description | Priority |
-|---------|----------------|-------------|----------|
-| **Performance Profiling Dashboard** | Phase 6 | Track metrics, identify bottlenecks | Medium |
-| **Multi-Language Support (i18n)** | Phase 7 | Translate UI, RTL languages | High |
-| **Anti-Fingerprinting** | Phase 10 | Canvas protection, UA randomization | Medium |
-| **Encrypted Storage** | Phase 10 | Encrypt sensitive local data | Low |
+| Feature                             | Original Phase | Description                         | Priority |
+| ----------------------------------- | -------------- | ----------------------------------- | -------- |
+| **Performance Profiling Dashboard** | Phase 6        | Track metrics, identify bottlenecks | Medium   |
+| **Multi-Language Support (i18n)**   | Phase 7        | Translate UI, RTL languages         | High     |
+| **Anti-Fingerprinting**             | Phase 10       | Canvas protection, UA randomization | Medium   |
+| **Encrypted Storage**               | Phase 10       | Encrypt sensitive local data        | Low      |
 
 **Status**: Deferred due to resource constraints. Implementation depends on community demand and developer availability.
 
@@ -228,14 +240,15 @@ Potential next phases organized by priority and theme:
 **Timeline**: 4-5 weeks
 **Focus**: Enable community-driven improvements and reduce maintenance burden
 
-| Feature | Description | Impact |
-|---------|-------------|--------|
-| **Shared Filter Lists** | Import/export standardized blocklists, one-click subscriptions | Community curation |
-| **Custom Selector Contributions** | User interface for submitting CSS selectors, community voting | Crowdsourced maintenance |
-| **DOM Change Monitoring** | Automated Reddit change detection, selector update notifications | Faster responses |
-| **Filter List Marketplace** | Browse/install/rate community lists, privacy-preserving analytics | Engagement |
+| Feature                           | Description                                                       | Impact                   |
+| --------------------------------- | ----------------------------------------------------------------- | ------------------------ |
+| **Shared Filter Lists**           | Import/export standardized blocklists, one-click subscriptions    | Community curation       |
+| **Custom Selector Contributions** | User interface for submitting CSS selectors, community voting     | Crowdsourced maintenance |
+| **DOM Change Monitoring**         | Automated Reddit change detection, selector update notifications  | Faster responses         |
+| **Filter List Marketplace**       | Browse/install/rate community lists, privacy-preserving analytics | Engagement               |
 
 **Estimated Impact**:
+
 - Faster response to Reddit UI changes
 - Reduced solo maintenance burden
 - Stronger community engagement
@@ -248,11 +261,11 @@ Potential next phases organized by priority and theme:
 **Timeline**: 2-3 weeks
 **Focus**: Enhanced thread navigation and orientation
 
-| Feature | Description | Benefit |
-|---------|-------------|---------|
+| Feature                   | Description                                | Benefit           |
+| ------------------------- | ------------------------------------------ | ----------------- |
 | **Breadcrumb Navigation** | Visual hierarchy for deeply nested threads | Context awareness |
-| **Improved Search** | In-page comment search with highlighting | Find discussions |
-| **Thread Bookmarks** | Save positions within long threads | Resume reading |
+| **Improved Search**       | In-page comment search with highlighting   | Find discussions  |
+| **Thread Bookmarks**      | Save positions within long threads         | Resume reading    |
 
 ---
 
@@ -261,11 +274,11 @@ Potential next phases organized by priority and theme:
 **Timeline**: 3-4 weeks
 **Focus**: Privacy-preserving content recommendations
 
-| Feature | Description | Benefit |
-|---------|-------------|---------|
-| **Related Posts** | Local-only suggestions based on reading history | Discover content |
-| **Saved Post Organization** | Tags, folders, search for saved items | Better organization |
-| **Smart Collections** | Auto-group saved posts by topic | Automatic curation |
+| Feature                     | Description                                     | Benefit             |
+| --------------------------- | ----------------------------------------------- | ------------------- |
+| **Related Posts**           | Local-only suggestions based on reading history | Discover content    |
+| **Saved Post Organization** | Tags, folders, search for saved items           | Better organization |
+| **Smart Collections**       | Auto-group saved posts by topic                 | Automatic curation  |
 
 ---
 
@@ -274,21 +287,25 @@ Potential next phases organized by priority and theme:
 Features under consideration but not yet prioritized:
 
 ### Navigation
+
 - ~~Jump to permalink~~ ✅ v17.0.0
 - ~~Thread minimap~~ ✅ v19.0.0
 - Breadcrumb navigation for nested threads
 
 ### Content Discovery
+
 - ~~Reading history~~ ✅ v16.0.0
 - Related post suggestions (privacy-preserving)
 - Saved post organization (tags, folders)
 
 ### NSFW Controls
+
 - ~~Advanced filtering~~ ✅ v18.0.0
 - ~~Blur options~~ ✅ v18.0.0
 - Age verification reminder
 
 ### Monetization (Optional)
+
 - Donation button (Ko-fi, GitHub Sponsors)
 - Patron-exclusive beta features
 - Open Collective for transparency

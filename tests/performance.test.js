@@ -36,27 +36,29 @@ const mockChrome = {
 global.chrome = mockChrome;
 
 // Import Storage after mocking chrome
-const { default: _Storage } = await import("../src/core/storage.js").catch(() => {
-  // Return a mock Storage for testing
-  return {
-    default: {
-      getStorageUsage: vi.fn(),
-      isNearQuotaLimit: vi.fn(),
-      getStorageHealthReport: vi.fn(),
-      cleanupExpiredData: vi.fn(),
-      compactStorage: vi.fn(),
-      runMaintenance: vi.fn(),
-      getScrollPositions: vi.fn(),
-      setScrollPositions: vi.fn(),
-      getSortPreferences: vi.fn(),
-      setSortPreferences: vi.fn(),
-      getStats: vi.fn(),
-      set: vi.fn(),
-      getAll: vi.fn(),
-      _calculateObjectSize: (obj) => new Blob([JSON.stringify(obj)]).size,
-    },
-  };
-});
+const { default: _Storage } = await import("../src/core/storage.js").catch(
+  () => {
+    // Return a mock Storage for testing
+    return {
+      default: {
+        getStorageUsage: vi.fn(),
+        isNearQuotaLimit: vi.fn(),
+        getStorageHealthReport: vi.fn(),
+        cleanupExpiredData: vi.fn(),
+        compactStorage: vi.fn(),
+        runMaintenance: vi.fn(),
+        getScrollPositions: vi.fn(),
+        setScrollPositions: vi.fn(),
+        getSortPreferences: vi.fn(),
+        setSortPreferences: vi.fn(),
+        getStats: vi.fn(),
+        set: vi.fn(),
+        getAll: vi.fn(),
+        _calculateObjectSize: (obj) => new Blob([JSON.stringify(obj)]).size,
+      },
+    };
+  }
+);
 
 describe("Storage Quota Monitoring", () => {
   beforeEach(() => {
