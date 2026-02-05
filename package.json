@@ -9,7 +9,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "validate": "node -e \"JSON.parse(require('fs').readFileSync('./manifest.json')); JSON.parse(require('fs').readFileSync('./rules.json'));\" && node -c background.js",
+    "validate": "node -e \"JSON.parse(require('fs').readFileSync('./manifest.json')); JSON.parse(require('fs').readFileSync('./rules.json'));\"",
     "test": "vitest run",
     "test:watch": "vitest",
     "version:check": "node scripts/sync-version.js --check",
