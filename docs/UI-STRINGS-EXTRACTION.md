@@ -15,11 +15,13 @@ Successfully extracted 119 hardcoded UI strings from the options page into a cen
 ## Changes
 
 ### Before
+
 - 6,426 lines
 - Hardcoded strings scattered throughout the file
 - Example: `showToast("Settings saved")`
 
 ### After
+
 - 6,550 lines (+124 lines for UI_STRINGS object)
 - Centralized string definitions at top of file
 - Example: `showToast(UI_STRINGS.SUCCESS_SETTINGS_SAVED)`
@@ -31,6 +33,7 @@ Successfully extracted 119 hardcoded UI strings from the options page into a cen
 The constant object is organized into semantic categories:
 
 ### 1. Status Messages (6 strings)
+
 - `STATUS_NEVER`: "Never"
 - `STATUS_NOT_SET`: "Not set"
 - `STATUS_NOT_SYNCED`: "Not synced"
@@ -39,44 +42,56 @@ The constant object is organized into semantic categories:
 - `STATUS_RUNNING`: "Running..."
 
 ### 2. Button Text (3 strings)
+
 - `BTN_REMOVE`: "Remove"
 - `BTN_RUN_CLEANUP`: "Run Cleanup"
 - `BTN_FULL_MAINTENANCE`: "Full Maintenance"
 
 ### 3. Success Messages (47 strings)
+
 Prefixed with `SUCCESS_*`:
+
 - Settings saved confirmations
 - Feature update notifications
 - Export/import success messages
 - Example: `SUCCESS_PREFERENCES_SAVED`, `SUCCESS_CUSTOM_CSS_SAVED`
 
 ### 4. Error Messages (14 strings)
+
 Prefixed with `ERROR_*`:
+
 - Cleanup/maintenance failures
 - Import/export errors
 - Permission errors
 - Example: `ERROR_CLEANUP_FAILED`, `ERROR_IMPORT_INVALID_FORMAT`
 
 ### 5. Validation Messages (17 strings)
+
 Prefixed with `VALIDATE_*`:
+
 - Input validation errors
 - Format validation messages
 - Example: `VALIDATE_PLEASE_ENTER_URL`, `VALIDATE_INVALID_SUBREDDIT`
 
 ### 6. Informational Messages (23 strings)
+
 Prefixed with `MSG_*`:
+
 - Duplicate/already exists messages
 - Limit reached messages
 - Empty state messages
 - Example: `MSG_ALREADY_IN_LIST`, `MSG_MAX_100_SUBREDDITS`
 
 ### 7. Titles and ARIA Labels (7 strings)
+
 Prefixed with `TITLE_*`:
+
 - Button title attributes (tooltips)
 - ARIA labels for accessibility
 - Example: `TITLE_DELETE_PREFERENCE`, `TITLE_EDIT_TAG`
 
 ### 8. Section Labels (1 string)
+
 - `LABEL_PRESET`: "Preset"
 
 ---
@@ -123,16 +138,19 @@ The following types of strings were intentionally NOT extracted:
 ## Quality Assurance
 
 ### Tests
+
 - ✅ All 830 tests pass (25 test suites)
 - ✅ No regressions introduced
 - ✅ Modular loading tests pass
 
 ### Code Quality
+
 - ✅ ESLint passes with no errors
 - ✅ Prettier formatting applied
 - ✅ No functional changes to UI behavior
 
 ### Manual Verification
+
 - File structure intact
 - UI_STRINGS object properly formatted
 - All replacements use correct constant references
@@ -142,29 +160,37 @@ The following types of strings were intentionally NOT extracted:
 ## Future Work
 
 ### Phase 1: Remaining Files
+
 Extract UI strings from:
+
 - `src/pages/popup/popup.js` (~15 strings estimated)
 - `src/pages/onboarding/onboarding.js` (~20 strings estimated)
 - `src/core/background.js` (notification messages)
 
 ### Phase 2: Template Strings
+
 Handle dynamic strings with interpolation:
+
 ```javascript
 // Current:
 showToast(`Exported ${count} history entries`);
 
 // Future i18n approach:
-showToast(t('MSG_EXPORTED_HISTORY_ENTRIES', { count }));
+showToast(t("MSG_EXPORTED_HISTORY_ENTRIES", { count }));
 ```
 
 ### Phase 3: HTML Content
+
 Extract strings from HTML files:
+
 - `src/pages/options/options.html`
 - `src/pages/popup/popup.html`
 - `src/pages/onboarding/onboarding.html`
 
 ### Phase 4: i18n Integration
+
 Implement full internationalization:
+
 1. Choose i18n library (e.g., chrome.i18n, i18next)
 2. Create locale files (en, es, fr, etc.)
 3. Replace UI_STRINGS with i18n function calls

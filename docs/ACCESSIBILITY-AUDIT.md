@@ -14,6 +14,7 @@ The options page demonstrates **strong accessibility fundamentals** with compreh
 **Overall Grade:** B+ (Good, with room for improvement)
 
 ### Strengths
+
 - ✅ Semantic HTML with proper heading hierarchy
 - ✅ Comprehensive ARIA labels on form controls
 - ✅ Region landmarks with `role="region"`
@@ -22,6 +23,7 @@ The options page demonstrates **strong accessibility fundamentals** with compreh
 - ✅ High contrast mode option
 
 ### Critical Issues Found
+
 - ❌ Modals lack focus trapping
 - ❌ Many buttons missing ARIA labels
 - ❌ No focus restoration when modals close
@@ -41,39 +43,49 @@ Many buttons throughout the options page use emoji icons or icons without text a
 #### Examples:
 
 **Line 71-74 (Statistics Section):**
+
 ```html
-<button class="button secondary" id="export-stats">
-  📊 Export Stats
-</button>
-<button class="button secondary" id="clear-stats">
-  Clear Statistics
-</button>
+<button class="button secondary" id="export-stats">📊 Export Stats</button>
+<button class="button secondary" id="clear-stats">Clear Statistics</button>
 ```
+
 **Issue:** Emojis are not reliably announced by screen readers. "📊" may be announced as "chart with upward trend" or ignored entirely.
 
 **Line 493-514 (Sort Preferences):**
+
 ```html
-<button id="export-prefs" class="secondary-button" title="Export preferences as JSON">
+<button
+  id="export-prefs"
+  class="secondary-button"
+  title="Export preferences as JSON"
+>
   Export
 </button>
-<button id="import-prefs" class="secondary-button" title="Import preferences from JSON">
+<button
+  id="import-prefs"
+  class="secondary-button"
+  title="Import preferences from JSON"
+>
   Import
 </button>
-<button id="clear-all-prefs" class="danger-button" title="Clear all saved preferences">
+<button
+  id="clear-all-prefs"
+  class="danger-button"
+  title="Clear all saved preferences"
+>
   Clear All
 </button>
 ```
+
 **Issue:** `title` attribute is not reliably announced by screen readers. Should use `aria-label` instead.
 
 **Line 1518-1523 (Muted Subreddits):**
+
 ```html
-<button class="button secondary" id="export-muted">
-  📥 Export List
-</button>
-<button class="button secondary" id="import-muted">
-  📤 Import List
-</button>
+<button class="button secondary" id="export-muted">📥 Export List</button>
+<button class="button secondary" id="import-muted">📤 Import List</button>
 ```
+
 **Issue:** Same emoji accessibility issue.
 
 ### Recommendation:
@@ -82,29 +94,57 @@ Add explicit `aria-label` attributes to all buttons:
 
 ```html
 <!-- Statistics Section -->
-<button class="button secondary" id="export-stats" aria-label="Export statistics">
+<button
+  class="button secondary"
+  id="export-stats"
+  aria-label="Export statistics"
+>
   📊 Export Stats
 </button>
-<button class="button secondary" id="clear-stats" aria-label="Clear all statistics">
+<button
+  class="button secondary"
+  id="clear-stats"
+  aria-label="Clear all statistics"
+>
   Clear Statistics
 </button>
 
 <!-- Sort Preferences -->
-<button id="export-prefs" class="secondary-button" aria-label="Export preferences as JSON">
+<button
+  id="export-prefs"
+  class="secondary-button"
+  aria-label="Export preferences as JSON"
+>
   Export
 </button>
-<button id="import-prefs" class="secondary-button" aria-label="Import preferences from JSON">
+<button
+  id="import-prefs"
+  class="secondary-button"
+  aria-label="Import preferences from JSON"
+>
   Import
 </button>
-<button id="clear-all-prefs" class="danger-button" aria-label="Clear all saved preferences">
+<button
+  id="clear-all-prefs"
+  class="danger-button"
+  aria-label="Clear all saved preferences"
+>
   Clear All
 </button>
 
 <!-- Muted Subreddits -->
-<button class="button secondary" id="export-muted" aria-label="Export muted subreddit list">
+<button
+  class="button secondary"
+  id="export-muted"
+  aria-label="Export muted subreddit list"
+>
   📥 Export List
 </button>
-<button class="button secondary" id="import-muted" aria-label="Import muted subreddit list">
+<button
+  class="button secondary"
+  id="import-muted"
+  aria-label="Import muted subreddit list"
+>
   📤 Import List
 </button>
 ```
@@ -123,6 +163,7 @@ Two modals in the page lack proper focus management:
 2. **Keyboard Edit Modal** (`#keyboard-edit-modal`, line 2263-2320)
 
 #### Current Behavior:
+
 - When a modal opens, focus is not moved to the modal
 - Users can tab outside the modal to background content
 - Escape key does not close the modal
@@ -131,18 +172,21 @@ Two modals in the page lack proper focus management:
 #### Code Analysis:
 
 **options.js line 2695:**
+
 ```javascript
 // Show modal
 modal.style.display = "flex";
 ```
 
 **options.js line 6165:**
+
 ```javascript
 // Show modal
 document.getElementById("keyboard-edit-modal").style.display = "flex";
 ```
 
 **Issue:** Simply setting `display: flex` does not:
+
 - Move focus into the modal
 - Trap focus within the modal
 - Handle Escape key
@@ -262,30 +306,48 @@ function closeModal(modalId) {
 
 ```html
 <!-- Preset Edit Modal -->
-<div id="preset-edit-modal" class="modal" style="display: none"
-     role="dialog"
-     aria-modal="true"
-     aria-labelledby="preset-edit-title"
-     aria-hidden="true">
+<div
+  id="preset-edit-modal"
+  class="modal"
+  style="display: none"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="preset-edit-title"
+  aria-hidden="true"
+>
   <div class="modal-content">
     <div class="modal-header">
       <h3 id="preset-edit-title">Edit Preset</h3>
-      <button class="modal-close" id="preset-edit-close" aria-label="Close dialog">&times;</button>
+      <button
+        class="modal-close"
+        id="preset-edit-close"
+        aria-label="Close dialog"
+      >
+        &times;
+      </button>
     </div>
     <!-- ... -->
   </div>
 </div>
 
 <!-- Keyboard Edit Modal -->
-<div id="keyboard-edit-modal" class="modal" style="display: none"
-     role="dialog"
-     aria-modal="true"
-     aria-labelledby="keyboard-edit-title"
-     aria-hidden="true">
+<div
+  id="keyboard-edit-modal"
+  class="modal"
+  style="display: none"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="keyboard-edit-title"
+  aria-hidden="true"
+>
   <div class="modal-content">
     <div class="modal-header">
       <h3 id="keyboard-edit-title">Edit Keyboard Shortcut</h3>
-      <button class="modal-close" id="keyboard-edit-close" aria-label="Close dialog">
+      <button
+        class="modal-close"
+        id="keyboard-edit-close"
+        aria-label="Close dialog"
+      >
         &times;
       </button>
     </div>
@@ -307,6 +369,7 @@ While most form controls have proper labels, some dynamic content and search inp
 #### Examples:
 
 **Line 488-492 (Sort Preferences Search):**
+
 ```html
 <input
   type="text"
@@ -315,9 +378,11 @@ While most form controls have proper labels, some dynamic content and search inp
   class="search-input"
 />
 ```
+
 **Issue:** No `<label>` element or `aria-label` attribute.
 
 **Line 570-575 (User Tags Search):**
+
 ```html
 <input
   type="text"
@@ -326,9 +391,11 @@ While most form controls have proper labels, some dynamic content and search inp
   class="search-input"
 />
 ```
+
 **Issue:** Same issue.
 
 **Line 1797-1801 (Reading History Search):**
+
 ```html
 <input
   type="text"
@@ -337,6 +404,7 @@ While most form controls have proper labels, some dynamic content and search inp
   placeholder="Search history..."
 />
 ```
+
 **Issue:** Same issue.
 
 ### Recommendation:
@@ -382,6 +450,7 @@ Range inputs (sliders) for Minimap Width, Minimap Opacity, and NSFW Blur Intensi
 #### Examples:
 
 **Line 386-395 (Minimap Width):**
+
 ```html
 <div class="range-container">
   <input
@@ -397,6 +466,7 @@ Range inputs (sliders) for Minimap Width, Minimap Opacity, and NSFW Blur Intensi
 ```
 
 **Line 402-411 (Minimap Opacity):**
+
 ```html
 <div class="range-container">
   <input
@@ -412,6 +482,7 @@ Range inputs (sliders) for Minimap Width, Minimap Opacity, and NSFW Blur Intensi
 ```
 
 **Line 1886-1894 (NSFW Blur Intensity):**
+
 ```html
 <div class="range-container">
   <input
@@ -446,7 +517,9 @@ Add `aria-live` and `aria-atomic` to value spans:
     aria-valuenow="120"
     aria-valuetext="120 pixels"
   />
-  <span id="minimap-width-value" aria-live="polite" aria-atomic="true">120px</span>
+  <span id="minimap-width-value" aria-live="polite" aria-atomic="true"
+    >120px</span
+  >
 </div>
 
 <!-- Minimap Opacity -->
@@ -464,7 +537,9 @@ Add `aria-live` and `aria-atomic` to value spans:
     aria-valuenow="90"
     aria-valuetext="90 percent"
   />
-  <span id="minimap-opacity-value" aria-live="polite" aria-atomic="true">90%</span>
+  <span id="minimap-opacity-value" aria-live="polite" aria-atomic="true"
+    >90%</span
+  >
 </div>
 
 <!-- NSFW Blur Intensity -->
@@ -482,7 +557,9 @@ Add `aria-live` and `aria-atomic` to value spans:
     aria-valuenow="10"
     aria-valuetext="10 pixels"
   />
-  <span id="nsfw-blur-intensity-value" aria-live="polite" aria-atomic="true">10px</span>
+  <span id="nsfw-blur-intensity-value" aria-live="polite" aria-atomic="true"
+    >10px</span
+  >
 </div>
 ```
 
@@ -542,13 +619,22 @@ Some dynamically generated content (lists, tables) may not be fully keyboard acc
 #### Examples:
 
 **Line 911 (JavaScript - Tag Remove Button):**
+
 ```javascript
-<button class="tag-remove" data-subreddit="${escapeHtml(subreddit)}" aria-label="Remove r/${escapeHtml(subreddit)}">×</button>
+<button
+  class="tag-remove"
+  data-subreddit="${escapeHtml(subreddit)}"
+  aria-label="Remove r/${escapeHtml(subreddit)}"
+>
+  ×
+</button>
 ```
+
 **Good:** This button does have an `aria-label`. ✅
 
 **Dynamically Generated Tables:**
 The following tables are populated via JavaScript but should ensure all interactive elements are keyboard accessible:
+
 - Sort preferences table (`#prefs-tbody`)
 - User tags table (`#tags-tbody`)
 - Layout presets table (`#presets-tbody`)
@@ -557,6 +643,7 @@ The following tables are populated via JavaScript but should ensure all interact
 ### Recommendation:
 
 Ensure all dynamically generated buttons have:
+
 1. Explicit `aria-label` attributes
 2. Proper focus management
 3. Enter/Space key support (already handled by `<button>` elements)
@@ -683,6 +770,7 @@ No heading levels are skipped. Hierarchy is logical and assists screen reader na
 #### Examples of Good Implementation:
 
 **Line 14-37 (Main Toggle):**
+
 ```html
 <section class="setting" role="region" aria-labelledby="main-toggle-heading">
   <h2 id="main-toggle-heading" class="visually-hidden">Main Toggle</h2>
@@ -691,6 +779,7 @@ No heading levels are skipped. Hierarchy is logical and assists screen reader na
 ```
 
 **Line 40-78 (Statistics):**
+
 ```html
 <section class="setting" role="region" aria-labelledby="stats-heading">
   <h2 id="stats-heading">Statistics</h2>
@@ -703,6 +792,7 @@ No heading levels are skipped. Hierarchy is logical and assists screen reader na
 The following sections should add `role="region"`:
 
 **Line 459 (Sort Preferences):**
+
 ```html
 <section class="setting">
   <h2>Subreddit Sort Preferences</h2>
@@ -711,6 +801,7 @@ The following sections should add `role="region"`:
 ```
 
 **Line 542 (User Tags):**
+
 ```html
 <section class="setting">
   <h2>User Tags</h2>
@@ -809,6 +900,7 @@ Add skip links at the top of the page:
 **Severity:** Medium (WCAG 2.1 Level A - 4.1.3 Status Messages)
 
 **Line 2340-2342 (Toast HTML):**
+
 ```html
 <div id="toast" class="toast" hidden>
   <span id="toast-message"></span>
@@ -822,7 +914,14 @@ Add skip links at the top of the page:
 Update toast element:
 
 ```html
-<div id="toast" class="toast" hidden role="status" aria-live="polite" aria-atomic="true">
+<div
+  id="toast"
+  class="toast"
+  hidden
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+>
   <span id="toast-message"></span>
 </div>
 ```
@@ -852,6 +951,7 @@ function showToast(message, type = "success") {
 Several file inputs are hidden and triggered by separate buttons:
 
 **Line 1525-1529:**
+
 ```html
 <input
   type="file"
@@ -862,6 +962,7 @@ Several file inputs are hidden and triggered by separate buttons:
 ```
 
 **Line 1597-1601:**
+
 ```html
 <input
   type="file"
@@ -872,13 +973,9 @@ Several file inputs are hidden and triggered by separate buttons:
 ```
 
 **Line 2130-2134:**
+
 ```html
-<input
-  type="file"
-  id="import-file"
-  accept=".json,application/json"
-  hidden
-/>
+<input type="file" id="import-file" accept=".json,application/json" hidden />
 ```
 
 ### Recommendation:
@@ -998,6 +1095,7 @@ elements.importFile.addEventListener("change", handleImport);
 ### Automated Testing
 
 Run automated accessibility scanners:
+
 - [ ] axe DevTools browser extension
 - [ ] WAVE browser extension
 - [ ] Lighthouse accessibility audit
