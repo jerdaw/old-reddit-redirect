@@ -5,6 +5,10 @@
 
 import { getStorage } from "../shared/storage-helpers.js";
 
+// Store references for cleanup
+let colorSchemeMediaQuery = null;
+let colorSchemeHandler = null;
+
 /**
  * Apply dark mode based on user preferences
  * @returns {Promise<void>}
@@ -64,15 +68,16 @@ async function applyDarkMode() {
  * Listen for system color scheme changes and reapply dark mode
  */
 function watchColorScheme() {
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-  mediaQuery.addEventListener("change", async () => {
+  colorSchemeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  colorSchemeHandler = async () => {
     const prefs = await getStorage({
       darkMode: { enabled: "auto" },
     });
     if (prefs.darkMode.enabled === "auto") {
       applyDarkMode();
     }
-  });
+  };
+  colorSchemeMediaQuery.addEventListener("change", colorSchemeHandler);
 }
 
 /**
@@ -129,6 +134,17 @@ async function autoCollapseBotComments() {
 }
 
 /**
+ * Clean up event listeners
+ */
+function cleanup() {
+  if (colorSchemeMediaQuery && colorSchemeHandler) {
+    colorSchemeMediaQuery.removeEventListener("change", colorSchemeHandler);
+    colorSchemeMediaQuery = null;
+    colorSchemeHandler = null;
+  }
+}
+
+/**
  * Initialize dark mode module
  * @returns {Promise<void>}
  */
@@ -136,6 +152,10 @@ export async function initDarkMode() {
   try {
     await applyDarkMode();
     watchColorScheme();
+
+    // Register cleanup handler
+    if (!window.orrCleanup) window.orrCleanup = [];
+    window.orrCleanup.push(cleanup);
 
     // Auto-collapse bots is called separately in main init
     // to avoid duplication with mutation observer

@@ -9,6 +9,11 @@ import {
 } from "../shared/page-detection.js";
 import { debugLog } from "../shared/debug-helpers.js";
 
+// Store references for cleanup
+let sortObserver = null;
+let popStateHandler = null;
+let sortCheckInterval = null;
+
 /**
  * Get current sort order from URL
  * @returns {Object} { sort, time }
@@ -157,6 +162,24 @@ async function detectSortChange() {
 }
 
 /**
+ * Clean up observers and event listeners
+ */
+function cleanup() {
+  if (sortObserver) {
+    sortObserver.disconnect();
+    sortObserver = null;
+  }
+  if (popStateHandler) {
+    window.removeEventListener("popstate", popStateHandler);
+    popStateHandler = null;
+  }
+  if (sortCheckInterval) {
+    clearInterval(sortCheckInterval);
+    sortCheckInterval = null;
+  }
+}
+
+/**
  * Initialize sort preferences module
  * @returns {Promise<void>}
  */
@@ -170,17 +193,22 @@ export async function initSortPreferences() {
 
     // Watch for URL changes to detect manual sort changes
     // Use MutationObserver to detect history.pushState
-    const observer = new MutationObserver(detectSortChange);
-    observer.observe(document.body, {
+    sortObserver = new MutationObserver(detectSortChange);
+    sortObserver.observe(document.body, {
       childList: true,
       subtree: true,
     });
 
     // Also watch for popstate (back/forward buttons)
-    window.addEventListener("popstate", detectSortChange);
+    popStateHandler = detectSortChange;
+    window.addEventListener("popstate", popStateHandler);
 
     // Poll for URL changes as fallback
-    setInterval(detectSortChange, 1000);
+    sortCheckInterval = setInterval(detectSortChange, 1000);
+
+    // Register cleanup handler
+    if (!window.orrCleanup) window.orrCleanup = [];
+    window.orrCleanup.push(cleanup);
   } catch (error) {
     console.error("[ORR] Sort preferences initialization failed:", error);
   }

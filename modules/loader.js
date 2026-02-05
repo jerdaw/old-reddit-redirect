@@ -79,6 +79,28 @@ export async function initializeFeatures() {
   }
 }
 
+/**
+ * Cleanup all registered event listeners and observers
+ * Called on page unload to prevent memory leaks
+ */
+function cleanupAllModules() {
+  debugLog("[ORR] Module loader: Cleaning up event listeners and observers");
+  if (window.orrCleanup && Array.isArray(window.orrCleanup)) {
+    for (const cleanup of window.orrCleanup) {
+      try {
+        cleanup();
+      } catch (error) {
+        console.error("[ORR] Module loader: Cleanup error:", error);
+      }
+    }
+    window.orrCleanup = [];
+  }
+}
+
+// Register cleanup on page unload
+window.addEventListener("beforeunload", cleanupAllModules);
+window.addEventListener("pagehide", cleanupAllModules);
+
 // Auto-initialize when module is imported
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", initializeFeatures);
