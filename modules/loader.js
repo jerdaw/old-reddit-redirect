@@ -55,10 +55,6 @@ export async function initializeFeatures() {
     const { initOptionalFeatures } = await import("./optional/index.js");
     await initOptionalFeatures();
 
-    // Phase 6: Keyboard shortcuts
-    // TODO: Implement in Phase 6
-    console.log("[ORR] Module loader: Keyboard shortcuts will load here");
-
     // Auto-collapse bot comments (part of dark mode)
     const { autoCollapseBotComments } = await import("./core/dark-mode.js");
     await autoCollapseBotComments();
