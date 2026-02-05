@@ -32,7 +32,8 @@ function getParentComments() {
  */
 function scrollToComment(comment) {
   const elementPosition = comment.getBoundingClientRect().top;
-  const offsetPosition = elementPosition + window.scrollY - REDDIT_HEADER_HEIGHT;
+  const offsetPosition =
+    elementPosition + window.scrollY - REDDIT_HEADER_HEIGHT;
 
   window.scrollTo({
     top: offsetPosition,

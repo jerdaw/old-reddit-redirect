@@ -167,7 +167,8 @@ export async function initMinimap() {
     const updateViewportIndicator = () => {
       const scrollTop = window.scrollY;
       const viewportTop = (scrollTop / docHeight) * MINIMAP_CONTENT_HEIGHT;
-      const viewportSize = (viewportHeight / docHeight) * MINIMAP_CONTENT_HEIGHT;
+      const viewportSize =
+        (viewportHeight / docHeight) * MINIMAP_CONTENT_HEIGHT;
 
       viewportIndicator.style.top = `${viewportTop + 30}px`; // +30 for header
       viewportIndicator.style.height = `${Math.max(10, viewportSize)}px`;
