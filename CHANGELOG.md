@@ -9,6 +9,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+#### Code Quality Improvements (2026-02-05)
+
+- **Module Documentation**: Added comprehensive modules/README.md (574 lines)
+  - Architecture overview with module categories and lazy loading patterns
+  - Complete "how to add a new module" tutorial with code examples
+  - Performance benefits explanation (13.8% smaller bundle, 33-53% fewer lines executed)
+  - Best practices, browser compatibility, and troubleshooting guide
+  - Module orchestrator patterns and Promise.allSettled() usage
+
+- **UI Constants Centralization**: Created modules/shared/constants.js
+  - Extracted 20+ hardcoded UI values (layout, colors, timing)
+  - REDDIT_HEADER_HEIGHT (60px), SCROLL_OFFSET (100px), MINIMAP_CONTENT_HEIGHT (400px)
+  - DEPTH_COLORS array (10-level comment color palette)
+  - TRANSITION_DURATION, HIGHLIGHT_COLOR, keyboard chord timeout
+  - Updated minimap.js, navigation.js, color-coding.js to use constants
+
+- **Options Page Refactoring**: Extracted UI strings to options-constants.js
+  - Moved 110+ UI strings from options.js to separate module
+  - Reduced options.js from 6,550 to 6,439 lines (-111 lines, -1.7%)
+  - Follows storage.js IIFE + global namespace pattern
+  - Improved maintainability and future i18n readiness
+
+- **JSDoc Coverage**: Added comprehensive documentation to core files
+  - popup.js: 24 JSDoc blocks (100% coverage)
+  - background.js: 36 JSDoc blocks (100% coverage)
+  - Improved IDE autocomplete and developer experience
+
+- **Documentation Updates**: Cleaned up migration documentation
+  - Updated PHASE-1-COMPLETE.md to reflect Phase 7 completion
+  - Fixed outdated "Ready to Start" and "TBD" references
+  - Added actual post-migration performance metrics
+
 #### Code Quality Improvements (2026-02-04)
 
 - **Dependency Updates**: Updated all dev dependencies to latest versions

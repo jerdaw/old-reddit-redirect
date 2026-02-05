@@ -7,6 +7,7 @@ This directory contains the modular implementation of Old Reddit Redirect's cont
 **Before (v18.x):** Single 3,699-line `content-script.js` loaded on every page
 
 **After (v19.0.0+):** 24 ES6 modules with smart loading:
+
 - **Core features:** Always loaded (4 modules, ~683 lines)
 - **Comment features:** Lazy-loaded on `/comments/` pages only (5 modules, ~756 lines)
 - **Feed features:** Lazy-loaded on feed pages only (3 modules, ~445 lines)
@@ -14,6 +15,7 @@ This directory contains the modular implementation of Old Reddit Redirect's cont
 - **Shared utilities:** Imported by all modules (4 modules, ~372 lines)
 
 **Benefits:**
+
 - 13.8% smaller bundle (181KB → 156KB)
 - 33-53% fewer lines executed per page
 - 100-150ms faster page load
@@ -102,12 +104,14 @@ modules/
 **Purpose:** Essential features needed on all pages
 
 **Modules:**
+
 - `dark-mode.js` - Dark/light/auto/OLED themes
 - `accessibility.js` - Font size, reduced motion
 - `nag-blocking.js` - Remove login/app/premium prompts
 - `content-filtering.js` - Keyword/domain/flair/score filtering
 
 **Pattern:**
+
 ```javascript
 // In loader.js
 const { initDarkMode } = await import("./core/dark-mode.js");
@@ -121,12 +125,14 @@ await initDarkMode(); // Always runs
 **Purpose:** Features specific to comment threads
 
 **Modules:**
+
 - `color-coding.js` - Color-coded depth indicators
 - `navigation.js` - Next/previous navigation buttons
 - `inline-images.js` - Expand images inline
 - `minimap.js` - Comment thread visualization
 
 **Pattern:**
+
 ```javascript
 // In loader.js
 if (isCommentsPage()) {
@@ -144,10 +150,12 @@ if (isCommentsPage()) {
 **Purpose:** Features for browsing post listings
 
 **Modules:**
+
 - `feed-modes.js` - Compact/text-only/custom modes
 - `sort-preferences.js` - Remember sort order per subreddit
 
 **Pattern:**
+
 ```javascript
 // In loader.js
 if (isSubredditPage() || isFrontPage()) {
@@ -163,12 +171,14 @@ if (isSubredditPage() || isFrontPage()) {
 **Purpose:** Features users can enable/disable
 
 **Modules:**
+
 - `user-tags.js` - Tag users with custom labels/colors
 - `nsfw-controls.js` - Blur/hide NSFW content
 - `layout-presets.js` - Save/restore UI configurations
 - `reading-history.js` - Track viewed posts (opt-in)
 
 **Pattern:**
+
 ```javascript
 // In optional/index.js
 export async function initOptionalFeatures() {
@@ -181,11 +191,13 @@ export async function initOptionalFeatures() {
   const loaders = [];
 
   if (prefs.userTags?.enabled) {
-    loaders.push(import("./user-tags.js").then(m => m.initUserTags()));
+    loaders.push(import("./user-tags.js").then((m) => m.initUserTags()));
   }
 
   if (prefs.nsfwControls?.enabled) {
-    loaders.push(import("./nsfw-controls.js").then(m => m.initNsfwControls()));
+    loaders.push(
+      import("./nsfw-controls.js").then((m) => m.initNsfwControls())
+    );
   }
 
   // Fail gracefully if one feature breaks
@@ -200,12 +212,14 @@ export async function initOptionalFeatures() {
 **Purpose:** Reusable utilities to prevent code duplication
 
 **Modules:**
+
 - `page-detection.js` - Detect page types (comments, feed, user profile)
 - `dom-helpers.js` - DOM manipulation (`$`, `$$`, `waitForElement`, etc.)
 - `storage-helpers.js` - Storage wrappers (`getStorage`, `setStorage`)
 - `debug-helpers.js` - Conditional logging (`debugLog`)
 
 **Pattern:**
+
 ```javascript
 // In any module
 import { $, $$ } from "../shared/dom-helpers.js";
@@ -221,6 +235,7 @@ import { debugLog } from "../shared/debug-helpers.js";
 Each category has an `index.js` orchestrator that conditionally loads features:
 
 **Example: `comments/index.js`**
+
 ```javascript
 export async function initCommentFeatures() {
   const prefs = await getStorage({
@@ -233,19 +248,21 @@ export async function initCommentFeatures() {
   const loaders = [];
 
   if (prefs.commentColorCoding?.enabled) {
-    loaders.push(import("./color-coding.js").then(m => m.initColorCoding()));
+    loaders.push(import("./color-coding.js").then((m) => m.initColorCoding()));
   }
 
   if (prefs.commentNavigation?.enabled) {
-    loaders.push(import("./navigation.js").then(m => m.initNavigation()));
+    loaders.push(import("./navigation.js").then((m) => m.initNavigation()));
   }
 
   if (prefs.inlineImages?.enabled) {
-    loaders.push(import("./inline-images.js").then(m => m.initInlineImages()));
+    loaders.push(
+      import("./inline-images.js").then((m) => m.initInlineImages())
+    );
   }
 
   if (prefs.commentMinimap?.enabled) {
-    loaders.push(import("./minimap.js").then(m => m.initMinimap()));
+    loaders.push(import("./minimap.js").then((m) => m.initMinimap()));
   }
 
   // Load all enabled features in parallel, fail gracefully
@@ -258,20 +275,13 @@ export async function initCommentFeatures() {
 **Why:** One feature failure shouldn't break all features
 
 **Pattern:**
+
 ```javascript
 // ✅ Good: Fail gracefully
-await Promise.allSettled([
-  initFeature1(),
-  initFeature2(),
-  initFeature3(),
-]);
+await Promise.allSettled([initFeature1(), initFeature2(), initFeature3()]);
 
 // ❌ Bad: One error breaks everything
-await Promise.all([
-  initFeature1(),
-  initFeature2(),
-  initFeature3(),
-]);
+await Promise.all([initFeature1(), initFeature2(), initFeature3()]);
 ```
 
 ## Memory Management
@@ -282,9 +292,13 @@ All modules register cleanup functions to prevent memory leaks:
 // In any module
 export function initFeature() {
   const observer = new MutationObserver(/* ... */);
-  observer.observe(document.body, { /* ... */ });
+  observer.observe(document.body, {
+    /* ... */
+  });
 
-  const handleClick = (e) => { /* ... */ };
+  const handleClick = (e) => {
+    /* ... */
+  };
   document.addEventListener("click", handleClick);
 
   // Register cleanup
@@ -310,6 +324,7 @@ Cleanup runs automatically on page unload (`loader.js` handles this).
 ### Step 2: Create Module File
 
 **Example: `modules/optional/custom-feature.js`**
+
 ```javascript
 /**
  * Custom Feature Module
@@ -365,6 +380,7 @@ export function helperFunction() {
 ### Step 3: Update Orchestrator
 
 **For optional features: Edit `modules/optional/index.js`**
+
 ```javascript
 export async function initOptionalFeatures() {
   const prefs = await getStorage({
@@ -376,7 +392,7 @@ export async function initOptionalFeatures() {
 
   if (prefs.customFeature?.enabled) {
     loaders.push(
-      import("./custom-feature.js").then(m => m.initCustomFeature())
+      import("./custom-feature.js").then((m) => m.initCustomFeature())
     );
   }
 
@@ -389,9 +405,13 @@ export async function initOptionalFeatures() {
 ### Step 4: Add Tests
 
 **Create `tests/custom-feature.test.js`**
+
 ```javascript
 import { describe, it, expect, beforeEach } from "vitest";
-import { initCustomFeature, helperFunction } from "../modules/optional/custom-feature.js";
+import {
+  initCustomFeature,
+  helperFunction,
+} from "../modules/optional/custom-feature.js";
 
 describe("Custom Feature", () => {
   beforeEach(() => {
@@ -415,6 +435,7 @@ describe("Custom Feature", () => {
 ### Step 5: Add to ESLint Config
 
 **Edit `eslint.config.js`**
+
 ```javascript
 {
   files: [
@@ -458,6 +479,7 @@ To see which modules are loading:
 4. Check timestamps to measure load times
 
 **Example output:**
+
 ```
 [ORR] Module loader: Starting feature initialization
 [ORR] Module loader: Loading core features
@@ -482,12 +504,18 @@ To see which modules are loading:
 
 ```javascript
 // ✅ Good: Export init function AND helpers
-export async function initFeature() { /* ... */ }
-export function helperFunction() { /* ... */ }
+export async function initFeature() {
+  /* ... */
+}
+export function helperFunction() {
+  /* ... */
+}
 
 // ❌ Bad: Only export init, can't test helpers
 export async function initFeature() {
-  function helper() { /* ... */ } // Not testable
+  function helper() {
+    /* ... */
+  } // Not testable
 }
 ```
 
@@ -521,7 +549,9 @@ await riskyOperation(); // Throws and stops loader
 
 ```javascript
 // ✅ Good: Register cleanup
-const handler = () => { /* ... */ };
+const handler = () => {
+  /* ... */
+};
 document.addEventListener("click", handler);
 window.orrCleanup = window.orrCleanup || [];
 window.orrCleanup.push(() => {
@@ -529,20 +559,25 @@ window.orrCleanup.push(() => {
 });
 
 // ❌ Bad: Memory leak
-document.addEventListener("click", () => { /* ... */ });
+document.addEventListener("click", () => {
+  /* ... */
+});
 ```
 
 ## Browser Compatibility
 
 **ES Modules Support:**
+
 - Chrome 91+ (July 2021)
 - Firefox 130+ (September 2024)
 - Edge 91+ (July 2021)
 
 **Dynamic Imports:**
+
 - Same as above (native support)
 
 **No Transpilation Required:**
+
 - Native ES modules work in all supported browsers
 - No Webpack/Rollup needed
 - Simpler builds, easier debugging
@@ -550,6 +585,7 @@ document.addEventListener("click", () => { /* ... */ });
 ## Migration History
 
 See detailed migration documentation in `docs/migration/`:
+
 - `MIGRATION-COMPLETE.md` - Full migration summary
 - `PHASE-1-COMPLETE.md` - Foundation setup
 - `PHASE-2-COMPLETE.md` - Core modules
@@ -569,6 +605,7 @@ See detailed migration documentation in `docs/migration/`:
 ## Questions?
 
 For questions or issues with the modular architecture:
+
 - Check migration docs in `docs/migration/`
 - Review CLAUDE.md for architecture overview
 - Open an issue on GitHub
