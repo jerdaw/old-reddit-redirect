@@ -9,6 +9,21 @@
   // Schema version for future migrations
   const SCHEMA_VERSION = 3;
 
+  // Application Constants
+  const MAX_USER_TAGS = 500;
+  const MAX_MUTED_USERS = 500;
+  const MAX_SORT_PREFERENCES = 100;
+  const MAX_SCROLL_POSITIONS = 100;
+  const MAX_SUBREDDIT_MAPPINGS = 100;
+  const MAX_LAYOUT_PRESETS = 20;
+  const MAX_READING_HISTORY = 500;
+  const SCROLL_RETENTION_HOURS = 24;
+  const READING_HISTORY_RETENTION_DAYS = 30;
+  const KEYBOARD_CHORD_TIMEOUT_MS = 1000;
+  const MAX_INLINE_IMAGE_WIDTH = 600;
+  const COLOR_STRIPE_WIDTH = 3;
+  const MINIMAP_DEFAULT_WIDTH = 120;
+
   // Keys that should be synced across browsers (when sync is enabled)
   const SYNC_KEYS = [
     "frontend",
@@ -98,38 +113,38 @@
     commentEnhancements: {
       colorCodedComments: true,
       colorPalette: "standard", // "standard" | "colorblind"
-      stripeWidth: 3,
+      stripeWidth: COLOR_STRIPE_WIDTH,
       navigationButtons: true,
       navButtonPosition: "bottom-right", // "bottom-right" | "bottom-left"
       inlineImages: true,
-      maxImageWidth: 600, // pixels, 0 = full width
+      maxImageWidth: MAX_INLINE_IMAGE_WIDTH, // pixels, 0 = full width
       // v11.2.0: Jump to top keyboard shortcut
       jumpToTopShortcut: true,
     },
     sortPreferences: {
       enabled: true,
-      maxEntries: 100,
+      maxEntries: MAX_SORT_PREFERENCES,
       preferences: {}, // { subreddit: { sort, time, timestamp } }
     },
     userTags: {
       enabled: true,
-      maxTags: 500,
+      maxTags: MAX_USER_TAGS,
       tags: {}, // { username: { text, color, timestamp } }
     },
     mutedUsers: {
       enabled: true,
-      maxUsers: 500,
+      maxUsers: MAX_MUTED_USERS,
       users: {}, // { username: { reason, timestamp } }
     },
     scrollPositions: {
       enabled: true,
-      maxEntries: 100,
-      retentionHours: 24,
+      maxEntries: MAX_SCROLL_POSITIONS,
+      retentionHours: SCROLL_RETENTION_HOURS,
       positions: {}, // { url: { scrollY, timestamp } }
     },
     keyboardShortcuts: {
       enabled: true,
-      chordTimeout: 1000, // Milliseconds to wait for chord sequence
+      chordTimeout: KEYBOARD_CHORD_TIMEOUT_MS, // Milliseconds to wait for chord sequence
       shortcuts: {
         // Existing shortcuts
         "toggle-redirect": {
@@ -231,11 +246,11 @@
     },
     layoutPresets: {
       enabled: true,
-      maxPresets: 20,
+      maxPresets: MAX_LAYOUT_PRESETS,
       activePreset: null, // Name of currently active global preset
       presets: {}, // { presetName: { darkMode, compactMode, textOnlyMode, uncropImages, hideJoinButtons, hideActionLinks, colorCodedComments, colorPalette, customCSS, timestamp } }
       subredditLayouts: {}, // { subredditName: presetName }
-      maxSubredditMappings: 100,
+      maxSubredditMappings: MAX_SUBREDDIT_MAPPINGS,
     },
     privacy: {
       removeTracking: true,
@@ -326,8 +341,8 @@
     readingHistory: {
       enabled: true,
       showVisitedIndicator: true,
-      maxEntries: 500,
-      retentionDays: 30,
+      maxEntries: MAX_READING_HISTORY,
+      retentionDays: READING_HISTORY_RETENTION_DAYS,
       entries: [], // Array of { id, title, subreddit, url, timestamp, commentCount }
     },
     nsfwControls: {
@@ -341,7 +356,7 @@
     commentMinimap: {
       enabled: true, // Show minimap on comment pages
       position: "right", // "left" | "right"
-      width: 120, // Width in pixels (80-200)
+      width: MINIMAP_DEFAULT_WIDTH, // Width in pixels (80-200)
       opacity: 0.9, // Opacity (0.5-1.0)
       showViewportIndicator: true, // Highlight current viewport position
       useDepthColors: true, // Use color-coded comment depth colors
