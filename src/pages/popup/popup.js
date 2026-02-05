@@ -23,6 +23,11 @@
 
   let countdownInterval = null;
 
+  /**
+   * Handle Chrome API errors gracefully
+   * Prevents "Unchecked runtime.lastError" warnings in console
+   * @returns {void}
+   */
   function handleLastError() {
     void chrome.runtime.lastError;
   }

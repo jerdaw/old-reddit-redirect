@@ -5,6 +5,13 @@
 
 import { getStorage } from "../shared/storage-helpers.js";
 import { $ } from "../shared/dom-helpers.js";
+import {
+  REDDIT_HEADER_HEIGHT,
+  SCROLL_OFFSET,
+  COMMENT_HIGHLIGHT_DURATION,
+  HIGHLIGHT_COLOR,
+  TRANSITION_DURATION,
+} from "../shared/constants.js";
 
 /**
  * Get all parent (top-level) comments on the page
@@ -24,9 +31,8 @@ function getParentComments() {
  * @param {Element} comment - The comment element to scroll to
  */
 function scrollToComment(comment) {
-  const headerOffset = 60; // Account for Reddit header
   const elementPosition = comment.getBoundingClientRect().top;
-  const offsetPosition = elementPosition + window.scrollY - headerOffset;
+  const offsetPosition = elementPosition + window.scrollY - REDDIT_HEADER_HEIGHT;
 
   window.scrollTo({
     top: offsetPosition,
@@ -34,16 +40,16 @@ function scrollToComment(comment) {
   });
 
   // Briefly highlight the comment
-  comment.style.transition = "background-color 0.3s";
+  comment.style.transition = `background-color ${TRANSITION_DURATION}s`;
   const originalBg = comment.style.backgroundColor;
-  comment.style.backgroundColor = "rgba(255, 69, 0, 0.15)";
+  comment.style.backgroundColor = HIGHLIGHT_COLOR;
 
   setTimeout(() => {
     comment.style.backgroundColor = originalBg;
     setTimeout(() => {
       comment.style.transition = "";
-    }, 300);
-  }, 600);
+    }, TRANSITION_DURATION * 1000);
+  }, COMMENT_HIGHLIGHT_DURATION);
 }
 
 /**
@@ -53,7 +59,7 @@ export function navigateToNext() {
   const parents = getParentComments();
   if (parents.length === 0) return;
 
-  const currentScroll = window.scrollY + 100; // Small offset for current position
+  const currentScroll = window.scrollY + SCROLL_OFFSET;
 
   // Find the first comment below current scroll position
   for (const comment of parents) {
@@ -74,7 +80,7 @@ export function navigateToPrevious() {
   const parents = getParentComments();
   if (parents.length === 0) return;
 
-  const currentScroll = window.scrollY - 100; // Small offset for current position
+  const currentScroll = window.scrollY - SCROLL_OFFSET;
 
   // Find the last comment above current scroll position
   for (let i = parents.length - 1; i >= 0; i--) {

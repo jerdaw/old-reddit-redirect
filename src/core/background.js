@@ -25,6 +25,11 @@ if (typeof importScripts === "function") {
   const TRACKING_BADGE_TIMEOUT = 3000; // 3 seconds
   let trackingBadgeTimeout = null;
 
+  /**
+   * Handle Chrome API errors gracefully using Logger
+   * @param {string} [context] - Optional context string for error logging
+   * @returns {void}
+   */
   function handleLastError(context) {
     Logger.handleChromeError(context);
   }

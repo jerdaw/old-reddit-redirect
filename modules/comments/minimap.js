@@ -6,6 +6,15 @@
 import { getStorage } from "../shared/storage-helpers.js";
 import { $$ } from "../shared/dom-helpers.js";
 import { calculateCommentDepth } from "./color-coding.js";
+import {
+  MINIMAP_CONTENT_HEIGHT,
+  MINIMAP_SCROLL_OFFSET,
+  MINIMAP_DEPTH_INDENT,
+  MINIMAP_ENTRY_PADDING,
+  MINIMAP_MAX_ENTRY_HEIGHT,
+  MINIMAP_MIN_ENTRY_HEIGHT,
+  DEPTH_COLORS,
+} from "../shared/constants.js";
 
 // Track minimap instance for cleanup
 let minimapInstance = null;
@@ -86,24 +95,9 @@ export async function initMinimap() {
   content.className = "orr-minimap-content";
   minimap.appendChild(content);
 
-  // Color palette for depth (matches color-coded comments)
-  const depthColors = [
-    "#ff4500", // Level 1 - Reddit orange
-    "#0079d3", // Level 2 - Blue
-    "#46d160", // Level 3 - Green
-    "#ff8b60", // Level 4 - Light orange
-    "#7193ff", // Level 5 - Light blue
-    "#ffd635", // Level 6 - Yellow
-    "#ff66ac", // Level 7 - Pink
-    "#9147ff", // Level 8 - Purple
-    "#00d5fa", // Level 9 - Cyan
-    "#cccccc", // Level 10+ - Gray
-  ];
-
   // Calculate total document height for scaling
   const docHeight = document.documentElement.scrollHeight;
   const viewportHeight = window.innerHeight;
-  const minimapContentHeight = 400; // Fixed height for minimap content
 
   // Build minimap entries
   comments.forEach((comment) => {
@@ -112,28 +106,28 @@ export async function initMinimap() {
 
     // Get comment depth
     const depth = calculateCommentDepth(comment);
-    const depthIndex = Math.min(depth, depthColors.length - 1);
+    const depthIndex = Math.min(depth, DEPTH_COLORS.length - 1);
 
     // Calculate position based on comment's position in document
     const rect = comment.getBoundingClientRect();
     const commentTop = window.scrollY + rect.top;
     const relativePosition = commentTop / docHeight;
-    const entryTop = relativePosition * minimapContentHeight;
+    const entryTop = relativePosition * MINIMAP_CONTENT_HEIGHT;
 
     // Calculate entry height based on comment size
     const commentHeight = rect.height;
     const relativeHeight = Math.max(
-      2,
-      (commentHeight / docHeight) * minimapContentHeight
+      MINIMAP_MIN_ENTRY_HEIGHT,
+      (commentHeight / docHeight) * MINIMAP_CONTENT_HEIGHT
     );
 
     entry.style.top = `${entryTop}px`;
-    entry.style.height = `${Math.min(relativeHeight, 20)}px`;
-    entry.style.left = `${depth * 4}px`;
-    entry.style.width = `${config.width - 20 - depth * 4}px`;
+    entry.style.height = `${Math.min(relativeHeight, MINIMAP_MAX_ENTRY_HEIGHT)}px`;
+    entry.style.left = `${depth * MINIMAP_DEPTH_INDENT}px`;
+    entry.style.width = `${config.width - MINIMAP_ENTRY_PADDING - depth * MINIMAP_DEPTH_INDENT}px`;
 
     if (config.useDepthColors) {
-      entry.style.backgroundColor = depthColors[depthIndex];
+      entry.style.backgroundColor = DEPTH_COLORS[depthIndex];
     }
 
     // Check if comment is collapsed
@@ -144,7 +138,7 @@ export async function initMinimap() {
 
     // Add click handler to navigate to comment
     entry.addEventListener("click", () => {
-      const targetTop = commentTop - 80; // Offset for header
+      const targetTop = commentTop - MINIMAP_SCROLL_OFFSET;
       window.scrollTo({
         top: targetTop,
         behavior: "smooth",
@@ -166,14 +160,14 @@ export async function initMinimap() {
   });
 
   // Set content height
-  content.style.height = `${minimapContentHeight}px`;
+  content.style.height = `${MINIMAP_CONTENT_HEIGHT}px`;
 
   // Update viewport indicator on scroll
   if (viewportIndicator) {
     const updateViewportIndicator = () => {
       const scrollTop = window.scrollY;
-      const viewportTop = (scrollTop / docHeight) * minimapContentHeight;
-      const viewportSize = (viewportHeight / docHeight) * minimapContentHeight;
+      const viewportTop = (scrollTop / docHeight) * MINIMAP_CONTENT_HEIGHT;
+      const viewportSize = (viewportHeight / docHeight) * MINIMAP_CONTENT_HEIGHT;
 
       viewportIndicator.style.top = `${viewportTop + 30}px`; // +30 for header
       viewportIndicator.style.height = `${Math.max(10, viewportSize)}px`;
