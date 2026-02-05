@@ -5,6 +5,10 @@
 
 import { getStorage } from "../shared/storage-helpers.js";
 
+// Store references for cleanup
+let reducedMotionMediaQuery = null;
+let reducedMotionHandler = null;
+
 /**
  * Apply accessibility settings based on user preferences
  * @returns {Promise<void>}
@@ -62,6 +66,17 @@ async function applyAccessibility() {
 }
 
 /**
+ * Clean up event listeners
+ */
+function cleanup() {
+  if (reducedMotionMediaQuery && reducedMotionHandler) {
+    reducedMotionMediaQuery.removeEventListener("change", reducedMotionHandler);
+    reducedMotionMediaQuery = null;
+    reducedMotionHandler = null;
+  }
+}
+
+/**
  * Initialize accessibility module
  * @returns {Promise<void>}
  */
@@ -70,15 +85,22 @@ export async function initAccessibility() {
     await applyAccessibility();
 
     // Listen for reduced motion preference changes
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    mediaQuery.addEventListener("change", async () => {
+    reducedMotionMediaQuery = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+    reducedMotionHandler = async () => {
       const prefs = await getStorage({
         accessibility: { reduceMotion: "auto" },
       });
       if (prefs.accessibility.reduceMotion === "auto") {
         await applyAccessibility();
       }
-    });
+    };
+    reducedMotionMediaQuery.addEventListener("change", reducedMotionHandler);
+
+    // Register cleanup handler
+    if (!window.orrCleanup) window.orrCleanup = [];
+    window.orrCleanup.push(cleanup);
   } catch (error) {
     console.error("[ORR] Accessibility initialization failed:", error);
   }

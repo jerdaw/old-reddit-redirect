@@ -47,10 +47,12 @@ export function waitForElement(selector, timeout = 5000) {
       return;
     }
 
+    let timeoutId = null;
     const observer = new MutationObserver(() => {
       const element = $(selector);
       if (element) {
         observer.disconnect();
+        if (timeoutId) clearTimeout(timeoutId);
         resolve(element);
       }
     });
@@ -60,10 +62,18 @@ export function waitForElement(selector, timeout = 5000) {
       subtree: true,
     });
 
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       observer.disconnect();
       reject(new Error(`Element ${selector} not found within ${timeout}ms`));
     }, timeout);
+
+    // Register cleanup handler to disconnect observer if page unloads
+    if (!window.orrCleanup) window.orrCleanup = [];
+    const cleanup = () => {
+      observer.disconnect();
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+    window.orrCleanup.push(cleanup);
   });
 }
 
