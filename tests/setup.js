@@ -1,15 +1,35 @@
-import { readFileSync } from "fs";
-import { join } from "path";
+/**
+ * Test setup file
+ * Ensures storage modules are loaded in the correct order before tests run
+ * Also provides utility functions for loading test data
+ */
 
-export function loadJSON(filename) {
-  const filepath = join(process.cwd(), filename);
-  return JSON.parse(readFileSync(filepath, "utf-8"));
-}
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Import modules in dependency order so they attach to window object
+await import("../src/core/storage-schema.js");
+await import("../src/core/storage-operations.js");
+await import("../src/core/storage-migration.js");
+
+/**
+ * Load rules.json for tests
+ */
 export function loadRules() {
-  return loadJSON("rules.json");
+  const rulesPath = path.join(__dirname, "..", "rules.json");
+  const rulesData = fs.readFileSync(rulesPath, "utf8");
+  return JSON.parse(rulesData);
 }
 
+/**
+ * Load manifest.json for tests
+ */
 export function loadManifest() {
-  return loadJSON("manifest.json");
+  const manifestPath = path.join(__dirname, "..", "manifest.json");
+  const manifestData = fs.readFileSync(manifestPath, "utf8");
+  return JSON.parse(manifestData);
 }
