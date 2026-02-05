@@ -30,7 +30,8 @@ function removePresetCSS() {
 }
 
 /**
- * Apply a layout preset
+ * Apply a layout preset based on current page and user preferences
+ * @returns {Promise<void>}
  */
 async function applyLayoutPreset() {
   try {
@@ -135,7 +136,8 @@ async function applyLayoutPreset() {
 }
 
 /**
- * Initialize layout presets
+ * Initialize layout presets module
+ * @returns {Promise<void>}
  */
 export async function initLayoutPresets() {
   try {

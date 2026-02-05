@@ -8,7 +8,8 @@ import { $$ } from "../shared/dom-helpers.js";
 import { getCurrentSubreddit } from "../shared/page-detection.js";
 
 /**
- * Apply NSFW content controls
+ * Apply NSFW content controls based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyNsfwControls() {
   const prefs = await getStorage({
@@ -128,7 +129,8 @@ async function applyNsfwControls() {
 }
 
 /**
- * Initialize NSFW controls
+ * Initialize NSFW controls module
+ * @returns {Promise<void>}
  */
 export async function initNsfwControls() {
   try {

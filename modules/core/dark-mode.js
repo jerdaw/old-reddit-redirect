@@ -7,6 +7,7 @@ import { getStorage } from "../shared/storage-helpers.js";
 
 /**
  * Apply dark mode based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyDarkMode() {
   const prefs = await getStorage({
@@ -60,7 +61,7 @@ async function applyDarkMode() {
 }
 
 /**
- * Listen for system color scheme changes
+ * Listen for system color scheme changes and reapply dark mode
  */
 function watchColorScheme() {
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -75,7 +76,8 @@ function watchColorScheme() {
 }
 
 /**
- * Auto-collapse bot comments
+ * Auto-collapse bot comments based on user preferences
+ * @returns {Promise<void>}
  */
 async function autoCollapseBotComments() {
   const prefs = await getStorage({
@@ -127,7 +129,8 @@ async function autoCollapseBotComments() {
 }
 
 /**
- * Initialize dark mode features
+ * Initialize dark mode module
+ * @returns {Promise<void>}
  */
 export async function initDarkMode() {
   try {

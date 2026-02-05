@@ -58,6 +58,7 @@ function sortMatches(current, preference) {
 
 /**
  * Apply saved sort preference for current subreddit
+ * @returns {Promise<void>}
  */
 async function applySortPreference() {
   try {
@@ -109,7 +110,8 @@ let lastUrl = window.location.href;
 let lastSort = null;
 
 /**
- * Detect when user manually changes sort order
+ * Detect when user manually changes sort order and save preference
+ * @returns {Promise<void>}
  */
 async function detectSortChange() {
   try {
@@ -155,7 +157,8 @@ async function detectSortChange() {
 }
 
 /**
- * Initialize sort preferences
+ * Initialize sort preferences module
+ * @returns {Promise<void>}
  */
 export async function initSortPreferences() {
   try {

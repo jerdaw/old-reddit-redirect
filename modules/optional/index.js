@@ -7,7 +7,9 @@ import { getStorage } from "../shared/storage-helpers.js";
 import { debugLog } from "../shared/debug-helpers.js";
 
 /**
- * Initialize optional features
+ * Initialize optional features orchestrator
+ * Conditionally loads features only when explicitly enabled by user
+ * @returns {Promise<void>}
  */
 export async function initOptionalFeatures() {
   try {

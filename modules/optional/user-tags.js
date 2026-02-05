@@ -27,6 +27,8 @@ let currentTagDialog = null;
 
 /**
  * Escape HTML to prevent XSS
+ * @param {string} text - Text to escape
+ * @returns {string} Escaped HTML string
  */
 function escapeHtml(text) {
   const div = document.createElement("div");
@@ -35,7 +37,8 @@ function escapeHtml(text) {
 }
 
 /**
- * Check if user tags are enabled
+ * Check if user tags feature is enabled
+ * @returns {Promise<boolean>} True if user tags are enabled
  */
 async function isUserTagsEnabled() {
   const prefs = await getStorage({ userTags: { enabled: true } });
@@ -44,6 +47,8 @@ async function isUserTagsEnabled() {
 
 /**
  * Get tag for a username
+ * @param {string} username - Username to retrieve tag for
+ * @returns {Promise<Object|null>} Tag object or null if not found
  */
 async function getUserTag(username) {
   const prefs = await getStorage({ userTags: { tags: {} } });
@@ -52,6 +57,9 @@ async function getUserTag(username) {
 
 /**
  * Set tag for a username
+ * @param {string} username - Username to tag
+ * @param {Object} tag - Tag object with text and color properties
+ * @returns {Promise<void>}
  */
 async function setUserTag(username, tag) {
   const prefs = await getStorage({ userTags: { tags: {} } });
@@ -62,6 +70,8 @@ async function setUserTag(username, tag) {
 
 /**
  * Delete tag for a username
+ * @param {string} username - Username to remove tag from
+ * @returns {Promise<void>}
  */
 async function deleteUserTag(username) {
   const prefs = await getStorage({ userTags: { tags: {} } });
@@ -72,6 +82,8 @@ async function deleteUserTag(username) {
 
 /**
  * Show tag button next to username
+ * @param {Element} authorElement - Author element to add button next to
+ * @param {string} username - Username being tagged
  */
 function showTagButton(authorElement, username) {
   // Check if button already exists
@@ -95,6 +107,9 @@ function showTagButton(authorElement, username) {
 
 /**
  * Show tag badge next to username
+ * @param {Element} authorElement - Author element to add badge next to
+ * @param {string} username - Username being tagged
+ * @param {Object} tag - Tag object with text and color properties
  */
 function showTagBadge(authorElement, username, tag) {
   // Check if badge already exists
@@ -118,7 +133,7 @@ function showTagBadge(authorElement, username, tag) {
 }
 
 /**
- * Close tag dialog
+ * Close the tag dialog and cleanup
  */
 function closeTagDialog() {
   if (currentTagDialog) {
@@ -130,7 +145,9 @@ function closeTagDialog() {
 }
 
 /**
- * Refresh tags for a username
+ * Refresh tags for a username by removing old tags and re-applying
+ * @param {string} username - Username to refresh tags for
+ * @returns {Promise<void>}
  */
 async function refreshUsernameTags(username) {
   // Remove old tags/buttons
@@ -148,7 +165,9 @@ async function refreshUsernameTags(username) {
 }
 
 /**
- * Show tag dialog
+ * Show tag dialog for editing or creating a user tag
+ * @param {string} username - Username to tag
+ * @param {Object|null} existingTag - Existing tag object or null for new tag
  */
 function showTagDialog(username, existingTag = null) {
   // Close any existing dialog
@@ -272,7 +291,8 @@ function showTagDialog(username, existingTag = null) {
 }
 
 /**
- * Apply user tags to all author elements
+ * Apply user tags to all author elements on the page
+ * @returns {Promise<void>}
  */
 async function applyUserTags() {
   try {
@@ -304,7 +324,8 @@ async function applyUserTags() {
 }
 
 /**
- * Initialize user tags
+ * Initialize user tags module
+ * @returns {Promise<void>}
  */
 export async function initUserTags() {
   try {

@@ -11,7 +11,9 @@ import { calculateCommentDepth } from "./color-coding.js";
 let minimapInstance = null;
 
 /**
- * Initialize comment minimap
+ * Initialize comment minimap module
+ * Creates a visual sidebar for navigating comment threads
+ * @returns {Promise<void>}
  */
 export async function initMinimap() {
   // Only run on comment pages

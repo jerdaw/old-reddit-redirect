@@ -7,7 +7,8 @@ import { getStorage } from "../shared/storage-helpers.js";
 import { $$ } from "../shared/dom-helpers.js";
 
 /**
- * Apply subreddit muting on /r/all and /r/popular
+ * Apply subreddit muting on /r/all and /r/popular based on user preferences
+ * @returns {Promise<void>}
  */
 async function applySubredditMuting() {
   // Only apply on /r/all and /r/popular
@@ -45,7 +46,8 @@ async function applySubredditMuting() {
 }
 
 /**
- * Apply keyword filtering to posts (with advanced options)
+ * Apply keyword filtering to posts with advanced options (regex, flair, score)
+ * @returns {Promise<void>}
  */
 async function applyKeywordFiltering() {
   const filtering = await getStorage({
@@ -168,7 +170,8 @@ async function applyKeywordFiltering() {
 }
 
 /**
- * Apply domain filtering to posts
+ * Apply domain filtering to posts based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyDomainFiltering() {
   const filtering = await getStorage({
@@ -209,7 +212,8 @@ async function applyDomainFiltering() {
 }
 
 /**
- * Apply user muting to posts and comments
+ * Apply user muting to posts and comments based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyUserMuting() {
   try {
@@ -256,7 +260,8 @@ async function applyUserMuting() {
 }
 
 /**
- * Initialize content filtering features
+ * Initialize content filtering module
+ * @returns {Promise<void>}
  */
 export async function initFiltering() {
   try {

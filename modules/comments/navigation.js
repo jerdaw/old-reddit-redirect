@@ -47,7 +47,7 @@ function scrollToComment(comment) {
 }
 
 /**
- * Navigate to the next parent comment
+ * Navigate to the next parent comment with smooth scrolling
  */
 export function navigateToNext() {
   const parents = getParentComments();
@@ -68,7 +68,7 @@ export function navigateToNext() {
 }
 
 /**
- * Navigate to the previous parent comment
+ * Navigate to the previous parent comment with smooth scrolling
  */
 export function navigateToPrevious() {
   const parents = getParentComments();
@@ -90,7 +90,7 @@ export function navigateToPrevious() {
 }
 
 /**
- * Navigate to the top of the page
+ * Navigate to the top of the page with smooth scrolling
  */
 function navigateToTop() {
   window.scrollTo({
@@ -160,7 +160,8 @@ function createNavigationButtons(position) {
 }
 
 /**
- * Apply comment navigation buttons based on preferences
+ * Apply comment navigation buttons based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyCommentNavigation() {
   const prefs = await getStorage({
@@ -191,7 +192,8 @@ async function applyCommentNavigation() {
 }
 
 /**
- * Initialize comment navigation
+ * Initialize comment navigation module
+ * @returns {Promise<void>}
  */
 export async function initCommentNavigation() {
   try {

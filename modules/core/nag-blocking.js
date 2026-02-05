@@ -90,6 +90,7 @@ const nagSelectors = {
 
 /**
  * Apply nag blocking based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyNagBlocking() {
   const prefs = await getStorage({
@@ -153,7 +154,8 @@ async function applyNagBlocking() {
 }
 
 /**
- * Initialize nag blocking features
+ * Initialize nag blocking module
+ * @returns {Promise<void>}
  */
 export async function initNagBlocking() {
   try {

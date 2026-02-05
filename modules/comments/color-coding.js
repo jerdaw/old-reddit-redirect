@@ -26,7 +26,8 @@ export function calculateCommentDepth(comment) {
 }
 
 /**
- * Apply color-coded comments based on depth
+ * Apply color-coded comments based on depth and user preferences
+ * @returns {Promise<void>}
  */
 async function applyColorCodedComments() {
   const prefs = await getStorage({
@@ -87,7 +88,8 @@ async function applyColorCodedComments() {
 }
 
 /**
- * Initialize color-coded comments
+ * Initialize color-coded comments module
+ * @returns {Promise<void>}
  */
 export async function initColorCoding() {
   try {

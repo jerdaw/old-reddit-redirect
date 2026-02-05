@@ -102,7 +102,8 @@ function createExpandButton(imageUrl) {
 }
 
 /**
- * Apply inline image expansion to comment links
+ * Apply inline image expansion to comment links based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyInlineImages() {
   const prefs = await getStorage({
@@ -150,7 +151,8 @@ async function applyInlineImages() {
 }
 
 /**
- * Initialize inline images
+ * Initialize inline images module
+ * @returns {Promise<void>}
  */
 export async function initInlineImages() {
   try {
