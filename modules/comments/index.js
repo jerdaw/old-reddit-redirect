@@ -7,7 +7,10 @@ import { getStorage } from "../shared/storage-helpers.js";
 import { debugLog } from "../shared/debug-helpers.js";
 
 /**
- * Initialize all comment features
+ * Initialize all comment features orchestrator
+ * Conditionally loads comment-specific features based on user preferences
+ * @returns {Promise<void>}
+ * @throws {Error} If initialization fails
  */
 export async function initCommentFeatures() {
   try {

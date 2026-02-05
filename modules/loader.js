@@ -14,6 +14,9 @@ import { debugLog } from "./shared/debug-helpers.js";
 
 /**
  * Initialize all features with modular loading
+ * Entry point for the module loader that orchestrates feature initialization
+ * @returns {Promise<void>}
+ * @throws {Error} If initialization fails
  */
 export async function initializeFeatures() {
   try {

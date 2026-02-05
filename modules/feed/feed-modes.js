@@ -31,7 +31,8 @@ function removeCustomCSS() {
 }
 
 /**
- * Apply feed enhancements
+ * Apply feed enhancements based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyFeedEnhancements() {
   try {
@@ -57,7 +58,8 @@ async function applyFeedEnhancements() {
 }
 
 /**
- * Initialize feed modes
+ * Initialize feed modes module
+ * @returns {Promise<void>}
  */
 export async function initFeedModes() {
   try {

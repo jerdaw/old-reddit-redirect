@@ -7,7 +7,9 @@ import { getStorage } from "../shared/storage-helpers.js";
 import { debugLog } from "../shared/debug-helpers.js";
 
 /**
- * Initialize feed features
+ * Initialize feed features orchestrator
+ * Conditionally loads feed-specific features based on user preferences
+ * @returns {Promise<void>}
  */
 export async function initFeedFeatures() {
   try {

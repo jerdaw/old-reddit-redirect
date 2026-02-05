@@ -9,6 +9,7 @@ import { debugLog } from "../shared/debug-helpers.js";
 
 /**
  * Track current post in reading history
+ * @returns {Promise<void>}
  */
 async function trackReadingHistory() {
   try {
@@ -61,7 +62,8 @@ async function trackReadingHistory() {
 }
 
 /**
- * Mark visited posts in the feed
+ * Mark visited posts in the feed with visual indicators
+ * @returns {Promise<void>}
  */
 async function markVisitedPosts() {
   try {
@@ -122,7 +124,8 @@ async function markVisitedPosts() {
 }
 
 /**
- * Initialize reading history features
+ * Initialize reading history module
+ * @returns {Promise<void>}
  */
 export async function initReadingHistory() {
   try {

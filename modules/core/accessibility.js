@@ -6,7 +6,8 @@
 import { getStorage } from "../shared/storage-helpers.js";
 
 /**
- * Apply accessibility settings (font size, reduce motion)
+ * Apply accessibility settings based on user preferences
+ * @returns {Promise<void>}
  */
 async function applyAccessibility() {
   const prefs = await getStorage({
@@ -61,7 +62,8 @@ async function applyAccessibility() {
 }
 
 /**
- * Initialize accessibility features
+ * Initialize accessibility module
+ * @returns {Promise<void>}
  */
 export async function initAccessibility() {
   try {
