@@ -43,7 +43,7 @@ export default [
     },
   },
   {
-    files: ["scripts/**/*.js", "vitest.config.js", "keyboard-utils.js"],
+    files: ["scripts/**/*.js", "vitest.config.js", "src/content/keyboard-utils.js"],
     languageOptions: {
       sourceType: "module",
       globals: {
