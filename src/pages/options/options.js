@@ -3,6 +3,129 @@
 (function () {
   const RULESET_ID = "ruleset_1";
 
+  // =========================================================================
+  // UI Strings - Centralized for future i18n
+  // =========================================================================
+  const UI_STRINGS = {
+    STATUS_NEVER: "Never",
+    STATUS_NOT_SET: "Not set",
+    STATUS_NOT_SYNCED: "Not synced",
+    STATUS_VALID: "✓ Valid",
+    STATUS_CLEANING: "Cleaning...",
+    STATUS_RUNNING: "Running...",
+    BTN_REMOVE: "Remove",
+    BTN_RUN_CLEANUP: "Run Cleanup",
+    BTN_FULL_MAINTENANCE: "Full Maintenance",
+    SUCCESS_PREFERENCES_SAVED: "Preferences saved",
+    SUCCESS_ACCESSIBILITY_SAVED: "Accessibility settings saved",
+    SUCCESS_DARK_MODE_SAVED: "Dark mode settings saved",
+    SUCCESS_COMMENT_ENHANCEMENTS_SAVED: "Comment enhancements settings saved",
+    SUCCESS_COMMENT_MINIMAP_SAVED: "Comment minimap settings saved",
+    SUCCESS_NAG_BLOCKING_SAVED: "Nag blocking settings saved",
+    SUCCESS_FEED_ENHANCEMENTS_UPDATED: "Feed enhancements updated",
+    SUCCESS_CONTENT_FILTERING_UPDATED: "Content filtering updated",
+    SUCCESS_PRIVACY_UPDATED: "Privacy settings updated",
+    SUCCESS_REFERRER_UPDATED: "Referrer policy updated",
+    SUCCESS_FLAIR_FILTERING_UPDATED: "Flair filtering updated",
+    SUCCESS_SCORE_FILTERING_UPDATED: "Score filtering updated",
+    SUCCESS_CASE_SENSITIVITY_UPDATED: "Case sensitivity updated",
+    SUCCESS_REGEX_MODE_UPDATED: "Regex mode updated",
+    SUCCESS_READING_HISTORY_UPDATED: "Reading history settings updated",
+    SUCCESS_READING_HISTORY_CLEARED: "Reading history cleared",
+    SUCCESS_ENTRY_REMOVED: "Entry removed from history",
+    SUCCESS_RETENTION_UPDATED: "Retention period updated",
+    SUCCESS_CUSTOM_CSS_SAVED: "Custom CSS saved",
+    SUCCESS_CUSTOM_CSS_CLEARED: "Custom CSS cleared",
+    SUCCESS_CSS_VALID: "CSS is valid!",
+    SUCCESS_CLEANUP_COMPLETED: "Cleanup completed",
+    SUCCESS_MAINTENANCE_COMPLETED: "Maintenance completed",
+    SUCCESS_STORAGE_STATS_REFRESHED: "Storage stats refreshed",
+    SUCCESS_STATS_CLEARED: "Statistics cleared",
+    SUCCESS_STATS_EXPORTED: "Statistics exported",
+    SUCCESS_TRACKING_STATS_CLEARED: "Tracking statistics cleared",
+    SUCCESS_PRIVACY_REPORT_EXPORTED: "Privacy report exported",
+    SUCCESS_SETTINGS_EXPORTED: "Settings exported",
+    SUCCESS_SETTINGS_IMPORTED: "Settings imported successfully",
+    SUCCESS_FRONTEND_UPDATED: "Frontend updated!",
+    SUCCESS_CUSTOM_FRONTEND_SAVED: "Custom frontend saved!",
+    SUCCESS_MUTE_LIST_EXPORTED: "Mute list exported",
+    SUCCESS_KEYWORD_LIST_EXPORTED: "Keyword list exported",
+    SUCCESS_DOMAIN_LIST_EXPORTED: "Domain list exported",
+    SUCCESS_FLAIR_LIST_EXPORTED: "Flair list exported",
+    SUCCESS_PRESETS_EXPORTED: "Presets exported",
+    SUCCESS_ALL_PRESETS_CLEARED: "All presets cleared",
+    SUCCESS_ALL_MAPPINGS_CLEARED: "All subreddit mappings cleared",
+    SUCCESS_NSFW_ALLOWED_CLEARED: "Cleared all allowed subreddits",
+    SUCCESS_SYNC_ENABLED: "Sync enabled",
+    SUCCESS_SYNC_DISABLED: "Sync disabled",
+    SUCCESS_SHORTCUT_UPDATED: "Shortcut updated successfully",
+    SUCCESS_SHORTCUT_RESET: "Shortcut reset to default",
+    SUCCESS_SHORTCUTS_RESET: "All shortcuts reset to defaults",
+    SUCCESS_SHORTCUTS_EXPORTED: "Shortcuts exported successfully",
+    SUCCESS_SHORTCUTS_IMPORTED: "Shortcuts imported successfully",
+    SUCCESS_CHORD_TIMEOUT_UPDATED: "Chord timeout updated",
+    SUCCESS_PERMISSION_GRANTED: "Permission granted!",
+    ERROR_CLEANUP_FAILED: "Cleanup failed:",
+    ERROR_MAINTENANCE_FAILED: "Maintenance failed:",
+    ERROR_CSS_VALIDATION_FAILED: "CSS validation failed:",
+    ERROR_IMPORT_FAILED: "Failed to import:",
+    ERROR_IMPORT_INVALID_FORMAT: "Failed to import: Invalid file format",
+    ERROR_PERMISSION_DENIED: "Permission denied",
+    ERROR_PERMISSION_REQUEST_FAILED: "Permission request failed",
+    ERROR_FAILED_SAVE_SHORTCUT: "Failed to save shortcut",
+    ERROR_FAILED_UPDATE_SHORTCUT: "Failed to update shortcut",
+    ERROR_FAILED_RESET_SHORTCUT: "Failed to reset shortcut",
+    ERROR_FAILED_RESET_SHORTCUTS: "Failed to reset shortcuts",
+    ERROR_FAILED_LOAD_SHORTCUTS: "Failed to load keyboard shortcuts",
+    ERROR_FAILED_EXPORT_SHORTCUTS: "Failed to export shortcuts",
+    ERROR_FAILED_IMPORT_SHORTCUTS: "Failed to import shortcuts:",
+    VALIDATE_PLEASE_ENTER_URL: "Please enter a URL",
+    VALIDATE_PLEASE_ENTER_SUBREDDIT: "Please enter a subreddit name",
+    VALIDATE_PLEASE_ENTER_DOMAIN: "Please enter a domain",
+    VALIDATE_PLEASE_ENTER_KEYWORD: "Please enter a keyword or phrase",
+    VALIDATE_PLEASE_ENTER_FLAIR: "Please enter a flair text",
+    VALIDATE_PLEASE_ENTER_PRESET_NAME: "Please enter a preset name",
+    VALIDATE_PLEASE_SELECT_PRESET: "Please select a preset",
+    VALIDATE_PLEASE_ENTER_TRACKING_PARAM:
+      "Please enter at least one tracking parameter",
+    VALIDATE_INVALID_SUBREDDIT: "Invalid subreddit name",
+    VALIDATE_INVALID_DOMAIN: "Invalid domain format",
+    VALIDATE_INVALID_FORMAT_JSON_ARRAY: "Invalid format: must be JSON array",
+    VALIDATE_INVALID_KEYWORDS: "Invalid keywords detected",
+    VALIDATE_INVALID_DOMAINS: "Invalid domains detected",
+    VALIDATE_PRESET_NAME_REQUIRED: "Preset name is required",
+    VALIDATE_PRESET_NAME_TOO_LONG:
+      "Preset name is too long (max 50 characters)",
+    VALIDATE_KEYS_CANNOT_BE_EMPTY: "Keys cannot be empty",
+    MSG_ALREADY_IN_LIST: "Already in list",
+    MSG_SUBREDDIT_ALREADY_IN_LIST: "Subreddit already in list",
+    MSG_SUBREDDIT_ALREADY_MUTED: "Subreddit already muted",
+    MSG_KEYWORD_ALREADY_MUTED: "Keyword already muted",
+    MSG_DOMAIN_ALREADY_MUTED: "Domain already muted",
+    MSG_FLAIR_ALREADY_MUTED: "Flair already muted",
+    MSG_ALL_SUBREDDITS_MUTED: "All subreddits already muted",
+    MSG_ALL_KEYWORDS_MUTED: "All keywords already muted",
+    MSG_ALL_DOMAINS_MUTED: "All domains already muted",
+    MSG_ALL_FLAIRS_MUTED: "All flairs already muted",
+    MSG_MAX_100_SUBREDDITS: "Maximum 100 subreddits allowed",
+    MSG_MAX_100_MUTED_SUBREDDITS: "Maximum 100 muted subreddits allowed",
+    MSG_MAX_200_KEYWORDS: "Maximum 200 keywords allowed",
+    MSG_MAX_100_DOMAINS: "Maximum 100 domains allowed",
+    MSG_MAX_100_FLAIRS: "Maximum 100 flairs allowed",
+    MSG_NO_MAPPINGS_TO_CLEAR: "No mappings to clear",
+    MSG_NO_PRESETS_TO_CLEAR: "No presets to clear",
+    MSG_NO_CSS_TO_VALIDATE: "No CSS to validate",
+    MSG_NO_EXPIRED_DATA: "No expired data to clean up",
+    TITLE_DELETE_PREFERENCE: "Delete preference",
+    TITLE_EDIT_TAG: "Edit tag",
+    TITLE_DELETE_TAG: "Delete tag",
+    TITLE_APPLY_PRESET: "Apply this preset now",
+    TITLE_EDIT_PRESET: "Edit preset settings",
+    TITLE_DELETE_PRESET: "Delete preset",
+    TITLE_REMOVE_MAPPING: "Remove mapping",
+    LABEL_PRESET: "Preset",
+  };
+
   // DOM elements
   const elements = {
     toggleRedirect: document.getElementById("toggle-redirect"),
@@ -500,7 +623,7 @@
         mostRecent.timestamp
       ).toLocaleString();
     } else if (elements.historyLastViewed) {
-      elements.historyLastViewed.textContent = "Never";
+      elements.historyLastViewed.textContent = UI_STRINGS.STATUS_NEVER;
     }
 
     // Refresh table
@@ -566,12 +689,12 @@
       // Actions
       const actionsCell = document.createElement("td");
       const removeBtn = document.createElement("button");
-      removeBtn.textContent = "Remove";
+      removeBtn.textContent = UI_STRINGS.BTN_REMOVE;
       removeBtn.className = "small-button danger-button";
       removeBtn.addEventListener("click", async () => {
         await window.Storage.removeReadingHistoryEntry(entry.id);
         await refreshReadingHistoryDisplay();
-        showToast("Entry removed from history");
+        showToast(UI_STRINGS.SUCCESS_ENTRY_REMOVED);
       });
       actionsCell.appendChild(removeBtn);
       row.appendChild(actionsCell);
@@ -601,7 +724,7 @@
       });
     });
 
-    showToast("Reading history settings updated");
+    showToast(UI_STRINGS.SUCCESS_READING_HISTORY_UPDATED);
   }
 
   /**
@@ -619,7 +742,7 @@
       await refreshReadingHistoryDisplay();
       showToast(`Retention updated, ${removed} old entries removed`);
     } else {
-      showToast("Retention period updated");
+      showToast(UI_STRINGS.SUCCESS_RETENTION_UPDATED);
     }
   }
 
@@ -639,7 +762,7 @@
       });
     });
 
-    showToast("Reading history cleared");
+    showToast(UI_STRINGS.SUCCESS_READING_HISTORY_CLEARED);
   }
 
   /**
@@ -684,7 +807,7 @@
 
       showToast(`Imported ${imported} new history entries`);
     } catch (_error) {
-      showToast("Failed to import: Invalid file format");
+      showToast(UI_STRINGS.ERROR_IMPORT_INVALID_FORMAT);
     }
 
     // Reset file input
@@ -884,7 +1007,7 @@
     await window.Storage.clearNsfwAllowedSubreddits();
     await refreshNsfwAllowedList();
     notifyContentScripts();
-    showToast("Cleared all allowed subreddits");
+    showToast(UI_STRINGS.SUCCESS_NSFW_ALLOWED_CLEARED);
   }
 
   /**
@@ -1030,7 +1153,7 @@
         <td>
           <button class="delete-pref secondary-button"
                   data-subreddit="${escapeHtml(subreddit)}"
-                  title="Delete preference">
+                  title=UI_STRINGS.TITLE_DELETE_PREFERENCE>
             Delete
           </button>
         </td>
@@ -1270,12 +1393,12 @@
         <td>
           <button class="edit-tag secondary-button"
                   data-username="${escapeHtml(username)}"
-                  title="Edit tag">
+                  title=UI_STRINGS.TITLE_EDIT_TAG>
             Edit
           </button>
           <button class="delete-tag secondary-button"
                   data-username="${escapeHtml(username)}"
-                  title="Delete tag">
+                  title=UI_STRINGS.TITLE_DELETE_TAG>
             Delete
           </button>
         </td>
@@ -1803,7 +1926,7 @@
       });
     });
 
-    showToast("Feed enhancements updated");
+    showToast(UI_STRINGS.SUCCESS_FEED_ENHANCEMENTS_UPDATED);
   }
 
   /**
@@ -1825,7 +1948,7 @@
       });
     });
 
-    showToast("Custom CSS saved");
+    showToast(UI_STRINGS.SUCCESS_CUSTOM_CSS_SAVED);
   }
 
   /**
@@ -1848,7 +1971,7 @@
       });
     });
 
-    showToast("Custom CSS cleared");
+    showToast(UI_STRINGS.SUCCESS_CUSTOM_CSS_CLEARED);
   }
 
   /**
@@ -2058,7 +2181,7 @@
     try {
       if (elements.runStorageCleanup) {
         elements.runStorageCleanup.disabled = true;
-        elements.runStorageCleanup.textContent = "Cleaning...";
+        elements.runStorageCleanup.textContent = UI_STRINGS.STATUS_CLEANING;
       }
 
       const results = await window.Storage.cleanupExpiredData();
@@ -2072,7 +2195,7 @@
           elements.cleanupResult.textContent = `Cleaned ${items} items, freed ${bytesFree} KB`;
           elements.cleanupResult.className = "cleanup-result success";
         } else {
-          elements.cleanupResult.textContent = "No expired data to clean up";
+          elements.cleanupResult.textContent = UI_STRINGS.MSG_NO_EXPIRED_DATA;
           elements.cleanupResult.className = "cleanup-result";
         }
         elements.cleanupResult.style.display = "block";
@@ -2087,7 +2210,7 @@
     } finally {
       if (elements.runStorageCleanup) {
         elements.runStorageCleanup.disabled = false;
-        elements.runStorageCleanup.textContent = "Run Cleanup";
+        elements.runStorageCleanup.textContent = UI_STRINGS.BTN_RUN_CLEANUP;
       }
     }
   }
@@ -2099,7 +2222,7 @@
     try {
       if (elements.runStorageMaintenance) {
         elements.runStorageMaintenance.disabled = true;
-        elements.runStorageMaintenance.textContent = "Running...";
+        elements.runStorageMaintenance.textContent = UI_STRINGS.STATUS_RUNNING;
       }
 
       const results = await window.Storage.runMaintenance();
@@ -2127,7 +2250,8 @@
     } finally {
       if (elements.runStorageMaintenance) {
         elements.runStorageMaintenance.disabled = false;
-        elements.runStorageMaintenance.textContent = "Full Maintenance";
+        elements.runStorageMaintenance.textContent =
+          UI_STRINGS.BTN_FULL_MAINTENANCE;
       }
     }
   }
@@ -2242,17 +2366,17 @@
             <td class="preset-actions">
               <button class="secondary-button apply-preset"
                       data-preset="${escapeHtml(name)}"
-                      title="Apply this preset now">
+                      title=UI_STRINGS.TITLE_APPLY_PRESET>
                 Apply
               </button>
               <button class="secondary-button edit-preset"
                       data-preset="${escapeHtml(name)}"
-                      title="Edit preset settings">
+                      title=UI_STRINGS.TITLE_EDIT_PRESET>
                 Edit
               </button>
               <button class="secondary-button delete-preset"
                       data-preset="${escapeHtml(name)}"
-                      title="Delete preset">
+                      title=UI_STRINGS.TITLE_DELETE_PRESET>
                 Delete
               </button>
             </td>
@@ -2377,7 +2501,7 @@
             <td>
               <button class="secondary-button delete-mapping"
                       data-subreddit="${escapeHtml(subreddit)}"
-                      title="Remove mapping">
+                      title=UI_STRINGS.TITLE_REMOVE_MAPPING>
                 Remove
               </button>
             </td>
@@ -2712,7 +2836,7 @@
     const count = Object.keys(config.subredditLayouts || {}).length;
 
     if (count === 0) {
-      showToast("No mappings to clear");
+      showToast(UI_STRINGS.MSG_NO_MAPPINGS_TO_CLEAR);
       return;
     }
 
@@ -2723,7 +2847,7 @@
     await window.Storage.clearSubredditLayouts();
     await refreshMappingsList();
     notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-    showToast("All subreddit mappings cleared");
+    showToast(UI_STRINGS.SUCCESS_ALL_MAPPINGS_CLEARED);
   }
 
   /**
@@ -2734,7 +2858,7 @@
     const count = Object.keys(config.presets || {}).length;
 
     if (count === 0) {
-      showToast("No presets to clear");
+      showToast(UI_STRINGS.MSG_NO_PRESETS_TO_CLEAR);
       return;
     }
 
@@ -2748,7 +2872,7 @@
 
     await window.Storage.clearLayoutPresets();
     await loadLayoutPresets();
-    showToast("All presets cleared");
+    showToast(UI_STRINGS.SUCCESS_ALL_PRESETS_CLEARED);
   }
 
   /**
@@ -2774,7 +2898,7 @@
     a.click();
 
     URL.revokeObjectURL(url);
-    showToast("Presets exported");
+    showToast(UI_STRINGS.SUCCESS_PRESETS_EXPORTED);
   }
 
   /**
@@ -3084,7 +3208,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast("Privacy report exported");
+    showToast(UI_STRINGS.SUCCESS_PRIVACY_REPORT_EXPORTED);
   }
 
   /**
@@ -3114,7 +3238,7 @@
       });
     });
 
-    showToast("Privacy settings updated");
+    showToast(UI_STRINGS.SUCCESS_PRIVACY_UPDATED);
   }
 
   /**
@@ -3139,7 +3263,7 @@
       });
     });
 
-    showToast("Referrer policy updated");
+    showToast(UI_STRINGS.SUCCESS_REFERRER_UPDATED);
   }
 
   /**
@@ -3226,7 +3350,7 @@
     await window.Storage.clearTrackingStats();
     await loadPrivacySettings();
 
-    showToast("Tracking statistics cleared");
+    showToast(UI_STRINGS.SUCCESS_TRACKING_STATS_CLEARED);
   }
 
   /**
@@ -3481,7 +3605,7 @@
       if (toggleCommand && toggleCommand.shortcut) {
         elements.shortcutDisplay.textContent = toggleCommand.shortcut;
       } else {
-        elements.shortcutDisplay.textContent = "Not set";
+        elements.shortcutDisplay.textContent = UI_STRINGS.STATUS_NOT_SET;
       }
     });
   }
@@ -3512,7 +3636,7 @@
 
       elements.syncStatus.textContent = `Last synced: ${timeAgo}`;
     } else {
-      elements.syncStatus.textContent = "Not synced";
+      elements.syncStatus.textContent = UI_STRINGS.STATUS_NOT_SYNCED;
     }
   }
 
@@ -3550,7 +3674,7 @@
 
     await window.Storage.clearStats();
     await loadStats();
-    showToast("Statistics cleared");
+    showToast(UI_STRINGS.SUCCESS_STATS_CLEARED);
   }
 
   /**
@@ -3584,7 +3708,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast("Statistics exported");
+    showToast(UI_STRINGS.SUCCESS_STATS_EXPORTED);
   }
 
   /**
@@ -3639,7 +3763,7 @@
     // Notify background to update badge
     chrome.runtime.sendMessage({ type: "UPDATE_BADGE" });
 
-    showToast("Preferences saved");
+    showToast(UI_STRINGS.SUCCESS_PREFERENCES_SAVED);
   }
 
   /**
@@ -3663,7 +3787,7 @@
       });
     });
 
-    showToast("Dark mode settings saved");
+    showToast(UI_STRINGS.SUCCESS_DARK_MODE_SAVED);
   }
 
   /**
@@ -3692,7 +3816,7 @@
       });
     });
 
-    showToast("Accessibility settings saved");
+    showToast(UI_STRINGS.SUCCESS_ACCESSIBILITY_SAVED);
   }
 
   /**
@@ -3741,7 +3865,7 @@
       });
     });
 
-    showToast("Comment enhancements settings saved");
+    showToast(UI_STRINGS.SUCCESS_COMMENT_ENHANCEMENTS_SAVED);
   }
 
   /**
@@ -3782,7 +3906,7 @@
       });
     });
 
-    showToast("Comment minimap settings saved");
+    showToast(UI_STRINGS.SUCCESS_COMMENT_MINIMAP_SAVED);
   }
 
   /**
@@ -3819,7 +3943,7 @@
       });
     });
 
-    showToast("Nag blocking settings saved");
+    showToast(UI_STRINGS.SUCCESS_NAG_BLOCKING_SAVED);
   }
 
   /**
@@ -3971,7 +4095,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast("Mute list exported");
+    showToast(UI_STRINGS.SUCCESS_MUTE_LIST_EXPORTED);
   }
 
   /**
@@ -4137,7 +4261,7 @@
       });
     });
 
-    showToast("Case sensitivity updated");
+    showToast(UI_STRINGS.SUCCESS_CASE_SENSITIVITY_UPDATED);
   }
 
   /**
@@ -4162,7 +4286,7 @@
       });
     });
 
-    showToast("Regex mode updated");
+    showToast(UI_STRINGS.SUCCESS_REGEX_MODE_UPDATED);
   }
 
   /**
@@ -4187,7 +4311,7 @@
       });
     });
 
-    showToast("Content filtering updated");
+    showToast(UI_STRINGS.SUCCESS_CONTENT_FILTERING_UPDATED);
   }
 
   /**
@@ -4213,7 +4337,7 @@
       });
     });
 
-    showToast("Flair filtering updated");
+    showToast(UI_STRINGS.SUCCESS_FLAIR_FILTERING_UPDATED);
   }
 
   /**
@@ -4239,7 +4363,7 @@
       });
     });
 
-    showToast("Score filtering updated");
+    showToast(UI_STRINGS.SUCCESS_SCORE_FILTERING_UPDATED);
   }
 
   /**
@@ -4362,7 +4486,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast("Flair list exported");
+    showToast(UI_STRINGS.SUCCESS_FLAIR_LIST_EXPORTED);
   }
 
   /**
@@ -4440,7 +4564,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast("Keyword list exported");
+    showToast(UI_STRINGS.SUCCESS_KEYWORD_LIST_EXPORTED);
   }
 
   /**
@@ -4634,7 +4758,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast("Domain list exported");
+    showToast(UI_STRINGS.SUCCESS_DOMAIN_LIST_EXPORTED);
   }
 
   /**
@@ -4753,7 +4877,7 @@
 
     URL.revokeObjectURL(url);
 
-    showToast("Settings exported");
+    showToast(UI_STRINGS.SUCCESS_SETTINGS_EXPORTED);
   }
 
   /**
@@ -4799,7 +4923,7 @@
       // Refresh rules
       await chrome.runtime.sendMessage({ type: "UPDATE_SUBREDDIT_RULES" });
 
-      showToast("Settings imported successfully");
+      showToast(UI_STRINGS.SUCCESS_SETTINGS_IMPORTED);
 
       // Reload page to refresh UI
       setTimeout(() => location.reload(), 1000);
@@ -4820,10 +4944,10 @@
     try {
       if (enabled) {
         await window.Storage.enableSync();
-        showToast("Sync enabled");
+        showToast(UI_STRINGS.SUCCESS_SYNC_ENABLED);
       } else {
         await window.Storage.disableSync();
-        showToast("Sync disabled");
+        showToast(UI_STRINGS.SUCCESS_SYNC_DISABLED);
       }
 
       await loadSyncStatus();
@@ -6091,7 +6215,7 @@
     const validation = document.getElementById("keyboard-edit-validation");
 
     if (!keys || keys.trim().length === 0) {
-      validation.textContent = "Keys cannot be empty";
+      validation.textContent = UI_STRINGS.VALIDATE_KEYS_CANNOT_BE_EMPTY;
       validation.className = "validation-message";
       return false;
     }
@@ -6117,7 +6241,7 @@
       }
     }
 
-    validation.textContent = "✓ Valid";
+    validation.textContent = UI_STRINGS.STATUS_VALID;
     validation.className = "validation-message success";
     return true;
   }
