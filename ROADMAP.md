@@ -12,10 +12,10 @@
 **Status**: Production ready, feature complete
 **Architecture**: Manifest V3, modular ES6 with lazy loading
 **Bundle Size**: 156KB (13.8% reduction from v18)
-**Test Coverage**: 830 tests across 24 suites
+**Test Coverage**: 860 tests across 26 suites
 
 **Feature Count**: 50+ major features across 14 completed phases
-**Latest Release**: Comment Thread Minimap (v19.0.0)
+**Latest Addition**: Switch All Tabs (popup buttons to switch all Reddit tabs at once)
 **Next Focus**: Under consideration (see Future Phases below)
 
 ---
@@ -42,7 +42,7 @@ All core features have been implemented and are production-ready:
 **Total Impact**:
 
 - 50+ features from 14 phases
-- 830 comprehensive tests
+- 860 comprehensive tests
 - 156KB optimized bundle
 - Full WCAG 2.1 AA/AAA compliance
 - Native ES6 modules with lazy loading
@@ -288,20 +288,15 @@ Features under consideration but not yet prioritized:
 
 ### Navigation
 
-- ~~Jump to permalink~~ ✅ v17.0.0
-- ~~Thread minimap~~ ✅ v19.0.0
 - Breadcrumb navigation for nested threads
 
 ### Content Discovery
 
-- ~~Reading history~~ ✅ v16.0.0
 - Related post suggestions (privacy-preserving)
 - Saved post organization (tags, folders)
 
 ### NSFW Controls
 
-- ~~Advanced filtering~~ ✅ v18.0.0
-- ~~Blur options~~ ✅ v18.0.0
 - Age verification reminder
 
 ### Monetization (Optional)
@@ -357,4 +352,4 @@ See `CONTRIBUTING.md` for development guidelines.
 
 ---
 
-_Last updated: 2026-02-04_
+_Last updated: 2026-02-05_

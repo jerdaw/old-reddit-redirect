@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Switch All Tabs**: Two new popup buttons to switch all open Reddit tabs to old or new Reddit in one click
+  - "All Tabs → Old" switches all www/new/np reddit.com tabs to old.reddit.com
+  - "All Tabs → New" switches all old.reddit.com tabs to www.reddit.com
+  - Skips allowlisted paths (/settings, /mod, /media, etc.)
+  - Transforms gallery URLs (/gallery/ID → /comments/ID)
+  - Visual feedback showing count of switched tabs
+
 ### Changed
 
 #### Code Quality Improvements (2026-02-05)

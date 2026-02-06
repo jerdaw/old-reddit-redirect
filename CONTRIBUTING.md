@@ -36,7 +36,7 @@ See `CLAUDE.md` for complete architectural details and patterns.
 ### Testing Your Changes
 
 1. Make your changes to the source files
-2. Run automated tests: `npm test` (830 tests across 24 suites)
+2. Run automated tests: `npm test` (860 tests across 26 suites)
 3. Run linting and formatting:
    ```bash
    npm run lint:fix
@@ -91,7 +91,7 @@ See `CLAUDE.md` for complete architectural details and patterns.
 
 **Testing & Documentation:**
 
-- `tests/` - Comprehensive test suite (830 tests across 24 suites)
+- `tests/` - Comprehensive test suite (860 tests across 26 suites)
 - `CLAUDE.md` - Complete architecture guide for AI coding assistants
 - `MIGRATION-COMPLETE.md` - Modular architecture migration summary
 - `ROADMAP.md` - Feature roadmap and release planning
@@ -161,7 +161,7 @@ When adding new features to the extension, follow the modular architecture patte
 4. **Add comprehensive tests:**
    - Create `tests/my-feature.test.js`
    - Cover initialization, edge cases, and error handling
-   - Run `npm test` to ensure all 830+ tests still pass
+   - Run `npm test` to ensure all 860+ tests still pass
 
 5. **Update documentation:**
    - Add feature description to `CLAUDE.md`

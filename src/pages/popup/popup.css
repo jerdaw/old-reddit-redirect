@@ -317,6 +317,16 @@ input:checked + .slider:before {
   letter-spacing: 0.5px;
 }
 
+/* Switch All Tabs Section */
+.switch-tabs-section {
+  margin-bottom: 16px;
+}
+
+.switch-tabs-row {
+  display: flex;
+  gap: 8px;
+}
+
 /* Action Buttons */
 .actions-section {
   display: flex;
