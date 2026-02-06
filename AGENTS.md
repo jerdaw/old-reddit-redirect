@@ -9,7 +9,7 @@ AI coding agent instructions for this repository. This file provides guidance fo
 | Command            | Purpose                    |
 | ------------------ | -------------------------- |
 | `npm install`      | Install dependencies       |
-| `npm test`         | Run test suite (811 tests) |
+| `npm test`         | Run test suite (860 tests) |
 | `npm run dev`      | Live-reload dev server     |
 | `npm run lint:fix` | Fix linting issues         |
 | `npm run format`   | Format with Prettier       |
@@ -22,7 +22,7 @@ AI coding agent instructions for this repository. This file provides guidance fo
 **Type:** Browser extension (Chrome/Firefox)
 **Purpose:** Redirects all Reddit URLs to old.reddit.com
 **API:** Manifest V3 with `declarativeNetRequest`
-**Tests:** Vitest (811 tests across 24 suites)
+**Tests:** Vitest (860 tests across 26 suites)
 
 ---
 
@@ -150,6 +150,7 @@ Rules in `rules.json` use priority ordering (higher = processed first):
 | `reading-history.test.js`            | 28    | Reading history                 |
 | `nsfw-controls.test.js`              | 39    | NSFW content controls           |
 | `comment-minimap.test.js`            | 46    | Comment thread minimap          |
+| `switch-tabs.test.js`                | 30    | Switch all tabs URL transforms  |
 
 ### Running Tests
 

@@ -19,6 +19,8 @@
     tabToggle: document.getElementById("tab-toggle"),
     shortcutHint: document.getElementById("shortcut-hint"),
     darkModeSelect: document.getElementById("dark-mode-select"),
+    switchAllOld: document.getElementById("switch-all-old"),
+    switchAllNew: document.getElementById("switch-all-new"),
   };
 
   let countdownInterval = null;
@@ -413,6 +415,32 @@
   }
 
   /**
+   * Handle switch all tabs button click
+   * @param {string} direction - "old" or "new"
+   * @param {HTMLButtonElement} btn - The button element
+   */
+  async function handleSwitchAllTabs(direction, btn) {
+    const messageType =
+      direction === "old" ? "SWITCH_ALL_TABS_OLD" : "SWITCH_ALL_TABS_NEW";
+    const originalText = btn.querySelector("span").textContent;
+
+    btn.disabled = true;
+
+    const response = await chrome.runtime.sendMessage({ type: messageType });
+    const count = response?.count || 0;
+
+    btn.querySelector("span").textContent =
+      count > 0
+        ? `Switched ${count} tab${count === 1 ? "" : "s"}`
+        : "No tabs to switch";
+
+    setTimeout(() => {
+      btn.querySelector("span").textContent = originalText;
+      btn.disabled = false;
+    }, 1500);
+  }
+
+  /**
    * Attach event listeners
    */
   function attachListeners() {
@@ -425,6 +453,12 @@
     elements.tabToggle.addEventListener("change", handleTabToggle);
     elements.openOptions.addEventListener("click", handleOpenOptions);
     elements.darkModeSelect.addEventListener("change", handleDarkModeChange);
+    elements.switchAllOld.addEventListener("click", () =>
+      handleSwitchAllTabs("old", elements.switchAllOld)
+    );
+    elements.switchAllNew.addEventListener("click", () =>
+      handleSwitchAllTabs("new", elements.switchAllNew)
+    );
 
     // Listen for storage changes to keep popup in sync (debounced for performance)
     let statsUpdateTimeout = null;

@@ -844,6 +844,84 @@ if (typeof importScripts === "function") {
     });
   }
 
+  // Paths that only exist on new Reddit and should not be redirected
+  const ALLOWLISTED_PREFIXES = [
+    "/media",
+    "/mod",
+    "/poll",
+    "/settings",
+    "/topics",
+    "/vault",
+    "/avatar",
+    "/talk",
+    "/coins",
+    "/premium",
+    "/predictions",
+    "/rpan",
+  ];
+
+  /**
+   * Switch all Reddit tabs to old.reddit.com
+   * @returns {Promise<number>} Number of tabs switched
+   */
+  async function switchAllTabsToOld() {
+    const tabs = await chrome.tabs.query({
+      url: [
+        "*://www.reddit.com/*",
+        "*://reddit.com/*",
+        "*://new.reddit.com/*",
+        "*://np.reddit.com/*",
+      ],
+    });
+
+    let count = 0;
+    for (const tab of tabs) {
+      try {
+        const url = new URL(tab.url);
+
+        // Skip allowlisted paths
+        if (ALLOWLISTED_PREFIXES.some((p) => url.pathname.startsWith(p))) {
+          continue;
+        }
+
+        // Transform gallery URLs: /gallery/ID → /comments/ID
+        if (url.pathname.startsWith("/gallery/")) {
+          url.pathname = url.pathname.replace(/^\/gallery\//, "/comments/");
+        }
+
+        url.hostname = "old.reddit.com";
+        await chrome.tabs.update(tab.id, { url: url.toString() });
+        count++;
+      } catch {
+        // Skip tabs with invalid URLs
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Switch all old.reddit.com tabs to www.reddit.com
+   * @returns {Promise<number>} Number of tabs switched
+   */
+  async function switchAllTabsToNew() {
+    const tabs = await chrome.tabs.query({
+      url: ["*://old.reddit.com/*"],
+    });
+
+    let count = 0;
+    for (const tab of tabs) {
+      try {
+        const url = new URL(tab.url);
+        url.hostname = "www.reddit.com";
+        await chrome.tabs.update(tab.id, { url: url.toString() });
+        count++;
+      } catch {
+        // Skip tabs with invalid URLs
+      }
+    }
+    return count;
+  }
+
   /**
    * Handle messages from popup and content scripts
    */
@@ -903,6 +981,18 @@ if (typeof importScripts === "function") {
             }
             sendResponse({ success: true });
             break;
+
+          case "SWITCH_ALL_TABS_OLD": {
+            const count = await switchAllTabsToOld();
+            sendResponse({ count });
+            break;
+          }
+
+          case "SWITCH_ALL_TABS_NEW": {
+            const count = await switchAllTabsToNew();
+            sendResponse({ count });
+            break;
+          }
 
           default:
             sendResponse({ error: "Unknown message type" });
