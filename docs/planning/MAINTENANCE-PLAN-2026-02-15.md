@@ -39,3 +39,13 @@ Scope: Maintenance, cleanup, documentation accuracy, attribution policy complian
 
 - [ ] Verify past commits do not list non-human/bot authors
 - [ ] If needed, rewrite history to replace non-human identities with the appropriate human maintainer (requires force push)
+
+## Notes
+
+### Local Cleanup Commands
+
+This repo ignores local artifacts like `.claude/` and `_metadata/`. If you want them removed locally:
+
+```bash
+rm -rf .claude _metadata
+```
