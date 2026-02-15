@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Old Reddit Redirect - Options</title>
+    <title>__MSG_options_title__</title>
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
     <div class="container">
-      <h1>Old Reddit Redirect</h1>
+      <h1 data-i18n="extName">Old Reddit Redirect</h1>
 
       <!-- Main Toggle -->
       <section
@@ -16,15 +16,31 @@
         role="region"
         aria-labelledby="main-toggle-heading"
       >
-        <h2 id="main-toggle-heading" class="visually-hidden">Main Toggle</h2>
+        <h2
+          id="main-toggle-heading"
+          class="visually-hidden"
+          data-i18n="opt_main_heading"
+        >
+          Main Toggle
+        </h2>
         <div class="setting-row">
           <div class="setting-info">
-            <label for="toggle-redirect">Enable Redirect</label>
-            <p class="description" id="toggle-redirect-desc">
+            <label for="toggle-redirect" data-i18n="opt_enable_redirect"
+              >Enable Redirect</label
+            >
+            <p
+              class="description"
+              id="toggle-redirect-desc"
+              data-i18n="opt_enable_redirect_desc"
+            >
               Automatically redirect Reddit URLs to old.reddit.com
             </p>
           </div>
-          <label class="switch" aria-label="Toggle redirect">
+          <label
+            class="switch"
+            data-i18n-aria-label="opt_toggle_redirect_aria"
+            aria-label="Toggle redirect"
+          >
             <input
               type="checkbox"
               id="toggle-redirect"
@@ -38,40 +54,54 @@
 
       <!-- Statistics -->
       <section class="setting" role="region" aria-labelledby="stats-heading">
-        <h2 id="stats-heading">Statistics</h2>
+        <h2 id="stats-heading" data-i18n="opt_stats_heading">Statistics</h2>
         <div class="stats-grid">
           <div class="stat-card">
             <span class="stat-number" id="total-redirects">0</span>
-            <span class="stat-label">Total Redirects</span>
+            <span class="stat-label" data-i18n="opt_stats_total"
+              >Total Redirects</span
+            >
           </div>
           <div class="stat-card">
             <span class="stat-number" id="today-redirects">0</span>
-            <span class="stat-label">Today</span>
+            <span class="stat-label" data-i18n="opt_stats_today">Today</span>
           </div>
         </div>
 
         <!-- Weekly Trend Chart -->
         <div class="chart-container">
-          <h3>Last 7 Days</h3>
+          <h3 data-i18n="opt_stats_last7days">Last 7 Days</h3>
           <div class="bar-chart" id="weekly-chart">
             <!-- Populated by JS -->
           </div>
         </div>
 
         <div class="stats-detail">
-          <h3>Top Subreddits</h3>
+          <h3 data-i18n="opt_stats_top_subs">Top Subreddits</h3>
           <ol id="top-subreddits" class="subreddit-list">
             <!-- Populated by JS -->
           </ol>
-          <p class="empty-state" id="subreddit-empty">
+          <p
+            class="empty-state"
+            id="subreddit-empty"
+            data-i18n="opt_stats_no_data"
+          >
             No subreddit data yet. Visit some subreddits to see stats!
           </p>
         </div>
         <div class="stats-actions">
-          <button class="button secondary" id="export-stats">
+          <button
+            class="button secondary"
+            id="export-stats"
+            data-i18n="opt_stats_export"
+          >
             📊 Export Stats
           </button>
-          <button class="button secondary" id="clear-stats">
+          <button
+            class="button secondary"
+            id="clear-stats"
+            data-i18n="opt_stats_clear"
+          >
             Clear Statistics
           </button>
         </div>
@@ -83,28 +113,44 @@
         role="region"
         aria-labelledby="visual-prefs-heading"
       >
-        <h2 id="visual-prefs-heading">Visual Preferences</h2>
+        <h2 id="visual-prefs-heading" data-i18n="opt_vis_heading">
+          Visual Preferences
+        </h2>
 
         <div class="option-row">
-          <label for="icon-click-behavior">Icon Click Behavior</label>
+          <label for="icon-click-behavior" data-i18n="opt_vis_icon_click"
+            >Icon Click Behavior</label
+          >
           <select id="icon-click-behavior" class="select-input">
-            <option value="popup">Open popup (default)</option>
-            <option value="toggle">Toggle redirect on/off</option>
+            <option value="popup" data-i18n="opt_vis_click_popup">
+              Open popup (default)
+            </option>
+            <option value="toggle" data-i18n="opt_vis_click_toggle">
+              Toggle redirect on/off
+            </option>
           </select>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_vis_icon_desc">
             Choose what happens when you click the extension icon. Keyboard
             shortcut always toggles regardless of this setting.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="badge-style">Badge Style</label>
+          <label for="badge-style" data-i18n="opt_vis_badge_style"
+            >Badge Style</label
+          >
           <select id="badge-style" class="select-input">
-            <option value="text">Text ("OFF" when disabled)</option>
-            <option value="count">Redirect count</option>
-            <option value="color">Color only</option>
+            <option value="text" data-i18n="opt_vis_badge_text">
+              Text ("OFF" when disabled)
+            </option>
+            <option value="count" data-i18n="opt_vis_badge_count">
+              Redirect count
+            </option>
+            <option value="color" data-i18n="opt_vis_badge_color">
+              Color only
+            </option>
           </select>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_vis_badge_desc">
             How the extension icon badge should display
           </p>
         </div>
@@ -112,9 +158,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="animate-toggle" checked />
-            <span>Animate icon on toggle</span>
+            <span data-i18n="opt_vis_animate">Animate icon on toggle</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_vis_animate_desc">
             Flash the badge color when toggling redirect on/off
           </p>
         </div>
@@ -122,9 +168,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="show-notifications" />
-            <span>Show notifications</span>
+            <span data-i18n="opt_vis_notify">Show notifications</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_vis_notify_desc">
             Show browser notifications for redirect events
           </p>
         </div>
@@ -132,11 +178,32 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="show-redirect-notice" />
-            <span>Show redirect notice</span>
+            <span data-i18n="opt_vis_redirect_notice"
+              >Show redirect notice</span
+            >
           </label>
-          <p class="option-description">
+          <p
+            class="option-description"
+            data-i18n="opt_vis_redirect_notice_desc"
+          >
             Show a small notification on old.reddit.com after redirect with "Go
             back" option
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label for="language-override" data-i18n="opt_i18n_lang_label"
+            >Interface language</label
+          >
+          <select id="language-override" class="select-input">
+            <option value="auto" data-i18n="opt_i18n_auto">
+              Auto (browser default)
+            </option>
+            <option value="en" data-i18n="opt_i18n_en">English</option>
+          </select>
+          <p class="option-description" data-i18n="opt_i18n_desc">
+            Override UI language for extension pages. "Auto" follows your
+            browser language.
           </p>
         </div>
       </section>
@@ -147,26 +214,36 @@
         role="region"
         aria-labelledby="dark-mode-heading"
       >
-        <h2 id="dark-mode-heading">Dark Mode for old.reddit.com</h2>
-        <p class="section-description">
+        <h2 id="dark-mode-heading" data-i18n="opt_dark_heading">
+          Dark Mode for old.reddit.com
+        </h2>
+        <p class="section-description" data-i18n="opt_dark_desc">
           Apply a dark theme to old Reddit that respects your system
           preferences.
         </p>
 
         <div class="option-row">
-          <label for="dark-mode">Dark Mode</label>
+          <label for="dark-mode" data-i18n="opt_dark_mode">Dark Mode</label>
           <select
             id="dark-mode"
             class="select-input"
             aria-describedby="dark-mode-desc"
           >
-            <option value="auto">Auto (follow system preference)</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-            <option value="oled">OLED Black</option>
-            <option value="high-contrast">High Contrast (Accessibility)</option>
+            <option value="auto" data-i18n="opt_dark_auto">
+              Auto (follow system preference)
+            </option>
+            <option value="light" data-i18n="opt_dark_light">Light</option>
+            <option value="dark" data-i18n="opt_dark_dark">Dark</option>
+            <option value="oled" data-i18n="opt_dark_oled">OLED Black</option>
+            <option value="high-contrast" data-i18n="opt_dark_high_contrast">
+              High Contrast (Accessibility)
+            </option>
           </select>
-          <p class="option-description" id="dark-mode-desc">
+          <p
+            class="option-description"
+            id="dark-mode-desc"
+            data-i18n="opt_dark_mode_desc"
+          >
             Choose when to apply dark mode. "Auto" follows your system's
             light/dark preference. "OLED Black" uses pure black for OLED
             screens. "High Contrast" provides maximum visibility for users with
@@ -177,9 +254,11 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="auto-collapse-automod" checked />
-            <span>Auto-collapse bot comments</span>
+            <span data-i18n="opt_dark_collapse_bot"
+              >Auto-collapse bot comments</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_dark_collapse_bot_desc">
             Automatically collapse AutoModerator and common bot comments when
             loading comment threads
           </p>
@@ -188,42 +267,70 @@
 
       <!-- Accessibility -->
       <section class="setting" aria-labelledby="accessibility-heading">
-        <h2 id="accessibility-heading">Accessibility</h2>
-        <p class="section-description">
+        <h2 id="accessibility-heading" data-i18n="opt_acc_heading">
+          Accessibility
+        </h2>
+        <p class="section-description" data-i18n="opt_acc_desc">
           Customize the extension for better accessibility. These settings help
           users with visual impairments or motor disabilities.
         </p>
 
         <div class="option-row">
-          <label for="font-size">Content Font Size</label>
+          <label for="font-size" data-i18n="opt_acc_font_size"
+            >Content Font Size</label
+          >
           <select
             id="font-size"
             class="select-input"
             aria-describedby="font-size-desc"
           >
-            <option value="small">Small (87.5%)</option>
-            <option value="medium">Medium (Default)</option>
-            <option value="large">Large (112.5%)</option>
-            <option value="x-large">Extra Large (125%)</option>
+            <option value="small" data-i18n="opt_acc_font_small">
+              Small (87.5%)
+            </option>
+            <option value="medium" data-i18n="opt_acc_font_medium">
+              Medium (Default)
+            </option>
+            <option value="large" data-i18n="opt_acc_font_large">
+              Large (112.5%)
+            </option>
+            <option value="x-large" data-i18n="opt_acc_font_xlarge">
+              Extra Large (125%)
+            </option>
           </select>
-          <p class="option-description" id="font-size-desc">
+          <p
+            class="option-description"
+            id="font-size-desc"
+            data-i18n="opt_acc_font_desc"
+          >
             Adjust the font size of Reddit content. Affects post titles,
             comments, and other text on old.reddit.com.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="reduce-motion">Reduce Motion</label>
+          <label for="reduce-motion" data-i18n="opt_acc_reduce_motion"
+            >Reduce Motion</label
+          >
           <select
             id="reduce-motion"
             class="select-input"
             aria-describedby="reduce-motion-desc"
           >
-            <option value="auto">Auto (follow system preference)</option>
-            <option value="always">Always reduce motion</option>
-            <option value="never">Never reduce motion</option>
+            <option value="auto" data-i18n="opt_acc_motion_auto">
+              Auto (follow system preference)
+            </option>
+            <option value="always" data-i18n="opt_acc_motion_always">
+              Always reduce motion
+            </option>
+            <option value="never" data-i18n="opt_acc_motion_never">
+              Never reduce motion
+            </option>
           </select>
-          <p class="option-description" id="reduce-motion-desc">
+          <p
+            class="option-description"
+            id="reduce-motion-desc"
+            data-i18n="opt_acc_motion_desc"
+          >
             Control animations and transitions. "Auto" respects your system's
             reduced motion setting. Helpful for users with vestibular disorders.
           </p>
@@ -236,9 +343,15 @@
               id="high-contrast-elements"
               aria-describedby="high-contrast-desc"
             />
-            <span>High contrast UI elements</span>
+            <span data-i18n="opt_acc_high_contrast"
+              >High contrast UI elements</span
+            >
           </label>
-          <p class="option-description" id="high-contrast-desc">
+          <p
+            class="option-description"
+            id="high-contrast-desc"
+            data-i18n="opt_acc_high_contrast_desc"
+          >
             Add extra-visible borders and outlines to buttons, inputs, and other
             interactive elements. Works alongside any theme.
           </p>
@@ -247,43 +360,63 @@
 
       <!-- Comment Enhancements -->
       <section class="setting" aria-labelledby="comment-heading">
-        <h2 id="comment-heading">Comment Enhancements</h2>
-        <p class="section-description">
+        <h2 id="comment-heading" data-i18n="opt_comm_heading">
+          Comment Enhancements
+        </h2>
+        <p class="section-description" data-i18n="opt_comm_desc">
           Improve the comment reading experience with visual enhancements.
         </p>
 
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="color-coded-comments" checked />
-            <span>Color-coded comment depth</span>
+            <span data-i18n="opt_comm_depth_colors"
+              >Color-coded comment depth</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_depth_colors_desc">
             Add colored stripes to the left edge of comments indicating nesting
             depth. Helps visually track conversation threads.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="color-palette">Color Palette</label>
+          <label for="color-palette" data-i18n="opt_comm_palette"
+            >Color Palette</label
+          >
           <select id="color-palette" class="select-input">
-            <option value="standard">Standard (Rainbow)</option>
-            <option value="colorblind">Color-Blind Friendly</option>
+            <option value="standard" data-i18n="opt_comm_palette_standard">
+              Standard (Rainbow)
+            </option>
+            <option value="colorblind" data-i18n="opt_comm_palette_colorblind">
+              Color-Blind Friendly
+            </option>
           </select>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_palette_desc">
             Choose color palette for comment depth indicators. Color-blind
             palette uses distinct hues optimized for accessibility.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="stripe-width">Stripe Width</label>
+          <label for="stripe-width" data-i18n="opt_comm_stripe_width"
+            >Stripe Width</label
+          >
           <select id="stripe-width" class="select-input">
-            <option value="2">Thin (2px)</option>
-            <option value="3">Medium (3px)</option>
-            <option value="4">Thick (4px)</option>
-            <option value="5">Extra Thick (5px)</option>
+            <option value="2" data-i18n="opt_comm_stripe_thin">
+              Thin (2px)
+            </option>
+            <option value="3" data-i18n="opt_comm_stripe_medium">
+              Medium (3px)
+            </option>
+            <option value="4" data-i18n="opt_comm_stripe_thick">
+              Thick (4px)
+            </option>
+            <option value="5" data-i18n="opt_comm_stripe_xthick">
+              Extra Thick (5px)
+            </option>
           </select>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_stripe_desc">
             Width of the colored stripe on the left edge of comments.
           </p>
         </div>
@@ -291,21 +424,29 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="navigation-buttons" checked />
-            <span>Comment navigation buttons</span>
+            <span data-i18n="opt_comm_nav_btns"
+              >Comment navigation buttons</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_nav_btns_desc">
             Show floating buttons to jump between top-level comments. Use
             Shift+J/K for keyboard navigation.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="nav-button-position">Button Position</label>
+          <label for="nav-button-position" data-i18n="opt_comm_btn_pos"
+            >Button Position</label
+          >
           <select id="nav-button-position" class="select-input">
-            <option value="bottom-right">Bottom Right</option>
-            <option value="bottom-left">Bottom Left</option>
+            <option value="bottom-right" data-i18n="opt_comm_pos_br">
+              Bottom Right
+            </option>
+            <option value="bottom-left" data-i18n="opt_comm_pos_bl">
+              Bottom Left
+            </option>
           </select>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_pos_desc">
             Choose where the navigation buttons appear on the screen.
           </p>
         </div>
@@ -313,23 +454,33 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="inline-images" checked />
-            <span>Inline image expansion</span>
+            <span data-i18n="opt_comm_inline_img">Inline image expansion</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_inline_img_desc">
             Add expand buttons next to image links in comments. Click to view
             images inline without opening a new tab.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="max-image-width">Maximum Image Width</label>
+          <label for="max-image-width" data-i18n="opt_comm_max_width"
+            >Maximum Image Width</label
+          >
           <select id="max-image-width" class="select-input">
-            <option value="400">Small (400px)</option>
-            <option value="600">Medium (600px)</option>
-            <option value="800">Large (800px)</option>
-            <option value="0">Full Width</option>
+            <option value="400" data-i18n="opt_comm_width_small">
+              Small (400px)
+            </option>
+            <option value="600" data-i18n="opt_comm_width_medium">
+              Medium (600px)
+            </option>
+            <option value="800" data-i18n="opt_comm_width_large">
+              Large (800px)
+            </option>
+            <option value="0" data-i18n="opt_comm_width_full">
+              Full Width
+            </option>
           </select>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_width_desc">
             Maximum width for expanded images. "Full Width" uses the comment
             area width.
           </p>
@@ -338,19 +489,57 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="jump-to-top-shortcut" checked />
-            <span>Jump to top keyboard shortcut (Shift+Home)</span>
+            <span data-i18n="opt_comm_jump_top"
+              >Jump to top keyboard shortcut (Shift+Home)</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_comm_jump_top_desc">
             Press Shift+Home to smoothly scroll to the top of any page. Respects
             reduced motion preferences.
+          </p>
+        </div>
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="breadcrumbs-enabled" checked />
+            <span data-i18n="opt_comm_breadcrumbs"
+              >Enable breadcrumbs navigation</span
+            >
+          </label>
+          <p class="option-description" data-i18n="opt_comm_breadcrumbs_desc">
+            Show a sticky breadcrumb bar when scrolling deep into comment
+            threads.
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="comment-search-enabled" checked />
+            <span data-i18n="opt_comm_search"
+              >Enable in-page comment search</span
+            >
+          </label>
+          <p class="option-description" data-i18n="opt_comm_search_desc">
+            Search within comments using a floating widget (Ctrl+Shift+F).
+          </p>
+        </div>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="bookmarks-enabled" checked />
+            <span data-i18n="opt_comm_bookmarks">Enable comment bookmarks</span>
+          </label>
+          <p class="option-description" data-i18n="opt_comm_bookmarks_desc">
+            Save comments to return to later in the thread.
           </p>
         </div>
       </section>
 
       <!-- Comment Minimap -->
       <section class="setting" role="region" aria-labelledby="minimap-heading">
-        <h2 id="minimap-heading">Comment Thread Minimap</h2>
-        <p class="section-description">
+        <h2 id="minimap-heading" data-i18n="opt_mini_heading">
+          Comment Thread Minimap
+        </h2>
+        <p class="section-description" data-i18n="opt_mini_desc">
           A visual navigation aid that shows an overview of the comment thread.
           Click on the minimap to quickly jump to any comment.
         </p>
@@ -358,30 +547,42 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="minimap-enabled" checked />
-            <span>Enable comment minimap</span>
+            <span data-i18n="opt_mini_enable">Enable comment minimap</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_mini_enable_desc">
             Show a minimap on comment pages for easy thread navigation.
           </p>
         </div>
 
         <div class="option-row" id="minimap-position-row">
-          <label for="minimap-position">Minimap Position</label>
+          <label for="minimap-position" data-i18n="opt_mini_pos"
+            >Minimap Position</label
+          >
           <select
             id="minimap-position"
             class="select-input"
             aria-describedby="minimap-position-desc"
           >
-            <option value="right">Right side</option>
-            <option value="left">Left side</option>
+            <option value="right" data-i18n="opt_mini_pos_right">
+              Right side
+            </option>
+            <option value="left" data-i18n="opt_mini_pos_left">
+              Left side
+            </option>
           </select>
-          <p class="option-description" id="minimap-position-desc">
+          <p
+            class="option-description"
+            id="minimap-position-desc"
+            data-i18n="opt_mini_pos_desc"
+          >
             Choose which side of the screen to display the minimap.
           </p>
         </div>
 
         <div class="option-row" id="minimap-width-row">
-          <label for="minimap-width">Minimap Width</label>
+          <label for="minimap-width" data-i18n="opt_mini_width"
+            >Minimap Width</label
+          >
           <div class="range-container">
             <input
               type="range"
@@ -393,11 +594,15 @@
             />
             <span id="minimap-width-value">120px</span>
           </div>
-          <p class="help-text">Width of the minimap in pixels.</p>
+          <p class="help-text" data-i18n="opt_mini_width_help">
+            Width of the minimap in pixels.
+          </p>
         </div>
 
         <div class="option-row" id="minimap-opacity-row">
-          <label for="minimap-opacity">Minimap Opacity</label>
+          <label for="minimap-opacity" data-i18n="opt_mini_opacity"
+            >Minimap Opacity</label
+          >
           <div class="range-container">
             <input
               type="range"
@@ -409,15 +614,17 @@
             />
             <span id="minimap-opacity-value">90%</span>
           </div>
-          <p class="help-text">Transparency of the minimap.</p>
+          <p class="help-text" data-i18n="opt_mini_opacity_help">
+            Transparency of the minimap.
+          </p>
         </div>
 
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="minimap-viewport" checked />
-            <span>Show viewport indicator</span>
+            <span data-i18n="opt_mini_viewport">Show viewport indicator</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_mini_viewport_desc">
             Highlight the currently visible portion of the thread in the
             minimap.
           </p>
@@ -426,9 +633,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="minimap-depth-colors" checked />
-            <span>Use depth colors</span>
+            <span data-i18n="opt_mini_depth">Use depth colors</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_mini_depth_desc">
             Color-code minimap entries by comment depth (matches color-coded
             comments).
           </p>
@@ -437,9 +644,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="minimap-collapsed" checked />
-            <span>Show collapsed indicator</span>
+            <span data-i18n="opt_mini_collapsed">Show collapsed indicator</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_mini_collapsed_desc">
             Visually distinguish collapsed comments in the minimap.
           </p>
         </div>
@@ -447,9 +654,11 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="minimap-autohide" />
-            <span>Auto-hide when not hovering</span>
+            <span data-i18n="opt_mini_autohide"
+              >Auto-hide when not hovering</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_mini_autohide_desc">
             Fade out the minimap when not in use to reduce visual clutter.
           </p>
         </div>
@@ -457,8 +666,8 @@
 
       <!-- Sort Preferences -->
       <section class="setting">
-        <h2>Subreddit Sort Preferences</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_sort_heading">Subreddit Sort Preferences</h2>
+        <p class="section-description" data-i18n="opt_sort_desc">
           Automatically apply your preferred sort order (new, top, rising, etc.)
           when visiting subreddits. Your preference is saved when you manually
           change the sort order.
@@ -467,9 +676,11 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="sort-preferences-enabled" checked />
-            <span>Remember sort order per subreddit</span>
+            <span data-i18n="opt_sort_enable"
+              >Remember sort order per subreddit</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_sort_enable_desc">
             Enable automatic sort order application when visiting subreddits
           </p>
         </div>
@@ -477,7 +688,7 @@
         <div class="sort-preferences-management" id="sort-prefs-container">
           <div class="prefs-header">
             <h3>
-              Saved Preferences
+              <span data-i18n="opt_sort_saved_heading">Saved Preferences</span>
               <span class="pref-count"
                 >(<span id="pref-count">0</span>/<span id="pref-max">100</span
                 >)</span
@@ -487,29 +698,33 @@
               <input
                 type="text"
                 id="pref-search"
+                data-i18n-placeholder="opt_sort_search"
                 placeholder="Search subreddits..."
                 class="search-input"
               />
               <button
                 id="export-prefs"
                 class="secondary-button"
+                data-i18n-title="opt_sort_export"
                 title="Export preferences as JSON"
               >
-                Export
+                <span data-i18n="opt_sort_export">Export</span>
               </button>
               <button
                 id="import-prefs"
                 class="secondary-button"
+                data-i18n-title="opt_sort_import"
                 title="Import preferences from JSON"
               >
-                Import
+                <span data-i18n="opt_sort_import">Import</span>
               </button>
               <button
                 id="clear-all-prefs"
                 class="danger-button"
+                data-i18n-title="opt_sort_clear"
                 title="Clear all saved preferences"
               >
-                Clear All
+                <span data-i18n="opt_sort_clear">Clear All</span>
               </button>
             </div>
           </div>
@@ -518,11 +733,11 @@
             <table id="prefs-table">
               <thead>
                 <tr>
-                  <th>Subreddit</th>
-                  <th>Sort Order</th>
-                  <th>Time Filter</th>
-                  <th>Last Updated</th>
-                  <th>Actions</th>
+                  <th data-i18n="opt_sort_th_sub">Subreddit</th>
+                  <th data-i18n="opt_sort_th_sort">Sort Order</th>
+                  <th data-i18n="opt_sort_th_time">Time Filter</th>
+                  <th data-i18n="opt_sort_th_updated">Last Updated</th>
+                  <th data-i18n="opt_sort_th_actions">Actions</th>
                 </tr>
               </thead>
               <tbody id="prefs-tbody">
@@ -530,7 +745,7 @@
               </tbody>
             </table>
 
-            <p class="empty-state" id="prefs-empty">
+            <p class="empty-state" id="prefs-empty" data-i18n="opt_sort_empty">
               No saved preferences yet. Visit a subreddit and change the sort
               order to automatically save your preference.
             </p>
@@ -540,8 +755,8 @@
 
       <!-- User Tags -->
       <section class="setting">
-        <h2>User Tags</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_tags_heading">User Tags</h2>
+        <p class="section-description" data-i18n="opt_tags_desc">
           Add custom labels and colors to Reddit users. Tags appear as badges
           next to usernames throughout Reddit.
         </p>
@@ -549,9 +764,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="user-tags-enabled" checked />
-            <span>Enable user tagging</span>
+            <span data-i18n="opt_tags_enable">Enable user tagging</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_tags_enable_desc">
             Click the tag button (🏷️) next to any username on Reddit to add a
             custom tag
           </p>
@@ -560,7 +775,7 @@
         <div class="user-tags-management" id="user-tags-container">
           <div class="tags-header">
             <h3>
-              Saved Tags
+              <span data-i18n="opt_tags_saved_heading">Saved Tags</span>
               <span class="tag-count"
                 >(<span id="tag-count">0</span>/<span id="tag-max">500</span
                 >)</span
@@ -570,29 +785,33 @@
               <input
                 type="text"
                 id="tag-search"
+                data-i18n-placeholder="opt_tags_search"
                 placeholder="Search users..."
                 class="search-input"
               />
               <button
                 id="export-tags"
                 class="secondary-button"
+                data-i18n-title="opt_sort_export"
                 title="Export tags as JSON"
               >
-                Export
+                <span data-i18n="opt_sort_export">Export</span>
               </button>
               <button
                 id="import-tags"
                 class="secondary-button"
+                data-i18n-title="opt_sort_import"
                 title="Import tags from JSON"
               >
-                Import
+                <span data-i18n="opt_sort_import">Import</span>
               </button>
               <button
                 id="clear-all-tags"
                 class="danger-button"
+                data-i18n-title="opt_sort_clear"
                 title="Clear all saved tags"
               >
-                Clear All
+                <span data-i18n="opt_sort_clear">Clear All</span>
               </button>
             </div>
           </div>
@@ -601,11 +820,11 @@
             <table id="tags-table">
               <thead>
                 <tr>
-                  <th>Username</th>
-                  <th>Tag</th>
-                  <th>Color</th>
-                  <th>Created</th>
-                  <th>Actions</th>
+                  <th data-i18n="opt_tags_th_user">Username</th>
+                  <th data-i18n="opt_tags_th_tag">Tag</th>
+                  <th data-i18n="opt_tags_th_color">Color</th>
+                  <th data-i18n="opt_tags_th_created">Created</th>
+                  <th data-i18n="opt_sort_th_actions">Actions</th>
                 </tr>
               </thead>
               <tbody id="tags-tbody">
@@ -613,7 +832,7 @@
               </tbody>
             </table>
 
-            <p class="empty-state" id="tags-empty">
+            <p class="empty-state" id="tags-empty" data-i18n="opt_tags_empty">
               No tags yet. Visit Reddit and click the tag button (🏷️) next to
               any username to add a tag.
             </p>
@@ -623,8 +842,8 @@
 
       <!-- Muted Users -->
       <section class="setting">
-        <h2>User Muting</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_mute_user_heading">User Muting</h2>
+        <p class="section-description" data-i18n="opt_mute_user_desc">
           Hide posts and comments from specific users. Muted users are
           completely hidden from your feed and comment threads.
         </p>
@@ -632,9 +851,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="user-muting-enabled" checked />
-            <span>Enable user muting</span>
+            <span data-i18n="opt_mute_user_enable">Enable user muting</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_mute_user_enable_desc">
             Hide posts and comments from muted users. Right-click any username
             to mute them via context menu.
           </p>
@@ -642,15 +861,30 @@
 
         <div class="muted-users-container">
           <div class="list-header">
-            <h3>Muted Users (<span id="muted-users-count">0</span>/500)</h3>
+            <h3>
+              <span data-i18n="opt_mute_user_list_heading">Muted Users</span>
+              (<span id="muted-users-count">0</span>/500)
+            </h3>
             <div class="list-actions">
-              <button class="button secondary" id="import-muted-users">
+              <button
+                class="button secondary"
+                id="import-muted-users"
+                data-i18n="opt_sort_import"
+              >
                 Import
               </button>
-              <button class="button secondary" id="export-muted-users">
+              <button
+                class="button secondary"
+                id="export-muted-users"
+                data-i18n="opt_sort_export"
+              >
                 Export
               </button>
-              <button class="button secondary" id="clear-muted-users">
+              <button
+                class="button secondary"
+                id="clear-muted-users"
+                data-i18n="opt_sort_clear"
+              >
                 Clear All
               </button>
             </div>
@@ -660,22 +894,34 @@
             <input
               type="text"
               id="new-muted-user"
+              data-i18n-placeholder="opt_mute_user_placeholder"
               placeholder="Enter username (without u/)"
               class="text-input"
             />
             <input
               type="text"
               id="mute-reason"
+              data-i18n-placeholder="opt_mute_user_reason"
               placeholder="Reason (optional)"
               class="text-input"
             />
-            <button class="button" id="add-muted-user">Add</button>
+            <button
+              class="button"
+              id="add-muted-user"
+              data-i18n="opt_mute_user_add"
+            >
+              Add
+            </button>
           </div>
 
           <div id="muted-users-list" class="item-list">
             <!-- Populated by JS -->
           </div>
-          <p class="empty-state" id="muted-users-empty">
+          <p
+            class="empty-state"
+            id="muted-users-empty"
+            data-i18n="opt_mute_user_empty"
+          >
             No muted users. Right-click any username to mute them or add one
             manually above.
           </p>
@@ -684,8 +930,8 @@
 
       <!-- Scroll Position Memory -->
       <section class="setting">
-        <h2>Scroll Position Memory</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_scroll_heading">Scroll Position Memory</h2>
+        <p class="section-description" data-i18n="opt_scroll_desc">
           Remember your scroll position when navigating away from pages. Your
           position is automatically restored when you return via the back
           button.
@@ -694,9 +940,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="scroll-positions-enabled" checked />
-            <span>Remember scroll positions</span>
+            <span data-i18n="opt_scroll_enable">Remember scroll positions</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_scroll_enable_desc">
             Automatically save and restore scroll position when using back
             button
           </p>
@@ -704,11 +950,19 @@
 
         <div class="scroll-positions-management">
           <p class="info-text">
-            <strong>Storage:</strong>
-            <span id="scroll-positions-count">0</span> positions saved (max 100,
-            auto-cleanup after 24 hours)
+            <strong
+              ><span data-i18n="opt_scroll_info_storage">Storage:</span></strong
+            >
+            <span id="scroll-positions-count">0</span>
+            <span data-i18n="opt_scroll_info_saved"
+              >positions saved (max 100, auto-cleanup after 24 hours)</span
+            >
           </p>
-          <button id="clear-scroll-positions" class="secondary-button">
+          <button
+            id="clear-scroll-positions"
+            class="secondary-button"
+            data-i18n="opt_scroll_clear"
+          >
             Clear All Positions
           </button>
         </div>
@@ -716,8 +970,8 @@
 
       <!-- Nag Blocking -->
       <section class="setting">
-        <h2>Nag & Banner Blocking</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_nag_heading">Nag & Banner Blocking</h2>
+        <p class="section-description" data-i18n="opt_nag_desc">
           Remove annoying popups, banners, and promotional content from old
           Reddit.
         </p>
@@ -725,9 +979,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="nag-blocking-enabled" checked />
-            <span>Enable nag blocking</span>
+            <span data-i18n="opt_nag_enable">Enable nag blocking</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_enable_desc">
             Master toggle for all nag/banner blocking features below
           </p>
         </div>
@@ -735,9 +989,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-login-prompts" checked />
-            <span>Block login prompts</span>
+            <span data-i18n="opt_nag_login">Block login prompts</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_login_desc">
             Hide popups and overlays asking you to log in
           </p>
         </div>
@@ -745,9 +999,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-email-verification" checked />
-            <span>Block email verification nags</span>
+            <span data-i18n="opt_nag_email">Block email verification nags</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_email_desc">
             Remove banners asking you to verify your email address
           </p>
         </div>
@@ -755,9 +1009,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-premium-banners" checked />
-            <span>Block Reddit Premium ads</span>
+            <span data-i18n="opt_nag_premium">Block Reddit Premium ads</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_premium_desc">
             Hide promotional content for Reddit Premium/Gold
           </p>
         </div>
@@ -765,9 +1019,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-app-prompts" checked />
-            <span>Block app download prompts</span>
+            <span data-i18n="opt_nag_app">Block app download prompts</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_app_desc">
             Remove banners asking you to download the mobile app
           </p>
         </div>
@@ -775,9 +1029,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-ai-content" checked />
-            <span>Block AI-generated content</span>
+            <span data-i18n="opt_nag_ai">Block AI-generated content</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_ai_desc">
             Hide AI answers, summaries, and overviews. Future-proofed against
             Reddit's AI features.
           </p>
@@ -786,9 +1040,11 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-trending" checked />
-            <span>Block trending posts sections</span>
+            <span data-i18n="opt_nag_trending"
+              >Block trending posts sections</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_trending_desc">
             Remove trending subreddits and posts widgets
           </p>
         </div>
@@ -796,9 +1052,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-recommended" checked />
-            <span>Block recommended communities</span>
+            <span data-i18n="opt_nag_rec">Block recommended communities</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_rec_desc">
             Hide recommended subreddits and community suggestions
           </p>
         </div>
@@ -806,9 +1062,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-community-highlights" checked />
-            <span>Block community highlights</span>
+            <span data-i18n="opt_nag_high">Block community highlights</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_high_desc">
             Remove featured posts and spotlight content
           </p>
         </div>
@@ -816,9 +1072,11 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="block-more-posts" checked />
-            <span>Block "More posts you may like"</span>
+            <span data-i18n="opt_nag_more"
+              >Block "More posts you may like"</span
+            >
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_nag_more_desc">
             Hide recommended posts and "continue browsing" sections
           </p>
         </div>
@@ -826,8 +1084,8 @@
 
       <!-- Feed Enhancements -->
       <section class="setting">
-        <h2>Feed Enhancements</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_feed_heading">Feed Enhancements</h2>
+        <p class="section-description" data-i18n="opt_feed_desc">
           Customize the appearance and layout of Reddit feeds for better
           readability and information density.
         </p>
@@ -835,9 +1093,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="feed-compact-mode" />
-            <span>Compact mode</span>
+            <span data-i18n="opt_feed_compact">Compact mode</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_feed_compact_desc">
             Reduce spacing to show more posts per screen (~30% smaller posts)
           </p>
         </div>
@@ -845,9 +1103,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="feed-text-only" />
-            <span>Text-only mode</span>
+            <span data-i18n="opt_feed_text">Text-only mode</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_feed_text_desc">
             Hide all images and thumbnails for focused reading and bandwidth
             savings
           </p>
@@ -856,9 +1114,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="feed-uncrop-images" />
-            <span>Uncropped thumbnails</span>
+            <span data-i18n="opt_feed_uncrop">Uncropped thumbnails</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_feed_uncrop_desc">
             Show full-aspect-ratio thumbnails instead of cropped squares
           </p>
         </div>
@@ -866,9 +1124,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="feed-hide-join" />
-            <span>Hide join buttons</span>
+            <span data-i18n="opt_feed_join">Hide join buttons</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_feed_join_desc">
             Remove subreddit join/subscribe buttons from feed
           </p>
         </div>
@@ -876,42 +1134,55 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="feed-hide-actions" />
-            <span>Hide action links</span>
+            <span data-i18n="opt_feed_actions">Hide action links</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_feed_actions_desc">
             Hide share/save/hide/report links until you hover over a post
             (comments link always visible)
           </p>
         </div>
 
         <div class="option-row custom-css-section">
-          <h3>Custom CSS (Advanced)</h3>
-          <p class="section-description warning">
+          <h3 data-i18n="opt_css_heading">Custom CSS (Advanced)</h3>
+          <p class="section-description warning" data-i18n="opt_css_warning">
             ⚠️ Advanced feature: Custom CSS can break page layout. Use at your
             own risk.
           </p>
 
           <label class="checkbox-label">
             <input type="checkbox" id="custom-css-enabled" />
-            <span>Enable custom CSS</span>
+            <span data-i18n="opt_css_enable">Enable custom CSS</span>
           </label>
 
           <textarea
             id="custom-css"
             rows="10"
+            data-i18n-placeholder="opt_css_placeholder"
             placeholder="/* Your custom CSS here */&#10;.thing { ... }"
             spellcheck="false"
             class="custom-css-textarea"
           ></textarea>
 
           <div class="button-row">
-            <button id="save-custom-css" class="primary-button">
+            <button
+              id="save-custom-css"
+              class="primary-button"
+              data-i18n="opt_css_save"
+            >
               Save CSS
             </button>
-            <button id="clear-custom-css" class="secondary-button">
+            <button
+              id="clear-custom-css"
+              class="secondary-button"
+              data-i18n="opt_css_clear"
+            >
               Clear
             </button>
-            <button id="validate-custom-css" class="secondary-button">
+            <button
+              id="validate-custom-css"
+              class="secondary-button"
+              data-i18n="opt_css_validate"
+            >
               Validate
             </button>
           </div>
@@ -920,8 +1191,8 @@
 
       <!-- Layout Presets -->
       <section class="setting">
-        <h2>Layout Presets</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_preset_heading">Layout Presets</h2>
+        <p class="section-description" data-i18n="opt_preset_desc">
           Save combinations of visual settings as presets for quick switching.
           Apply different layouts to specific subreddits automatically.
         </p>
@@ -929,9 +1200,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="layout-presets-enabled" checked />
-            <span>Enable layout presets</span>
+            <span data-i18n="opt_preset_enable">Enable layout presets</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_preset_enable_desc">
             Save and apply custom layout configurations as reusable presets
           </p>
         </div>
@@ -939,21 +1210,26 @@
         <div id="layout-presets-container">
           <!-- Create New Preset -->
           <div class="subsection">
-            <h3>Create New Preset</h3>
+            <h3 data-i18n="opt_preset_create_heading">Create New Preset</h3>
             <div class="create-preset-form">
               <div class="form-row">
                 <input
                   type="text"
                   id="new-preset-name"
                   class="text-input"
+                  data-i18n-placeholder="opt_preset_name_placeholder"
                   placeholder="Preset name (e.g., Night Mode, Compact Reading)"
                   maxlength="50"
                 />
-                <button class="button" id="create-preset-btn">
+                <button
+                  class="button"
+                  id="create-preset-btn"
+                  data-i18n="opt_preset_create_btn"
+                >
                   Create from Current
                 </button>
               </div>
-              <p class="help-text">
+              <p class="help-text" data-i18n="opt_preset_create_help">
                 Creates a preset from your current feed enhancement and dark
                 mode settings.
               </p>
@@ -964,7 +1240,7 @@
           <div class="subsection">
             <div class="presets-header">
               <h3>
-                Saved Presets
+                <span data-i18n="opt_preset_saved_heading">Saved Presets</span>
                 <span class="preset-count"
                   >(<span id="preset-count">0</span>/<span id="preset-max"
                     >20</span
@@ -975,21 +1251,27 @@
                 <button
                   id="export-presets"
                   class="secondary-button"
+                  data-i18n-title="opt_preset_export_title"
                   title="Export presets as JSON"
+                  data-i18n="opt_preset_export"
                 >
                   Export
                 </button>
                 <button
                   id="import-presets"
                   class="secondary-button"
+                  data-i18n-title="opt_preset_import_title"
                   title="Import presets from JSON"
+                  data-i18n="opt_preset_import"
                 >
                   Import
                 </button>
                 <button
                   id="clear-all-presets"
                   class="danger-button"
+                  data-i18n-title="opt_preset_clear_title"
                   title="Clear all saved presets"
+                  data-i18n="opt_preset_clear"
                 >
                   Clear All
                 </button>
@@ -1000,10 +1282,10 @@
               <table id="presets-table" class="data-table">
                 <thead>
                   <tr>
-                    <th>Preset Name</th>
-                    <th>Settings</th>
-                    <th>Created</th>
-                    <th>Actions</th>
+                    <th data-i18n="opt_preset_th_name">Preset Name</th>
+                    <th data-i18n="opt_preset_th_settings">Settings</th>
+                    <th data-i18n="opt_preset_th_created">Created</th>
+                    <th data-i18n="opt_preset_th_actions">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="presets-tbody">
@@ -1011,7 +1293,11 @@
                 </tbody>
               </table>
 
-              <p class="empty-state" id="presets-empty">
+              <p
+                class="empty-state"
+                id="presets-empty"
+                data-i18n="opt_preset_empty"
+              >
                 No presets saved yet. Create a preset from your current settings
                 using the form above.
               </p>
@@ -1020,13 +1306,15 @@
 
           <!-- Active Preset -->
           <div class="subsection">
-            <h3>Active Preset</h3>
+            <h3 data-i18n="opt_preset_active_heading">Active Preset</h3>
             <div class="active-preset-row">
               <select id="active-preset-select" class="select-input">
-                <option value="">None (use individual settings)</option>
+                <option value="" data-i18n="opt_preset_active_none">
+                  None (use individual settings)
+                </option>
                 <!-- Populated by JavaScript -->
               </select>
-              <p class="help-text">
+              <p class="help-text" data-i18n="opt_preset_active_help">
                 The active preset is applied globally. Subreddit-specific
                 layouts override this.
               </p>
@@ -1037,7 +1325,9 @@
           <div class="subsection">
             <div class="subreddit-layouts-header">
               <h3>
-                Subreddit-Specific Layouts
+                <span data-i18n="opt_preset_sub_heading"
+                  >Subreddit-Specific Layouts</span
+                >
                 <span class="mapping-count"
                   >(<span id="mapping-count">0</span>/<span id="mapping-max"
                     >100</span
@@ -1053,15 +1343,24 @@
                   type="text"
                   id="mapping-subreddit"
                   class="text-input"
+                  data-i18n-placeholder="opt_preset_sub_placeholder"
                   placeholder="subreddit name"
                 />
                 <select id="mapping-preset" class="select-input">
-                  <option value="">Select preset...</option>
+                  <option value="" data-i18n="opt_preset_sub_select">
+                    Select preset...
+                  </option>
                   <!-- Populated by JavaScript -->
                 </select>
-                <button class="button" id="add-mapping-btn">Add</button>
+                <button
+                  class="button"
+                  id="add-mapping-btn"
+                  data-i18n="opt_preset_sub_add"
+                >
+                  Add
+                </button>
               </div>
-              <p class="help-text">
+              <p class="help-text" data-i18n="opt_preset_sub_help">
                 Apply a specific layout preset when visiting a subreddit.
               </p>
             </div>
@@ -1070,9 +1369,9 @@
               <table id="mappings-table" class="data-table">
                 <thead>
                   <tr>
-                    <th>Subreddit</th>
-                    <th>Preset</th>
-                    <th>Actions</th>
+                    <th data-i18n="opt_preset_map_th_sub">Subreddit</th>
+                    <th data-i18n="opt_preset_map_th_preset">Preset</th>
+                    <th data-i18n="opt_preset_map_th_actions">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="mappings-tbody">
@@ -1080,7 +1379,11 @@
                 </tbody>
               </table>
 
-              <p class="empty-state" id="mappings-empty">
+              <p
+                class="empty-state"
+                id="mappings-empty"
+                data-i18n="opt_preset_map_empty"
+              >
                 No subreddit layouts configured. Add a mapping above to apply
                 different presets to specific subreddits.
               </p>
@@ -1090,7 +1393,9 @@
               <button
                 id="clear-all-mappings"
                 class="secondary-button"
+                data-i18n-title="opt_preset_map_clear_title"
                 title="Clear all subreddit mappings"
+                data-i18n="opt_preset_map_clear"
               >
                 Clear All Mappings
               </button>
@@ -1103,12 +1408,14 @@
       <div id="preset-edit-modal" class="modal" style="display: none">
         <div class="modal-content">
           <div class="modal-header">
-            <h3>Edit Preset</h3>
+            <h3 data-i18n="opt_preset_modal_heading">Edit Preset</h3>
             <button class="modal-close" id="preset-edit-close">&times;</button>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="preset-edit-name">Preset Name</label>
+              <label for="preset-edit-name" data-i18n="opt_preset_modal_name"
+                >Preset Name</label
+              >
               <input
                 type="text"
                 id="preset-edit-name"
@@ -1117,86 +1424,122 @@
               />
             </div>
 
-            <h4>Visual Settings</h4>
+            <h4 data-i18n="opt_preset_modal_visual">Visual Settings</h4>
 
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="preset-dark-mode" />
-                Dark mode enabled
+                <span data-i18n="opt_preset_modal_dark">Dark mode enabled</span>
               </label>
             </div>
 
             <div class="form-group">
-              <label for="preset-dark-mode-type">Dark Mode Type</label>
+              <label
+                for="preset-dark-mode-type"
+                data-i18n="opt_preset_modal_dark_type"
+                >Dark Mode Type</label
+              >
               <select id="preset-dark-mode-type" class="select-input">
-                <option value="dark">Dark</option>
-                <option value="oled">OLED Black</option>
+                <option value="dark" data-i18n="opt_dark_dark">Dark</option>
+                <option value="oled" data-i18n="opt_dark_oled">
+                  OLED Black
+                </option>
               </select>
             </div>
 
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="preset-compact-mode" />
-                Compact mode
+                <span data-i18n="opt_preset_modal_compact">Compact mode</span>
               </label>
             </div>
 
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="preset-text-only" />
-                Text-only mode
+                <span data-i18n="opt_preset_modal_text">Text-only mode</span>
               </label>
             </div>
 
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="preset-uncrop-images" />
-                Uncropped thumbnails
+                <span data-i18n="opt_preset_modal_uncrop"
+                  >Uncropped thumbnails</span
+                >
               </label>
             </div>
 
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="preset-hide-join" />
-                Hide join buttons
+                <span data-i18n="opt_preset_modal_join">Hide join buttons</span>
               </label>
             </div>
 
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="preset-hide-actions" />
-                Hide action links
+                <span data-i18n="opt_preset_modal_actions"
+                  >Hide action links</span
+                >
               </label>
             </div>
 
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="preset-color-comments" />
-                Color-coded comments
+                <span data-i18n="opt_preset_modal_color"
+                  >Color-coded comments</span
+                >
               </label>
             </div>
 
             <div class="form-group">
-              <label for="preset-color-palette">Comment Color Palette</label>
+              <label
+                for="preset-color-palette"
+                data-i18n="opt_preset_modal_palette"
+                >Comment Color Palette</label
+              >
               <select id="preset-color-palette" class="select-input">
-                <option value="standard">Standard (Rainbow)</option>
-                <option value="colorblind">Color-Blind Friendly</option>
+                <option value="standard" data-i18n="opt_comm_palette_standard">
+                  Standard (Rainbow)
+                </option>
+                <option
+                  value="colorblind"
+                  data-i18n="opt_comm_palette_colorblind"
+                >
+                  Color-Blind Friendly
+                </option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="preset-custom-css">Custom CSS (optional)</label>
+              <label for="preset-custom-css" data-i18n="opt_preset_modal_css"
+                >Custom CSS (optional)</label
+              >
               <textarea
                 id="preset-custom-css"
                 rows="5"
                 class="custom-css-textarea"
+                data-i18n-placeholder="opt_preset_modal_css_placeholder"
                 placeholder="/* Custom CSS for this preset */"
               ></textarea>
             </div>
           </div>
           <div class="modal-footer">
-            <button id="preset-edit-save" class="primary-button">Save</button>
-            <button id="preset-edit-cancel" class="secondary-button">
+            <button
+              id="preset-edit-save"
+              class="primary-button"
+              data-i18n="opt_preset_save"
+            >
+              Save
+            </button>
+            <button
+              id="preset-edit-cancel"
+              class="secondary-button"
+              data-i18n="opt_preset_cancel"
+            >
               Cancel
             </button>
           </div>
@@ -1205,8 +1548,8 @@
 
       <!-- Privacy & Tracking Protection -->
       <section class="setting">
-        <h2>Privacy & Tracking Protection</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_priv_heading">Privacy & Tracking Protection</h2>
+        <p class="section-description" data-i18n="opt_priv_desc">
           Protect your privacy by removing tracking parameters from URLs and
           controlling referrer information sent when leaving Reddit.
         </p>
@@ -1233,8 +1576,14 @@
             <div class="privacy-score-value" id="privacy-score-value">0</div>
           </div>
           <div class="privacy-score-info">
-            <div class="privacy-score-label">Privacy Score</div>
-            <div class="privacy-score-status" id="privacy-score-status">
+            <div class="privacy-score-label" data-i18n="opt_priv_score">
+              Privacy Score
+            </div>
+            <div
+              class="privacy-score-status"
+              id="privacy-score-status"
+              data-i18n="opt_priv_calculating"
+            >
               Calculating...
             </div>
             <div
@@ -1247,9 +1596,11 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="tracking-removal-enabled" />
-            <span>Remove tracking parameters from URLs</span>
+            <span data-i18n="opt_priv_remove"
+              >Remove tracking parameters from URLs</span
+            >
           </label>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_priv_remove_desc">
             Automatically strips tracking parameters like utm_source, fbclid,
             gclid, and 55+ others when you click links.
           </p>
@@ -1258,69 +1609,102 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="tracking-badge-enabled" />
-            <span>Show shield badge when tracking is removed</span>
+            <span data-i18n="opt_priv_badge"
+              >Show shield badge when tracking is removed</span
+            >
           </label>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_priv_badge_desc">
             Display a temporary 🛡️ badge in the extension icon when tracking
             parameters are cleaned (lasts 3 seconds).
           </p>
         </div>
 
         <div class="subsection">
-          <h3>Tracking Statistics by Category</h3>
+          <h3 data-i18n="opt_priv_stats_heading">
+            Tracking Statistics by Category
+          </h3>
           <div class="stats-grid">
             <div class="stat-card">
-              <div class="stat-label">Total URLs Cleaned</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_total">
+                Total URLs Cleaned
+              </div>
               <div class="stat-value" id="tracking-total-cleaned">0</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Last Cleaned</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_last">
+                Last Cleaned
+              </div>
               <div
                 class="stat-value stat-value-small"
                 id="tracking-last-cleaned"
+                data-i18n="opt_priv_stats_never"
               >
                 Never
               </div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">UTM Parameters</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_utm">
+                UTM Parameters
+              </div>
               <div class="stat-value" id="tracking-utm-count">0</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Social Media</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_social">
+                Social Media
+              </div>
               <div class="stat-value" id="tracking-social-count">0</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Analytics</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_analytics">
+                Analytics
+              </div>
               <div class="stat-value" id="tracking-analytics-count">0</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Affiliate/Referral</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_affiliate">
+                Affiliate/Referral
+              </div>
               <div class="stat-value" id="tracking-affiliate-count">0</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Reddit-Specific</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_reddit">
+                Reddit-Specific
+              </div>
               <div class="stat-value" id="tracking-reddit-count">0</div>
             </div>
             <div class="stat-card">
-              <div class="stat-label">Other Trackers</div>
+              <div class="stat-label" data-i18n="opt_priv_stats_other">
+                Other Trackers
+              </div>
               <div class="stat-value" id="tracking-other-count">0</div>
             </div>
           </div>
         </div>
 
         <div class="button-row" style="margin-top: 15px">
-          <button id="clear-tracking-stats" class="secondary-button">
+          <button
+            id="clear-tracking-stats"
+            class="secondary-button"
+            data-i18n="opt_priv_clear_stats"
+          >
             Clear Statistics
           </button>
-          <button id="export-privacy-report" class="secondary-button">
+          <button
+            id="export-privacy-report"
+            class="secondary-button"
+            data-i18n="opt_priv_export"
+          >
             Export Privacy Report
           </button>
         </div>
 
         <div class="subsection">
-          <h3>Referrer Control</h3>
-          <p class="help-text" style="margin-bottom: 10px">
+          <h3 data-i18n="opt_priv_ref_heading">Referrer Control</h3>
+          <p
+            class="help-text"
+            style="margin-bottom: 10px"
+            data-i18n="opt_priv_ref_desc"
+          >
             Choose what referrer information is sent when you leave Reddit.
             Higher privacy may break some website features.
           </p>
@@ -1333,7 +1717,11 @@
               id="referrer-default"
             />
             <span>
-              <strong>Default</strong> - Use browser's default behavior
+              <strong data-i18n="opt_priv_ref_default">Default</strong>
+              -
+              <span data-i18n="opt_priv_ref_default_desc">
+                Use browser's default behavior
+              </span>
             </span>
           </label>
 
@@ -1345,8 +1733,13 @@
               id="referrer-same-origin"
             />
             <span>
-              <strong>Same Origin (Recommended)</strong> - Only send referrer
-              within Reddit
+              <strong data-i18n="opt_priv_ref_same"
+                >Same Origin (Recommended)</strong
+              >
+              -
+              <span data-i18n="opt_priv_ref_same_desc">
+                Only send referrer within Reddit
+              </span>
             </span>
           </label>
 
@@ -1358,7 +1751,11 @@
               id="referrer-origin"
             />
             <span>
-              <strong>Origin Only</strong> - Only send domain (high privacy)
+              <strong data-i18n="opt_priv_ref_origin">Origin Only</strong>
+              -
+              <span data-i18n="opt_priv_ref_origin_desc">
+                Only send domain (high privacy)
+              </span>
             </span>
           </label>
 
@@ -1370,15 +1767,20 @@
               id="referrer-no-referrer"
             />
             <span>
-              <strong>No Referrer</strong> - Don't send any referrer (maximum
-              privacy)
+              <strong data-i18n="opt_priv_ref_none">No Referrer</strong>
+              -
+              <span data-i18n="opt_priv_ref_none_desc">
+                Don't send any referrer (maximum privacy)
+              </span>
             </span>
           </label>
         </div>
 
         <div class="subsection">
-          <h3>Custom Tracking Parameters</h3>
-          <p class="help-text">
+          <h3 data-i18n="opt_priv_custom_heading">
+            Custom Tracking Parameters
+          </h3>
+          <p class="help-text" data-i18n="opt_priv_custom_desc">
             Add or remove tracking parameters (one per line). Changes take
             effect immediately.
           </p>
@@ -1386,16 +1788,25 @@
           <textarea
             id="tracking-params"
             rows="8"
+            data-i18n-placeholder="opt_priv_custom_placeholder"
             placeholder="utm_source&#10;fbclid&#10;gclid&#10;..."
             spellcheck="false"
             class="custom-css-textarea"
           ></textarea>
 
           <div class="button-row">
-            <button id="save-tracking-params" class="primary-button">
+            <button
+              id="save-tracking-params"
+              class="primary-button"
+              data-i18n="opt_priv_custom_save"
+            >
               Save Parameters
             </button>
-            <button id="reset-tracking-params" class="secondary-button">
+            <button
+              id="reset-tracking-params"
+              class="secondary-button"
+              data-i18n="opt_priv_custom_reset"
+            >
               Reset to Defaults
             </button>
           </div>
@@ -1404,8 +1815,8 @@
 
       <!-- Alternative Frontend -->
       <section class="setting">
-        <h2>Reddit Frontend</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_front_heading">Reddit Frontend</h2>
+        <p class="section-description" data-i18n="opt_front_desc">
           Choose which Reddit frontend to redirect to. Alternative frontends
           offer privacy benefits and work without JavaScript.
         </p>
@@ -1415,23 +1826,40 @@
         </div>
 
         <div class="custom-domain-section" id="custom-domain-section" hidden>
-          <label for="custom-domain">Custom Domain</label>
+          <label for="custom-domain" data-i18n="opt_front_custom_label"
+            >Custom Domain</label
+          >
           <div class="input-row">
             <input
               type="text"
               id="custom-domain"
               class="text-input"
+              data-i18n-placeholder="opt_front_custom_placeholder"
               placeholder="example.com"
             />
-            <button class="button" id="save-custom-domain">Save</button>
+            <button
+              class="button"
+              id="save-custom-domain"
+              data-i18n="opt_front_custom_save"
+            >
+              Save
+            </button>
           </div>
-          <p class="help-text">Enter domain without https:// prefix</p>
+          <p class="help-text" data-i18n="opt_front_custom_help">
+            Enter domain without https:// prefix
+          </p>
         </div>
 
         <div class="permission-notice" id="permission-notice" hidden>
           <span class="notice-icon">⚠️</span>
-          <span>This frontend requires additional permissions.</span>
-          <button class="button" id="request-permission">
+          <span data-i18n="opt_front_perm_notice"
+            >This frontend requires additional permissions.</span
+          >
+          <button
+            class="button"
+            id="request-permission"
+            data-i18n="opt_front_perm_grant"
+          >
             Grant Permission
           </button>
         </div>
@@ -1439,8 +1867,8 @@
 
       <!-- Subreddit Exceptions -->
       <section class="setting">
-        <h2>Subreddit Exceptions</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_exc_heading">Subreddit Exceptions</h2>
+        <p class="section-description" data-i18n="opt_exc_desc">
           These subreddits will stay on new Reddit instead of redirecting.
           Useful for subreddits that use new Reddit features (polls,
           predictions, etc.)
@@ -1453,31 +1881,39 @@
               type="text"
               id="subreddit-input"
               class="text-input"
+              data-i18n-placeholder="opt_exc_placeholder"
               placeholder="subreddit name"
               pattern="^[A-Za-z0-9_]+$"
             />
-            <button class="button" id="add-subreddit">Add</button>
+            <button class="button" id="add-subreddit" data-i18n="opt_exc_add">
+              Add
+            </button>
           </div>
 
           <ul id="whitelist" class="tag-list">
             <!-- Populated by JS -->
           </ul>
 
-          <p class="empty-state" id="whitelist-empty">
+          <p class="empty-state" id="whitelist-empty" data-i18n="opt_exc_empty">
             No exceptions configured. All subreddits redirect to old Reddit.
           </p>
         </div>
 
         <div class="suggestions-container">
-          <h3>Suggested Exceptions</h3>
-          <p class="help-text">
+          <h3 data-i18n="opt_exc_sug_heading">Suggested Exceptions</h3>
+          <p class="help-text" data-i18n="opt_exc_sug_desc">
             Popular subreddits that use new Reddit features like polls and
             predictions:
           </p>
           <div id="suggestions-list" class="suggestions-list">
             <!-- Populated by JS -->
           </div>
-          <p class="empty-state" id="suggestions-empty" hidden>
+          <p
+            class="empty-state"
+            id="suggestions-empty"
+            hidden
+            data-i18n="opt_exc_sug_empty"
+          >
             All suggestions have been added!
           </p>
         </div>
@@ -1485,8 +1921,8 @@
 
       <!-- Muted Subreddits -->
       <section class="setting">
-        <h2>Muted Subreddits</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_muted_heading">Muted Subreddits</h2>
+        <p class="section-description" data-i18n="opt_muted_desc">
           Hide posts from these subreddits on /r/all and /r/popular. Useful for
           filtering out noise or unwanted content.
         </p>
@@ -1498,27 +1934,45 @@
               type="text"
               id="muted-subreddit-input"
               class="text-input"
+              data-i18n-placeholder="opt_muted_placeholder"
               placeholder="subreddit name"
               pattern="^[A-Za-z0-9_]+$"
             />
-            <button class="button" id="add-muted-subreddit">Mute</button>
+            <button
+              class="button"
+              id="add-muted-subreddit"
+              data-i18n="opt_muted_add"
+            >
+              Mute
+            </button>
           </div>
 
           <ul id="muted-list" class="tag-list">
             <!-- Populated by JS -->
           </ul>
 
-          <p class="empty-state" id="muted-empty">
+          <p class="empty-state" id="muted-empty" data-i18n="opt_muted_empty">
             No muted subreddits. Posts from all subreddits will appear on /r/all
             and /r/popular.
           </p>
         </div>
-
         <div class="muted-actions">
-          <button class="button secondary" id="export-muted">
+          <button
+            class="button secondary"
+            id="export-muted"
+            data-i18n="opt_muted_export"
+          >
             📥 Export List
           </button>
-          <button class="button secondary" id="import-muted">
+          <button class="button secondary" id="share-muted">
+            <span class="icon">🔗</span>
+            <span data-i18n="opt_muted_share">Share List</span>
+          </button>
+          <button
+            class="button secondary"
+            id="import-muted"
+            data-i18n="opt_muted_import"
+          >
             📤 Import List
           </button>
           <input
@@ -1532,8 +1986,8 @@
 
       <!-- Muted Keywords -->
       <section class="setting">
-        <h2>Muted Keywords</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_key_heading">Muted Keywords</h2>
+        <p class="section-description" data-i18n="opt_key_desc">
           Hide posts containing specific words or phrases in their titles.
           Useful for filtering clickbait, spoilers, or topics you want to avoid.
         </p>
@@ -1544,24 +1998,33 @@
               type="text"
               id="keyword-input"
               class="text-input"
+              data-i18n-placeholder="opt_key_placeholder"
               placeholder="word or phrase"
             />
-            <button class="button" id="add-keyword">Mute</button>
+            <button
+              class="button"
+              id="add-keyword"
+              data-i18n="opt_mute_sub_btn"
+            >
+              Mute
+            </button>
           </div>
 
           <div class="option-row" style="margin-top: 8px">
             <label class="checkbox-label">
               <input type="checkbox" id="case-sensitive" />
-              <span>Case sensitive matching</span>
+              <span data-i18n="opt_key_case">Case sensitive matching</span>
             </label>
           </div>
 
           <div class="option-row">
             <label class="checkbox-label">
               <input type="checkbox" id="use-regex" />
-              <span>Use regular expressions (advanced)</span>
+              <span data-i18n="opt_key_regex"
+                >Use regular expressions (advanced)</span
+              >
             </label>
-            <p class="option-description">
+            <p class="option-description" data-i18n="opt_key_regex_desc">
               Treat keywords as regex patterns instead of plain text. Requires
               valid regex syntax.
             </p>
@@ -1570,9 +2033,11 @@
           <div class="option-row">
             <label class="checkbox-label">
               <input type="checkbox" id="filter-content" />
-              <span>Filter post content (not just titles)</span>
+              <span data-i18n="opt_key_content"
+                >Filter post content (not just titles)</span
+              >
             </label>
-            <p class="option-description">
+            <p class="option-description" data-i18n="opt_key_content_desc">
               Check post body text for keywords, not just titles. Works with
               self-posts that have visible content.
             </p>
@@ -1582,16 +2047,24 @@
             <!-- Populated by JS -->
           </ul>
 
-          <p class="empty-state" id="keyword-empty">
+          <p class="empty-state" id="keyword-empty" data-i18n="opt_key_empty">
             No muted keywords. All post titles will be shown.
           </p>
         </div>
 
         <div class="muted-actions">
-          <button class="button secondary" id="export-keywords">
+          <button
+            class="button secondary"
+            id="export-keywords"
+            data-i18n="opt_export_list"
+          >
             📥 Export List
           </button>
-          <button class="button secondary" id="import-keywords">
+          <button
+            class="button secondary"
+            id="import-keywords"
+            data-i18n="opt_import_list"
+          >
             📤 Import List
           </button>
           <input
@@ -1605,8 +2078,8 @@
 
       <!-- Flair Filtering -->
       <section class="setting">
-        <h2>Flair Filtering</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_flair_heading">Flair Filtering</h2>
+        <p class="section-description" data-i18n="opt_flair_desc">
           Hide posts with specific post flairs. Many subreddits use flairs to
           categorize posts (e.g., "Meme", "Discussion", "NSFW").
         </p>
@@ -1614,9 +2087,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="filter-by-flair" />
-            <span>Enable flair filtering</span>
+            <span data-i18n="opt_flair_enable">Enable flair filtering</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_flair_enable_desc">
             Hide posts based on their flair text. Flair text must match exactly
             (case-insensitive).
           </p>
@@ -1628,25 +2101,36 @@
               type="text"
               id="flair-input"
               class="text-input"
+              data-i18n-placeholder="opt_flair_placeholder"
               placeholder="Flair text (e.g., Meme, Spoiler)"
             />
-            <button class="button" id="add-flair">Mute</button>
+            <button class="button" id="add-flair" data-i18n="opt_mute_sub_btn">
+              Mute
+            </button>
           </div>
 
           <ul id="flair-list" class="tag-list">
             <!-- Populated by JS -->
           </ul>
 
-          <p class="empty-state" id="flair-empty">
+          <p class="empty-state" id="flair-empty" data-i18n="opt_flair_empty">
             No muted flairs. All posts regardless of flair will be shown.
           </p>
         </div>
 
         <div class="muted-actions">
-          <button class="button secondary" id="export-flairs">
+          <button
+            class="button secondary"
+            id="export-flairs"
+            data-i18n="opt_export_list"
+          >
             📥 Export List
           </button>
-          <button class="button secondary" id="import-flairs">
+          <button
+            class="button secondary"
+            id="import-flairs"
+            data-i18n="opt_import_list"
+          >
             📤 Import List
           </button>
         </div>
@@ -1654,8 +2138,8 @@
 
       <!-- Score Filtering -->
       <section class="setting">
-        <h2>Score Filtering</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_score_heading">Score Filtering</h2>
+        <p class="section-description" data-i18n="opt_score_desc">
           Hide posts with scores below a threshold. Useful for filtering low
           quality or unpopular content.
         </p>
@@ -1663,15 +2147,17 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="filter-by-score" />
-            <span>Enable score filtering</span>
+            <span data-i18n="opt_score_enable">Enable score filtering</span>
           </label>
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_score_enable_desc">
             Hide posts with scores below the minimum threshold.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="min-score">Minimum score threshold</label>
+          <label for="min-score" data-i18n="opt_score_min"
+            >Minimum score threshold</label
+          >
           <input
             type="number"
             id="min-score"
@@ -1681,7 +2167,7 @@
             max="999999"
             style="max-width: 150px"
           />
-          <p class="option-description">
+          <p class="option-description" data-i18n="opt_score_min_desc">
             Posts with scores below this value will be hidden. Default: 0 (hide
             negative posts).
           </p>
@@ -1690,8 +2176,8 @@
 
       <!-- Muted Domains -->
       <section class="setting">
-        <h2>Muted Domains</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_dom_heading">Muted Domains</h2>
+        <p class="section-description" data-i18n="opt_dom_desc">
           Hide posts linking to specific domains. Useful for filtering clickbait
           sites or content from sources you want to avoid. Supports wildcard
           subdomains (e.g., *.example.com).
@@ -1703,25 +2189,36 @@
               type="text"
               id="domain-input"
               class="text-input"
+              data-i18n-placeholder="opt_dom_placeholder"
               placeholder="example.com or *.example.com"
             />
-            <button class="button" id="add-domain">Mute</button>
+            <button class="button" id="add-domain" data-i18n="opt_mute_sub_btn">
+              Mute
+            </button>
           </div>
 
           <ul id="domain-list" class="tag-list">
             <!-- Populated by JS -->
           </ul>
 
-          <p class="empty-state" id="domain-empty">
+          <p class="empty-state" id="domain-empty" data-i18n="opt_dom_empty">
             No muted domains. All post domains will be shown.
           </p>
         </div>
 
         <div class="muted-actions">
-          <button class="button secondary" id="export-domains">
+          <button
+            class="button secondary"
+            id="export-domains"
+            data-i18n="opt_export_list"
+          >
             📥 Export List
           </button>
-          <button class="button secondary" id="import-domains">
+          <button
+            class="button secondary"
+            id="import-domains"
+            data-i18n="opt_import_list"
+          >
             📤 Import List
           </button>
           <input
@@ -1733,14 +2230,48 @@
         </div>
       </section>
 
+      <!-- Community Lists -->
+      <section class="setting">
+        <h2 data-i18n="opt_comm_list_heading">Community Lists</h2>
+        <p class="section-description" data-i18n="opt_comm_list_desc">
+          Subscribe to shared filter lists curated by the community.
+        </p>
+
+        <div class="option-row">
+          <button
+            class="button primary"
+            id="browse-marketplace"
+            data-i18n="opt_comm_browse"
+          >
+            Browse Marketplace
+          </button>
+        </div>
+
+        <div class="whitelist-container">
+          <h3 data-i18n="opt_comm_subs_heading">Your Subscriptions</h3>
+          <ul id="subscription-list" class="tag-list">
+            <!-- Populated by JS -->
+          </ul>
+          <p
+            class="empty-state"
+            id="subscriptions-empty"
+            data-i18n="opt_comm_subs_empty"
+          >
+            No subscriptions yet. Visit the marketplace to find lists.
+          </p>
+        </div>
+      </section>
+
       <!-- Reading History -->
       <section
         class="setting"
         role="region"
         aria-labelledby="reading-history-heading"
       >
-        <h2 id="reading-history-heading">Reading History</h2>
-        <p class="section-description">
+        <h2 id="reading-history-heading" data-i18n="opt_hist_heading">
+          Reading History
+        </h2>
+        <p class="section-description" data-i18n="opt_hist_desc">
           Track posts you've read for easy reference. All history is stored
           locally and never leaves your browser.
         </p>
@@ -1748,9 +2279,9 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="reading-history-enabled" />
-            <span>Enable reading history</span>
+            <span data-i18n="opt_hist_enable">Enable reading history</span>
           </label>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_hist_enable_help">
             Track which posts you've viewed. History is stored locally only.
           </p>
         </div>
@@ -1758,31 +2289,39 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="show-visited-indicator" />
-            <span>Show visited indicator on posts</span>
+            <span data-i18n="opt_hist_indicator"
+              >Show visited indicator on posts</span
+            >
           </label>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_hist_indicator_help">
             Display a checkmark (✓) next to posts you've already read.
           </p>
         </div>
 
         <div class="option-row">
-          <label for="history-retention-days">Keep history for</label>
+          <label for="history-retention-days" data-i18n="opt_hist_retention"
+            >Keep history for</label
+          >
           <select id="history-retention-days" class="select-input">
-            <option value="7">7 days</option>
-            <option value="14">14 days</option>
-            <option value="30">30 days</option>
-            <option value="60">60 days</option>
-            <option value="90">90 days</option>
+            <option value="7" data-i18n="opt_hist_days_7">7 days</option>
+            <option value="14" data-i18n="opt_hist_days_14">14 days</option>
+            <option value="30" data-i18n="opt_hist_days_30">30 days</option>
+            <option value="60" data-i18n="opt_hist_days_60">60 days</option>
+            <option value="90" data-i18n="opt_hist_days_90">90 days</option>
           </select>
         </div>
 
         <div class="stats-grid" style="margin-top: 15px">
           <div class="stat-card">
-            <div class="stat-label">Posts in History</div>
+            <div class="stat-label" data-i18n="opt_hist_stat_posts">
+              Posts in History
+            </div>
             <div class="stat-value" id="history-entry-count">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Most Recent</div>
+            <div class="stat-label" data-i18n="opt_hist_stat_recent">
+              Most Recent
+            </div>
             <div class="stat-value stat-value-small" id="history-last-viewed">
               Never
             </div>
@@ -1791,12 +2330,13 @@
 
         <!-- History Table -->
         <div class="subsection">
-          <h3>Recent History</h3>
+          <h3 data-i18n="opt_hist_list_heading">Recent History</h3>
           <div class="search-box">
             <input
               type="text"
               id="history-search"
               class="search-input"
+              data-i18n-placeholder="opt_hist_search"
               placeholder="Search history..."
             />
           </div>
@@ -1804,30 +2344,47 @@
             <table id="history-table" class="data-table">
               <thead>
                 <tr>
-                  <th>Post</th>
-                  <th>Subreddit</th>
-                  <th>Viewed</th>
-                  <th>Actions</th>
+                  <th data-i18n="opt_hist_th_post">Post</th>
+                  <th data-i18n="opt_sort_th_sub">Subreddit</th>
+                  <th data-i18n="opt_hist_th_viewed">Viewed</th>
+                  <th data-i18n="opt_sort_th_actions">Actions</th>
                 </tr>
               </thead>
               <tbody id="history-tbody">
                 <!-- History entries will be inserted here -->
               </tbody>
             </table>
-            <p id="history-empty" class="empty-message" style="display: none">
+            <p
+              id="history-empty"
+              class="empty-message"
+              style="display: none"
+              data-i18n="opt_hist_empty"
+            >
               No posts in reading history yet.
             </p>
           </div>
         </div>
 
         <div class="button-row" style="margin-top: 15px">
-          <button id="clear-reading-history" class="secondary-button">
+          <button
+            id="clear-reading-history"
+            class="secondary-button"
+            data-i18n="opt_hist_clear"
+          >
             Clear All History
           </button>
-          <button id="export-reading-history" class="secondary-button">
+          <button
+            id="export-reading-history"
+            class="secondary-button"
+            data-i18n="opt_hist_export"
+          >
             Export History
           </button>
-          <button id="import-reading-history-btn" class="secondary-button">
+          <button
+            id="import-reading-history-btn"
+            class="secondary-button"
+            data-i18n="opt_hist_import"
+          >
             Import History
           </button>
           <input
@@ -1845,8 +2402,10 @@
         role="region"
         aria-labelledby="nsfw-controls-heading"
       >
-        <h2 id="nsfw-controls-heading">NSFW Content Controls</h2>
-        <p class="section-description">
+        <h2 id="nsfw-controls-heading" data-i18n="opt_nsfw_heading">
+          NSFW Content Controls
+        </h2>
+        <p class="section-description" data-i18n="opt_nsfw_desc">
           Control how NSFW (Not Safe For Work) content is displayed on Reddit.
           You can blur, hide, or show NSFW posts, with options for per-subreddit
           exceptions.
@@ -1855,33 +2414,49 @@
         <div class="option-row">
           <label class="checkbox-label">
             <input type="checkbox" id="nsfw-controls-enabled" />
-            <span>Enable NSFW content controls</span>
+            <span data-i18n="opt_nsfw_enable"
+              >Enable NSFW content controls</span
+            >
           </label>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_nsfw_enable_help">
             When disabled, NSFW content is shown normally (Reddit's default
             behavior).
           </p>
         </div>
 
         <div class="option-row" id="nsfw-visibility-row">
-          <label for="nsfw-visibility">NSFW Visibility</label>
+          <label for="nsfw-visibility" data-i18n="opt_nsfw_vis"
+            >NSFW Visibility</label
+          >
           <select
             id="nsfw-visibility"
             class="select-input"
             aria-describedby="nsfw-visibility-desc"
           >
-            <option value="show">Show (no filtering)</option>
-            <option value="blur">Blur (images are blurred)</option>
-            <option value="hide">Hide (posts are hidden)</option>
+            <option value="show" data-i18n="opt_nsfw_vis_show">
+              Show (no filtering)
+            </option>
+            <option value="blur" data-i18n="opt_nsfw_vis_blur">
+              Blur (images are blurred)
+            </option>
+            <option value="hide" data-i18n="opt_nsfw_vis_hide">
+              Hide (posts are hidden)
+            </option>
           </select>
-          <p class="option-description" id="nsfw-visibility-desc">
+          <p
+            class="option-description"
+            id="nsfw-visibility-desc"
+            data-i18n="opt_nsfw_vis_desc"
+          >
             Choose how to handle NSFW content. "Blur" obscures images but keeps
             posts visible. "Hide" removes NSFW posts from your feed entirely.
           </p>
         </div>
 
         <div class="option-row" id="nsfw-blur-options">
-          <label for="nsfw-blur-intensity">Blur Intensity</label>
+          <label for="nsfw-blur-intensity" data-i18n="opt_nsfw_blur"
+            >Blur Intensity</label
+          >
           <div class="range-container">
             <input
               type="range"
@@ -1893,7 +2468,7 @@
             />
             <span id="nsfw-blur-intensity-value">10px</span>
           </div>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_nsfw_blur_help">
             How much to blur NSFW images. Higher values = more blur.
           </p>
         </div>
@@ -1901,9 +2476,9 @@
         <div class="option-row" id="nsfw-hover-row">
           <label class="checkbox-label">
             <input type="checkbox" id="nsfw-reveal-hover" checked />
-            <span>Reveal on hover</span>
+            <span data-i18n="opt_nsfw_hover">Reveal on hover</span>
           </label>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_nsfw_hover_help">
             Temporarily reveal blurred NSFW content when hovering over it.
           </p>
         </div>
@@ -1911,9 +2486,9 @@
         <div class="option-row" id="nsfw-warning-row">
           <label class="checkbox-label">
             <input type="checkbox" id="nsfw-show-warning" checked />
-            <span>Show NSFW warning overlay</span>
+            <span data-i18n="opt_nsfw_warning">Show NSFW warning overlay</span>
           </label>
-          <p class="help-text">
+          <p class="help-text" data-i18n="opt_nsfw_warning_help">
             Display a "18+ NSFW" badge on blurred thumbnails. Click to
             temporarily reveal.
           </p>
@@ -1921,8 +2496,8 @@
 
         <!-- NSFW Allowed Subreddits -->
         <div class="subsection">
-          <h3>Allowed Subreddits</h3>
-          <p class="help-text">
+          <h3 data-i18n="opt_nsfw_allowed_heading">Allowed Subreddits</h3>
+          <p class="help-text" data-i18n="opt_nsfw_allowed_help">
             NSFW content will always be shown (not blurred/hidden) in these
             subreddits. Use this for subreddits you trust or where NSFW tagging
             is inconsistent.
@@ -1931,22 +2506,38 @@
             <input
               type="text"
               id="nsfw-allowed-subreddit"
+              data-i18n-placeholder="opt_nsfw_allowed_placeholder"
+              data-i18n-aria-label="opt_nsfw_allowed_placeholder"
               placeholder="Enter subreddit name (e.g., art)"
               class="text-input"
               aria-label="Subreddit name to allow"
             />
-            <button id="add-nsfw-allowed" class="primary-button">Add</button>
+            <button
+              id="add-nsfw-allowed"
+              class="primary-button"
+              data-i18n="opt_preset_add_btn"
+            >
+              Add
+            </button>
           </div>
           <div class="tag-list" id="nsfw-allowed-list">
             <!-- Populated by JavaScript -->
           </div>
-          <p id="nsfw-allowed-empty" class="empty-message">
+          <p
+            id="nsfw-allowed-empty"
+            class="empty-message"
+            data-i18n="opt_nsfw_allowed_empty"
+          >
             No subreddits added yet. NSFW controls apply everywhere.
           </p>
         </div>
 
         <div class="button-row" style="margin-top: 15px">
-          <button id="clear-nsfw-allowed" class="secondary-button">
+          <button
+            id="clear-nsfw-allowed"
+            class="secondary-button"
+            data-i18n="opt_nsfw_clear_allowed"
+          >
             Clear All Allowed Subreddits
           </button>
         </div>
@@ -1954,8 +2545,8 @@
 
       <!-- Storage Management -->
       <section class="setting">
-        <h2>Storage Management</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_store_heading">Storage Management</h2>
+        <p class="section-description" data-i18n="opt_store_desc">
           Monitor storage usage and optimize performance. The extension uses
           both local storage and sync storage (when enabled).
         </p>
@@ -1975,7 +2566,9 @@
           <div class="storage-meters">
             <div class="storage-meter-group">
               <div class="meter-header">
-                <span class="meter-label">Local Storage</span>
+                <span class="meter-label" data-i18n="opt_store_local"
+                  >Local Storage</span
+                >
                 <span class="meter-value" id="local-storage-value"
                   >0 KB / 5 MB</span
                 >
@@ -1991,7 +2584,9 @@
 
             <div class="storage-meter-group">
               <div class="meter-header">
-                <span class="meter-label">Sync Storage</span>
+                <span class="meter-label" data-i18n="opt_store_sync"
+                  >Sync Storage</span
+                >
                 <span class="meter-value" id="sync-storage-value"
                   >0 KB / 100 KB</span
                 >
@@ -2008,7 +2603,7 @@
 
           <!-- Storage Breakdown -->
           <div class="storage-breakdown">
-            <h3>Storage Breakdown</h3>
+            <h3 data-i18n="opt_store_breakdown">Storage Breakdown</h3>
             <div class="breakdown-grid" id="storage-breakdown-grid">
               <!-- Populated by JavaScript -->
             </div>
@@ -2016,30 +2611,42 @@
 
           <!-- Item Counts -->
           <div class="storage-counts">
-            <h3>Feature Usage</h3>
+            <h3 data-i18n="opt_store_usage">Feature Usage</h3>
             <div class="counts-grid">
               <div class="count-item">
-                <span class="count-label">User Tags</span>
+                <span class="count-label" data-i18n="opt_tags_heading"
+                  >User Tags</span
+                >
                 <span class="count-value" id="count-user-tags">0/500</span>
               </div>
               <div class="count-item">
-                <span class="count-label">Muted Users</span>
+                <span class="count-label" data-i18n="opt_mute_user_heading"
+                  >Muted Users</span
+                >
                 <span class="count-value" id="count-muted-users">0/500</span>
               </div>
               <div class="count-item">
-                <span class="count-label">Sort Preferences</span>
+                <span class="count-label" data-i18n="opt_sort_heading"
+                  >Sort Preferences</span
+                >
                 <span class="count-value" id="count-sort-prefs">0/100</span>
               </div>
               <div class="count-item">
-                <span class="count-label">Scroll Positions</span>
+                <span class="count-label" data-i18n="opt_scroll_heading"
+                  >Scroll Positions</span
+                >
                 <span class="count-value" id="count-scroll-pos">0/100</span>
               </div>
               <div class="count-item">
-                <span class="count-label">Layout Presets</span>
+                <span class="count-label" data-i18n="opt_preset_heading"
+                  >Layout Presets</span
+                >
                 <span class="count-value" id="count-presets">0/20</span>
               </div>
               <div class="count-item">
-                <span class="count-label">Muted Subreddits</span>
+                <span class="count-label" data-i18n="opt_mute_sub_heading"
+                  >Muted Subreddits</span
+                >
                 <span class="count-value" id="count-muted-subs">0/100</span>
               </div>
             </div>
@@ -2047,19 +2654,31 @@
 
           <!-- Cleanup Actions -->
           <div class="storage-actions">
-            <h3>Optimization</h3>
-            <p class="help-text">
+            <h3 data-i18n="opt_store_opt">Optimization</h3>
+            <p class="help-text" data-i18n="opt_store_opt_help">
               Clean up expired data to free storage space and improve
               performance.
             </p>
             <div class="button-row">
-              <button id="run-storage-cleanup" class="button">
+              <button
+                id="run-storage-cleanup"
+                class="button"
+                data-i18n="opt_store_cleanup"
+              >
                 Run Cleanup
               </button>
-              <button id="run-storage-maintenance" class="secondary-button">
+              <button
+                id="run-storage-maintenance"
+                class="secondary-button"
+                data-i18n="opt_store_maint"
+              >
                 Full Maintenance
               </button>
-              <button id="refresh-storage-stats" class="secondary-button">
+              <button
+                id="refresh-storage-stats"
+                class="secondary-button"
+                data-i18n="opt_store_refresh"
+              >
                 Refresh Stats
               </button>
             </div>
@@ -2074,8 +2693,8 @@
 
       <!-- URL Testing Tool -->
       <section class="setting">
-        <h2>Test a URL</h2>
-        <p class="section-description">
+        <h2 data-i18n="opt_url_heading">Test a URL</h2>
+        <p class="section-description" data-i18n="opt_url_desc">
           Check if a URL would be redirected before visiting it.
         </p>
 
@@ -2085,9 +2704,12 @@
               type="url"
               id="test-url-input"
               class="text-input"
+              data-i18n-placeholder="opt_url_placeholder"
               placeholder="https://reddit.com/r/news"
             />
-            <button class="button" id="test-url-btn">Test</button>
+            <button class="button" id="test-url-btn" data-i18n="opt_url_btn">
+              Test
+            </button>
           </div>
 
           <div class="test-result" id="test-result" hidden>
@@ -2104,25 +2726,39 @@
       <section class="setting">
         <div class="setting-row">
           <div class="setting-info">
-            <label>Keyboard Shortcut</label>
-            <p class="description">
+            <label data-i18n="opt_kb_heading">Keyboard Shortcut</label>
+            <p class="description" data-i18n="opt_kb_desc">
               Toggle redirect on/off with
               <kbd id="shortcut-display">Alt+Shift+R</kbd>
             </p>
           </div>
-          <a href="#" id="customize-shortcut" class="button">Customize</a>
+          <a
+            href="#"
+            id="customize-shortcut"
+            class="button"
+            data-i18n="opt_kb_customize"
+            >Customize</a
+          >
         </div>
       </section>
 
       <!-- Backup & Restore -->
       <section class="setting">
-        <h2>Backup & Restore</h2>
+        <h2 data-i18n="opt_backup_heading">Backup & Restore</h2>
 
         <div class="backup-actions">
-          <button class="button" id="export-settings">
+          <button
+            class="button"
+            id="export-settings"
+            data-i18n="opt_backup_export"
+          >
             📤 Export Settings
           </button>
-          <button class="button secondary" id="import-settings">
+          <button
+            class="button secondary"
+            id="import-settings"
+            data-i18n="opt_backup_import"
+          >
             📥 Import Settings
           </button>
         </div>
@@ -2134,7 +2770,7 @@
           hidden
         />
 
-        <p class="help-text">
+        <p class="help-text" data-i18n="opt_backup_help">
           Export your settings to a JSON file. Import to restore or share
           configurations. Statistics are not included in exports.
         </p>
@@ -2142,11 +2778,13 @@
 
       <!-- Sync Settings -->
       <section class="setting">
-        <h2>Sync Settings</h2>
+        <h2 data-i18n="opt_sync_heading">Sync Settings</h2>
         <div class="setting-row">
           <div class="setting-info">
-            <label for="sync-toggle">Sync across browsers</label>
-            <p class="description">
+            <label for="sync-toggle" data-i18n="opt_sync_enable"
+              >Sync across browsers</label
+            >
+            <p class="description" data-i18n="opt_sync_enable_desc">
               Sync your preferences across Chrome/Edge browsers signed into the
               same account. Statistics are never synced.
             </p>
@@ -2163,14 +2801,14 @@
 
       <!-- Keyboard Shortcuts -->
       <section class="setting">
-        <h2>Keyboard Shortcuts</h2>
+        <h2 data-i18n="opt_kb_heading">Keyboard Shortcuts</h2>
 
         <div class="setting-row">
           <div class="setting-info">
-            <label for="keyboard-shortcuts-enabled"
+            <label for="keyboard-shortcuts-enabled" data-i18n="opt_kb_enable"
               >Enable keyboard shortcuts</label
             >
-            <p class="description">
+            <p class="description" data-i18n="opt_kb_enable_desc">
               Use keyboard shortcuts to quickly navigate and control the
               extension
             </p>
@@ -2185,8 +2823,10 @@
           <!-- Chord timeout setting -->
           <div class="setting-row">
             <div class="setting-info">
-              <label for="chord-timeout">Chord timeout (ms)</label>
-              <p class="description">
+              <label for="chord-timeout" data-i18n="opt_kb_timeout"
+                >Chord timeout (ms)</label
+              >
+              <p class="description" data-i18n="opt_kb_timeout_desc">
                 Time to wait between keys in chord shortcuts (e.g., "g g")
               </p>
             </div>
@@ -2211,7 +2851,9 @@
             class="warning-banner"
             style="display: none"
           >
-            <strong>⚠️ Keyboard Shortcut Conflicts Detected</strong>
+            <strong data-i18n="opt_kb_conflict"
+              >⚠️ Keyboard Shortcut Conflicts Detected</strong
+            >
             <p id="keyboard-conflicts-message"></p>
           </div>
 
@@ -2220,11 +2862,11 @@
             <table class="shortcuts-table">
               <thead>
                 <tr>
-                  <th>Action</th>
-                  <th>Keys</th>
-                  <th>Context</th>
-                  <th>Enabled</th>
-                  <th>Actions</th>
+                  <th data-i18n="opt_kb_th_action">Action</th>
+                  <th data-i18n="opt_kb_th_keys">Keys</th>
+                  <th data-i18n="opt_kb_th_context">Context</th>
+                  <th data-i18n="opt_kb_th_enabled">Enabled</th>
+                  <th data-i18n="opt_sort_th_actions">Actions</th>
                 </tr>
               </thead>
               <tbody id="shortcuts-table-body">
@@ -2235,13 +2877,25 @@
 
           <!-- Action buttons -->
           <div class="keyboard-shortcuts-actions">
-            <button id="keyboard-export-btn" class="secondary-button">
+            <button
+              id="keyboard-export-btn"
+              class="secondary-button"
+              data-i18n="opt_kb_export"
+            >
               Export Shortcuts
             </button>
-            <button id="keyboard-import-btn" class="secondary-button">
+            <button
+              id="keyboard-import-btn"
+              class="secondary-button"
+              data-i18n="opt_kb_import"
+            >
               Import Shortcuts
             </button>
-            <button id="keyboard-reset-all-btn" class="danger-button">
+            <button
+              id="keyboard-reset-all-btn"
+              class="danger-button"
+              data-i18n="opt_kb_reset"
+            >
               Reset All to Defaults
             </button>
           </div>
@@ -2253,7 +2907,7 @@
           />
         </div>
 
-        <p class="help-text">
+        <p class="help-text" data-i18n="opt_kb_help">
           Customize keyboard shortcuts to match your preferences. Press Shift+/
           on any Reddit page to see the help overlay.
         </p>
@@ -2263,30 +2917,36 @@
       <div id="keyboard-edit-modal" class="modal" style="display: none">
         <div class="modal-content">
           <div class="modal-header">
-            <h3>Edit Keyboard Shortcut</h3>
+            <h3 data-i18n="opt_kb_modal_heading">Edit Keyboard Shortcut</h3>
             <button class="modal-close" id="keyboard-edit-close">
               &times;
             </button>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label>Action</label>
+              <label data-i18n="opt_kb_th_action">Action</label>
               <p
                 id="keyboard-edit-action-name"
                 class="keyboard-action-display"
               ></p>
             </div>
             <div class="form-group">
-              <label for="keyboard-edit-keys">Keys</label>
+              <label for="keyboard-edit-keys" data-i18n="opt_kb_modal_keys"
+                >Keys</label
+              >
               <div class="keyboard-capture-container">
                 <input
                   type="text"
                   id="keyboard-edit-keys"
                   class="keyboard-capture-input"
+                  data-i18n-placeholder="opt_kb_modal_capture_placeholder"
                   placeholder="Press keys or type combination..."
                   autocomplete="off"
                 />
-                <p class="keyboard-capture-hint">
+                <p
+                  class="keyboard-capture-hint"
+                  data-i18n="opt_kb_modal_capture_hint"
+                >
                   Click and press your desired key combination, or type it
                   manually (e.g., "Ctrl+K", "G G")
                 </p>
@@ -2294,7 +2954,7 @@
               <p id="keyboard-edit-validation" class="validation-message"></p>
             </div>
             <div class="form-group">
-              <label>Context</label>
+              <label data-i18n="opt_kb_modal_context">Context</label>
               <p
                 id="keyboard-edit-context"
                 class="keyboard-context-display"
@@ -2303,21 +2963,100 @@
             <div class="form-group">
               <label class="checkbox-label">
                 <input type="checkbox" id="keyboard-edit-enabled" />
-                Enable this shortcut
+                <span data-i18n="opt_kb_modal_enable"
+                  >Enable this shortcut</span
+                >
               </label>
             </div>
           </div>
           <div class="modal-footer">
-            <button id="keyboard-edit-save" class="primary-button">Save</button>
-            <button id="keyboard-edit-reset" class="secondary-button">
+            <button
+              id="keyboard-edit-save"
+              class="primary-button"
+              data-i18n="opt_preset_save"
+            >
+              Save
+            </button>
+            <button
+              id="keyboard-edit-reset"
+              class="secondary-button"
+              data-i18n="opt_kb_modal_reset"
+            >
               Reset to Default
             </button>
-            <button id="keyboard-edit-cancel" class="secondary-button">
+            <button
+              id="keyboard-edit-cancel"
+              class="secondary-button"
+              data-i18n="opt_preset_cancel"
+            >
               Cancel
             </button>
           </div>
         </div>
       </div>
+
+      <!-- Sustainability & Support -->
+      <section
+        class="setting"
+        role="region"
+        aria-labelledby="sustainability-heading"
+      >
+        <h2 id="sustainability-heading" data-i18n="opt_sus_heading">
+          Sustainability & Support
+        </h2>
+        <p class="section-description" data-i18n="opt_sus_desc">
+          Old Reddit Redirect is free and open source. Supporting the project
+          helps ensure long-term maintenance.
+        </p>
+
+        <div class="option-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="age-verification-enabled" />
+            <span data-i18n="opt_sus_age"
+              >Enable age verification reminder</span
+            >
+          </label>
+          <p class="option-description" data-i18n="opt_sus_age_desc">
+            Show a confirmation overlay when visiting NSFW content. Helps
+            prevent accidental viewing of adult content.
+          </p>
+        </div>
+
+        <div class="support-links">
+          <h3 data-i18n="opt_sus_dev_heading">Support Development</h3>
+          <p data-i18n="opt_sus_dev_text">
+            If you find this extension useful, please consider supporting its
+            development:
+          </p>
+          <div class="support-buttons">
+            <a
+              href="https://ko-fi.com/tomjameswatson"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="button support-btn kofi-btn"
+              data-i18n="opt_sus_kofi"
+            >
+              ☕ Buy me a coffee
+            </a>
+            <a
+              href="https://github.com/tom-james-watson/old-reddit-redirect"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="button support-btn github-btn"
+              data-i18n="opt_sus_github"
+            >
+              ⭐ Star on GitHub
+            </a>
+            <button
+              id="report-issue-btn"
+              class="button support-btn secondary-btn"
+              data-i18n="opt_sus_report"
+            >
+              🐛 Report Issue
+            </button>
+          </div>
+        </div>
+      </section>
 
       <!-- Footer -->
       <footer>
@@ -2325,12 +3064,14 @@
           <a
             href="https://github.com/tom-james-watson/old-reddit-redirect"
             target="_blank"
+            data-i18n="opt_footer_view"
             >View on GitHub</a
           >
           &bull;
           <a
             href="https://github.com/tom-james-watson/old-reddit-redirect/blob/master/PRIVACY.md"
             target="_blank"
+            data-i18n="opt_footer_privacy"
             >Privacy Policy</a
           >
         </p>
@@ -2346,9 +3087,9 @@
     <script src="../../core/storage-operations.js"></script>
     <script src="../../core/storage-migration.js"></script>
     <script src="../../core/storage.js"></script>
+    <script src="../../core/i18n.js"></script>
     <script src="../../content/suggestions.js"></script>
     <script src="../../core/frontends.js"></script>
-    <script src="options-constants.js"></script>
     <script src="options.js"></script>
   </body>
 </html>

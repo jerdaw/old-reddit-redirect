@@ -1,0 +1,40 @@
+{
+  "lists": [
+    {
+      "id": "list-001",
+      "name": "No Politics",
+      "description": "Filters out common political subreddits and keywords.",
+      "author": "CommunityMod",
+      "type": "subreddits",
+      "url": "https://raw.githubusercontent.com/tom-james-watson/old-reddit-redirect/master/assets/lists/no-politics.json",
+      "stats": { "subscribers": 1250, "rating": 4.8 }
+    },
+    {
+      "id": "list-002",
+      "name": "Spoiler Guard",
+      "description": "Hides posts with spoiler keywords in titles.",
+      "author": "MovieBuff",
+      "type": "keywords",
+      "url": "https://raw.githubusercontent.com/tom-james-watson/old-reddit-redirect/master/assets/lists/spoilers.json",
+      "stats": { "subscribers": 850, "rating": 4.5 }
+    },
+    {
+      "id": "list-003",
+      "name": "Clean & Safe",
+      "description": "Filters NSFW domains and risky keywords.",
+      "author": "SafeSurf",
+      "type": "domains",
+      "url": "https://raw.githubusercontent.com/tom-james-watson/old-reddit-redirect/master/assets/lists/safe-domains.json",
+      "stats": { "subscribers": 2100, "rating": 4.9 }
+    },
+    {
+      "id": "list-004",
+      "name": "Crypto Free",
+      "description": "Hides cryptocurrency related subreddits.",
+      "author": "NoCoiner",
+      "type": "subreddits",
+      "url": "https://raw.githubusercontent.com/tom-james-watson/old-reddit-redirect/master/assets/lists/no-crypto.json",
+      "stats": { "subscribers": 540, "rating": 4.2 }
+    }
+  ]
+}

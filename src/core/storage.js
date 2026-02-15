@@ -705,6 +705,23 @@
     },
 
     /**
+     * Get i18n preferences
+     * @returns {Promise<Object>}
+     */
+    async getI18n() {
+      return this.get("i18n", DEFAULTS.i18n);
+    },
+
+    /**
+     * Set i18n preferences
+     * @param {Object} prefs
+     * @returns {Promise<void>}
+     */
+    async setI18n(prefs) {
+      return this.set("i18n", prefs);
+    },
+
+    /**
      * Get sync configuration
      * @returns {Promise<Object>}
      */
@@ -2395,6 +2412,91 @@
         this.setSortPreferences.bind(this),
         this.cleanupOldScrollPositions.bind(this)
       );
+    },
+
+    /**
+     * Get compliance settings
+     * @returns {Promise<Object>}
+     */
+    async getCompliance() {
+      return this.get("compliance", DEFAULTS.compliance);
+    },
+
+    /**
+     * Set compliance settings
+     * @param {Object} compliance
+     * @returns {Promise<void>}
+     */
+    async setCompliance(compliance) {
+      return this.set("compliance", compliance);
+    },
+
+    /**
+     * Get breadcrumbs settings
+     * @returns {Promise<Object>}
+     */
+    async getBreadcrumbs() {
+      return this.get("breadcrumbs", DEFAULTS.breadcrumbs);
+    },
+
+    /**
+     * Set breadcrumbs settings
+     * @param {Object} breadcrumbs
+     * @returns {Promise<void>}
+     */
+    async setBreadcrumbs(breadcrumbs) {
+      return this.set("breadcrumbs", breadcrumbs);
+    },
+
+    /**
+     * Get comment search settings
+     * @returns {Promise<Object>}
+     */
+    async getCommentSearch() {
+      return this.get("commentSearch", DEFAULTS.commentSearch);
+    },
+
+    /**
+     * Set comment search settings
+     * @param {Object} commentSearch
+     * @returns {Promise<void>}
+     */
+    async setCommentSearch(commentSearch) {
+      return this.set("commentSearch", commentSearch);
+    },
+
+    /**
+     * Get bookmarks settings
+     * @returns {Promise<Object>}
+     */
+    async getBookmarks() {
+      return this.get("bookmarks", DEFAULTS.bookmarks);
+    },
+
+    /**
+     * Set bookmarks settings
+     * @param {Object} bookmarks
+     * @returns {Promise<void>}
+     */
+    async setBookmarks(bookmarks) {
+      return this.set("bookmarks", bookmarks);
+    },
+
+    /**
+     * Get discovery settings
+     * @returns {Promise<Object>}
+     */
+    async getDiscovery() {
+      return this.get("discovery", DEFAULTS.discovery);
+    },
+
+    /**
+     * Set discovery settings
+     * @param {Object} discovery
+     * @returns {Promise<void>}
+     */
+    async setDiscovery(discovery) {
+      return this.set("discovery", discovery);
     },
   };
 

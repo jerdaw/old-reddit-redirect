@@ -3,22 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Old Reddit Redirect</title>
+    <title data-i18n="extName">Old Reddit Redirect</title>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <div
       class="popup-container"
       role="main"
+      data-i18n-aria-label="popup_container_aria"
       aria-label="Old Reddit Redirect popup"
     >
       <header class="popup-header" role="banner">
         <img
           src="img/icon32.png"
+          data-i18n-alt="popup_logo_alt"
           alt="Old Reddit Redirect logo"
           class="popup-logo"
         />
-        <h1>Old Reddit Redirect</h1>
+        <h1 data-i18n="extName">Old Reddit Redirect</h1>
       </header>
 
       <main class="popup-main">
@@ -29,7 +31,12 @@
           aria-labelledby="toggle-label"
         >
           <label class="toggle-row" id="toggle-label-container">
-            <span class="toggle-label" id="toggle-label">Enable Redirect</span>
+            <span
+              class="toggle-label"
+              id="toggle-label"
+              data-i18n="popup_enableRedirect"
+              >Enable Redirect</span
+            >
             <div
               class="switch"
               role="switch"
@@ -45,7 +52,12 @@
               <span class="slider" aria-hidden="true"></span>
             </div>
           </label>
-          <p class="toggle-status" id="status-text" aria-live="polite">
+          <p
+            class="toggle-status"
+            id="status-text"
+            aria-live="polite"
+            data-i18n="popup_statusRedirecting"
+          >
             Redirecting to old.reddit.com
           </p>
         </section>
@@ -58,16 +70,23 @@
           role="region"
           aria-labelledby="temp-disable-heading"
         >
-          <h2 id="temp-disable-heading" class="visually-hidden">
+          <h2
+            id="temp-disable-heading"
+            class="visually-hidden"
+            data-i18n="popup_tempDisableStatus"
+          >
             Temporary Disable Status
           </h2>
           <p class="countdown-text" aria-live="polite" aria-atomic="true">
-            Re-enabling in <span id="countdown">0:00</span>
+            <span data-i18n="popup_reenablingIn">Re-enabling in</span>
+            <span id="countdown">0:00</span>
           </p>
           <button
             class="cancel-button"
             id="cancel-temp-disable"
+            data-i18n-aria-label="popup_cancel_aria"
             aria-label="Cancel temporary disable and re-enable redirect"
+            data-i18n="popup_cancel"
           >
             Cancel
           </button>
@@ -80,20 +99,35 @@
           role="region"
           aria-labelledby="duration-heading"
         >
-          <h2 id="duration-heading" class="visually-hidden">
+          <h2
+            id="duration-heading"
+            class="visually-hidden"
+            data-i18n="popup_tempDisableHeading"
+          >
             Temporary Disable
           </h2>
-          <label for="disable-duration">Disable for:</label>
+          <label for="disable-duration" data-i18n="popup_disableFor"
+            >Disable for:</label
+          >
           <select
             id="disable-duration"
             class="duration-select"
+            data-i18n-aria-label="popup_duration_select_aria"
             aria-label="Select duration to temporarily disable redirect"
           >
-            <option value="">Choose duration...</option>
-            <option value="300000">5 minutes</option>
-            <option value="900000">15 minutes</option>
-            <option value="1800000">30 minutes</option>
-            <option value="3600000">1 hour</option>
+            <option value="" data-i18n="popup_durationChoose">
+              Choose duration...
+            </option>
+            <option value="300000" data-i18n="popup_duration5m">
+              5 minutes
+            </option>
+            <option value="900000" data-i18n="popup_duration15m">
+              15 minutes
+            </option>
+            <option value="1800000" data-i18n="popup_duration30m">
+              30 minutes
+            </option>
+            <option value="3600000" data-i18n="popup_duration1h">1 hour</option>
           </select>
         </section>
 
@@ -106,24 +140,33 @@
           <h2 id="dark-mode-popup-heading" class="visually-hidden">
             Dark Mode
           </h2>
-          <label for="dark-mode-select">Dark Mode:</label>
+          <label for="dark-mode-select" data-i18n="popup_darkMode"
+            >Dark Mode:</label
+          >
           <select
             id="dark-mode-select"
             class="duration-select"
+            data-i18n-aria-label="popup_darkmode_select_aria"
             aria-label="Select dark mode theme"
           >
-            <option value="auto">Auto (follow system)</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-            <option value="oled">OLED Black</option>
-            <option value="high-contrast">High Contrast</option>
+            <option value="auto" data-i18n="popup_themeAuto">
+              Auto (follow system)
+            </option>
+            <option value="light" data-i18n="popup_themeLight">Light</option>
+            <option value="dark" data-i18n="popup_themeDark">Dark</option>
+            <option value="oled" data-i18n="popup_themeOLED">OLED Black</option>
+            <option value="high-contrast" data-i18n="popup_themeHighContrast">
+              High Contrast
+            </option>
           </select>
         </section>
 
         <!-- Per-Tab Toggle (only visible on Reddit pages) -->
         <section class="tab-toggle-section" id="tab-toggle-section" hidden>
           <label class="toggle-row secondary">
-            <span class="toggle-label">This tab only</span>
+            <span class="toggle-label" data-i18n="popup_thisTabOnly"
+              >This tab only</span
+            >
             <div class="switch secondary">
               <input type="checkbox" id="tab-toggle" checked />
               <span class="slider"></span>
@@ -135,22 +178,25 @@
         <section
           class="switch-tabs-section"
           role="region"
+          data-i18n-aria-label="popup_switch_tabs_section_aria"
           aria-label="Switch all Reddit tabs"
         >
           <div class="switch-tabs-row">
             <button
               class="action-btn switch-btn"
               id="switch-all-old"
+              data-i18n-aria-label="popup_switch_old_aria"
               aria-label="Switch all Reddit tabs to old Reddit"
             >
-              <span>All Tabs → Old</span>
+              <span data-i18n="popup_switchOld">All Tabs → Old</span>
             </button>
             <button
               class="action-btn switch-btn"
               id="switch-all-new"
+              data-i18n-aria-label="popup_switch_new_aria"
               aria-label="Switch all Reddit tabs to new Reddit"
             >
-              <span>All Tabs → New</span>
+              <span data-i18n="popup_switchNew">All Tabs → New</span>
             </button>
           </div>
         </section>
@@ -161,58 +207,100 @@
           role="region"
           aria-labelledby="stats-popup-heading"
         >
-          <h2 id="stats-popup-heading" class="visually-hidden">
+          <h2
+            id="stats-popup-heading"
+            class="visually-hidden"
+            data-i18n="popup_statsHeading"
+          >
             Redirect Statistics
           </h2>
           <div class="stat-item">
             <span
               class="stat-value"
               id="redirect-count"
+              data-i18n-aria-label="popup_redirect_count_aria"
               aria-label="Redirects today"
               >0</span
             >
-            <span class="stat-label" aria-hidden="true">redirects today</span>
+            <span
+              class="stat-label"
+              aria-hidden="true"
+              data-i18n="popup_statsToday"
+              >redirects today</span
+            >
           </div>
           <div class="stat-divider" aria-hidden="true"></div>
           <div class="stat-item">
             <span
               class="stat-value"
               id="total-count"
+              data-i18n-aria-label="popup_total_count_aria"
               aria-label="Total redirects"
               >0</span
             >
-            <span class="stat-label" aria-hidden="true">total</span>
+            <span
+              class="stat-label"
+              aria-hidden="true"
+              data-i18n="popup_statsTotal"
+              >total</span
+            >
           </div>
           <div class="stat-divider" aria-hidden="true"></div>
           <!-- Mini sparkline showing 7-day trend -->
           <div
             class="sparkline-container"
             role="img"
+            data-i18n-aria-label="popup_trend_chart_aria"
             aria-label="7-day redirect trend chart"
           >
             <div class="sparkline" id="mini-sparkline" aria-hidden="true">
               <!-- Populated by JS -->
             </div>
-            <span class="sparkline-label" aria-hidden="true">7-day trend</span>
+            <span
+              class="sparkline-label"
+              aria-hidden="true"
+              data-i18n="popup_statsTrend"
+              >7-day trend</span
+            >
           </div>
         </section>
 
         <!-- Action Buttons -->
-        <section class="actions-section" role="region" aria-label="Actions">
+        <section
+          class="actions-section"
+          role="region"
+          data-i18n-aria-label="popup_actions_section_aria"
+          aria-label="Actions"
+        >
           <button
             class="action-btn"
             id="open-options"
+            data-i18n-aria-label="popup_open_options_aria"
             aria-label="Open extension options page"
           >
             <span class="action-icon" aria-hidden="true">⚙️</span>
-            <span>Options</span>
+            <span data-i18n="popup_btnOptions">Options</span>
+          </button>
+          <button
+            class="action-btn secondary-action"
+            id="report-broken"
+            data-i18n-aria-label="popup_report_broken_aria"
+            aria-label="Report broken selector"
+          >
+            <span class="action-icon" aria-hidden="true">🚩</span>
+            <span data-i18n="popup_btnReportBroken">Report Broken</span>
           </button>
         </section>
       </main>
 
       <!-- Footer -->
       <footer class="popup-footer" role="contentinfo">
-        <span class="shortcut-hint" id="shortcut-hint" aria-live="polite">
+        <span
+          class="shortcut-hint"
+          id="shortcut-hint"
+          aria-live="polite"
+          data-i18n="popup_loadingShortcut"
+        >
           Loading shortcut...
         </span>
       </footer>
@@ -222,6 +310,7 @@
     <script src="../../core/storage-operations.js"></script>
     <script src="../../core/storage-migration.js"></script>
     <script src="../../core/storage.js"></script>
+    <script src="../../core/i18n.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

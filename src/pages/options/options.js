@@ -3,19 +3,118 @@
 (function () {
   const RULESET_ID = "ruleset_1";
 
-  // Import UI strings from external module
-  const UI_STRINGS = window.OptionsConstants?.UI_STRINGS || {};
+  function openIssueReporter(type = "bug", details = {}) {
+    const params = new URLSearchParams();
+    const repoUrl =
+      "https://github.com/tom-james-watson/old-reddit-redirect/issues/new";
 
-  // Check that options-constants.js loaded successfully
-  if (!window.OptionsConstants) {
-    console.error(
-      "[ORR] OptionsConstants not loaded! Ensure options-constants.js loads before options.js"
-    );
+    if (type === "selector") {
+      params.set("labels", "broken-selector");
+      params.set(
+        "title",
+        `[Selector] Broken selector on ${details.pageType || "unknown page"}`
+      );
+      params.set(
+        "body",
+        [
+          `**Page Type**: ${details.pageType || "N/A"}`,
+          `**Url**: ${details.url || "N/A"}`,
+          "",
+          "**Description of breakage**:",
+          "<!-- Describe what visual element is broken -->",
+        ].join("\n")
+      );
+    } else {
+      params.set("labels", "bug");
+      params.set(
+        "body",
+        [
+          "**Description**:",
+          "<!-- Describe the bug -->",
+          "",
+          "**Steps to Reproduce**:",
+          "1.",
+          "2.",
+          "3.",
+          "",
+          "**Expected Behavior**:",
+          "",
+          "**Actual Behavior**:",
+        ].join("\n")
+      );
+    }
+
+    window.open(`${repoUrl}?${params.toString()}`, "_blank");
   }
 
-  // Original UI_STRINGS object removed - now imported from options-constants.js
-  // This reduces options.js from 6,550 lines and improves maintainability
-  // All 110+ UI strings are defined in src/pages/options/options-constants.js
+  function msg(key, substitutions) {
+    if (window.ORRI18n?.msg) {
+      return window.ORRI18n.msg(key, substitutions);
+    }
+    return chrome.i18n.getMessage(key, substitutions) || key;
+  }
+
+  function applyDocumentLanguageAndDirection() {
+    if (window.ORRI18n?.applyDocumentLanguageAndDirection) {
+      window.ORRI18n.applyDocumentLanguageAndDirection();
+      return;
+    }
+
+    const uiLanguage = (chrome.i18n.getUILanguage?.() || "en").toLowerCase();
+    const rtlPrefixes = ["ar", "he", "fa", "ur", "ps", "dv", "ku", "yi"];
+    const isRtl = rtlPrefixes.some(
+      (prefix) => uiLanguage === prefix || uiLanguage.startsWith(`${prefix}-`)
+    );
+    document.documentElement.lang = uiLanguage;
+    document.documentElement.dir = isRtl ? "rtl" : "ltr";
+  }
+
+  function localizePage() {
+    if (window.ORRI18n?.localizePage) {
+      window.ORRI18n.localizePage();
+      return;
+    }
+
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      const key = el.getAttribute("data-i18n-placeholder");
+      const text = msg(key);
+      if (text !== key) {
+        el.placeholder = text;
+      }
+    });
+
+    document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+      const key = el.getAttribute("data-i18n-title");
+      const text = msg(key);
+      if (text !== key) {
+        el.title = text;
+      }
+    });
+
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+      const key = el.getAttribute("data-i18n-aria-label");
+      const text = msg(key);
+      if (text !== key) {
+        el.setAttribute("aria-label", text);
+      }
+    });
+
+    document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+      const key = el.getAttribute("data-i18n-alt");
+      const text = msg(key);
+      if (text !== key) {
+        el.setAttribute("alt", text);
+      }
+    });
+
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      const text = msg(key);
+      if (text !== key) {
+        el.textContent = text;
+      }
+    });
+  }
 
   // DOM elements
   const elements = {
@@ -31,6 +130,7 @@
     animateToggle: document.getElementById("animate-toggle"),
     showNotifications: document.getElementById("show-notifications"),
     showRedirectNotice: document.getElementById("show-redirect-notice"),
+    languageOverride: document.getElementById("language-override"),
     subredditInput: document.getElementById("subreddit-input"),
     addSubreddit: document.getElementById("add-subreddit"),
     whitelist: document.getElementById("whitelist"),
@@ -68,6 +168,9 @@
     inlineImages: document.getElementById("inline-images"),
     maxImageWidth: document.getElementById("max-image-width"),
     jumpToTopShortcut: document.getElementById("jump-to-top-shortcut"),
+    breadcrumbsEnabled: document.getElementById("breadcrumbs-enabled"),
+    commentSearchEnabled: document.getElementById("comment-search-enabled"),
+    bookmarksEnabled: document.getElementById("bookmarks-enabled"),
     // Comment Minimap
     minimapEnabled: document.getElementById("minimap-enabled"),
     minimapPosition: document.getElementById("minimap-position"),
@@ -95,6 +198,33 @@
     ),
     blockMorePosts: document.getElementById("block-more-posts"),
     mutedSubredditInput: document.getElementById("muted-subreddit-input"),
+    addMutedSubreddit: document.getElementById("add-muted-subreddit"),
+    exportMuted: document.getElementById("export-muted"),
+    shareMuted: document.getElementById("share-muted"),
+    importMuted: document.getElementById("import-muted"),
+    importMutedFile: document.getElementById("import-muted-file"),
+
+    // Keywords
+    keywordInput: document.getElementById("keyword-input"),
+    addKeyword: document.getElementById("add-keyword"),
+    caseSensitive: document.getElementById("case-sensitive"),
+    exportKeywords: document.getElementById("export-keywords"),
+    shareKeywords: document.getElementById("share-keywords"),
+    importKeywords: document.getElementById("import-keywords"),
+    importKeywordsFile: document.getElementById("import-keywords-file"),
+
+    // Domains
+    domainInput: document.getElementById("domain-input"),
+    addDomain: document.getElementById("add-domain"),
+    exportDomains: document.getElementById("export-domains"),
+    shareDomains: document.getElementById("share-domains"),
+    importDomains: document.getElementById("import-domains"),
+    importDomainsFile: document.getElementById("import-domains-file"),
+
+    // Community
+    browseMarketplace: document.getElementById("browse-marketplace"),
+    subscriptionList: document.getElementById("subscription-list"),
+    subscriptionsEmpty: document.getElementById("subscriptions-empty"),
     addMutedSubreddit: document.getElementById("add-muted-subreddit"),
     mutedList: document.getElementById("muted-list"),
     mutedEmpty: document.getElementById("muted-empty"),
@@ -142,6 +272,7 @@
     privacyScoreFill: document.getElementById("privacy-score-fill"),
     privacyScoreStatus: document.getElementById("privacy-score-status"),
     privacyRecommendations: document.getElementById("privacy-recommendations"),
+    reportIssueBtn: document.getElementById("report-issue-btn"),
     referrerDefault: document.getElementById("referrer-default"),
     referrerSameOrigin: document.getElementById("referrer-same-origin"),
     referrerOrigin: document.getElementById("referrer-origin"),
@@ -230,6 +361,7 @@
     runStorageMaintenance: document.getElementById("run-storage-maintenance"),
     refreshStorageStats: document.getElementById("refresh-storage-stats"),
     cleanupResult: document.getElementById("cleanup-result"),
+    ageVerificationEnabled: document.getElementById("age-verification-enabled"),
   };
 
   function handleLastError() {
@@ -269,6 +401,11 @@
    * Initialize options page
    */
   async function init() {
+    if (window.ORRI18n?.init) {
+      await window.ORRI18n.init();
+    }
+    applyDocumentLanguageAndDirection();
+    localizePage();
     await loadAllSettings();
     attachListeners();
     initKeyboardShortcutsUI();
@@ -281,12 +418,14 @@
     await loadMainToggle();
     await loadStats();
     await loadUIPreferences();
+    await loadI18nSettings();
     await loadDarkModeSettings();
     await loadAccessibilitySettings();
     await loadReadingHistorySettings();
     await loadNsfwControlsSettings();
     await loadCommentEnhancementsSettings();
     await loadCommentMinimapSettings();
+    await loadAdvancedNavigationSettings();
     await loadSortPreferences();
     await loadUserTags();
     await loadMutedUsers();
@@ -306,6 +445,7 @@
     await loadSuggestions();
     await loadShortcut();
     await loadSyncStatus();
+    await loadComplianceSettings();
   }
 
   /**
@@ -445,6 +585,17 @@
   }
 
   /**
+   * Load i18n settings
+   */
+  async function loadI18nSettings() {
+    if (!elements.languageOverride) return;
+
+    const i18n = await window.Storage.getI18n();
+    const override = i18n?.languageOverride || "auto";
+    elements.languageOverride.value = override;
+  }
+
+  /**
    * Load dark mode settings
    */
   async function loadDarkModeSettings() {
@@ -514,7 +665,7 @@
         mostRecent.timestamp
       ).toLocaleString();
     } else if (elements.historyLastViewed) {
-      elements.historyLastViewed.textContent = UI_STRINGS.STATUS_NEVER;
+      elements.historyLastViewed.textContent = msg("opt_js_status_never");
     }
 
     // Refresh table
@@ -580,12 +731,12 @@
       // Actions
       const actionsCell = document.createElement("td");
       const removeBtn = document.createElement("button");
-      removeBtn.textContent = UI_STRINGS.BTN_REMOVE;
+      removeBtn.textContent = msg("opt_js_btn_remove");
       removeBtn.className = "small-button danger-button";
       removeBtn.addEventListener("click", async () => {
         await window.Storage.removeReadingHistoryEntry(entry.id);
         await refreshReadingHistoryDisplay();
-        showToast(UI_STRINGS.SUCCESS_ENTRY_REMOVED);
+        showToast(msg("opt_js_success_entry_removed"));
       });
       actionsCell.appendChild(removeBtn);
       row.appendChild(actionsCell);
@@ -615,7 +766,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_READING_HISTORY_UPDATED);
+    showToast(msg("opt_js_success_reading_history_updated"));
   }
 
   /**
@@ -631,9 +782,9 @@
     const removed = await window.Storage.cleanupReadingHistory();
     if (removed > 0) {
       await refreshReadingHistoryDisplay();
-      showToast(`Retention updated, ${removed} old entries removed`);
+      showToast(msg("opt_js_toast_retention_updated_removed", [String(removed)]));
     } else {
-      showToast(UI_STRINGS.SUCCESS_RETENTION_UPDATED);
+      showToast(msg("opt_js_success_retention_updated"));
     }
   }
 
@@ -641,7 +792,7 @@
    * Handle clear reading history
    */
   async function handleClearReadingHistory() {
-    if (!confirm("Clear all reading history? This cannot be undone.")) return;
+    if (!confirm(msg("opt_js_confirm_clear_all_reading_history_this_cannot_be_undone"))) return;
 
     await window.Storage.clearReadingHistory();
     await refreshReadingHistoryDisplay();
@@ -653,7 +804,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_READING_HISTORY_CLEARED);
+    showToast(msg("opt_js_success_reading_history_cleared"));
   }
 
   /**
@@ -672,7 +823,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(`Exported ${data.entryCount} history entries`);
+    showToast(msg("opt_js_toast_exported_history_entries", [String(data.entryCount)]));
   }
 
   /**
@@ -696,9 +847,9 @@
         });
       });
 
-      showToast(`Imported ${imported} new history entries`);
+      showToast(msg("opt_js_toast_imported_history_entries", [String(imported)]));
     } catch (_error) {
-      showToast(UI_STRINGS.ERROR_IMPORT_INVALID_FORMAT);
+      showToast(msg("opt_js_error_import_invalid_format"));
     }
 
     // Reset file input
@@ -799,7 +950,7 @@
       tag.className = "tag";
       tag.innerHTML = `
         <span class="tag-text">r/${escapeHtml(subreddit)}</span>
-        <button class="tag-remove" data-subreddit="${escapeHtml(subreddit)}" aria-label="Remove r/${escapeHtml(subreddit)}">×</button>
+        <button class="tag-remove" data-subreddit="${escapeHtml(subreddit)}" aria-label="${escapeHtml(msg("opt_js_aria_remove_subreddit", [String(subreddit)]))}">×</button>
       `;
       elements.nsfwAllowedList.appendChild(tag);
     }
@@ -811,7 +962,7 @@
         await window.Storage.removeNsfwAllowedSubreddit(subreddit);
         await refreshNsfwAllowedList();
         notifyContentScripts();
-        showToast(`Removed r/${subreddit} from allowed list`);
+        showToast(msg("opt_js_toast_removed_subreddit_from_allowed_list", [String(subreddit)]));
       });
     });
   }
@@ -866,13 +1017,13 @@
 
     const subreddit = input.value.trim().toLowerCase().replace(/^r\//, "");
     if (!subreddit) {
-      showToast("Please enter a subreddit name", "error");
+      showToast(msg("opt_js_toast_please_enter_a_subreddit_name"), "error");
       return;
     }
 
     // Validate subreddit name
     if (!/^[a-z0-9_]+$/i.test(subreddit)) {
-      showToast("Invalid subreddit name", "error");
+      showToast(msg("opt_js_toast_invalid_subreddit_name"), "error");
       return;
     }
 
@@ -880,7 +1031,7 @@
     input.value = "";
     await refreshNsfwAllowedList();
     notifyContentScripts();
-    showToast(`Added r/${subreddit} to allowed list`);
+    showToast(msg("opt_js_toast_added_subreddit_to_allowed_list", [String(subreddit)]));
   }
 
   /**
@@ -888,9 +1039,7 @@
    */
   async function handleClearNsfwAllowed() {
     if (
-      !confirm(
-        "Clear all allowed subreddits? NSFW controls will apply everywhere."
-      )
+      !confirm(msg("opt_js_confirm_clear_all_allowed_subreddits_nsfw_everywhere"))
     ) {
       return;
     }
@@ -898,16 +1047,19 @@
     await window.Storage.clearNsfwAllowedSubreddits();
     await refreshNsfwAllowedList();
     notifyContentScripts();
-    showToast(UI_STRINGS.SUCCESS_NSFW_ALLOWED_CLEARED);
+    showToast(msg("opt_js_success_nsfw_allowed_cleared"));
   }
 
   /**
    * Notify content scripts of settings change
    */
-  function notifyContentScripts() {
+  function notifyContentScripts(
+    messageType = "REFRESH_NSFW_CONTROLS",
+    data = {}
+  ) {
     chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.tabs.sendMessage(tab.id, { type: "REFRESH_NSFW_CONTROLS" });
+        chrome.tabs.sendMessage(tab.id, { type: messageType, ...data });
       });
     });
   }
@@ -973,6 +1125,26 @@
         el.style.pointerEvents = enabled ? "auto" : "none";
       }
     });
+  }
+
+  /**
+   * Load advanced navigation settings
+   */
+  async function loadAdvancedNavigationSettings() {
+    const breadcrumbs = await window.Storage.getBreadcrumbs();
+    if (elements.breadcrumbsEnabled) {
+      elements.breadcrumbsEnabled.checked = breadcrumbs.enabled !== false;
+    }
+
+    const search = await window.Storage.getCommentSearch();
+    if (elements.commentSearchEnabled) {
+      elements.commentSearchEnabled.checked = search.enabled !== false;
+    }
+
+    const bookmarks = await window.Storage.getBookmarks();
+    if (elements.bookmarksEnabled) {
+      elements.bookmarksEnabled.checked = bookmarks.enabled !== false;
+    }
   }
 
   /**
@@ -1044,8 +1216,8 @@
         <td>
           <button class="delete-pref secondary-button"
                   data-subreddit="${escapeHtml(subreddit)}"
-                  title=UI_STRINGS.TITLE_DELETE_PREFERENCE>
-            Delete
+                  title=msg("opt_js_title_delete_preference")>
+            ${msg("opt_js_action_delete")}
           </button>
         </td>
       </tr>
@@ -1064,11 +1236,11 @@
    */
   function formatSortDisplay(sort) {
     const labels = {
-      hot: "Hot",
-      new: "New",
-      top: "Top",
-      rising: "Rising",
-      controversial: "Controversial",
+      hot: msg("opt_js_sort_hot"),
+      new: msg("opt_js_sort_new"),
+      top: msg("opt_js_sort_top"),
+      rising: msg("opt_js_sort_rising"),
+      controversial: msg("opt_js_sort_controversial"),
     };
     return labels[sort] || sort;
   }
@@ -1078,12 +1250,12 @@
    */
   function formatTimeDisplay(time) {
     const labels = {
-      hour: "Past Hour",
-      day: "Today",
-      week: "This Week",
-      month: "This Month",
-      year: "This Year",
-      all: "All Time",
+      hour: msg("opt_js_time_past_hour"),
+      day: msg("opt_js_time_today"),
+      week: msg("opt_js_time_this_week"),
+      month: msg("opt_js_time_this_month"),
+      year: msg("opt_js_time_this_year"),
+      all: msg("opt_js_time_all_time"),
     };
     return labels[time] || time;
   }
@@ -1097,10 +1269,12 @@
     const diffMs = now - date;
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Yesterday";
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    if (diffDays === 0) return msg("opt_js_date_today");
+    if (diffDays === 1) return msg("opt_js_date_yesterday");
+    if (diffDays < 7) return msg("opt_js_date_days_ago", [String(diffDays)]);
+    if (diffDays < 30) {
+      return msg("opt_js_date_weeks_ago", [String(Math.floor(diffDays / 7))]);
+    }
 
     return date.toLocaleDateString();
   }
@@ -1121,7 +1295,7 @@
   async function handleDeletePreference(e) {
     const subreddit = e.target.dataset.subreddit;
 
-    if (!confirm(`Delete sort preference for r/${subreddit}?`)) {
+    if (!confirm(msg("opt_js_confirm_delete_sort_preference_for_subreddit", [String(subreddit)]))) {
       return;
     }
 
@@ -1137,14 +1311,12 @@
     const count = Object.keys(config.preferences || {}).length;
 
     if (count === 0) {
-      alert("No preferences to clear.");
+      alert(msg("opt_js_alert_no_preferences_to_clear"));
       return;
     }
 
     if (
-      !confirm(
-        `Clear all ${count} saved sort preferences? This cannot be undone.`
-      )
+      !confirm(msg("opt_js_confirm_clear_all_sort_preferences_with_count", [String(count)]))
     ) {
       return;
     }
@@ -1198,9 +1370,9 @@
         await window.Storage.setSortPreferences(config);
         await refreshSortPreferencesList();
 
-        alert(`Imported ${Object.keys(imported).length} preferences`);
+        alert(msg("opt_js_alert_imported_preferences", [String(Object.keys(imported).length)]));
       } catch (err) {
-        alert("Failed to import preferences: " + err.message);
+        alert(msg("opt_js_alert_failed_to_import_preferences", [String(err.message)]));
       }
     };
 
@@ -1284,13 +1456,13 @@
         <td>
           <button class="edit-tag secondary-button"
                   data-username="${escapeHtml(username)}"
-                  title=UI_STRINGS.TITLE_EDIT_TAG>
-            Edit
+                  title=msg("opt_js_title_edit_tag")>
+            ${msg("opt_js_action_edit")}
           </button>
           <button class="delete-tag secondary-button"
                   data-username="${escapeHtml(username)}"
-                  title=UI_STRINGS.TITLE_DELETE_TAG>
-            Delete
+                  title=msg("opt_js_title_delete_tag")>
+            ${msg("opt_js_action_delete")}
           </button>
         </td>
       </tr>
@@ -1370,15 +1542,18 @@
     const tag = await window.Storage.getUserTag(username);
 
     if (!tag) {
-      alert("Tag not found");
+      alert(msg("opt_js_alert_tag_not_found"));
       return;
     }
 
-    const newText = prompt(`Edit tag for u/${username}:`, tag.text);
+    const newText = prompt(
+      msg("opt_js_prompt_edit_tag_for_user", [String(username)]),
+      tag.text
+    );
     if (newText === null) return; // Cancelled
 
     if (!newText.trim()) {
-      alert("Tag text cannot be empty");
+      alert(msg("opt_js_alert_tag_text_cannot_be_empty"));
       return;
     }
 
@@ -1406,7 +1581,7 @@
   async function handleDeleteTag(e) {
     const username = e.target.dataset.username;
 
-    if (!confirm(`Delete tag for u/${username}?`)) {
+    if (!confirm(msg("opt_js_confirm_delete_tag_for_user", [String(username)]))) {
       return;
     }
 
@@ -1432,12 +1607,12 @@
     const count = Object.keys(config.tags || {}).length;
 
     if (count === 0) {
-      alert("No tags to clear.");
+      alert(msg("opt_js_alert_no_tags_to_clear"));
       return;
     }
 
     if (
-      !confirm(`Clear all ${count} saved user tags? This cannot be undone.`)
+      !confirm(msg("opt_js_confirm_clear_all_user_tags_with_count", [String(count)]))
     ) {
       return;
     }
@@ -1498,7 +1673,7 @@
         await window.Storage.setUserTags(config);
         await refreshUserTagsList();
 
-        alert(`Imported ${Object.keys(imported).length} tags`);
+        alert(msg("opt_js_alert_imported_tags", [String(Object.keys(imported).length)]));
 
         // Notify content script to refresh
         chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
@@ -1507,7 +1682,7 @@
           }
         });
       } catch (err) {
-        alert("Failed to import tags: " + err.message);
+        alert(msg("opt_js_alert_failed_to_import_tags", [String(err.message)]));
       }
     };
 
@@ -1556,7 +1731,9 @@
     listContainer.innerHTML = entries
       .map(([username, data]) => {
         const dateDisplay = formatDate(data.timestamp);
-        const reason = data.reason ? escapeHtml(data.reason) : "No reason";
+        const reason = data.reason
+          ? escapeHtml(data.reason)
+          : msg("opt_js_reason_none");
 
         return `
         <div class="item-row" data-username="${escapeHtml(username)}">
@@ -1571,7 +1748,7 @@
           </div>
           <button class="button secondary remove-muted-user"
                   data-username="${escapeHtml(username)}">
-            Unmute
+            ${msg("opt_js_action_unmute")}
           </button>
         </div>
       `;
@@ -1611,12 +1788,12 @@
     const reason = reasonInput.value.trim();
 
     if (!username) {
-      alert("Please enter a username");
+      alert(msg("opt_js_alert_please_enter_a_username"));
       return;
     }
 
     await window.Storage.setMutedUser(username, {
-      reason: reason || "No reason",
+      reason: reason || msg("opt_js_reason_none"),
     });
 
     usernameInput.value = "";
@@ -1637,7 +1814,7 @@
   async function handleRemoveMutedUser(e) {
     const username = e.target.dataset.username;
 
-    if (!confirm(`Unmute u/${username}?`)) {
+    if (!confirm(msg("opt_js_confirm_unmute_user", [String(username)]))) {
       return;
     }
 
@@ -1660,11 +1837,11 @@
     const count = Object.keys(config.users || {}).length;
 
     if (count === 0) {
-      alert("No muted users to clear.");
+      alert(msg("opt_js_alert_no_muted_users_to_clear"));
       return;
     }
 
-    if (!confirm(`Unmute all ${count} users? This cannot be undone.`)) {
+    if (!confirm(msg("opt_js_confirm_unmute_all_users_with_count", [String(count)]))) {
       return;
     }
 
@@ -1731,7 +1908,7 @@
           }
         });
       } catch (err) {
-        alert("Failed to import muted users: " + err.message);
+        alert(msg("opt_js_alert_failed_to_import_muted_users", [String(err.message)]));
       }
     };
 
@@ -1765,7 +1942,7 @@
    * Handle clear scroll positions
    */
   async function handleClearScrollPositions() {
-    if (!confirm("Clear all saved scroll positions?")) return;
+    if (!confirm(msg("opt_js_confirm_clear_all_saved_scroll_positions"))) return;
 
     await window.Storage.clearScrollPositions();
     await loadScrollPositions();
@@ -1817,7 +1994,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_FEED_ENHANCEMENTS_UPDATED);
+    showToast(msg("opt_js_success_feed_enhancements_updated"));
   }
 
   /**
@@ -1839,14 +2016,14 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_CUSTOM_CSS_SAVED);
+    showToast(msg("opt_js_success_custom_css_saved"));
   }
 
   /**
    * Handle clear custom CSS
    */
   async function handleClearCustomCSS() {
-    if (!confirm("Clear custom CSS?")) return;
+    if (!confirm(msg("opt_js_confirm_clear_custom_css"))) return;
 
     elements.customCSS.value = "";
     const config = await window.Storage.getFeedEnhancements();
@@ -1862,7 +2039,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_CUSTOM_CSS_CLEARED);
+    showToast(msg("opt_js_success_custom_css_cleared"));
   }
 
   /**
@@ -1872,7 +2049,7 @@
     const css = elements.customCSS.value.trim();
 
     if (!css) {
-      showToast("No CSS to validate", "error");
+      showToast(msg("opt_js_toast_no_css_to_validate"), "error");
       return;
     }
 
@@ -1883,9 +2060,9 @@
       document.head.appendChild(style);
       document.head.removeChild(style);
 
-      showToast("CSS is valid!", "success");
+      showToast(msg("opt_js_toast_css_is_valid"), "success");
     } catch (error) {
-      showToast("CSS validation failed: " + error.message, "error");
+      showToast(msg("opt_js_toast_css_validation_failed", [String(error.message)]), "error");
     }
   }
 
@@ -1956,7 +2133,8 @@
       })
       .join("");
 
-    elements.storageBreakdownGrid.innerHTML = items || "<p>No data</p>";
+    elements.storageBreakdownGrid.innerHTML =
+      items || `<p>${escapeHtml(msg("opt_js_storage_no_data"))}</p>`;
   }
 
   /**
@@ -2072,7 +2250,7 @@
     try {
       if (elements.runStorageCleanup) {
         elements.runStorageCleanup.disabled = true;
-        elements.runStorageCleanup.textContent = UI_STRINGS.STATUS_CLEANING;
+        elements.runStorageCleanup.textContent = msg("opt_js_status_cleaning");
       }
 
       const results = await window.Storage.cleanupExpiredData();
@@ -2086,7 +2264,7 @@
           elements.cleanupResult.textContent = `Cleaned ${items} items, freed ${bytesFree} KB`;
           elements.cleanupResult.className = "cleanup-result success";
         } else {
-          elements.cleanupResult.textContent = UI_STRINGS.MSG_NO_EXPIRED_DATA;
+          elements.cleanupResult.textContent = msg("opt_js_msg_no_expired_data");
           elements.cleanupResult.className = "cleanup-result";
         }
         elements.cleanupResult.style.display = "block";
@@ -2094,14 +2272,14 @@
 
       // Refresh stats
       await refreshStorageStats();
-      showToast("Cleanup completed", "success");
+      showToast(msg("opt_js_toast_cleanup_completed"), "success");
     } catch (error) {
       console.error("[ORR] Cleanup failed:", error);
-      showToast("Cleanup failed: " + error.message, "error");
+      showToast(msg("opt_js_toast_cleanup_failed", [String(error.message)]), "error");
     } finally {
       if (elements.runStorageCleanup) {
         elements.runStorageCleanup.disabled = false;
-        elements.runStorageCleanup.textContent = UI_STRINGS.BTN_RUN_CLEANUP;
+        elements.runStorageCleanup.textContent = msg("opt_js_btn_run_cleanup");
       }
     }
   }
@@ -2113,7 +2291,7 @@
     try {
       if (elements.runStorageMaintenance) {
         elements.runStorageMaintenance.disabled = true;
-        elements.runStorageMaintenance.textContent = UI_STRINGS.STATUS_RUNNING;
+        elements.runStorageMaintenance.textContent = msg("opt_js_status_running");
       }
 
       const results = await window.Storage.runMaintenance();
@@ -2134,15 +2312,15 @@
 
       // Refresh stats
       await refreshStorageStats();
-      showToast("Maintenance completed", "success");
+      showToast(msg("opt_js_toast_maintenance_completed"), "success");
     } catch (error) {
       console.error("[ORR] Maintenance failed:", error);
-      showToast("Maintenance failed: " + error.message, "error");
+      showToast(msg("opt_js_toast_maintenance_failed", [String(error.message)]), "error");
     } finally {
       if (elements.runStorageMaintenance) {
         elements.runStorageMaintenance.disabled = false;
         elements.runStorageMaintenance.textContent =
-          UI_STRINGS.BTN_FULL_MAINTENANCE;
+          msg("opt_js_btn_full_maintenance");
       }
     }
   }
@@ -2166,7 +2344,7 @@
     if (elements.refreshStorageStats) {
       elements.refreshStorageStats.addEventListener("click", async () => {
         await refreshStorageStats();
-        showToast("Storage stats refreshed", "success");
+        showToast(msg("opt_js_toast_storage_stats_refreshed"), "success");
       });
     }
   }
@@ -2250,25 +2428,25 @@
           <tr data-preset="${escapeHtml(name)}" class="${isActive ? "active-preset" : ""}">
             <td class="preset-name-cell">
               <span class="preset-name">${escapeHtml(name)}</span>
-              ${isActive ? '<span class="active-badge">Active</span>' : ""}
+              ${isActive ? `<span class="active-badge">${msg("opt_js_status_active")}</span>` : ""}
             </td>
             <td class="preset-settings">${settings}</td>
             <td>${dateDisplay}</td>
             <td class="preset-actions">
               <button class="secondary-button apply-preset"
                       data-preset="${escapeHtml(name)}"
-                      title=UI_STRINGS.TITLE_APPLY_PRESET>
-                Apply
+                      title=msg("opt_js_title_apply_preset")>
+                ${msg("opt_js_action_apply")}
               </button>
               <button class="secondary-button edit-preset"
                       data-preset="${escapeHtml(name)}"
-                      title=UI_STRINGS.TITLE_EDIT_PRESET>
-                Edit
+                      title=msg("opt_js_title_edit_preset")>
+                ${msg("opt_js_action_edit")}
               </button>
               <button class="secondary-button delete-preset"
                       data-preset="${escapeHtml(name)}"
-                      title=UI_STRINGS.TITLE_DELETE_PRESET>
-                Delete
+                      title=msg("opt_js_title_delete_preset")>
+                ${msg("opt_js_action_delete")}
               </button>
             </td>
           </tr>
@@ -2296,17 +2474,24 @@
    */
   function formatPresetSettings(data) {
     const features = [];
-    if (data.darkMode) features.push("Dark");
-    if (data.darkModeType === "oled") features.push("OLED");
-    if (data.compactMode) features.push("Compact");
-    if (data.textOnlyMode) features.push("Text-only");
-    if (data.uncropImages) features.push("Uncrop");
-    if (data.hideJoinButtons) features.push("No join");
-    if (data.hideActionLinks) features.push("No actions");
-    if (data.colorCodedComments) features.push("Color comments");
-    if (data.customCSS) features.push("Custom CSS");
+    if (data.darkMode) features.push(msg("opt_js_preset_feature_dark"));
+    if (data.darkModeType === "oled")
+      features.push(msg("opt_js_preset_feature_oled"));
+    if (data.compactMode) features.push(msg("opt_js_preset_feature_compact"));
+    if (data.textOnlyMode)
+      features.push(msg("opt_js_preset_feature_text_only"));
+    if (data.uncropImages) features.push(msg("opt_js_preset_feature_uncrop"));
+    if (data.hideJoinButtons)
+      features.push(msg("opt_js_preset_feature_no_join"));
+    if (data.hideActionLinks)
+      features.push(msg("opt_js_preset_feature_no_actions"));
+    if (data.colorCodedComments)
+      features.push(msg("opt_js_preset_feature_color_comments"));
+    if (data.customCSS) features.push(msg("opt_js_preset_feature_custom_css"));
 
-    return features.length > 0 ? features.join(", ") : "Default";
+    return features.length > 0
+      ? features.join(msg("opt_js_list_separator"))
+      : msg("opt_js_preset_feature_default");
   }
 
   /**
@@ -2392,8 +2577,8 @@
             <td>
               <button class="secondary-button delete-mapping"
                       data-subreddit="${escapeHtml(subreddit)}"
-                      title=UI_STRINGS.TITLE_REMOVE_MAPPING>
-                Remove
+                      title=msg("opt_js_title_remove_mapping")>
+                ${msg("opt_js_action_remove")}
               </button>
             </td>
           </tr>
@@ -2420,7 +2605,7 @@
 
     // Notify content scripts
     notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-    showToast(`Layout presets ${config.enabled ? "enabled" : "disabled"}`);
+    showToast(msg(config.enabled ? "opt_js_toast_layout_presets_enabled" : "opt_js_toast_layout_presets_disabled"));
   }
 
   /**
@@ -2430,19 +2615,19 @@
     const name = elements.newPresetName?.value.trim();
 
     if (!name) {
-      showToast("Please enter a preset name", "error");
+      showToast(msg("opt_js_toast_please_enter_a_preset_name"), "error");
       return;
     }
 
     if (name.length > 50) {
-      showToast("Preset name is too long (max 50 characters)", "error");
+      showToast(msg("opt_js_toast_preset_name_is_too_long_max_50_characters"), "error");
       return;
     }
 
     // Check if preset already exists
     const existing = await window.Storage.getLayoutPreset(name);
     if (existing) {
-      if (!confirm(`Preset "${name}" already exists. Overwrite it?`)) {
+      if (!confirm(msg("opt_js_confirm_preset_already_exists_overwrite", [String(name)]))) {
         return;
       }
     }
@@ -2475,7 +2660,7 @@
 
     // Refresh UI
     await loadLayoutPresets();
-    showToast(`Preset "${name}" created`);
+    showToast(msg("opt_js_toast_preset_created", [String(name)]));
   }
 
   /**
@@ -2484,7 +2669,7 @@
   async function handleApplyPreset(e) {
     const presetName = e.target.dataset.preset;
     await applyPresetToCurrentSettings(presetName);
-    showToast(`Preset "${presetName}" applied`);
+    showToast(msg("opt_js_toast_preset_applied", [String(presetName)]));
   }
 
   /**
@@ -2493,7 +2678,7 @@
   async function applyPresetToCurrentSettings(presetName) {
     const preset = await window.Storage.getLayoutPreset(presetName);
     if (!preset) {
-      showToast(`Preset "${presetName}" not found`, "error");
+      showToast(msg("opt_js_toast_preset_not_found", [String(presetName)]), "error");
       return;
     }
 
@@ -2549,7 +2734,7 @@
     const preset = await window.Storage.getLayoutPreset(presetName);
 
     if (!preset) {
-      showToast(`Preset "${presetName}" not found`, "error");
+      showToast(msg("opt_js_toast_preset_not_found", [String(presetName)]), "error");
       return;
     }
 
@@ -2597,7 +2782,7 @@
     const newName = document.getElementById("preset-edit-name").value.trim();
 
     if (!newName) {
-      showToast("Preset name is required", "error");
+      showToast(msg("opt_js_toast_preset_name_is_required"), "error");
       return;
     }
 
@@ -2605,7 +2790,7 @@
     if (newName !== originalName) {
       const existing = await window.Storage.getLayoutPreset(newName);
       if (existing) {
-        showToast(`Preset "${newName}" already exists`, "error");
+        showToast(msg("opt_js_toast_preset_already_exists", [String(newName)]), "error");
         return;
       }
     }
@@ -2636,7 +2821,7 @@
 
     // Refresh UI
     await loadLayoutPresets();
-    showToast(`Preset "${newName}" saved`);
+    showToast(msg("opt_js_toast_preset_saved", [String(newName)]));
   }
 
   /**
@@ -2645,13 +2830,13 @@
   async function handleDeletePreset(e) {
     const presetName = e.target.dataset.preset;
 
-    if (!confirm(`Delete preset "${presetName}"? This cannot be undone.`)) {
+    if (!confirm(msg("opt_js_confirm_delete_preset", [String(presetName)]))) {
       return;
     }
 
     await window.Storage.deleteLayoutPreset(presetName);
     await loadLayoutPresets();
-    showToast(`Preset "${presetName}" deleted`);
+    showToast(msg("opt_js_toast_preset_deleted", [String(presetName)]));
   }
 
   /**
@@ -2679,12 +2864,12 @@
     const presetName = elements.mappingPreset?.value;
 
     if (!subreddit) {
-      showToast("Please enter a subreddit name", "error");
+      showToast(msg("opt_js_toast_please_enter_a_subreddit_name"), "error");
       return;
     }
 
     if (!presetName) {
-      showToast("Please select a preset", "error");
+      showToast(msg("opt_js_toast_please_select_a_preset"), "error");
       return;
     }
 
@@ -2697,9 +2882,9 @@
 
       await refreshMappingsList();
       notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-      showToast(`Layout set for r/${subreddit}`);
+      showToast(msg("opt_js_toast_layout_set_for_subreddit", [String(subreddit)]));
     } catch (error) {
-      showToast(error.message, "error");
+      showToast(msg("opt_js_toast_error", [String(error.message)]), "error");
     }
   }
 
@@ -2709,14 +2894,14 @@
   async function handleDeleteMapping(e) {
     const subreddit = e.target.dataset.subreddit;
 
-    if (!confirm(`Remove layout for r/${subreddit}?`)) {
+    if (!confirm(msg("opt_js_confirm_remove_layout_for_subreddit", [String(subreddit)]))) {
       return;
     }
 
     await window.Storage.deleteSubredditLayout(subreddit);
     await refreshMappingsList();
     notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-    showToast(`Layout removed for r/${subreddit}`);
+    showToast(msg("opt_js_toast_layout_removed_for_subreddit", [String(subreddit)]));
   }
 
   /**
@@ -2727,18 +2912,18 @@
     const count = Object.keys(config.subredditLayouts || {}).length;
 
     if (count === 0) {
-      showToast(UI_STRINGS.MSG_NO_MAPPINGS_TO_CLEAR);
+      showToast(msg("opt_js_msg_no_mappings_to_clear"));
       return;
     }
 
-    if (!confirm(`Clear all ${count} subreddit layout mappings?`)) {
+    if (!confirm(msg("opt_js_confirm_clear_all_subreddit_layout_mappings", [String(count)]))) {
       return;
     }
 
     await window.Storage.clearSubredditLayouts();
     await refreshMappingsList();
     notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-    showToast(UI_STRINGS.SUCCESS_ALL_MAPPINGS_CLEARED);
+    showToast(msg("opt_js_success_all_mappings_cleared"));
   }
 
   /**
@@ -2749,21 +2934,19 @@
     const count = Object.keys(config.presets || {}).length;
 
     if (count === 0) {
-      showToast(UI_STRINGS.MSG_NO_PRESETS_TO_CLEAR);
+      showToast(msg("opt_js_msg_no_presets_to_clear"));
       return;
     }
 
     if (
-      !confirm(
-        `Clear all ${count} presets and their subreddit mappings? This cannot be undone.`
-      )
+      !confirm(msg("opt_js_confirm_clear_all_presets_and_mappings", [String(count)]))
     ) {
       return;
     }
 
     await window.Storage.clearLayoutPresets();
     await loadLayoutPresets();
-    showToast(UI_STRINGS.SUCCESS_ALL_PRESETS_CLEARED);
+    showToast(msg("opt_js_success_all_presets_cleared"));
   }
 
   /**
@@ -2789,7 +2972,7 @@
     a.click();
 
     URL.revokeObjectURL(url);
-    showToast(UI_STRINGS.SUCCESS_PRESETS_EXPORTED);
+    showToast(msg("opt_js_success_presets_exported"));
   }
 
   /**
@@ -2830,26 +3013,13 @@
         await loadLayoutPresets();
 
         const presetCount = Object.keys(imported.presets).length;
-        showToast(
-          `Imported ${presetCount} preset${presetCount !== 1 ? "s" : ""}`
-        );
+        showToast(msg("opt_js_toast_imported_presets", [String(presetCount), presetCount === 1 ? "" : "s"]));
       } catch (err) {
-        showToast("Failed to import: " + err.message, "error");
+        showToast(msg("opt_js_toast_failed_to_import", [String(err.message)]), "error");
       }
     };
 
     input.click();
-  }
-
-  /**
-   * Notify content scripts of changes
-   */
-  function notifyContentScripts(messageType, data = {}) {
-    chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
-      tabs.forEach((tab) => {
-        chrome.tabs.sendMessage(tab.id, { type: messageType, ...data });
-      });
-    });
   }
 
   /**
@@ -3057,13 +3227,13 @@
       let statusText = "";
       let statusClass = "";
       if (score < 40) {
-        statusText = "Needs improvement";
+      statusText = msg("opt_js_privacy_status_needs_improvement");
         statusClass = "score-low";
       } else if (score < 70) {
-        statusText = "Good protection";
+      statusText = msg("opt_js_privacy_status_good_protection");
         statusClass = "score-medium";
       } else {
-        statusText = "Excellent protection";
+      statusText = msg("opt_js_privacy_status_excellent_protection");
         statusClass = "score-high";
       }
       elements.privacyScoreStatus.textContent = statusText;
@@ -3074,7 +3244,7 @@
     // Update recommendations
     if (elements.privacyRecommendations && recommendations.length > 0) {
       const html =
-        "<strong>Tips:</strong><ul>" +
+        `<strong>${escapeHtml(msg("opt_js_privacy_tips_label"))}</strong><ul>` +
         recommendations.map((r) => `<li>${escapeHtml(r)}</li>`).join("") +
         "</ul>";
       elements.privacyRecommendations.innerHTML = html;
@@ -3099,7 +3269,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(UI_STRINGS.SUCCESS_PRIVACY_REPORT_EXPORTED);
+    showToast(msg("opt_js_success_privacy_report_exported"));
   }
 
   /**
@@ -3129,7 +3299,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_PRIVACY_UPDATED);
+    showToast(msg("opt_js_success_privacy_updated"));
   }
 
   /**
@@ -3154,7 +3324,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_REFERRER_UPDATED);
+    showToast(msg("opt_js_success_referrer_updated"));
   }
 
   /**
@@ -3168,7 +3338,7 @@
       .filter((p) => p.length > 0);
 
     if (params.length === 0) {
-      showToast("Please enter at least one tracking parameter", "error");
+      showToast(msg("opt_js_toast_please_enter_at_least_one_tracking_parameter"), "error");
       return;
     }
 
@@ -3177,14 +3347,14 @@
 
     await window.Storage.setPrivacy(privacy);
 
-    showToast(`Saved ${params.length} tracking parameters`);
+    showToast(msg("opt_js_toast_saved_tracking_parameters", [String(params.length)]));
   }
 
   /**
    * Handle reset tracking parameters to defaults
    */
   async function handleResetTrackingParams() {
-    if (!confirm("Reset tracking parameters to defaults?")) return;
+    if (!confirm(msg("opt_js_confirm_reset_tracking_parameters_to_defaults"))) return;
 
     const privacy = await window.Storage.getPrivacy();
 
@@ -3229,19 +3399,19 @@
 
     elements.trackingParams.value = defaults.join("\n");
 
-    showToast("Tracking parameters reset to defaults");
+    showToast(msg("opt_js_toast_tracking_parameters_reset_to_defaults"));
   }
 
   /**
    * Handle clear tracking statistics
    */
   async function handleClearTrackingStats() {
-    if (!confirm("Clear all tracking statistics?")) return;
+    if (!confirm(msg("opt_js_confirm_clear_all_tracking_statistics"))) return;
 
     await window.Storage.clearTrackingStats();
     await loadPrivacySettings();
 
-    showToast(UI_STRINGS.SUCCESS_TRACKING_STATS_CLEARED);
+    showToast(msg("opt_js_success_tracking_stats_cleared"));
   }
 
   /**
@@ -3445,7 +3615,7 @@
           <div class="suggestion-name">r/${escapeHtml(suggestion.name)}</div>
           <div class="suggestion-reason">${escapeHtml(suggestion.reason)}</div>
         </div>
-        <button class="suggestion-add" data-subreddit="${escapeHtml(suggestion.name)}">Add</button>
+        <button class="suggestion-add" data-subreddit="${escapeHtml(suggestion.name)}">${msg("opt_js_action_add")}</button>
       `;
       elements.suggestionsList.appendChild(card);
     }
@@ -3468,7 +3638,7 @@
     const overrides = await window.Storage.getSubredditOverrides();
 
     if (overrides.whitelist.includes(subreddit.toLowerCase())) {
-      showToast("Already in list", "error");
+      showToast(msg("opt_js_toast_already_in_list"), "error");
       return;
     }
 
@@ -3481,7 +3651,7 @@
     await loadWhitelist();
     await loadSuggestions();
 
-    showToast(`r/${subreddit} added to exceptions`);
+    showToast(msg("opt_js_toast_subreddit_added_to_exceptions", [String(subreddit)]));
   }
 
   /**
@@ -3496,9 +3666,20 @@
       if (toggleCommand && toggleCommand.shortcut) {
         elements.shortcutDisplay.textContent = toggleCommand.shortcut;
       } else {
-        elements.shortcutDisplay.textContent = UI_STRINGS.STATUS_NOT_SET;
+        elements.shortcutDisplay.textContent = msg("opt_js_status_not_set");
       }
     });
+  }
+
+  /**
+   * Load compliance settings
+   */
+  async function loadComplianceSettings() {
+    const compliance = await window.Storage.getCompliance();
+    if (elements.ageVerificationEnabled) {
+      elements.ageVerificationEnabled.checked =
+        compliance?.ageVerificationEnabled === true;
+    }
   }
 
   /**
@@ -3527,7 +3708,7 @@
 
       elements.syncStatus.textContent = `Last synced: ${timeAgo}`;
     } else {
-      elements.syncStatus.textContent = UI_STRINGS.STATUS_NOT_SYNCED;
+      elements.syncStatus.textContent = msg("opt_js_status_not_synced");
     }
   }
 
@@ -3552,20 +3733,20 @@
     // Notify background to update badge
     chrome.runtime.sendMessage({ type: "UPDATE_BADGE" });
 
-    showToast(`Redirect ${enabled ? "enabled" : "disabled"}`);
+    showToast(msg(enabled ? "opt_js_toast_redirect_enabled" : "opt_js_toast_redirect_disabled"));
   }
 
   /**
    * Clear statistics
    */
   async function handleClearStats() {
-    if (!confirm("Clear all statistics? This cannot be undone.")) {
+    if (!confirm(msg("opt_js_confirm_clear_all_statistics_this_cannot_be_undone"))) {
       return;
     }
 
     await window.Storage.clearStats();
     await loadStats();
-    showToast(UI_STRINGS.SUCCESS_STATS_CLEARED);
+    showToast(msg("opt_js_success_stats_cleared"));
   }
 
   /**
@@ -3599,7 +3780,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(UI_STRINGS.SUCCESS_STATS_EXPORTED);
+    showToast(msg("opt_js_success_stats_exported"));
   }
 
   /**
@@ -3610,12 +3791,7 @@
 
     // Show warning when switching to toggle mode
     if (behavior === "toggle") {
-      const confirmed = confirm(
-        "Switching to toggle mode will disable the popup.\n\n" +
-          "You can still access all features from this Options page.\n" +
-          "Keyboard shortcut (Alt+Shift+R) will continue to work.\n\n" +
-          "Continue?"
-      );
+      const confirmed = confirm(msg("opt_js_confirm_switch_to_toggle_mode"));
       if (!confirmed) {
         elements.iconClickBehavior.value = "popup";
         return;
@@ -3632,9 +3808,7 @@
       behavior,
     });
 
-    showToast(
-      `Icon click will now ${behavior === "popup" ? "open popup" : "toggle redirect"}`
-    );
+    showToast(msg(behavior === "popup" ? "opt_js_toast_icon_click_opens_popup" : "opt_js_toast_icon_click_toggles_redirect"));
   }
 
   /**
@@ -3654,7 +3828,28 @@
     // Notify background to update badge
     chrome.runtime.sendMessage({ type: "UPDATE_BADGE" });
 
-    showToast(UI_STRINGS.SUCCESS_PREFERENCES_SAVED);
+    showToast(msg("opt_js_success_preferences_saved"));
+  }
+
+  /**
+   * Handle language override changes
+   */
+  async function handleLanguageOverrideChange() {
+    if (!elements.languageOverride) return;
+
+    const override = elements.languageOverride.value || "auto";
+    const current = await window.Storage.getI18n();
+    await window.Storage.setI18n({
+      ...current,
+      languageOverride: override,
+    });
+
+    if (window.ORRI18n?.setLanguageOverride) {
+      await window.ORRI18n.setLanguageOverride(override);
+    }
+
+    showToast(msg("opt_i18n_saved"));
+    setTimeout(() => location.reload(), 200);
   }
 
   /**
@@ -3678,7 +3873,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_DARK_MODE_SAVED);
+    showToast(msg("opt_js_success_dark_mode_saved"));
   }
 
   /**
@@ -3707,7 +3902,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_ACCESSIBILITY_SAVED);
+    showToast(msg("opt_js_success_accessibility_saved"));
   }
 
   /**
@@ -3756,7 +3951,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_COMMENT_ENHANCEMENTS_SAVED);
+    showToast(msg("opt_js_success_comment_enhancements_saved"));
   }
 
   /**
@@ -3797,7 +3992,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_COMMENT_MINIMAP_SAVED);
+    showToast(msg("opt_js_success_comment_minimap_saved"));
   }
 
   /**
@@ -3834,7 +4029,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_NAG_BLOCKING_SAVED);
+    showToast(msg("opt_js_success_nag_blocking_saved"));
   }
 
   /**
@@ -3844,24 +4039,24 @@
     const subreddit = elements.subredditInput.value.trim().toLowerCase();
 
     if (!subreddit) {
-      showToast("Please enter a subreddit name", "error");
+      showToast(msg("opt_js_toast_please_enter_a_subreddit_name"), "error");
       return;
     }
 
     if (!/^[a-z0-9_]+$/i.test(subreddit)) {
-      showToast("Invalid subreddit name", "error");
+      showToast(msg("opt_js_toast_invalid_subreddit_name"), "error");
       return;
     }
 
     const overrides = await window.Storage.getSubredditOverrides();
 
     if (overrides.whitelist.includes(subreddit)) {
-      showToast("Subreddit already in list", "error");
+      showToast(msg("opt_js_toast_subreddit_already_in_list"), "error");
       return;
     }
 
     if (overrides.whitelist.length >= 100) {
-      showToast("Maximum 100 subreddits allowed", "error");
+      showToast(msg("opt_js_toast_maximum_100_subreddits_allowed"), "error");
       return;
     }
 
@@ -3874,7 +4069,7 @@
     elements.subredditInput.value = "";
     await loadWhitelist();
 
-    showToast(`r/${subreddit} added to exceptions`);
+    showToast(msg("opt_js_toast_subreddit_added_to_exceptions", [String(subreddit)]));
   }
 
   /**
@@ -3892,7 +4087,7 @@
       await chrome.runtime.sendMessage({ type: "UPDATE_SUBREDDIT_RULES" });
 
       await loadWhitelist();
-      showToast(`r/${subreddit} removed from exceptions`);
+      showToast(msg("opt_js_toast_subreddit_removed_from_exceptions", [String(subreddit)]));
     }
   }
 
@@ -3903,24 +4098,24 @@
     const subreddit = elements.mutedSubredditInput.value.trim().toLowerCase();
 
     if (!subreddit) {
-      showToast("Please enter a subreddit name", "error");
+      showToast(msg("opt_js_toast_please_enter_a_subreddit_name"), "error");
       return;
     }
 
     if (!/^[a-z0-9_]+$/i.test(subreddit)) {
-      showToast("Invalid subreddit name", "error");
+      showToast(msg("opt_js_toast_invalid_subreddit_name"), "error");
       return;
     }
 
     const overrides = await window.Storage.getSubredditOverrides();
 
     if (overrides.mutedSubreddits.includes(subreddit)) {
-      showToast("Subreddit already muted", "error");
+      showToast(msg("opt_js_toast_subreddit_already_muted"), "error");
       return;
     }
 
     if (overrides.mutedSubreddits.length >= 100) {
-      showToast("Maximum 100 muted subreddits allowed", "error");
+      showToast(msg("opt_js_toast_maximum_100_muted_subreddits_allowed"), "error");
       return;
     }
 
@@ -3943,7 +4138,7 @@
     elements.mutedSubredditInput.value = "";
     await loadMutedSubreddits();
 
-    showToast(`r/${subreddit} muted`);
+    showToast(msg("opt_js_toast_subreddit_muted", [String(subreddit)]));
   }
 
   /**
@@ -3967,7 +4162,7 @@
     });
 
     await loadMutedSubreddits();
-    showToast(`r/${subreddit} unmuted`);
+    showToast(msg("opt_js_toast_subreddit_unmuted", [String(subreddit)]));
   }
 
   /**
@@ -3986,7 +4181,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(UI_STRINGS.SUCCESS_MUTE_LIST_EXPORTED);
+    showToast(msg("opt_js_success_mute_list_exported"));
   }
 
   /**
@@ -4008,7 +4203,7 @@
       const imported = JSON.parse(text);
 
       if (!Array.isArray(imported)) {
-        showToast("Invalid format: must be JSON array", "error");
+        showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
         return;
       }
 
@@ -4017,7 +4212,7 @@
         (s) => typeof s !== "string" || !/^[a-z0-9_]+$/i.test(s)
       );
       if (invalid.length > 0) {
-        showToast(`Invalid subreddit names: ${invalid.join(", ")}`, "error");
+        showToast(msg("opt_js_toast_invalid_subreddit_names", [invalid.join(", ")]), "error");
         return;
       }
 
@@ -4027,7 +4222,7 @@
       );
 
       if (newMutes.length === 0) {
-        showToast("All subreddits already muted", "error");
+        showToast(msg("opt_js_toast_all_subreddits_already_muted"), "error");
         return;
       }
 
@@ -4052,9 +4247,9 @@
         });
       });
 
-      showToast(`${newMutes.length} subreddits imported`);
+      showToast(msg("opt_js_toast_subreddits_imported", [String(newMutes.length)]));
     } catch (error) {
-      showToast(`Import failed: ${error.message}`, "error");
+      showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
     } finally {
       // Reset file input
       event.target.value = "";
@@ -4068,19 +4263,19 @@
     const keyword = elements.keywordInput.value.trim();
 
     if (!keyword) {
-      showToast("Please enter a keyword or phrase", "error");
+      showToast(msg("opt_js_toast_please_enter_a_keyword_or_phrase"), "error");
       return;
     }
 
     const filtering = await window.Storage.getContentFiltering();
 
     if (filtering.mutedKeywords.includes(keyword)) {
-      showToast("Keyword already muted", "error");
+      showToast(msg("opt_js_toast_keyword_already_muted"), "error");
       return;
     }
 
     if (filtering.mutedKeywords.length >= 200) {
-      showToast("Maximum 200 keywords allowed", "error");
+      showToast(msg("opt_js_toast_maximum_200_keywords_allowed"), "error");
       return;
     }
 
@@ -4103,7 +4298,7 @@
     elements.keywordInput.value = "";
     await loadKeywordFiltering();
 
-    showToast(`"${keyword}" muted`);
+    showToast(msg("opt_js_toast_keyword_muted", [String(keyword)]));
   }
 
   /**
@@ -4127,7 +4322,7 @@
     });
 
     await loadKeywordFiltering();
-    showToast(`"${keyword}" unmuted`);
+    showToast(msg("opt_js_toast_keyword_unmuted", [String(keyword)]));
   }
 
   /**
@@ -4152,7 +4347,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_CASE_SENSITIVITY_UPDATED);
+    showToast(msg("opt_js_success_case_sensitivity_updated"));
   }
 
   /**
@@ -4177,7 +4372,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_REGEX_MODE_UPDATED);
+    showToast(msg("opt_js_success_regex_mode_updated"));
   }
 
   /**
@@ -4202,7 +4397,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_CONTENT_FILTERING_UPDATED);
+    showToast(msg("opt_js_success_content_filtering_updated"));
   }
 
   /**
@@ -4228,7 +4423,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_FLAIR_FILTERING_UPDATED);
+    showToast(msg("opt_js_success_flair_filtering_updated"));
   }
 
   /**
@@ -4254,7 +4449,7 @@
       });
     });
 
-    showToast(UI_STRINGS.SUCCESS_SCORE_FILTERING_UPDATED);
+    showToast(msg("opt_js_success_score_filtering_updated"));
   }
 
   /**
@@ -4280,7 +4475,7 @@
       });
     });
 
-    showToast(`Minimum score set to ${filtering.minScore}`);
+    showToast(msg("opt_js_toast_minimum_score_set", [String(filtering.minScore)]));
   }
 
   /**
@@ -4291,7 +4486,7 @@
     const flair = flairInput.value.trim();
 
     if (!flair) {
-      showToast("Please enter a flair text", "error");
+      showToast(msg("opt_js_toast_please_enter_a_flair_text"), "error");
       return;
     }
 
@@ -4299,12 +4494,12 @@
     const flairs = filtering.mutedFlairs || [];
 
     if (flairs.includes(flair)) {
-      showToast("Flair already muted", "error");
+      showToast(msg("opt_js_toast_flair_already_muted"), "error");
       return;
     }
 
     if (flairs.length >= 100) {
-      showToast("Maximum 100 flairs allowed", "error");
+      showToast(msg("opt_js_toast_maximum_100_flairs_allowed"), "error");
       return;
     }
 
@@ -4329,7 +4524,7 @@
     flairInput.value = "";
     await loadFlairFiltering();
 
-    showToast(`"${flair}" flair muted`);
+    showToast(msg("opt_js_toast_flair_muted", [String(flair)]));
   }
 
   /**
@@ -4357,7 +4552,7 @@
     });
 
     await loadFlairFiltering();
-    showToast(`"${flair}" flair unmuted`);
+    showToast(msg("opt_js_toast_flair_unmuted", [String(flair)]));
   }
 
   /**
@@ -4377,7 +4572,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(UI_STRINGS.SUCCESS_FLAIR_LIST_EXPORTED);
+    showToast(msg("opt_js_success_flair_list_exported"));
   }
 
   /**
@@ -4397,7 +4592,7 @@
         const imported = JSON.parse(text);
 
         if (!Array.isArray(imported)) {
-          showToast("Invalid format: must be JSON array", "error");
+          showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
           return;
         }
 
@@ -4408,7 +4603,7 @@
         );
 
         if (newFlairs.length === 0) {
-          showToast("All flairs already muted", "error");
+          showToast(msg("opt_js_toast_all_flairs_already_muted"), "error");
           return;
         }
 
@@ -4430,9 +4625,9 @@
         });
 
         await loadFlairFiltering();
-        showToast(`${newFlairs.length} flairs imported`);
+        showToast(msg("opt_js_toast_flairs_imported", [String(newFlairs.length)]));
       } catch (error) {
-        showToast(`Import failed: ${error.message}`, "error");
+        showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
       }
     };
 
@@ -4455,7 +4650,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(UI_STRINGS.SUCCESS_KEYWORD_LIST_EXPORTED);
+    showToast(msg("opt_js_success_keyword_list_exported"));
   }
 
   /**
@@ -4477,7 +4672,7 @@
       const imported = JSON.parse(text);
 
       if (!Array.isArray(imported)) {
-        showToast("Invalid format: must be JSON array", "error");
+        showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
         return;
       }
 
@@ -4486,7 +4681,7 @@
         (k) => typeof k !== "string" || !k.trim()
       );
       if (invalid.length > 0) {
-        showToast("Invalid keywords detected", "error");
+        showToast(msg("opt_js_toast_invalid_keywords_detected"), "error");
         return;
       }
 
@@ -4496,7 +4691,7 @@
       );
 
       if (newKeywords.length === 0) {
-        showToast("All keywords already muted", "error");
+        showToast(msg("opt_js_toast_all_keywords_already_muted"), "error");
         return;
       }
 
@@ -4521,9 +4716,9 @@
         });
       });
 
-      showToast(`${newKeywords.length} keywords imported`);
+      showToast(msg("opt_js_toast_keywords_imported", [String(newKeywords.length)]));
     } catch (error) {
-      showToast(`Import failed: ${error.message}`, "error");
+      showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
     } finally {
       // Reset file input
       event.target.value = "";
@@ -4565,7 +4760,7 @@
     const domain = elements.domainInput.value.trim();
 
     if (!domain) {
-      showToast("Please enter a domain", "error");
+      showToast(msg("opt_js_toast_please_enter_a_domain"), "error");
       return;
     }
 
@@ -4578,12 +4773,12 @@
       .toLowerCase();
 
     if (filtering.mutedDomains.includes(normalized)) {
-      showToast("Domain already muted", "error");
+      showToast(msg("opt_js_toast_domain_already_muted"), "error");
       return;
     }
 
     if (filtering.mutedDomains.length >= 100) {
-      showToast("Maximum 100 domains allowed", "error");
+      showToast(msg("opt_js_toast_maximum_100_domains_allowed"), "error");
       return;
     }
 
@@ -4606,7 +4801,7 @@
     elements.domainInput.value = "";
     await loadDomainFiltering();
 
-    showToast(`"${normalized}" muted`);
+    showToast(msg("opt_js_toast_domain_muted", [String(normalized)]));
   }
 
   /**
@@ -4630,7 +4825,7 @@
     });
 
     await loadDomainFiltering();
-    showToast(`"${domain}" unmuted`);
+    showToast(msg("opt_js_toast_domain_unmuted", [String(domain)]));
   }
 
   /**
@@ -4649,7 +4844,7 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(UI_STRINGS.SUCCESS_DOMAIN_LIST_EXPORTED);
+    showToast(msg("opt_js_success_domain_list_exported"));
   }
 
   /**
@@ -4671,7 +4866,7 @@
       const imported = JSON.parse(text);
 
       if (!Array.isArray(imported)) {
-        showToast("Invalid format: must be JSON array", "error");
+        showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
         return;
       }
 
@@ -4680,7 +4875,7 @@
         (d) => typeof d !== "string" || !d.trim()
       );
       if (invalid.length > 0) {
-        showToast("Invalid domains detected", "error");
+        showToast(msg("opt_js_toast_invalid_domains_detected"), "error");
         return;
       }
 
@@ -4698,7 +4893,7 @@
         .filter((d) => !filtering.mutedDomains.includes(d));
 
       if (newDomains.length === 0) {
-        showToast("All domains already muted", "error");
+        showToast(msg("opt_js_toast_all_domains_already_muted"), "error");
         return;
       }
 
@@ -4723,9 +4918,9 @@
         });
       });
 
-      showToast(`${newDomains.length} domains imported`);
+      showToast(msg("opt_js_toast_domains_imported", [String(newDomains.length)]));
     } catch (error) {
-      showToast(`Import failed: ${error.message}`, "error");
+      showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
     } finally {
       // Reset file input
       event.target.value = "";
@@ -4767,8 +4962,7 @@
     a.click();
 
     URL.revokeObjectURL(url);
-
-    showToast(UI_STRINGS.SUCCESS_SETTINGS_EXPORTED);
+    showToast(msg("opt_js_success_settings_exported"));
   }
 
   /**
@@ -4796,30 +4990,26 @@
       const text = await file.text();
       const data = JSON.parse(text);
 
-      // Validate
       const validation = window.Storage.validateImport(data);
       if (!validation.valid) {
-        showToast(`Invalid settings file: ${validation.errors[0]}`, "error");
+        showToast(msg("opt_js_toast_invalid_settings_file", [String(validation.errors[0])]), "error");
         return;
       }
 
-      // Confirm overwrite
-      if (!confirm("This will replace your current settings. Continue?")) {
+      if (!confirm(msg("opt_js_confirm_this_will_replace_your_current_settings_continue"))) {
         return;
       }
 
-      // Import
       await window.Storage.importSettings(data);
 
       // Refresh rules
       await chrome.runtime.sendMessage({ type: "UPDATE_SUBREDDIT_RULES" });
-
-      showToast(UI_STRINGS.SUCCESS_SETTINGS_IMPORTED);
+      showToast(msg("opt_js_success_settings_imported"));
 
       // Reload page to refresh UI
       setTimeout(() => location.reload(), 1000);
     } catch (error) {
-      showToast(`Failed to import: ${error.message}`, "error");
+      showToast(msg("opt_js_toast_failed_to_import", [String(error.message)]), "error");
     }
 
     // Reset input
@@ -4835,15 +5025,15 @@
     try {
       if (enabled) {
         await window.Storage.enableSync();
-        showToast(UI_STRINGS.SUCCESS_SYNC_ENABLED);
+        showToast(msg("opt_js_success_sync_enabled"));
       } else {
         await window.Storage.disableSync();
-        showToast(UI_STRINGS.SUCCESS_SYNC_DISABLED);
+        showToast(msg("opt_js_success_sync_disabled"));
       }
 
       await loadSyncStatus();
     } catch (error) {
-      showToast(`Sync error: ${error.message}`, "error");
+      showToast(msg("opt_js_toast_sync_error", [String(error.message)]), "error");
       elements.syncToggle.checked = !enabled; // Revert
     }
   }
@@ -4868,7 +5058,7 @@
    */
   function validateTestUrl(url) {
     if (!url) {
-      showToast("Please enter a URL", "error");
+      showToast(msg("opt_js_toast_please_enter_a_url"), "error");
       return null;
     }
 
@@ -4878,8 +5068,8 @@
     } catch {
       displayTestResult(
         "error",
-        "Invalid URL",
-        "Please enter a valid URL starting with https://"
+        msg("opt_js_urltest_invalid_url_title"),
+        msg("opt_js_urltest_invalid_url_detail")
       );
       return null;
     }
@@ -4887,8 +5077,8 @@
     if (!urlObj.hostname.includes("reddit")) {
       displayTestResult(
         "error",
-        "Not a Reddit URL",
-        "This tool only tests Reddit URLs"
+        msg("opt_js_urltest_not_reddit_title"),
+        msg("opt_js_urltest_not_reddit_detail")
       );
       return null;
     }
@@ -4918,8 +5108,8 @@
     if (allowlistDomains.includes(urlObj.hostname)) {
       displayTestResult(
         "allow",
-        "Not redirected (allowlisted)",
-        `${urlObj.hostname} stays on new Reddit by design`
+        msg("opt_js_urltest_not_redirected_allowlisted_title"),
+        msg("opt_js_urltest_allowlisted_domain_detail", [String(urlObj.hostname)])
       );
       return true;
     }
@@ -4929,8 +5119,8 @@
       if (pattern.test(url)) {
         displayTestResult(
           "allow",
-          "Not redirected (allowlisted)",
-          "This path stays on new Reddit by design"
+          msg("opt_js_urltest_not_redirected_allowlisted_title"),
+          msg("opt_js_urltest_allowlisted_path_detail")
         );
         return true;
       }
@@ -4946,7 +5136,11 @@
    */
   function checkAlreadyOldReddit(urlObj) {
     if (urlObj.hostname === "old.reddit.com") {
-      displayTestResult("allow", "Already on Old Reddit", "No redirect needed");
+      displayTestResult(
+        "allow",
+        msg("opt_js_urltest_already_old_title"),
+        msg("opt_js_urltest_no_redirect_needed")
+      );
       return true;
     }
     return false;
@@ -4965,7 +5159,7 @@
     if (galleryMatch) {
       displayTestResult(
         "redirect",
-        "Would redirect to Old Reddit",
+        msg("opt_js_urltest_would_redirect_title"),
         `old.reddit.com/comments/${galleryMatch[2]}`
       );
       return true;
@@ -4978,7 +5172,7 @@
     if (videoMatch) {
       displayTestResult(
         "redirect",
-        "Would redirect to Old Reddit",
+        msg("opt_js_urltest_would_redirect_title"),
         `old.reddit.com/comments/${videoMatch[2]}`
       );
       return true;
@@ -5018,8 +5212,10 @@
         if (overrides.whitelist.includes(subreddit)) {
           displayTestResult(
             "allow",
-            "Not redirected (whitelisted)",
-            `r/${subreddit} is in your exceptions list`
+            msg("opt_js_urltest_not_redirected_whitelisted_title"),
+            msg("opt_js_urltest_whitelisted_subreddit_detail", [
+              String(subreddit),
+            ])
           );
           return true;
         }
@@ -5030,7 +5226,7 @@
       newUrl.hostname = "old.reddit.com";
       displayTestResult(
         "redirect",
-        "Would redirect to Old Reddit",
+        msg("opt_js_urltest_would_redirect_title"),
         newUrl.toString()
       );
       return true;
@@ -5058,8 +5254,8 @@
     // Unknown/not handled
     displayTestResult(
       "error",
-      "Not handled",
-      "This URL doesn't match any redirect rules"
+      msg("opt_js_urltest_not_handled_title"),
+      msg("opt_js_urltest_not_handled_detail")
     );
   }
 
@@ -5149,13 +5345,13 @@
     const domain = elements.customDomain.value.trim();
 
     if (!domain) {
-      showToast("Please enter a domain", "error");
+      showToast(msg("opt_js_toast_please_enter_a_domain"), "error");
       return;
     }
 
     // Validate domain format
     if (!/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(domain)) {
-      showToast("Invalid domain format", "error");
+      showToast(msg("opt_js_toast_invalid_domain_format"), "error");
       return;
     }
 
@@ -5173,7 +5369,7 @@
       customDomain: domain,
     });
 
-    showToast("Custom frontend saved!", "success");
+    showToast(msg("opt_js_toast_custom_frontend_saved"), "success");
     elements.permissionNotice.hidden = true;
 
     // Notify background script to update rules
@@ -5189,7 +5385,7 @@
       customDomain: null,
     });
 
-    showToast("Frontend updated!", "success");
+    showToast(msg("opt_js_toast_frontend_updated"), "success");
 
     // Notify background script to update rules
     await chrome.runtime.sendMessage({ type: "UPDATE_FRONTEND_RULES" });
@@ -5220,7 +5416,7 @@
 
       if (granted) {
         elements.permissionNotice.hidden = true;
-        showToast("Permission granted!", "success");
+        showToast(msg("opt_js_toast_permission_granted"), "success");
 
         // Save the selection now
         if (elements.customDomainSection.hidden) {
@@ -5233,11 +5429,11 @@
           await handleSaveCustomDomain();
         }
       } else {
-        showToast("Permission denied", "error");
+        showToast(msg("opt_js_toast_permission_denied"), "error");
       }
     } catch (error) {
       window.Logger?.error("Permission request failed:", error);
-      showToast("Permission request failed", "error");
+      showToast(msg("opt_js_toast_permission_request_failed"), "error");
     }
   }
 
@@ -5267,6 +5463,12 @@
       "change",
       handleUIPreferenceChange
     );
+    if (elements.languageOverride) {
+      elements.languageOverride.addEventListener(
+        "change",
+        handleLanguageOverrideChange
+      );
+    }
   }
 
   /**
@@ -5473,6 +5675,46 @@
   }
 
   /**
+   * Attach listeners for advanced navigation
+   */
+  function attachAdvancedNavigationListeners() {
+    [
+      elements.breadcrumbsEnabled,
+      elements.commentSearchEnabled,
+      elements.bookmarksEnabled,
+    ].forEach((el) => {
+      if (el) {
+        el.addEventListener("change", handleAdvancedNavigationChange);
+      }
+    });
+  }
+
+  /**
+   * Handle advanced navigation toggle
+   */
+  async function handleAdvancedNavigationChange() {
+    if (elements.breadcrumbsEnabled) {
+      await window.Storage.setBreadcrumbs({
+        enabled: elements.breadcrumbsEnabled.checked,
+      });
+    }
+
+    if (elements.commentSearchEnabled) {
+      await window.Storage.setCommentSearch({
+        enabled: elements.commentSearchEnabled.checked,
+      });
+    }
+
+    if (elements.bookmarksEnabled) {
+      await window.Storage.setBookmarks({
+        enabled: elements.bookmarksEnabled.checked,
+      });
+    }
+
+    showToast(msg("opt_js_toast_navigation_settings_saved"));
+  }
+
+  /**
    * Attach listeners for content filtering (nag blocking, subreddits, keywords, domains)
    */
   function attachContentFilteringListeners() {
@@ -5621,6 +5863,165 @@
       if (e.key === "Enter") {
         handleTestUrl();
       }
+    });
+
+    // Community
+    if (elements.shareMuted) {
+      elements.shareMuted.addEventListener("click", () =>
+        handleShareList("subreddits")
+      );
+    }
+    if (elements.shareKeywords) {
+      elements.shareKeywords.addEventListener("click", () =>
+        handleShareList("keywords")
+      );
+    }
+    if (elements.shareDomains) {
+      elements.shareDomains.addEventListener("click", () =>
+        handleShareList("domains")
+      );
+    }
+
+    if (elements.browseMarketplace) {
+      elements.browseMarketplace.addEventListener(
+        "click",
+        handleBrowseMarketplace
+      );
+    }
+  }
+
+  function exportCommunityList(type, list, metadata) {
+    const exportData = {
+      type: "orr-list",
+      contentType: type,
+      metadata: {
+        ...metadata,
+        version: "1.0",
+        timestamp: new Date().toISOString(),
+      },
+      items: list,
+    };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${metadata.name.toLowerCase().replace(/\s+/g, "-")}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Handle sharing a list
+   * @param {string} type - 'subreddits', 'keywords', 'domains'
+   */
+  async function handleShareList(type) {
+    try {
+      const settings = await window.Storage.get(null);
+      let list = [];
+      let name = "";
+
+      switch (type) {
+        case "subreddits":
+          list = settings.mutedSubreddits || [];
+          name = msg("opt_js_list_name_muted_subreddits");
+          break;
+        case "keywords":
+          list = settings.mutedKeywords || [];
+          name = msg("opt_js_list_name_muted_keywords");
+          break;
+        case "domains":
+          list = settings.mutedDomains || [];
+          name = msg("opt_js_list_name_muted_domains");
+          break;
+      }
+
+      if (!list || list.length === 0) {
+        showToast(msg("opt_js_toast_list_is_empty"), "error");
+        return;
+      }
+
+      const description = prompt(
+        msg("opt_js_prompt_enter_description_for_list", [String(name)]),
+        msg("opt_js_prompt_default_list_name", [String(name)])
+      );
+      if (description === null) return; // Cancelled
+
+      const author = prompt(
+        msg("opt_js_prompt_enter_name_handle_optional"),
+        msg("opt_js_author_anonymous")
+      );
+
+      exportCommunityList(type, list, {
+        name,
+        description,
+        author: author || msg("opt_js_author_anonymous"),
+      });
+
+      showToast(msg("opt_js_toast_list_exported_for_sharing"));
+    } catch (error) {
+      console.error(error);
+      showToast(msg("opt_js_toast_failed_to_share_list"), "error");
+    }
+  }
+
+  /**
+   * Handle browsing marketplace
+   */
+  function handleBrowseMarketplace() {
+    window.open("marketplace.html", "_blank");
+  }
+
+  /**
+   * Initialize community lists
+   */
+  async function initCommunityLists() {
+    const result = await chrome.storage.local.get("community");
+    const subscriptions = result.community?.subscriptions || [];
+    renderSubscriptions(subscriptions);
+  }
+
+  /**
+   * Render subscriptions list
+   */
+  function renderSubscriptions(subscriptions) {
+    if (!elements.subscriptionList) return;
+
+    elements.subscriptionList.innerHTML = "";
+
+    if (subscriptions.length === 0) {
+      if (elements.subscriptionsEmpty)
+        elements.subscriptionsEmpty.style.display = "block";
+      return;
+    }
+
+    if (elements.subscriptionsEmpty)
+      elements.subscriptionsEmpty.style.display = "none";
+
+    subscriptions.forEach((sub) => {
+      const li = document.createElement("li");
+      li.className = "tag-item";
+      li.innerHTML = `
+        <span class="tag-name">${sub.name}</span>
+        <span class="tag-meta" style="margin-left:8px;opacity:0.7">${escapeHtml(msg("opt_js_by_author", [String(sub.author)]))}</span>
+        <button class="remove-tag" data-id="${sub.id}" title="${msg("opt_js_action_unsubscribe")}">×</button>
+      `;
+
+      li.querySelector(".remove-tag").addEventListener("click", async () => {
+        if (confirm(msg("opt_js_confirm_unsubscribe_from_list", [String(sub.name)]))) {
+          const data = await chrome.storage.local.get("community");
+          const newSubs = (data.community?.subscriptions || []).filter(
+            (s) => s.id !== sub.id
+          );
+          await chrome.storage.local.set({
+            community: { ...data.community, subscriptions: newSubs },
+          });
+          initCommunityLists();
+        }
+      });
+
+      elements.subscriptionList.appendChild(li);
     });
   }
 
@@ -5785,6 +6186,32 @@
   /**
    * Attach listeners for global settings (keyboard shortcuts, import/export, sync, frontend)
    */
+  /**
+   * Attach compliance listeners
+   */
+  function attachComplianceListeners() {
+    if (elements.ageVerificationEnabled) {
+      elements.ageVerificationEnabled.addEventListener(
+        "change",
+        handleComplianceToggle
+      );
+    }
+  }
+
+  /**
+   * Handle compliance toggle
+   */
+  async function handleComplianceToggle(e) {
+    const enabled = e.target.checked;
+    await window.Storage.setCompliance({
+      ageVerificationEnabled: enabled,
+    });
+    showToast(msg("opt_js_toast_age_verification_setting_saved"));
+  }
+
+  /**
+   * Attach global settings listeners
+   */
   function attachGlobalSettingsListeners() {
     // Keyboard shortcut
     elements.customizeShortcut.addEventListener(
@@ -5845,13 +6272,24 @@
     attachReadingHistoryListeners();
     attachNsfwControlsListeners();
     attachCommentEnhancementsListeners();
+    attachAdvancedNavigationListeners();
     attachContentFilteringListeners();
     attachUserManagementListeners();
     attachFeedAndPrivacyListeners();
+    attachComplianceListeners();
     attachGlobalSettingsListeners();
 
     // Layout Presets (has its own sub-function)
     initLayoutPresetsListeners();
+
+    // Community Lists
+    initCommunityLists();
+
+    if (elements.reportIssueBtn) {
+      elements.reportIssueBtn.addEventListener("click", () =>
+        openIssueReporter("bug")
+      );
+    }
 
     // Storage Management (has its own sub-function)
     attachStorageManagementListeners();
@@ -5888,7 +6326,7 @@
       updateKeyboardShortcutsUI();
     } catch (error) {
       console.error("[ORR] Failed to load keyboard shortcuts:", error);
-      showToast("Failed to load keyboard shortcuts", "error");
+      showToast(msg("opt_js_toast_failed_to_load_keyboard_shortcuts"), "error");
     }
   }
 
@@ -5986,7 +6424,7 @@
           </td>
           <td class="shortcut-actions">
             <button class="shortcut-edit-btn" onclick="editShortcut('${shortcut.id}')">
-              Edit
+              ${msg("opt_js_action_edit")}
             </button>
           </td>
         `;
@@ -6001,9 +6439,9 @@
    */
   function getContextBadge(context) {
     const labels = {
-      any: "All pages",
-      feed: "Feed only",
-      comments: "Comments only",
+      any: msg("opt_js_shortcut_context_any"),
+      feed: msg("opt_js_shortcut_context_feed"),
+      comments: msg("opt_js_shortcut_context_comments"),
     };
     return `<span class="shortcut-context-badge">${labels[context] || context}</span>`;
   }
@@ -6027,10 +6465,10 @@
         keyboardShortcuts: keyboardShortcutsCache,
       });
       detectAndDisplayConflicts();
-      showToast(`Shortcut ${enabled ? "enabled" : "disabled"}`, "success");
+      showToast(msg(enabled ? "opt_js_toast_shortcut_enabled" : "opt_js_toast_shortcut_disabled"), "success");
     } catch (error) {
       console.error("[ORR] Failed to toggle shortcut:", error);
-      showToast("Failed to update shortcut", "error");
+      showToast(msg("opt_js_toast_failed_to_update_shortcut"), "error");
     }
   };
 
@@ -6106,7 +6544,7 @@
     const validation = document.getElementById("keyboard-edit-validation");
 
     if (!keys || keys.trim().length === 0) {
-      validation.textContent = UI_STRINGS.VALIDATE_KEYS_CANNOT_BE_EMPTY;
+      validation.textContent = msg("opt_js_validate_keys_cannot_be_empty");
       validation.className = "validation-message";
       return false;
     }
@@ -6125,14 +6563,14 @@
           shortcut.context === "any" ||
           currentContext === "any"
         ) {
-          validation.textContent = `Conflicts with: ${shortcut.description}`;
+          validation.textContent = msg("opt_js_validation_conflicts_with", [String(shortcut.description)]);
           validation.className = "validation-message";
           return false;
         }
       }
     }
 
-    validation.textContent = UI_STRINGS.STATUS_VALID;
+    validation.textContent = msg("opt_js_status_valid");
     validation.className = "validation-message success";
     return true;
   }
@@ -6159,10 +6597,10 @@
 
       closeEditModal();
       updateKeyboardShortcutsUI();
-      showToast("Shortcut updated successfully", "success");
+      showToast(msg("opt_js_toast_shortcut_updated_successfully"), "success");
     } catch (error) {
       console.error("[ORR] Failed to save shortcut:", error);
-      showToast("Failed to save shortcut", "error");
+      showToast(msg("opt_js_toast_failed_to_save_shortcut"), "error");
     }
   }
 
@@ -6170,7 +6608,7 @@
    * Reset shortcut to default
    */
   async function resetShortcut() {
-    if (!confirm("Reset this shortcut to its default?")) return;
+    if (!confirm(msg("opt_js_confirm_reset_this_shortcut_to_its_default"))) return;
 
     try {
       const defaults = await storage.getDefaults();
@@ -6187,11 +6625,11 @@
 
         closeEditModal();
         updateKeyboardShortcutsUI();
-        showToast("Shortcut reset to default", "success");
+        showToast(msg("opt_js_toast_shortcut_reset_to_default"), "success");
       }
     } catch (error) {
       console.error("[ORR] Failed to reset shortcut:", error);
-      showToast("Failed to reset shortcut", "error");
+      showToast(msg("opt_js_toast_failed_to_reset_shortcut"), "error");
     }
   }
 
@@ -6242,9 +6680,12 @@
     if (conflicts.length > 0) {
       banner.style.display = "block";
       const conflictList = conflicts
-        .map((c) => `<strong>${c.keys}</strong>: ${c.shortcuts.join(" and ")}`)
+        .map(
+          (c) =>
+            `<strong>${c.keys}</strong>: ${c.shortcuts.join(` ${msg("opt_js_word_and")} `)}`
+        )
         .join("<br>");
-      message.innerHTML = `The following shortcuts have conflicts:<br>${conflictList}`;
+      message.innerHTML = `${escapeHtml(msg("opt_js_shortcuts_conflict_prefix"))}<br>${conflictList}`;
 
       // Highlight conflicting rows
       conflicts.forEach((c) => {
@@ -6284,10 +6725,10 @@
       a.click();
       URL.revokeObjectURL(url);
 
-      showToast("Shortcuts exported successfully", "success");
+      showToast(msg("opt_js_toast_shortcuts_exported_successfully"), "success");
     } catch (error) {
       console.error("[ORR] Failed to export shortcuts:", error);
-      showToast("Failed to export shortcuts", "error");
+      showToast(msg("opt_js_toast_failed_to_export_shortcuts"), "error");
     }
   }
 
@@ -6305,7 +6746,7 @@
       }
 
       // Confirm overwrite
-      if (!confirm("This will overwrite your current shortcuts. Continue?")) {
+      if (!confirm(msg("opt_js_confirm_this_will_overwrite_your_current_shortcuts_continue"))) {
         return;
       }
 
@@ -6320,10 +6761,10 @@
       });
 
       updateKeyboardShortcutsUI();
-      showToast("Shortcuts imported successfully", "success");
+      showToast(msg("opt_js_toast_shortcuts_imported_successfully"), "success");
     } catch (error) {
       console.error("[ORR] Failed to import shortcuts:", error);
-      showToast("Failed to import shortcuts: " + error.message, "error");
+      showToast(msg("opt_js_toast_failed_to_import_shortcuts", [String(error.message)]), "error");
     }
   }
 
@@ -6332,9 +6773,7 @@
    */
   async function resetAllShortcuts() {
     if (
-      !confirm(
-        "Reset all keyboard shortcuts to defaults? This cannot be undone."
-      )
+      !confirm(msg("opt_js_confirm_reset_all_keyboard_shortcuts"))
     ) {
       return;
     }
@@ -6348,10 +6787,10 @@
       });
 
       updateKeyboardShortcutsUI();
-      showToast("All shortcuts reset to defaults", "success");
+      showToast(msg("opt_js_toast_all_shortcuts_reset_to_defaults"), "success");
     } catch (error) {
       console.error("[ORR] Failed to reset shortcuts:", error);
-      showToast("Failed to reset shortcuts", "error");
+      showToast(msg("opt_js_toast_failed_to_reset_shortcuts"), "error");
     }
   }
 
@@ -6378,7 +6817,7 @@
         await chrome.storage.sync.set({
           keyboardShortcuts: keyboardShortcutsCache,
         });
-        showToast("Chord timeout updated", "success");
+        showToast(msg("opt_js_toast_chord_timeout_updated"), "success");
       });
 
     // Export button

@@ -31,13 +31,29 @@ export async function initializeFeatures() {
     const { initAccessibility } = await import("./core/accessibility.js");
     const { initNagBlocking } = await import("./core/nag-blocking.js");
     const { initFiltering } = await import("./core/content-filtering.js");
+    const { initCompliance } = await import("./core/compliance.js");
 
     await Promise.all([
       initDarkMode(),
       initAccessibility(),
       initNagBlocking(),
       initFiltering(),
+      initCompliance(),
     ]);
+
+    // Phase 2b: DevTools & Monitoring
+    try {
+      const { startDomMonitor, checkCriticalSelectors } =
+        await import("./devtools/dom-monitor.js");
+      startDomMonitor();
+      checkCriticalSelectors();
+    } catch (e) {
+      if (typeof console.warn === "function") {
+        console.warn("[ORR] DOM Monitor failed to start", e);
+      } else if (typeof console.log === "function") {
+        console.log("[ORR] DOM Monitor failed to start", e);
+      }
+    }
 
     // Phase 3: Comment modules (lazy load for comment pages)
     if (isCommentsPage()) {
@@ -56,6 +72,11 @@ export async function initializeFeatures() {
     // Phase 4: Optional features (lazy load when enabled)
     const { initOptionalFeatures } = await import("./optional/index.js");
     await initOptionalFeatures();
+
+    // Phase 5: Discovery modules (load if enabled)
+    debugLog("[ORR] Module loader: Loading discovery features");
+    const { initDiscovery } = await import("./discovery/index.js");
+    await initDiscovery();
 
     // Auto-collapse bot comments (part of dark mode)
     const { autoCollapseBotComments } = await import("./core/dark-mode.js");

@@ -10,6 +10,7 @@
     redirectCount: document.getElementById("redirect-count"),
     totalCount: document.getElementById("total-count"),
     openOptions: document.getElementById("open-options"),
+    reportBroken: document.getElementById("report-broken"),
     disableDuration: document.getElementById("disable-duration"),
     tempDisableSection: document.getElementById("temp-disable-section"),
     durationSection: document.getElementById("duration-section"),
@@ -22,6 +23,103 @@
     switchAllOld: document.getElementById("switch-all-old"),
     switchAllNew: document.getElementById("switch-all-new"),
   };
+
+  function msg(key, substitutions) {
+    if (window.ORRI18n?.msg) {
+      return window.ORRI18n.msg(key, substitutions);
+    }
+    return chrome.i18n.getMessage(key, substitutions) || key;
+  }
+
+  function applyDocumentLanguageAndDirection() {
+    if (window.ORRI18n?.applyDocumentLanguageAndDirection) {
+      window.ORRI18n.applyDocumentLanguageAndDirection();
+      return;
+    }
+
+    const uiLanguage = (chrome.i18n.getUILanguage?.() || "en").toLowerCase();
+    const rtlPrefixes = ["ar", "he", "fa", "ur", "ps", "dv", "ku", "yi"];
+    const isRtl = rtlPrefixes.some(
+      (prefix) => uiLanguage === prefix || uiLanguage.startsWith(`${prefix}-`)
+    );
+    document.documentElement.lang = uiLanguage;
+    document.documentElement.dir = isRtl ? "rtl" : "ltr";
+  }
+
+  function localizePage() {
+    if (window.ORRI18n?.localizePage) {
+      window.ORRI18n.localizePage();
+      return;
+    }
+
+    document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+      const key = el.getAttribute("data-i18n-aria-label");
+      const text = msg(key);
+      if (text !== key) {
+        el.setAttribute("aria-label", text);
+      }
+    });
+
+    document.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+      const key = el.getAttribute("data-i18n-alt");
+      const text = msg(key);
+      if (text !== key) {
+        el.setAttribute("alt", text);
+      }
+    });
+
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      const text = msg(key);
+      if (text !== key) {
+        el.textContent = text;
+      }
+    });
+  }
+
+  function openIssueReporter(type = "bug", details = {}) {
+    const params = new URLSearchParams();
+    const repoUrl =
+      "https://github.com/tom-james-watson/old-reddit-redirect/issues/new";
+
+    if (type === "selector") {
+      params.set("labels", "broken-selector");
+      params.set(
+        "title",
+        `[Selector] Broken selector on ${details.pageType || "unknown page"}`
+      );
+      params.set(
+        "body",
+        [
+          `**Page Type**: ${details.pageType || "N/A"}`,
+          `**Url**: ${details.url || "N/A"}`,
+          "",
+          "**Description of breakage**:",
+          "<!-- Describe what visual element is broken -->",
+        ].join("\n")
+      );
+    } else {
+      params.set("labels", "bug");
+      params.set(
+        "body",
+        [
+          "**Description**:",
+          "<!-- Describe the bug -->",
+          "",
+          "**Steps to Reproduce**:",
+          "1.",
+          "2.",
+          "3.",
+          "",
+          "**Expected Behavior**:",
+          "",
+          "**Actual Behavior**:",
+        ].join("\n")
+      );
+    }
+
+    window.open(`${repoUrl}?${params.toString()}`, "_blank");
+  }
 
   let countdownInterval = null;
 
@@ -38,6 +136,11 @@
    * Initialize popup
    */
   async function init() {
+    if (window.ORRI18n?.init) {
+      await window.ORRI18n.init();
+    }
+    applyDocumentLanguageAndDirection();
+    localizePage();
     await loadState();
     await loadStats();
     await loadShortcut();
@@ -150,10 +253,9 @@
         const keys = toggleCommand.shortcut.split("+");
         elements.shortcutHint.innerHTML =
           keys.map((k) => `<kbd>${escapeHtml(k)}</kbd>`).join("+") +
-          " to toggle";
+          msg("popup_toToggle");
       } else {
-        elements.shortcutHint.innerHTML =
-          '<a href="#" id="set-shortcut">Set keyboard shortcut</a>';
+        elements.shortcutHint.innerHTML = `<a href="#" id="set-shortcut">${msg("popup_setShortcut")}</a>`;
 
         // Add click handler for setting shortcut
         setTimeout(() => {
@@ -211,8 +313,8 @@
    */
   function updateStatusText(enabled) {
     elements.statusText.textContent = enabled
-      ? "Redirecting to old.reddit.com"
-      : "Redirect disabled";
+      ? msg("popup_statusRedirecting")
+      : msg("popup_statusDisabled");
   }
 
   /**
@@ -376,12 +478,30 @@
     });
   }
 
-  /**
-   * Open options page
-   */
   function handleOpenOptions() {
     chrome.runtime.openOptionsPage(() => {
       handleLastError();
+    });
+  }
+
+  /**
+   * Get current tab details and open reporter
+   */
+  function getTabDetailsAndReport() {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      handleLastError();
+      if (tabs.length === 0) {
+        openIssueReporter("selector");
+        return;
+      }
+
+      const tab = tabs[0];
+      const isReddit = tab.url && /reddit\.com/.test(tab.url);
+
+      openIssueReporter("selector", {
+        url: tab.url,
+        pageType: isReddit ? "Reddit" : "Other",
+      });
     });
   }
 
@@ -431,8 +551,8 @@
 
     btn.querySelector("span").textContent =
       count > 0
-        ? `Switched ${count} tab${count === 1 ? "" : "s"}`
-        : "No tabs to switch";
+        ? msg("popup_switchedTabs", [count.toString(), count === 1 ? "" : "s"])
+        : msg("popup_noTabsToSwitch");
 
     setTimeout(() => {
       btn.querySelector("span").textContent = originalText;
@@ -452,6 +572,11 @@
     );
     elements.tabToggle.addEventListener("change", handleTabToggle);
     elements.openOptions.addEventListener("click", handleOpenOptions);
+    if (elements.reportBroken) {
+      elements.reportBroken.addEventListener("click", () =>
+        getTabDetailsAndReport()
+      );
+    }
     elements.darkModeSelect.addEventListener("change", handleDarkModeChange);
     elements.switchAllOld.addEventListener("click", () =>
       handleSwitchAllTabs("old", elements.switchAllOld)

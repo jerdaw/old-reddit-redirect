@@ -26,6 +26,15 @@ export async function initCommentFeatures() {
       commentMinimap: {
         enabled: true,
       },
+      breadcrumbs: {
+        enabled: true,
+      },
+      commentSearch: {
+        enabled: true,
+      },
+      bookmarks: {
+        enabled: true,
+      },
     });
 
     const loaders = [];
@@ -54,6 +63,21 @@ export async function initCommentFeatures() {
     // Load comment minimap if enabled
     if (prefs.commentMinimap?.enabled) {
       loaders.push(import("./minimap.js").then((m) => m.initMinimap()));
+    }
+
+    // Load breadcrumbs if enabled
+    if (prefs.breadcrumbs?.enabled) {
+      loaders.push(import("./breadcrumbs.js").then((m) => m.initBreadcrumbs()));
+    }
+
+    // Load search if enabled
+    if (prefs.commentSearch?.enabled) {
+      loaders.push(import("./search.js").then((m) => m.initCommentSearch()));
+    }
+
+    // Load bookmarks if enabled
+    if (prefs.bookmarks?.enabled) {
+      loaders.push(import("./bookmarks.js").then((m) => m.initBookmarks()));
     }
 
     // Load all enabled features in parallel

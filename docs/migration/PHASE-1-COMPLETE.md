@@ -261,4 +261,3 @@ Verify in console:
 
 - Plan document: Phase 6.1 Implementation Plan
 - Related issue: Code splitting for performance optimization
-- Previous discussion: Session transcript at `/home/jer/.claude/projects/-home-jer-localsync-old-reddit-redirect/f845d70e-f9c7-4e1c-8cbc-462a18d2d67d.jsonl`

@@ -51,6 +51,12 @@
     "readingHistory",
     "nsfwControls",
     "commentMinimap",
+    "i18n",
+    "compliance",
+    "breadcrumbs",
+    "commentSearch",
+    "bookmarks",
+    "discovery",
   ];
 
   // Default configuration
@@ -378,6 +384,36 @@
     sync: {
       enabled: false,
       lastSync: null,
+    },
+    i18n: {
+      languageOverride: "auto", // "auto" or explicit locale code (e.g., "en")
+    },
+    compliance: {
+      ageVerificationEnabled: false,
+      lastVerified: 0,
+    },
+    breadcrumbs: {
+      enabled: true,
+      showOnScroll: true,
+    },
+    commentSearch: {
+      enabled: true,
+      highlightColor: "#ffeb3b",
+    },
+    bookmarks: {
+      enabled: true,
+      maxBookmarks: 50,
+      entries: [], // Array of { id, url, title, timestamp, author, contentSnippet }
+    },
+    discovery: {
+      enabled: true,
+      relatedPosts: true,
+      collections: true,
+      smartCollections: true,
+    },
+    community: {
+      subscriptions: [], // Array of { id, url, name, lastUpdated, filters: {} }
+      contributions: [], // Array of submitted issues
     },
   };
 

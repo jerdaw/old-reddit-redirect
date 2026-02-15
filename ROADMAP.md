@@ -8,21 +8,20 @@
 
 ## Executive Summary
 
-**Current Version**: 19.0.0
-**Status**: Production ready, feature complete
+**Current Version (manifest.json)**: 19.0.0
+**Status**: Released through v19.0.0; additional work may be in `CHANGELOG.md#Unreleased`
 **Architecture**: Manifest V3, modular ES6 with lazy loading
 **Bundle Size**: 156KB (13.8% reduction from v18)
-**Test Coverage**: 860 tests across 26 suites
+**Test Coverage**: See `npm test` output for current counts
 
-**Feature Count**: 50+ major features across 14 completed phases
-**Latest Addition**: Switch All Tabs (popup buttons to switch all Reddit tabs at once)
-**Next Focus**: Under consideration (see Future Phases below)
+**Latest Addition (unreleased)**: Switch All Tabs (bulk switch between old/new)
+**Next Focus**: Stabilize and ship items in `CHANGELOG.md#Unreleased`
 
 ---
 
-## Completed Phases
+## Released Phases (Through v19.0.0)
 
-All core features have been implemented and are production-ready:
+Core features released through v19.0.0:
 
 | Phase   | Version      | Theme                 | Key Features                                                             | Tests |
 | ------- | ------------ | --------------------- | ------------------------------------------------------------------------ | ----- |
@@ -41,8 +40,6 @@ All core features have been implemented and are production-ready:
 
 **Total Impact**:
 
-- 50+ features from 14 phases
-- 860 comprehensive tests
 - 156KB optimized bundle
 - Full WCAG 2.1 AA/AAA compliance
 - Native ES6 modules with lazy loading
@@ -212,7 +209,106 @@ All core features have been implemented and are production-ready:
 - Collapsed comment indicators (striped pattern)
 - Auto-hide mode for reduced clutter
 
+### (Draft) Phase 15: Advanced Navigation (v20.0)
+
+**Breadcrumbs**:
+
+- Sticky parent chain at top of viewport when scrolling deep threads
+- Click ancestors to smooth-scroll to position
+- Works with existing color-coded depth visualization
+
+**Comment Search**:
+
+- In-page search widget (Ctrl+Shift+F)
+- Real-time highlighting of matches
+- Next/Previous navigation with counters
+- Performance-optimized DOM traversal
+
+**Bookmarks**:
+
+- Save individual comments for later reference
+- Floating "Next Bookmark" navigation button
+- Persisted to local storage (50 item LRU cache)
+- Visual indicators for saved items
+
+### (Draft) Phase 17: Sustainability (v20.0)
+
+- Optional age verification gate for NSFW content
+- "Support Development" section in Options
+- Ko-fi and GitHub Sponsors integration
+- Non-intrusive reminders
+
+### (Draft) Phase 16: Content Discovery (v21.0)
+
+**Related Posts**:
+
+- Local-only recommendations based on reading history
+- Subreddit and keyword matching
+- Privacy-preserving (no external requests)
+
+**Enhanced Bookmarks**:
+
+- Add tags to saved comments
+- Edit button for easy tagging
+- Persisted to local storage
+
+**Smart Collections**:
+
+- Auto-tagging based on rules (e.g. "Coding", "News")
+- Categorizes content automatically
+
 </details>
+
+<details>
+<summary>(Draft) Phase 8: Community & Collaboration (v22.0)</summary>
+
+**Shared Filter Lists**:
+
+- Import/export standardized blocklists
+- One-click subscriptions to community lists
+- Subreddit, keyword, and domain (wildcard) support
+
+**Marketplace**:
+
+- Browse community-curated lists
+- View list stats (subscribers, rating)
+- One-click subscribe/unsubscribe
+
+**Issue Reporter**:
+
+- Pre-filled GitHub issue generation
+- "Report Broken Selector" context-aware reporting
+- "Report Issue" from Options
+
+**DOM Monitoring**:
+
+- Background DOM change detection
+- Automated alerting for potential breakages
+</details>
+
+---
+
+## Current Focus: Unreleased
+
+### Phase 18: Internationalization (i18n)
+
+**Timeline**: 3-4 weeks
+**Focus**: Make the extension accessible to a global audience by translating the UI and handling text direction.
+
+| Feature                        | Description                                                    | Impact        |
+| ------------------------------ | -------------------------------------------------------------- | ------------- |
+| **Translation Infrastructure** | Implement `_locales` support and i18n helper functions         | Foundation    |
+| **UI Text Extraction**         | Extract hardcoded strings from HTML and JS into messages.json  | Preparation   |
+| **Language Selection**         | UI to override browser language preference                     | User Control  |
+| **RTL Support**                | CSS updates for Right-to-Left languages (Arabic, Hebrew, etc.) | Accessibility |
+
+### Stabilization (Completed 2026-02-15)
+
+Archived implementation plan: `docs/archive/2026-02-15-v23-stabilization-plan.md`
+
+- Restored project-standard `src/pages/**` script architecture and fixed Options/Popup wiring regressions.
+- Established i18n foundation (language override, RTL-aware dir/lang, locale catalogs, key-drift tests).
+- Localized Options/Popup UI and key runtime messages to locale-backed `msg()` keys.
 
 ---
 
@@ -234,77 +330,6 @@ Features postponed from their original phases (planned for future releases):
 ## Future Phases (Under Consideration)
 
 Potential next phases organized by priority and theme:
-
-### Phase 8: Community & Collaboration Features
-
-**Timeline**: 4-5 weeks
-**Focus**: Enable community-driven improvements and reduce maintenance burden
-
-| Feature                           | Description                                                       | Impact                   |
-| --------------------------------- | ----------------------------------------------------------------- | ------------------------ |
-| **Shared Filter Lists**           | Import/export standardized blocklists, one-click subscriptions    | Community curation       |
-| **Custom Selector Contributions** | User interface for submitting CSS selectors, community voting     | Crowdsourced maintenance |
-| **DOM Change Monitoring**         | Automated Reddit change detection, selector update notifications  | Faster responses         |
-| **Filter List Marketplace**       | Browse/install/rate community lists, privacy-preserving analytics | Engagement               |
-
-**Estimated Impact**:
-
-- Faster response to Reddit UI changes
-- Reduced solo maintenance burden
-- Stronger community engagement
-- Popular filter lists shared across users
-
----
-
-### Phase 15: Advanced Navigation (Proposed)
-
-**Timeline**: 2-3 weeks
-**Focus**: Enhanced thread navigation and orientation
-
-| Feature                   | Description                                | Benefit           |
-| ------------------------- | ------------------------------------------ | ----------------- |
-| **Breadcrumb Navigation** | Visual hierarchy for deeply nested threads | Context awareness |
-| **Improved Search**       | In-page comment search with highlighting   | Find discussions  |
-| **Thread Bookmarks**      | Save positions within long threads         | Resume reading    |
-
----
-
-### Phase 16: Content Discovery (Proposed)
-
-**Timeline**: 3-4 weeks
-**Focus**: Privacy-preserving content recommendations
-
-| Feature                     | Description                                     | Benefit             |
-| --------------------------- | ----------------------------------------------- | ------------------- |
-| **Related Posts**           | Local-only suggestions based on reading history | Discover content    |
-| **Saved Post Organization** | Tags, folders, search for saved items           | Better organization |
-| **Smart Collections**       | Auto-group saved posts by topic                 | Automatic curation  |
-
----
-
-## Lower Priority Ideas
-
-Features under consideration but not yet prioritized:
-
-### Navigation
-
-- Breadcrumb navigation for nested threads
-
-### Content Discovery
-
-- Related post suggestions (privacy-preserving)
-- Saved post organization (tags, folders)
-
-### NSFW Controls
-
-- Age verification reminder
-
-### Monetization (Optional)
-
-- Donation button (Ko-fi, GitHub Sponsors)
-- Patron-exclusive beta features
-- Open Collective for transparency
-- **Note**: Extension remains 100% free
 
 ---
 
@@ -352,4 +377,4 @@ See `CONTRIBUTING.md` for development guidelines.
 
 ---
 
-_Last updated: 2026-02-05_
+_Last updated: 2026-02-15_

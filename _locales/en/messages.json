@@ -1,0 +1,1630 @@
+{
+  "extName": {
+    "message": "Old Reddit Redirect",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Ensure Reddit always loads the old design",
+    "description": "Extension description"
+  },
+  "toggleRedirect": {
+    "message": "Toggle Redirect",
+    "description": "Command description"
+  },
+  "options_title": {
+    "message": "Old Reddit Redirect Options",
+    "description": "Title of the options page"
+  },
+  "popup_enableRedirect": { "message": "Enable Redirect" },
+  "popup_statusRedirecting": { "message": "Redirecting to old.reddit.com" },
+  "popup_statusDisabled": { "message": "Redirect disabled" },
+  "popup_tempDisableStatus": { "message": "Temporary Disable Status" },
+  "popup_reenablingIn": { "message": "Re-enabling in" },
+  "popup_cancel": { "message": "Cancel" },
+  "popup_tempDisableHeading": { "message": "Temporary Disable" },
+  "popup_disableFor": { "message": "Disable for:" },
+  "popup_durationChoose": { "message": "Choose duration..." },
+  "popup_duration5m": { "message": "5 minutes" },
+  "popup_duration15m": { "message": "15 minutes" },
+  "popup_duration30m": { "message": "30 minutes" },
+  "popup_duration1h": { "message": "1 hour" },
+  "popup_darkMode": { "message": "Dark Mode" },
+  "popup_themeAuto": { "message": "Auto (follow system)" },
+  "popup_themeLight": { "message": "Light" },
+  "popup_themeDark": { "message": "Dark" },
+  "popup_themeOLED": { "message": "OLED Black" },
+  "popup_themeHighContrast": { "message": "High Contrast" },
+  "popup_thisTabOnly": { "message": "This tab only" },
+  "popup_switchOld": { "message": "All Tabs → Old" },
+  "popup_switchNew": { "message": "All Tabs → New" },
+  "popup_statsHeading": { "message": "Redirect Statistics" },
+  "popup_statsToday": { "message": "redirects today" },
+  "popup_statsTotal": { "message": "total" },
+  "popup_statsTrend": { "message": "7-day trend" },
+  "popup_btnOptions": { "message": "Options" },
+  "popup_btnReportBroken": { "message": "Report Broken" },
+  "popup_loadingShortcut": { "message": "Loading shortcut..." },
+  "popup_container_aria": { "message": "Old Reddit Redirect popup" },
+  "popup_logo_alt": { "message": "Old Reddit Redirect logo" },
+  "popup_cancel_aria": {
+    "message": "Cancel temporary disable and re-enable redirect"
+  },
+  "popup_duration_select_aria": {
+    "message": "Select duration to temporarily disable redirect"
+  },
+  "popup_darkmode_select_aria": { "message": "Select dark mode theme" },
+  "popup_switch_tabs_section_aria": {
+    "message": "Switch all Reddit tabs"
+  },
+  "popup_switch_old_aria": {
+    "message": "Switch all Reddit tabs to old Reddit"
+  },
+  "popup_switch_new_aria": {
+    "message": "Switch all Reddit tabs to new Reddit"
+  },
+  "popup_redirect_count_aria": { "message": "Redirects today" },
+  "popup_total_count_aria": { "message": "Total redirects" },
+  "popup_trend_chart_aria": { "message": "7-day redirect trend chart" },
+  "popup_actions_section_aria": { "message": "Actions" },
+  "popup_open_options_aria": { "message": "Open extension options page" },
+  "popup_report_broken_aria": { "message": "Report broken selector" },
+  "popup_switchedTabs": {
+    "message": "Switched $COUNT$ tab$PLURAL$",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "plural": { "content": "$2" }
+    }
+  },
+  "popup_noTabsToSwitch": { "message": "No tabs to switch" },
+  "popup_toToggle": { "message": " to toggle" },
+  "popup_setShortcut": { "message": "Set keyboard shortcut" },
+
+  "opt_main_heading": { "message": "Main Toggle" },
+  "opt_enable_redirect": { "message": "Enable Redirect" },
+  "opt_enable_redirect_desc": {
+    "message": "Automatically redirect Reddit URLs to old.reddit.com"
+  },
+  "opt_toggle_redirect_aria": { "message": "Toggle redirect" },
+
+  "opt_stats_heading": { "message": "Statistics" },
+  "opt_stats_total": { "message": "Total Redirects" },
+  "opt_stats_today": { "message": "Today" },
+  "opt_stats_last7days": { "message": "Last 7 Days" },
+  "opt_stats_top_subs": { "message": "Top Subreddits" },
+  "opt_stats_no_data": {
+    "message": "No subreddit data yet. Visit some subreddits to see stats!"
+  },
+  "opt_stats_export": { "message": "📊 Export Stats" },
+  "opt_stats_clear": { "message": "Clear Statistics" },
+
+  "opt_vis_heading": { "message": "Visual Preferences" },
+  "opt_vis_icon_click": { "message": "Icon Click Behavior" },
+  "opt_vis_click_popup": { "message": "Open popup (default)" },
+  "opt_vis_click_toggle": { "message": "Toggle redirect on/off" },
+  "opt_vis_icon_desc": {
+    "message": "Choose what happens when you click the extension icon. Keyboard shortcut always toggles regardless of this setting."
+  },
+  "opt_vis_badge_style": { "message": "Badge Style" },
+  "opt_vis_badge_text": { "message": "Text (\"OFF\" when disabled)" },
+  "opt_vis_badge_count": { "message": "Redirect count" },
+  "opt_vis_badge_color": { "message": "Color only" },
+  "opt_vis_badge_desc": {
+    "message": "How the extension icon badge should display"
+  },
+  "opt_i18n_lang_label": { "message": "Interface language" },
+  "opt_i18n_auto": { "message": "Auto (browser default)" },
+  "opt_i18n_en": { "message": "English" },
+  "opt_i18n_desc": {
+    "message": "Override UI language for extension pages. \"Auto\" follows your browser language."
+  },
+  "opt_i18n_saved": { "message": "Language preference saved" },
+  "opt_css_validate": { "message": "Validate" },
+
+  "opt_preset_heading": { "message": "Layout Presets" },
+  "opt_preset_desc": {
+    "message": "Save combinations of visual settings as presets for quick switching. Apply different layouts to specific subreddits automatically."
+  },
+  "opt_preset_enable": { "message": "Enable layout presets" },
+  "opt_preset_enable_desc": {
+    "message": "Save and apply custom layout configurations as reusable presets"
+  },
+  "opt_preset_create_heading": { "message": "Create New Preset" },
+  "opt_preset_name_placeholder": {
+    "message": "Preset name (e.g., Night Mode, Compact Reading)"
+  },
+  "opt_preset_create_btn": { "message": "Create from Current" },
+  "opt_preset_create_help": {
+    "message": "Creates a preset from your current feed enhancement and dark mode settings."
+  },
+  "opt_preset_saved_heading": { "message": "Saved Presets" },
+  "opt_preset_th_name": { "message": "Preset Name" },
+  "opt_preset_th_settings": { "message": "Settings" },
+  "opt_preset_th_created": { "message": "Created" },
+  "opt_preset_empty": {
+    "message": "No presets saved yet. Create a preset from your current settings using the form above."
+  },
+  "opt_preset_active_heading": { "message": "Active Preset" },
+  "opt_preset_active_none": { "message": "None (use individual settings)" },
+  "opt_preset_active_help": {
+    "message": "The active preset is applied globally. Subreddit-specific layouts override this."
+  },
+  "opt_preset_sub_heading": { "message": "Subreddit-Specific Layouts" },
+  "opt_preset_sub_prefix": { "message": "r/" },
+  "opt_preset_sub_placeholder": { "message": "subreddit name" },
+  "opt_preset_select_placeholder": { "message": "Select preset..." },
+  "opt_preset_add_btn": { "message": "Add" },
+  "opt_preset_sub_help": {
+    "message": "Apply a specific layout preset when visiting a subreddit."
+  },
+  "opt_preset_sub_empty": {
+    "message": "No subreddit layouts configured. Add a mapping above to apply different presets to specific subreddits."
+  },
+  "opt_preset_clear_mappings": { "message": "Clear All Mappings" },
+  "opt_preset_modal_heading": { "message": "Edit Preset" },
+  "opt_preset_modal_name": { "message": "Preset Name" },
+  "opt_preset_visual_heading": { "message": "Visual Settings" },
+  "opt_preset_modal_dark": { "message": "Dark mode enabled" },
+  "opt_preset_modal_dark_type": { "message": "Dark Mode Type" },
+  "opt_preset_modal_css": { "message": "Custom CSS (optional)" },
+  "opt_preset_modal_css_placeholder": {
+    "message": "/* Custom CSS for this preset */"
+  },
+  "opt_preset_save": { "message": "Save" },
+  "opt_preset_cancel": { "message": "Cancel" },
+
+  "opt_priv_heading": { "message": "Privacy & Tracking Protection" },
+  "opt_priv_desc": {
+    "message": "Protect your privacy by removing tracking parameters from URLs and controlling referrer information sent when leaving Reddit."
+  },
+  "opt_priv_score_label": { "message": "Privacy Score" },
+  "opt_priv_calc": { "message": "Calculating..." },
+  "opt_priv_track_enable": {
+    "message": "Remove tracking parameters from URLs"
+  },
+  "opt_priv_track_help": {
+    "message": "Automatically strips tracking parameters like utm_source, fbclid, gclid, and 55+ others when you click links."
+  },
+  "opt_priv_badge": { "message": "Show shield badge when tracking is removed" },
+  "opt_priv_badge_help": {
+    "message": "Display a temporary 🛡️ badge in the extension icon when tracking parameters are cleaned (lasts 3 seconds)."
+  },
+  "opt_priv_stats_heading": { "message": "Tracking Statistics by Category" },
+  "opt_priv_stat_total": { "message": "Total URLs Cleaned" },
+  "opt_priv_stat_last": { "message": "Last Cleaned" },
+  "opt_priv_stat_never": { "message": "Never" },
+  "opt_priv_stat_utm": { "message": "UTM Parameters" },
+  "opt_priv_stat_social": { "message": "Social Media" },
+  "opt_priv_stat_analytics": { "message": "Analytics" },
+  "opt_priv_stat_affiliate": { "message": "Affiliate/Referral" },
+  "opt_priv_stat_reddit": { "message": "Reddit-Specific" },
+  "opt_priv_stat_other": { "message": "Other Trackers" },
+  "opt_priv_export": { "message": "Export Privacy Report" },
+  "opt_priv_ref_heading": { "message": "Referrer Control" },
+  "opt_priv_ref_help": {
+    "message": "Choose what referrer information is sent when you leave Reddit. Higher privacy may break some website features."
+  },
+  "opt_priv_ref_default": { "message": "Default" },
+  "opt_priv_ref_default_desc": { "message": "Use browser's default behavior" },
+  "opt_priv_ref_same": { "message": "Same Origin (Recommended)" },
+  "opt_priv_ref_same_desc": { "message": "Only send referrer within Reddit" },
+  "opt_priv_ref_origin": { "message": "Origin Only" },
+  "opt_priv_ref_origin_desc": { "message": "Only send domain (high privacy)" },
+  "opt_priv_ref_none": { "message": "No Referrer" },
+  "opt_priv_ref_none_desc": {
+    "message": "Don't send any referrer (maximum privacy)"
+  },
+  "opt_priv_custom_heading": { "message": "Custom Tracking Parameters" },
+  "opt_priv_custom_help": {
+    "message": "Add or remove tracking parameters (one per line). Changes take effect immediately."
+  },
+  "opt_priv_custom_save": { "message": "Save Parameters" },
+  "opt_priv_custom_reset": { "message": "Reset to Defaults" },
+
+  "opt_front_heading": { "message": "Reddit Frontend" },
+  "opt_front_desc": {
+    "message": "Choose which Reddit frontend to redirect to. Alternative frontends offer privacy benefits and work without JavaScript."
+  },
+  "opt_front_custom": { "message": "Custom Domain" },
+  "opt_front_custom_placeholder": { "message": "example.com" },
+  "opt_front_custom_save": { "message": "Save" },
+  "opt_front_custom_help": {
+    "message": "Enter domain without https:// prefix"
+  },
+  "opt_front_perm_notice": {
+    "message": "This frontend requires additional permissions."
+  },
+  "opt_front_perm_grant": { "message": "Grant Permission" },
+
+  "opt_exc_heading": { "message": "Subreddit Exceptions" },
+  "opt_exc_desc": {
+    "message": "These subreddits will stay on new Reddit instead of redirecting. Useful for subreddits that use new Reddit features (polls, predictions, etc.)"
+  },
+  "opt_exc_empty": {
+    "message": "No exceptions configured. All subreddits redirect to old Reddit."
+  },
+  "opt_exc_suggest_heading": { "message": "Suggested Exceptions" },
+  "opt_exc_suggest_help": {
+    "message": "Popular subreddits that use new Reddit features like polls and predictions:"
+  },
+  "opt_exc_suggest_empty": { "message": "All suggestions have been added!" },
+
+  "opt_mute_sub_heading": { "message": "Muted Subreddits" },
+  "opt_mute_sub_desc": {
+    "message": "Hide posts from these subreddits on /r/all and /r/popular. Useful for filtering out noise or unwanted content."
+  },
+  "opt_mute_sub_btn": { "message": "Mute" },
+  "opt_mute_sub_empty": {
+    "message": "No muted subreddits. Posts from all subreddits will appear on /r/all and /r/popular."
+  },
+  "opt_share_list": { "message": "Share List" },
+  "opt_export_list": { "message": "📥 Export List" },
+  "opt_import_list": { "message": "📤 Import List" },
+
+  "opt_key_heading": { "message": "Muted Keywords" },
+  "opt_key_desc": {
+    "message": "Hide posts containing specific words or phrases in their titles. Useful for filtering clickbait, spoilers, or topics you want to avoid."
+  },
+  "opt_key_placeholder": { "message": "word or phrase" },
+  "opt_key_case": { "message": "Case sensitive matching" },
+  "opt_key_regex": { "message": "Use regular expressions (advanced)" },
+  "opt_key_regex_desc": {
+    "message": "Treat keywords as regex patterns instead of plain text. Requires valid regex syntax."
+  },
+  "opt_key_content": { "message": "Filter post content (not just titles)" },
+  "opt_key_content_desc": {
+    "message": "Check post body text for keywords, not just titles. Works with self-posts that have visible content."
+  },
+  "opt_key_empty": {
+    "message": "No muted keywords. All post titles will be shown."
+  },
+
+  "opt_flair_heading": { "message": "Flair Filtering" },
+  "opt_flair_desc": {
+    "message": "Hide posts with specific post flairs. Many subreddits use flairs to categorize posts (e.g., \"Meme\", \"Discussion\", \"NSFW\")."
+  },
+  "opt_flair_enable": { "message": "Enable flair filtering" },
+  "opt_flair_enable_desc": {
+    "message": "Hide posts based on their flair text. Flair text must match exactly (case-insensitive)."
+  },
+  "opt_flair_placeholder": { "message": "Flair text (e.g., Meme, Spoiler)" },
+  "opt_flair_empty": {
+    "message": "No muted flairs. All posts regardless of flair will be shown."
+  },
+
+  "opt_score_heading": { "message": "Score Filtering" },
+  "opt_score_desc": {
+    "message": "Hide posts with scores below a threshold. Useful for filtering low quality or unpopular content."
+  },
+  "opt_score_enable": { "message": "Enable score filtering" },
+  "opt_score_enable_desc": {
+    "message": "Hide posts with scores below the minimum threshold."
+  },
+  "opt_score_min": { "message": "Minimum score threshold" },
+  "opt_score_min_desc": {
+    "message": "Posts with scores below this value will be hidden. Default: 0 (hide negative posts)."
+  },
+
+  "opt_dom_heading": { "message": "Muted Domains" },
+  "opt_dom_desc": {
+    "message": "Hide posts linking to specific domains. Useful for filtering clickbait sites or content from sources you want to avoid. Supports wildcard subdomains (e.g., *.example.com)."
+  },
+  "opt_dom_placeholder": { "message": "example.com or *.example.com" },
+  "opt_dom_empty": {
+    "message": "No muted domains. All post domains will be shown."
+  },
+
+  "opt_comm_list_heading": { "message": "Community Lists" },
+  "opt_comm_list_desc": {
+    "message": "Subscribe to shared filter lists curated by the community."
+  },
+  "opt_comm_browse": { "message": "Browse Marketplace" },
+  "opt_comm_subs_heading": { "message": "Your Subscriptions" },
+  "opt_comm_subs_empty": {
+    "message": "No subscriptions yet. Visit the marketplace to find lists."
+  },
+
+  "opt_hist_heading": { "message": "Reading History" },
+  "opt_hist_desc": {
+    "message": "Track posts you've read for easy reference. All history is stored locally and never leaves your browser."
+  },
+  "opt_hist_enable": { "message": "Enable reading history" },
+  "opt_hist_enable_help": {
+    "message": "Track which posts you've viewed. History is stored locally only."
+  },
+  "opt_hist_indicator": { "message": "Show visited indicator on posts" },
+  "opt_hist_indicator_help": {
+    "message": "Display a checkmark (✓) next to posts you've already read."
+  },
+  "opt_hist_retention": { "message": "Keep history for" },
+  "opt_hist_days_7": { "message": "7 days" },
+  "opt_hist_days_14": { "message": "14 days" },
+  "opt_hist_days_30": { "message": "30 days" },
+  "opt_hist_days_60": { "message": "60 days" },
+  "opt_hist_days_90": { "message": "90 days" },
+  "opt_hist_stat_posts": { "message": "Posts in History" },
+  "opt_hist_stat_recent": { "message": "Most Recent" },
+  "opt_hist_list_heading": { "message": "Recent History" },
+  "opt_hist_search": { "message": "Search history..." },
+  "opt_hist_th_post": { "message": "Post" },
+  "opt_hist_th_viewed": { "message": "Viewed" },
+  "opt_hist_empty": { "message": "No posts in reading history yet." },
+  "opt_hist_clear": { "message": "Clear All History" },
+  "opt_hist_export": { "message": "Export History" },
+  "opt_hist_import": { "message": "Import History" },
+
+  "opt_nsfw_heading": { "message": "NSFW Content Controls" },
+  "opt_nsfw_desc": {
+    "message": "Control how NSFW (Not Safe For Work) content is displayed on Reddit. You can blur, hide, or show NSFW posts, with options for per-subreddit exceptions."
+  },
+  "opt_nsfw_enable": { "message": "Enable NSFW content controls" },
+  "opt_nsfw_enable_help": {
+    "message": "When disabled, NSFW content is shown normally (Reddit's default behavior)."
+  },
+  "opt_nsfw_vis": { "message": "NSFW Visibility" },
+  "opt_nsfw_vis_show": { "message": "Show (no filtering)" },
+  "opt_nsfw_vis_blur": { "message": "Blur (images are blurred)" },
+  "opt_nsfw_vis_hide": { "message": "Hide (posts are hidden)" },
+  "opt_nsfw_vis_desc": {
+    "message": "Choose how to handle NSFW content. \"Blur\" obscures images but keeps posts visible. \"Hide\" removes NSFW posts from your feed entirely."
+  },
+  "opt_nsfw_blur": { "message": "Blur Intensity" },
+  "opt_nsfw_blur_help": {
+    "message": "How much to blur NSFW images. Higher values = more blur."
+  },
+  "opt_nsfw_hover": { "message": "Reveal on hover" },
+  "opt_nsfw_hover_help": {
+    "message": "Temporarily reveal blurred NSFW content when hovering over it."
+  },
+  "opt_nsfw_warning": { "message": "Show NSFW warning overlay" },
+  "opt_nsfw_warning_help": {
+    "message": "Display a \"18+ NSFW\" badge on blurred thumbnails. Click to temporarily reveal."
+  },
+  "opt_nsfw_allowed_heading": { "message": "Allowed Subreddits" },
+  "opt_nsfw_allowed_help": {
+    "message": "NSFW content will always be shown (not blurred/hidden) in these subreddits. Use this for subreddits you trust or where NSFW tagging is inconsistent."
+  },
+  "opt_nsfw_allowed_placeholder": {
+    "message": "Enter subreddit name (e.g., art)"
+  },
+  "opt_nsfw_allowed_empty": {
+    "message": "No subreddits added yet. NSFW controls apply everywhere."
+  },
+  "opt_nsfw_clear_allowed": { "message": "Clear All Allowed Subreddits" },
+
+  "opt_store_heading": { "message": "Storage Management" },
+  "opt_store_desc": {
+    "message": "Monitor storage usage and optimize performance. The extension uses both local storage and sync storage (when enabled)."
+  },
+  "opt_store_local": { "message": "Local Storage" },
+  "opt_store_sync": { "message": "Sync Storage" },
+  "opt_store_breakdown": { "message": "Storage Breakdown" },
+  "opt_store_usage": { "message": "Feature Usage" },
+  "opt_store_opt": { "message": "Optimization" },
+  "opt_store_opt_help": {
+    "message": "Clean up expired data to free storage space and improve performance."
+  },
+  "opt_store_cleanup": { "message": "Run Cleanup" },
+  "opt_store_maint": { "message": "Full Maintenance" },
+  "opt_store_refresh": { "message": "Refresh Stats" },
+
+  "opt_url_heading": { "message": "Test a URL" },
+  "opt_url_desc": {
+    "message": "Check if a URL would be redirected before visiting it."
+  },
+  "opt_url_placeholder": { "message": "https://reddit.com/r/news" },
+  "opt_url_btn": { "message": "Test" },
+
+  "opt_kb_heading": { "message": "Keyboard Shortcuts" },
+  "opt_kb_desc": { "message": "Toggle redirect on/off with" },
+  "opt_kb_customize": { "message": "Customize" },
+  "opt_kb_enable": { "message": "Enable keyboard shortcuts" },
+  "opt_kb_enable_desc": {
+    "message": "Use keyboard shortcuts to quickly navigate and control the extension"
+  },
+  "opt_kb_timeout": { "message": "Chord timeout (ms)" },
+  "opt_kb_timeout_desc": {
+    "message": "Time to wait between keys in chord shortcuts (e.g., \"g g\")"
+  },
+  "opt_kb_conflict": { "message": "⚠️ Keyboard Shortcut Conflicts Detected" },
+  "opt_kb_th_action": { "message": "Action" },
+  "opt_kb_th_keys": { "message": "Keys" },
+  "opt_kb_th_context": { "message": "Context" },
+  "opt_kb_th_enabled": { "message": "Enabled" },
+  "opt_kb_export": { "message": "Export Shortcuts" },
+  "opt_kb_import": { "message": "Import Shortcuts" },
+  "opt_kb_reset": { "message": "Reset All to Defaults" },
+  "opt_kb_help": {
+    "message": "Customize keyboard shortcuts to match your preferences. Press Shift+/ on any Reddit page to see the help overlay."
+  },
+  "opt_kb_modal_heading": { "message": "Edit Keyboard Shortcut" },
+  "opt_kb_modal_keys": { "message": "Keys" },
+  "opt_kb_modal_capture_placeholder": {
+    "message": "Press keys or type combination..."
+  },
+  "opt_kb_modal_capture_hint": {
+    "message": "Click and press your desired key combination, or type it manually (e.g., \"Ctrl+K\", \"G G\")"
+  },
+  "opt_kb_modal_context": { "message": "Context" },
+  "opt_kb_modal_enable": { "message": "Enable this shortcut" },
+  "opt_kb_modal_reset": { "message": "Reset to Default" },
+
+  "opt_backup_heading": { "message": "Backup & Restore" },
+  "opt_backup_export": { "message": "📤 Export Settings" },
+  "opt_backup_import": { "message": "📥 Import Settings" },
+  "opt_backup_help": {
+    "message": "Export your settings to a JSON file. Import to restore or share configurations. Statistics are not included in exports."
+  },
+
+  "opt_sync_heading": { "message": "Sync Settings" },
+  "opt_sync_enable": { "message": "Sync across browsers" },
+  "opt_sync_enable_desc": {
+    "message": "Sync your preferences across Chrome/Edge browsers signed into the same account. Statistics are never synced."
+  },
+
+  "opt_sus_heading": { "message": "Sustainability & Support" },
+  "opt_sus_desc": {
+    "message": "Old Reddit Redirect is free and open source. Supporting the project helps ensure long-term maintenance."
+  },
+  "opt_sus_age": { "message": "Enable age verification reminder" },
+  "opt_sus_age_desc": {
+    "message": "Show a confirmation overlay when visiting NSFW content. Helps prevent accidental viewing of adult content."
+  },
+  "opt_sus_dev_heading": { "message": "Support Development" },
+  "opt_sus_dev_text": {
+    "message": "If you find this extension useful, please consider supporting its development:"
+  },
+  "opt_sus_kofi": { "message": "☕ Buy me a coffee" },
+  "opt_sus_github": { "message": "⭐ Star on GitHub" },
+  "opt_sus_report": { "message": "🐛 Report Issue" },
+
+  "opt_footer_view": { "message": "View on GitHub" },
+  "opt_footer_privacy": { "message": "Privacy Policy" },
+
+  "opt_vis_animate": { "message": "Animate icon on toggle" },
+  "opt_vis_animate_desc": {
+    "message": "Flash the badge color when toggling redirect on/off"
+  },
+  "opt_vis_notify": { "message": "Show notifications" },
+  "opt_vis_notify_desc": {
+    "message": "Show browser notifications for redirect events"
+  },
+  "opt_vis_redirect_notice": { "message": "Show redirect notice" },
+  "opt_vis_redirect_notice_desc": {
+    "message": "Show a small notification on old.reddit.com after redirect with \"Go back\" option"
+  },
+
+  "opt_dark_heading": { "message": "Dark Mode for old.reddit.com" },
+  "opt_dark_desc": {
+    "message": "Apply a dark theme to old Reddit that respects your system preferences."
+  },
+  "opt_dark_mode": { "message": "Dark Mode" },
+  "opt_dark_auto": { "message": "Auto (follow system preference)" },
+  "opt_dark_light": { "message": "Light" },
+  "opt_dark_dark": { "message": "Dark" },
+  "opt_dark_oled": { "message": "OLED Black" },
+  "opt_dark_high_contrast": { "message": "High Contrast (Accessibility)" },
+  "opt_dark_mode_desc": {
+    "message": "Choose when to apply dark mode. \"Auto\" follows your system's light/dark preference. \"OLED Black\" uses pure black for OLED screens. \"High Contrast\" provides maximum visibility for users with visual impairments."
+  },
+  "opt_dark_collapse_bot": { "message": "Auto-collapse bot comments" },
+  "opt_dark_collapse_bot_desc": {
+    "message": "Automatically collapse AutoModerator and common bot comments when loading comment threads"
+  },
+
+  "opt_acc_heading": { "message": "Accessibility" },
+  "opt_acc_desc": {
+    "message": "Customize the extension for better accessibility. These settings help users with visual impairments or motor disabilities."
+  },
+  "opt_acc_font_size": { "message": "Content Font Size" },
+  "opt_acc_font_small": { "message": "Small (87.5%)" },
+  "opt_acc_font_medium": { "message": "Medium (Default)" },
+  "opt_acc_font_large": { "message": "Large (112.5%)" },
+  "opt_acc_font_xlarge": { "message": "Extra Large (125%)" },
+  "opt_acc_font_desc": {
+    "message": "Adjust the font size of Reddit content. Affects post titles, comments, and other text on old.reddit.com."
+  },
+  "opt_acc_reduce_motion": { "message": "Reduce Motion" },
+  "opt_acc_motion_auto": { "message": "Auto (follow system preference)" },
+  "opt_acc_motion_always": { "message": "Always reduce motion" },
+  "opt_acc_motion_never": { "message": "Never reduce motion" },
+  "opt_acc_motion_desc": {
+    "message": "Control animations and transitions. \"Auto\" respects your system's reduced motion setting. Helpful for users with vestibular disorders."
+  },
+  "opt_acc_high_contrast": { "message": "High contrast UI elements" },
+  "opt_acc_high_contrast_desc": {
+    "message": "Add extra-visible borders and outlines to buttons, inputs, and other interactive elements. Works alongside any theme."
+  },
+
+  "opt_comm_heading": { "message": "Comment Enhancements" },
+  "opt_comm_desc": {
+    "message": "Improve the comment reading experience with visual enhancements."
+  },
+  "opt_comm_depth_colors": { "message": "Color-coded comment depth" },
+  "opt_comm_depth_colors_desc": {
+    "message": "Add colored stripes to the left edge of comments indicating nesting depth. Helps visually track conversation threads."
+  },
+  "opt_comm_palette": { "message": "Color Palette" },
+  "opt_comm_palette_standard": { "message": "Standard (Rainbow)" },
+  "opt_comm_palette_colorblind": { "message": "Color-Blind Friendly" },
+  "opt_comm_palette_desc": {
+    "message": "Choose color palette for comment depth indicators. Color-blind palette uses distinct hues optimized for accessibility."
+  },
+  "opt_comm_stripe_width": { "message": "Stripe Width" },
+  "opt_comm_stripe_thin": { "message": "Thin (2px)" },
+  "opt_comm_stripe_medium": { "message": "Medium (3px)" },
+  "opt_comm_stripe_thick": { "message": "Thick (4px)" },
+  "opt_comm_stripe_xthick": { "message": "Extra Thick (5px)" },
+  "opt_comm_stripe_desc": {
+    "message": "Width of the colored stripe on the left edge of comments."
+  },
+  "opt_comm_nav_btns": { "message": "Comment navigation buttons" },
+  "opt_comm_nav_btns_desc": {
+    "message": "Show floating buttons to jump between top-level comments. Use Shift+J/K for keyboard navigation."
+  },
+  "opt_comm_btn_pos": { "message": "Button Position" },
+  "opt_comm_pos_br": { "message": "Bottom Right" },
+  "opt_comm_pos_bl": { "message": "Bottom Left" },
+  "opt_comm_pos_desc": {
+    "message": "Choose where the navigation buttons appear on the screen."
+  },
+  "opt_comm_inline_img": { "message": "Inline image expansion" },
+  "opt_comm_inline_img_desc": {
+    "message": "Add expand buttons next to image links in comments. Click to view images inline without opening a new tab."
+  },
+  "opt_comm_max_width": { "message": "Maximum Image Width" },
+  "opt_comm_width_small": { "message": "Small (400px)" },
+  "opt_comm_width_medium": { "message": "Medium (600px)" },
+  "opt_comm_width_large": { "message": "Large (800px)" },
+  "opt_comm_width_full": { "message": "Full Width" },
+  "opt_comm_width_desc": {
+    "message": "Maximum width for expanded images. \"Full Width\" uses the comment area width."
+  },
+  "opt_comm_jump_top": {
+    "message": "Jump to top keyboard shortcut (Shift+Home)"
+  },
+  "opt_comm_jump_top_desc": {
+    "message": "Press Shift+Home to smoothly scroll to the top of any page. Respects reduced motion preferences."
+  },
+  "opt_comm_breadcrumbs": { "message": "Enable breadcrumbs navigation" },
+  "opt_comm_breadcrumbs_desc": {
+    "message": "Show a sticky breadcrumb bar when scrolling deep into comment threads."
+  },
+  "opt_comm_search": { "message": "Enable in-page comment search" },
+  "opt_comm_search_desc": {
+    "message": "Search within comments using a floating widget (Ctrl+Shift+F)."
+  },
+  "opt_comm_bookmarks": { "message": "Enable comment bookmarks" },
+  "opt_comm_bookmarks_desc": {
+    "message": "Save comments to return to later in the thread."
+  },
+
+  "opt_mini_heading": { "message": "Comment Thread Minimap" },
+  "opt_mini_desc": {
+    "message": "A visual navigation aid that shows an overview of the comment thread. Click on the minimap to quickly jump to any comment."
+  },
+  "opt_mini_enable": { "message": "Enable comment minimap" },
+  "opt_mini_enable_desc": {
+    "message": "Show a minimap on comment pages for easy thread navigation."
+  },
+  "opt_mini_pos": { "message": "Minimap Position" },
+  "opt_mini_pos_right": { "message": "Right side" },
+  "opt_mini_pos_left": { "message": "Left side" },
+  "opt_mini_pos_desc": {
+    "message": "Choose which side of the screen to display the minimap."
+  },
+  "opt_mini_width": { "message": "Minimap Width" },
+  "opt_mini_width_help": { "message": "Width of the minimap in pixels." },
+  "opt_mini_opacity": { "message": "Minimap Opacity" },
+  "opt_mini_opacity_help": { "message": "Transparency of the minimap." },
+  "opt_mini_viewport": { "message": "Show viewport indicator" },
+  "opt_mini_viewport_desc": {
+    "message": "Highlight the currently visible portion of the thread in the minimap."
+  },
+  "opt_mini_depth": { "message": "Use depth colors" },
+  "opt_mini_depth_desc": {
+    "message": "Color-code minimap entries by comment depth (matches color-coded comments)."
+  },
+  "opt_mini_collapsed": { "message": "Show collapsed indicator" },
+  "opt_mini_collapsed_desc": {
+    "message": "Visually distinguish collapsed comments in the minimap."
+  },
+  "opt_mini_autohide": { "message": "Auto-hide when not hovering" },
+  "opt_mini_autohide_desc": {
+    "message": "Fade out the minimap when not in use to reduce visual clutter."
+  },
+
+  "opt_sort_heading": { "message": "Subreddit Sort Preferences" },
+  "opt_sort_desc": {
+    "message": "Automatically apply your preferred sort order (new, top, rising, etc.) when visiting subreddits. Your preference is saved when you manually change the sort order."
+  },
+  "opt_sort_enable": { "message": "Remember sort order per subreddit" },
+  "opt_sort_enable_desc": {
+    "message": "Enable automatic sort order application when visiting subreddits"
+  },
+  "opt_sort_saved_heading": { "message": "Saved Preferences" },
+  "opt_sort_search": { "message": "Search subreddits..." },
+  "opt_sort_export": { "message": "Export" },
+  "opt_sort_import": { "message": "Import" },
+  "opt_sort_clear": { "message": "Clear All" },
+  "opt_sort_th_sub": { "message": "Subreddit" },
+  "opt_sort_th_sort": { "message": "Sort Order" },
+  "opt_sort_th_time": { "message": "Time Filter" },
+  "opt_sort_th_updated": { "message": "Last Updated" },
+  "opt_sort_th_actions": { "message": "Actions" },
+  "opt_sort_empty": {
+    "message": "No saved preferences yet. Visit a subreddit and change the sort order to automatically save your preference."
+  },
+
+  "opt_tags_heading": { "message": "User Tags" },
+  "opt_tags_desc": {
+    "message": "Add custom labels and colors to Reddit users. Tags appear as badges next to usernames throughout Reddit."
+  },
+  "opt_tags_enable": { "message": "Enable user tagging" },
+  "opt_tags_enable_desc": {
+    "message": "Click the tag button (🏷️) next to any username on Reddit to add a custom tag"
+  },
+  "opt_tags_saved_heading": { "message": "Saved Tags" },
+  "opt_tags_search": { "message": "Search users..." },
+  "opt_tags_th_user": { "message": "Username" },
+  "opt_tags_th_tag": { "message": "Tag" },
+  "opt_tags_th_color": { "message": "Color" },
+  "opt_tags_th_created": { "message": "Created" },
+  "opt_tags_empty": {
+    "message": "No tags yet. Visit Reddit and click the tag button (🏷️) next to any username to add a tag."
+  },
+
+  "opt_mute_user_heading": { "message": "User Muting" },
+  "opt_mute_user_desc": {
+    "message": "Hide posts and comments from specific users. Muted users are completely hidden from your feed and comment threads."
+  },
+  "opt_mute_user_enable": { "message": "Enable user muting" },
+  "opt_mute_user_enable_desc": {
+    "message": "Hide posts and comments from muted users. Right-click any username to mute them via context menu."
+  },
+  "opt_mute_user_list_heading": { "message": "Muted Users" },
+  "opt_mute_user_placeholder": { "message": "Enter username (without u/)" },
+  "opt_mute_user_reason": { "message": "Reason (optional)" },
+  "opt_mute_user_add": { "message": "Add" },
+  "opt_mute_user_empty": {
+    "message": "No muted users. Right-click any username to mute them or add one manually above."
+  },
+
+  "opt_css_clear": { "message": "Clear" },
+  "opt_css_enable": { "message": "Enable custom CSS" },
+  "opt_css_heading": { "message": "Custom CSS (Advanced)" },
+  "opt_css_placeholder": {
+    "message": "/* Your custom CSS here */\n.thing { ... }"
+  },
+  "opt_css_save": { "message": "Save CSS" },
+  "opt_css_warning": {
+    "message": "⚠️ Advanced feature: Custom CSS can break page layout. Use at your own risk."
+  },
+
+  "opt_exc_add": { "message": "Add" },
+  "opt_exc_placeholder": { "message": "subreddit name" },
+  "opt_exc_sug_desc": {
+    "message": "Popular subreddits that use new Reddit features like polls and predictions:"
+  },
+  "opt_exc_sug_empty": { "message": "All suggestions have been added!" },
+  "opt_exc_sug_heading": { "message": "Suggested Exceptions" },
+
+  "opt_feed_actions": { "message": "Hide action links" },
+  "opt_feed_actions_desc": {
+    "message": "Hide share/save/hide/report links until you hover over a post (comments link always visible)"
+  },
+  "opt_feed_compact": { "message": "Compact mode" },
+  "opt_feed_compact_desc": {
+    "message": "Reduce spacing to show more posts per screen (~30% smaller posts)"
+  },
+  "opt_feed_desc": {
+    "message": "Customize the appearance and layout of Reddit feeds for better readability and information density."
+  },
+  "opt_feed_heading": { "message": "Feed Enhancements" },
+  "opt_feed_join": { "message": "Hide join buttons" },
+  "opt_feed_join_desc": {
+    "message": "Remove subreddit join/subscribe buttons from feed"
+  },
+  "opt_feed_text": { "message": "Text-only mode" },
+  "opt_feed_text_desc": {
+    "message": "Hide all images and thumbnails for focused reading and bandwidth savings"
+  },
+  "opt_feed_uncrop": { "message": "Uncropped thumbnails" },
+  "opt_feed_uncrop_desc": {
+    "message": "Show full-aspect-ratio thumbnails instead of cropped squares"
+  },
+
+  "opt_front_custom_label": { "message": "Custom Domain" },
+
+  "opt_muted_add": { "message": "Mute" },
+  "opt_muted_desc": {
+    "message": "Hide posts from these subreddits on /r/all and /r/popular. Useful for filtering out noise or unwanted content."
+  },
+  "opt_muted_empty": {
+    "message": "No muted subreddits. Posts from all subreddits will appear on /r/all and /r/popular."
+  },
+  "opt_muted_export": { "message": "📥 Export List" },
+  "opt_muted_heading": { "message": "Muted Subreddits" },
+  "opt_muted_import": { "message": "📤 Import List" },
+  "opt_muted_placeholder": { "message": "subreddit name" },
+  "opt_muted_share": { "message": "Share List" },
+
+  "opt_nag_ai": { "message": "Block AI-generated content" },
+  "opt_nag_ai_desc": {
+    "message": "Hide AI answers, summaries, and overviews. Future-proofed against Reddit's AI features."
+  },
+  "opt_nag_app": { "message": "Block app download prompts" },
+  "opt_nag_app_desc": {
+    "message": "Remove banners asking you to download the mobile app"
+  },
+  "opt_nag_desc": {
+    "message": "Remove annoying popups, banners, and promotional content from old Reddit."
+  },
+  "opt_nag_email": { "message": "Block email verification nags" },
+  "opt_nag_email_desc": {
+    "message": "Remove banners asking you to verify your email address"
+  },
+  "opt_nag_enable": { "message": "Enable nag blocking" },
+  "opt_nag_enable_desc": {
+    "message": "Master toggle for all nag/banner blocking features below"
+  },
+  "opt_nag_heading": { "message": "Nag & Banner Blocking" },
+  "opt_nag_high": { "message": "Block community highlights" },
+  "opt_nag_high_desc": {
+    "message": "Remove featured posts and spotlight content"
+  },
+  "opt_nag_login": { "message": "Block login prompts" },
+  "opt_nag_login_desc": {
+    "message": "Hide popups and overlays asking you to log in"
+  },
+  "opt_nag_more": { "message": "Block \"More posts you may like\"" },
+  "opt_nag_more_desc": {
+    "message": "Hide recommended posts and \"continue browsing\" sections"
+  },
+  "opt_nag_premium": { "message": "Block Reddit Premium ads" },
+  "opt_nag_premium_desc": {
+    "message": "Hide promotional content for Reddit Premium/Gold"
+  },
+  "opt_nag_rec": { "message": "Block recommended communities" },
+  "opt_nag_rec_desc": {
+    "message": "Hide recommended subreddits and community suggestions"
+  },
+  "opt_nag_trending": { "message": "Block trending posts sections" },
+  "opt_nag_trending_desc": {
+    "message": "Remove trending subreddits and posts widgets"
+  },
+
+  "opt_preset_clear": { "message": "Clear All" },
+  "opt_preset_clear_title": { "message": "Clear all saved presets" },
+  "opt_preset_export": { "message": "Export" },
+  "opt_preset_export_title": { "message": "Export presets as JSON" },
+  "opt_preset_import": { "message": "Import" },
+  "opt_preset_import_title": { "message": "Import presets from JSON" },
+  "opt_preset_map_clear": { "message": "Clear All Mappings" },
+  "opt_preset_map_clear_title": { "message": "Clear all subreddit mappings" },
+  "opt_preset_map_empty": {
+    "message": "No subreddit layouts configured. Add a mapping above to apply different presets to specific subreddits."
+  },
+  "opt_preset_map_th_actions": { "message": "Actions" },
+  "opt_preset_map_th_preset": { "message": "Preset" },
+  "opt_preset_map_th_sub": { "message": "Subreddit" },
+  "opt_preset_modal_actions": { "message": "Hide action links" },
+  "opt_preset_modal_color": { "message": "Color-coded comments" },
+  "opt_preset_modal_compact": { "message": "Compact mode" },
+  "opt_preset_modal_join": { "message": "Hide join buttons" },
+  "opt_preset_modal_palette": { "message": "Comment Color Palette" },
+  "opt_preset_modal_text": { "message": "Text-only mode" },
+  "opt_preset_modal_uncrop": { "message": "Uncropped thumbnails" },
+  "opt_preset_modal_visual": { "message": "Visual Settings" },
+  "opt_preset_sub_add": { "message": "Add" },
+  "opt_preset_sub_select": { "message": "Select preset..." },
+  "opt_preset_th_actions": { "message": "Actions" },
+
+  "opt_priv_badge_desc": {
+    "message": "Display a temporary 🛡️ badge in the extension icon when tracking parameters are cleaned (lasts 3 seconds)."
+  },
+  "opt_priv_calculating": { "message": "Calculating..." },
+  "opt_priv_clear_stats": { "message": "Clear Statistics" },
+  "opt_priv_custom_desc": {
+    "message": "Add or remove tracking parameters (one per line). Changes take effect immediately."
+  },
+  "opt_priv_custom_placeholder": {
+    "message": "utm_source\nfbclid\ngclid\n..."
+  },
+  "opt_priv_ref_desc": {
+    "message": "Choose what referrer information is sent when you leave Reddit. Higher privacy may break some website features."
+  },
+  "opt_priv_remove": { "message": "Remove tracking parameters from URLs" },
+  "opt_priv_remove_desc": {
+    "message": "Automatically strips tracking parameters like utm_source, fbclid, gclid, and 55+ others when you click links."
+  },
+  "opt_priv_score": { "message": "Privacy Score" },
+  "opt_priv_stats_affiliate": { "message": "Affiliate/Referral" },
+  "opt_priv_stats_analytics": { "message": "Analytics" },
+  "opt_priv_stats_last": { "message": "Last Cleaned" },
+  "opt_priv_stats_never": { "message": "Never" },
+  "opt_priv_stats_other": { "message": "Other Trackers" },
+  "opt_priv_stats_reddit": { "message": "Reddit-Specific" },
+  "opt_priv_stats_social": { "message": "Social Media" },
+  "opt_priv_stats_total": { "message": "Total URLs Cleaned" },
+  "opt_priv_stats_utm": { "message": "UTM Parameters" },
+
+  "opt_scroll_clear": { "message": "Clear All Positions" },
+  "opt_scroll_desc": {
+    "message": "Remember your scroll position when navigating away from pages. Your position is automatically restored when you return via the back button."
+  },
+  "opt_scroll_enable": { "message": "Remember scroll positions" },
+  "opt_scroll_enable_desc": {
+    "message": "Automatically save and restore scroll position when using back button"
+  },
+  "opt_scroll_heading": { "message": "Scroll Position Memory" },
+  "opt_scroll_info_saved": {
+    "message": "positions saved (max 100, auto-cleanup after 24 hours)"
+  },
+  "opt_scroll_info_storage": { "message": "Storage:" },
+  "opt_js_btn_full_maintenance": { "message": "Full Maintenance" },
+  "opt_js_btn_remove": { "message": "Remove" },
+  "opt_js_btn_run_cleanup": { "message": "Run Cleanup" },
+  "opt_js_error_import_invalid_format": {
+    "message": "Failed to import: Invalid file format"
+  },
+  "opt_js_msg_no_expired_data": { "message": "No expired data to clean up" },
+  "opt_js_msg_no_mappings_to_clear": { "message": "No mappings to clear" },
+  "opt_js_msg_no_presets_to_clear": { "message": "No presets to clear" },
+  "opt_js_status_cleaning": { "message": "Cleaning..." },
+  "opt_js_status_never": { "message": "Never" },
+  "opt_js_status_not_set": { "message": "Not set" },
+  "opt_js_status_not_synced": { "message": "Not synced" },
+  "opt_js_status_running": { "message": "Running..." },
+  "opt_js_status_valid": { "message": "✓ Valid" },
+  "opt_js_success_accessibility_saved": {
+    "message": "Accessibility settings saved"
+  },
+  "opt_js_success_all_mappings_cleared": {
+    "message": "All subreddit mappings cleared"
+  },
+  "opt_js_success_all_presets_cleared": { "message": "All presets cleared" },
+  "opt_js_success_case_sensitivity_updated": {
+    "message": "Case sensitivity updated"
+  },
+  "opt_js_success_comment_enhancements_saved": {
+    "message": "Comment enhancements settings saved"
+  },
+  "opt_js_success_comment_minimap_saved": {
+    "message": "Comment minimap settings saved"
+  },
+  "opt_js_success_content_filtering_updated": {
+    "message": "Content filtering updated"
+  },
+  "opt_js_success_custom_css_cleared": { "message": "Custom CSS cleared" },
+  "opt_js_success_custom_css_saved": { "message": "Custom CSS saved" },
+  "opt_js_success_dark_mode_saved": { "message": "Dark mode settings saved" },
+  "opt_js_success_domain_list_exported": { "message": "Domain list exported" },
+  "opt_js_success_entry_removed": { "message": "Entry removed from history" },
+  "opt_js_success_feed_enhancements_updated": {
+    "message": "Feed enhancements updated"
+  },
+  "opt_js_success_flair_filtering_updated": {
+    "message": "Flair filtering updated"
+  },
+  "opt_js_success_flair_list_exported": { "message": "Flair list exported" },
+  "opt_js_success_keyword_list_exported": {
+    "message": "Keyword list exported"
+  },
+  "opt_js_success_mute_list_exported": { "message": "Mute list exported" },
+  "opt_js_success_nag_blocking_saved": {
+    "message": "Nag blocking settings saved"
+  },
+  "opt_js_success_nsfw_allowed_cleared": {
+    "message": "Cleared all allowed subreddits"
+  },
+  "opt_js_success_preferences_saved": { "message": "Preferences saved" },
+  "opt_js_success_presets_exported": { "message": "Presets exported" },
+  "opt_js_success_privacy_report_exported": {
+    "message": "Privacy report exported"
+  },
+  "opt_js_success_privacy_updated": { "message": "Privacy settings updated" },
+  "opt_js_success_reading_history_cleared": {
+    "message": "Reading history cleared"
+  },
+  "opt_js_success_reading_history_updated": {
+    "message": "Reading history settings updated"
+  },
+  "opt_js_success_referrer_updated": { "message": "Referrer policy updated" },
+  "opt_js_success_regex_mode_updated": { "message": "Regex mode updated" },
+  "opt_js_success_retention_updated": { "message": "Retention period updated" },
+  "opt_js_success_score_filtering_updated": {
+    "message": "Score filtering updated"
+  },
+  "opt_js_success_settings_exported": { "message": "Settings exported" },
+  "opt_js_success_settings_imported": {
+    "message": "Settings imported successfully"
+  },
+  "opt_js_success_stats_cleared": { "message": "Statistics cleared" },
+  "opt_js_success_stats_exported": { "message": "Statistics exported" },
+  "opt_js_success_sync_disabled": { "message": "Sync disabled" },
+  "opt_js_success_sync_enabled": { "message": "Sync enabled" },
+  "opt_js_success_tracking_stats_cleared": {
+    "message": "Tracking statistics cleared"
+  },
+  "opt_js_title_apply_preset": { "message": "Apply this preset now" },
+  "opt_js_title_delete_preference": { "message": "Delete preference" },
+  "opt_js_title_delete_preset": { "message": "Delete preset" },
+  "opt_js_title_delete_tag": { "message": "Delete tag" },
+  "opt_js_title_edit_preset": { "message": "Edit preset settings" },
+  "opt_js_title_edit_tag": { "message": "Edit tag" },
+  "opt_js_title_remove_mapping": { "message": "Remove mapping" },
+  "opt_js_validate_keys_cannot_be_empty": { "message": "Keys cannot be empty" },
+  "opt_js_alert_no_muted_users_to_clear": {
+    "message": "No muted users to clear."
+  },
+  "opt_js_alert_no_preferences_to_clear": {
+    "message": "No preferences to clear."
+  },
+  "opt_js_alert_no_tags_to_clear": { "message": "No tags to clear." },
+  "opt_js_alert_please_enter_a_username": {
+    "message": "Please enter a username"
+  },
+  "opt_js_alert_tag_not_found": { "message": "Tag not found" },
+  "opt_js_alert_tag_text_cannot_be_empty": {
+    "message": "Tag text cannot be empty"
+  },
+  "opt_js_confirm_clear_all_reading_history_this_cannot_be_undone": {
+    "message": "Clear all reading history? This cannot be undone."
+  },
+  "opt_js_confirm_clear_all_saved_scroll_positions": {
+    "message": "Clear all saved scroll positions?"
+  },
+  "opt_js_confirm_clear_all_statistics_this_cannot_be_undone": {
+    "message": "Clear all statistics? This cannot be undone."
+  },
+  "opt_js_confirm_clear_all_tracking_statistics": {
+    "message": "Clear all tracking statistics?"
+  },
+  "opt_js_confirm_clear_custom_css": { "message": "Clear custom CSS?" },
+  "opt_js_confirm_reset_this_shortcut_to_its_default": {
+    "message": "Reset this shortcut to its default?"
+  },
+  "opt_js_confirm_reset_tracking_parameters_to_defaults": {
+    "message": "Reset tracking parameters to defaults?"
+  },
+  "opt_js_confirm_this_will_overwrite_your_current_shortcuts_continue": {
+    "message": "This will overwrite your current shortcuts. Continue?"
+  },
+  "opt_js_confirm_this_will_replace_your_current_settings_continue": {
+    "message": "This will replace your current settings. Continue?"
+  },
+  "opt_js_toast_age_verification_setting_saved": {
+    "message": "Age verification setting saved"
+  },
+  "opt_js_toast_all_domains_already_muted": {
+    "message": "All domains already muted"
+  },
+  "opt_js_toast_all_flairs_already_muted": {
+    "message": "All flairs already muted"
+  },
+  "opt_js_toast_all_keywords_already_muted": {
+    "message": "All keywords already muted"
+  },
+  "opt_js_toast_all_shortcuts_reset_to_defaults": {
+    "message": "All shortcuts reset to defaults"
+  },
+  "opt_js_toast_all_subreddits_already_muted": {
+    "message": "All subreddits already muted"
+  },
+  "opt_js_toast_already_in_list": { "message": "Already in list" },
+  "opt_js_toast_chord_timeout_updated": { "message": "Chord timeout updated" },
+  "opt_js_toast_cleanup_completed": { "message": "Cleanup completed" },
+  "opt_js_toast_css_is_valid": { "message": "CSS is valid!" },
+  "opt_js_toast_custom_frontend_saved": { "message": "Custom frontend saved!" },
+  "opt_js_toast_domain_already_muted": { "message": "Domain already muted" },
+  "opt_js_toast_failed_to_export_shortcuts": {
+    "message": "Failed to export shortcuts"
+  },
+  "opt_js_toast_failed_to_load_keyboard_shortcuts": {
+    "message": "Failed to load keyboard shortcuts"
+  },
+  "opt_js_toast_failed_to_reset_shortcut": {
+    "message": "Failed to reset shortcut"
+  },
+  "opt_js_toast_failed_to_reset_shortcuts": {
+    "message": "Failed to reset shortcuts"
+  },
+  "opt_js_toast_failed_to_save_shortcut": {
+    "message": "Failed to save shortcut"
+  },
+  "opt_js_toast_failed_to_share_list": { "message": "Failed to share list" },
+  "opt_js_toast_failed_to_update_shortcut": {
+    "message": "Failed to update shortcut"
+  },
+  "opt_js_toast_flair_already_muted": { "message": "Flair already muted" },
+  "opt_js_toast_frontend_updated": { "message": "Frontend updated!" },
+  "opt_js_toast_invalid_domain_format": { "message": "Invalid domain format" },
+  "opt_js_toast_invalid_domains_detected": {
+    "message": "Invalid domains detected"
+  },
+  "opt_js_toast_invalid_format_must_be_json_array": {
+    "message": "Invalid format: must be JSON array"
+  },
+  "opt_js_toast_invalid_keywords_detected": {
+    "message": "Invalid keywords detected"
+  },
+  "opt_js_toast_invalid_subreddit_name": {
+    "message": "Invalid subreddit name"
+  },
+  "opt_js_toast_keyword_already_muted": { "message": "Keyword already muted" },
+  "opt_js_toast_list_exported_for_sharing": {
+    "message": "List exported for sharing"
+  },
+  "opt_js_toast_list_is_empty": { "message": "List is empty" },
+  "opt_js_toast_maintenance_completed": { "message": "Maintenance completed" },
+  "opt_js_toast_maximum_100_domains_allowed": {
+    "message": "Maximum 100 domains allowed"
+  },
+  "opt_js_toast_maximum_100_flairs_allowed": {
+    "message": "Maximum 100 flairs allowed"
+  },
+  "opt_js_toast_maximum_100_muted_subreddits_allowed": {
+    "message": "Maximum 100 muted subreddits allowed"
+  },
+  "opt_js_toast_maximum_100_subreddits_allowed": {
+    "message": "Maximum 100 subreddits allowed"
+  },
+  "opt_js_toast_maximum_200_keywords_allowed": {
+    "message": "Maximum 200 keywords allowed"
+  },
+  "opt_js_toast_navigation_settings_saved": {
+    "message": "Navigation settings saved"
+  },
+  "opt_js_toast_no_css_to_validate": { "message": "No CSS to validate" },
+  "opt_js_toast_permission_denied": { "message": "Permission denied" },
+  "opt_js_toast_permission_granted": { "message": "Permission granted!" },
+  "opt_js_toast_permission_request_failed": {
+    "message": "Permission request failed"
+  },
+  "opt_js_toast_please_enter_a_domain": {
+    "message": "Please enter a domain"
+  },
+  "opt_js_toast_please_enter_a_flair_text": {
+    "message": "Please enter a flair text"
+  },
+  "opt_js_toast_please_enter_a_keyword_or_phrase": {
+    "message": "Please enter a keyword or phrase"
+  },
+  "opt_js_toast_please_enter_a_preset_name": {
+    "message": "Please enter a preset name"
+  },
+  "opt_js_toast_please_enter_a_subreddit_name": {
+    "message": "Please enter a subreddit name"
+  },
+  "opt_js_toast_please_enter_a_url": { "message": "Please enter a URL" },
+  "opt_js_toast_please_enter_at_least_one_tracking_parameter": {
+    "message": "Please enter at least one tracking parameter"
+  },
+  "opt_js_toast_please_select_a_preset": {
+    "message": "Please select a preset"
+  },
+  "opt_js_toast_preset_name_is_required": {
+    "message": "Preset name is required"
+  },
+  "opt_js_toast_preset_name_is_too_long_max_50_characters": {
+    "message": "Preset name is too long (max 50 characters)"
+  },
+  "opt_js_toast_shortcut_reset_to_default": {
+    "message": "Shortcut reset to default"
+  },
+  "opt_js_toast_shortcut_updated_successfully": {
+    "message": "Shortcut updated successfully"
+  },
+  "opt_js_toast_shortcuts_exported_successfully": {
+    "message": "Shortcuts exported successfully"
+  },
+  "opt_js_toast_shortcuts_imported_successfully": {
+    "message": "Shortcuts imported successfully"
+  },
+  "opt_js_toast_storage_stats_refreshed": {
+    "message": "Storage stats refreshed"
+  },
+  "opt_js_toast_subreddit_already_in_list": {
+    "message": "Subreddit already in list"
+  },
+  "opt_js_toast_subreddit_already_muted": {
+    "message": "Subreddit already muted"
+  },
+  "opt_js_toast_tracking_parameters_reset_to_defaults": {
+    "message": "Tracking parameters reset to defaults"
+  },
+  "opt_js_alert_failed_to_import_muted_users": {
+    "message": "Failed to import muted users: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_alert_failed_to_import_preferences": {
+    "message": "Failed to import preferences: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_alert_failed_to_import_tags": {
+    "message": "Failed to import tags: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_alert_imported_preferences": {
+    "message": "Imported $count$ preferences",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_alert_imported_tags": {
+    "message": "Imported $count$ tags",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_clear_all_allowed_subreddits_nsfw_everywhere": {
+    "message": "Clear all allowed subreddits? NSFW controls will apply everywhere."
+  },
+  "opt_js_confirm_clear_all_presets_and_mappings": {
+    "message": "Clear all $count$ presets and their subreddit mappings? This cannot be undone.",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_clear_all_sort_preferences_with_count": {
+    "message": "Clear all $count$ saved sort preferences? This cannot be undone.",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_clear_all_subreddit_layout_mappings": {
+    "message": "Clear all $count$ subreddit layout mappings?",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_clear_all_user_tags_with_count": {
+    "message": "Clear all $count$ saved user tags? This cannot be undone.",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_delete_preset": {
+    "message": "Delete preset \"$name$\"? This cannot be undone.",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_delete_sort_preference_for_subreddit": {
+    "message": "Delete sort preference for r/$subreddit$?",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_delete_tag_for_user": {
+    "message": "Delete tag for u/$username$?",
+    "placeholders": {
+      "username": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_preset_already_exists_overwrite": {
+    "message": "Preset \"$name$\" already exists. Overwrite it?",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_remove_layout_for_subreddit": {
+    "message": "Remove layout for r/$subreddit$?",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_reset_all_keyboard_shortcuts": {
+    "message": "Reset all keyboard shortcuts to defaults? This cannot be undone."
+  },
+  "opt_js_confirm_switch_to_toggle_mode": {
+    "message": "Switching to toggle mode will disable the popup.\n\nYou can still access all features from this Options page.\nKeyboard shortcut (Alt+Shift+R) will continue to work.\n\nContinue?"
+  },
+  "opt_js_confirm_unmute_all_users_with_count": {
+    "message": "Unmute all $count$ users? This cannot be undone.",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_unmute_user": {
+    "message": "Unmute u/$username$?",
+    "placeholders": {
+      "username": { "content": "$1" }
+    }
+  },
+  "opt_js_confirm_unsubscribe_from_list": {
+    "message": "Unsubscribe from \"$name$\"?",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_added_subreddit_to_allowed_list": {
+    "message": "Added r/$subreddit$ to allowed list",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_cleanup_failed": {
+    "message": "Cleanup failed: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_css_validation_failed": {
+    "message": "CSS validation failed: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_domain_muted": {
+    "message": "\"$domain$\" muted",
+    "placeholders": {
+      "domain": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_domain_unmuted": {
+    "message": "\"$domain$\" unmuted",
+    "placeholders": {
+      "domain": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_domains_imported": {
+    "message": "$count$ domains imported",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_error": {
+    "message": "$error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_exported_history_entries": {
+    "message": "Exported $count$ history entries",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_failed_to_import": {
+    "message": "Failed to import: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_failed_to_import_shortcuts": {
+    "message": "Failed to import shortcuts: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_flair_muted": {
+    "message": "\"$flair$\" flair muted",
+    "placeholders": {
+      "flair": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_flair_unmuted": {
+    "message": "\"$flair$\" flair unmuted",
+    "placeholders": {
+      "flair": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_flairs_imported": {
+    "message": "$count$ flairs imported",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_import_failed": {
+    "message": "Import failed: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_imported_history_entries": {
+    "message": "Imported $count$ new history entries",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_imported_presets": {
+    "message": "Imported $count$ preset$plural$",
+    "placeholders": {
+      "count": { "content": "$1" },
+      "plural": { "content": "$2" }
+    }
+  },
+  "opt_js_toast_invalid_settings_file": {
+    "message": "Invalid settings file: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_invalid_subreddit_names": {
+    "message": "Invalid subreddit names: $names$",
+    "placeholders": {
+      "names": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_keyword_muted": {
+    "message": "\"$keyword$\" muted",
+    "placeholders": {
+      "keyword": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_keyword_unmuted": {
+    "message": "\"$keyword$\" unmuted",
+    "placeholders": {
+      "keyword": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_keywords_imported": {
+    "message": "$count$ keywords imported",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_layout_removed_for_subreddit": {
+    "message": "Layout removed for r/$subreddit$",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_layout_set_for_subreddit": {
+    "message": "Layout set for r/$subreddit$",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_maintenance_failed": {
+    "message": "Maintenance failed: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_minimum_score_set": {
+    "message": "Minimum score set to $score$",
+    "placeholders": {
+      "score": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_preset_already_exists": {
+    "message": "Preset \"$name$\" already exists",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_preset_applied": {
+    "message": "Preset \"$name$\" applied",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_preset_created": {
+    "message": "Preset \"$name$\" created",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_preset_deleted": {
+    "message": "Preset \"$name$\" deleted",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_preset_not_found": {
+    "message": "Preset \"$name$\" not found",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_preset_saved": {
+    "message": "Preset \"$name$\" saved",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_removed_subreddit_from_allowed_list": {
+    "message": "Removed r/$subreddit$ from allowed list",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_retention_updated_removed": {
+    "message": "Retention updated, $count$ old entries removed",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_saved_tracking_parameters": {
+    "message": "Saved $count$ tracking parameters",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_subreddit_added_to_exceptions": {
+    "message": "r/$subreddit$ added to exceptions",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_subreddit_muted": {
+    "message": "r/$subreddit$ muted",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_subreddit_removed_from_exceptions": {
+    "message": "r/$subreddit$ removed from exceptions",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_subreddit_unmuted": {
+    "message": "r/$subreddit$ unmuted",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_subreddits_imported": {
+    "message": "$count$ subreddits imported",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_toast_sync_error": {
+    "message": "Sync error: $error$",
+    "placeholders": {
+      "error": { "content": "$1" }
+    }
+  },
+  "opt_js_validation_conflicts_with": {
+    "message": "Conflicts with: $description$",
+    "placeholders": {
+      "description": { "content": "$1" }
+    }
+  },
+  "opt_js_action_add": { "message": "Add" },
+  "opt_js_action_apply": { "message": "Apply" },
+  "opt_js_action_delete": { "message": "Delete" },
+  "opt_js_action_edit": { "message": "Edit" },
+  "opt_js_action_remove": { "message": "Remove" },
+  "opt_js_action_unmute": { "message": "Unmute" },
+  "opt_js_action_unsubscribe": { "message": "Unsubscribe" },
+  "opt_js_aria_remove_subreddit": {
+    "message": "Remove r/$subreddit$",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_author_anonymous": { "message": "Anonymous" },
+  "opt_js_by_author": {
+    "message": "by $author$",
+    "placeholders": {
+      "author": { "content": "$1" }
+    }
+  },
+  "opt_js_date_days_ago": {
+    "message": "$count$ days ago",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_date_today": { "message": "Today" },
+  "opt_js_date_weeks_ago": {
+    "message": "$count$ weeks ago",
+    "placeholders": {
+      "count": { "content": "$1" }
+    }
+  },
+  "opt_js_date_yesterday": { "message": "Yesterday" },
+  "opt_js_list_name_muted_domains": { "message": "Muted Domains" },
+  "opt_js_list_name_muted_keywords": { "message": "Muted Keywords" },
+  "opt_js_list_name_muted_subreddits": { "message": "Muted Subreddits" },
+  "opt_js_list_separator": { "message": ", " },
+  "opt_js_preset_feature_color_comments": { "message": "Color comments" },
+  "opt_js_preset_feature_compact": { "message": "Compact" },
+  "opt_js_preset_feature_custom_css": { "message": "Custom CSS" },
+  "opt_js_preset_feature_dark": { "message": "Dark" },
+  "opt_js_preset_feature_default": { "message": "Default" },
+  "opt_js_preset_feature_no_actions": { "message": "No actions" },
+  "opt_js_preset_feature_no_join": { "message": "No join" },
+  "opt_js_preset_feature_oled": { "message": "OLED" },
+  "opt_js_preset_feature_text_only": { "message": "Text-only" },
+  "opt_js_preset_feature_uncrop": { "message": "Uncrop" },
+  "opt_js_privacy_status_excellent_protection": {
+    "message": "Excellent protection"
+  },
+  "opt_js_privacy_status_good_protection": { "message": "Good protection" },
+  "opt_js_privacy_status_needs_improvement": {
+    "message": "Needs improvement"
+  },
+  "opt_js_privacy_tips_label": { "message": "Tips:" },
+  "opt_js_prompt_default_list_name": {
+    "message": "My $name$",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_prompt_edit_tag_for_user": {
+    "message": "Edit tag for u/$username$:",
+    "placeholders": {
+      "username": { "content": "$1" }
+    }
+  },
+  "opt_js_prompt_enter_description_for_list": {
+    "message": "Enter a description for your $name$ list:",
+    "placeholders": {
+      "name": { "content": "$1" }
+    }
+  },
+  "opt_js_prompt_enter_name_handle_optional": {
+    "message": "Enter your name/handle (optional):"
+  },
+  "opt_js_reason_none": { "message": "No reason" },
+  "opt_js_shortcut_context_any": { "message": "All pages" },
+  "opt_js_shortcut_context_comments": { "message": "Comments only" },
+  "opt_js_shortcut_context_feed": { "message": "Feed only" },
+  "opt_js_shortcuts_conflict_prefix": {
+    "message": "The following shortcuts have conflicts:"
+  },
+  "opt_js_sort_controversial": { "message": "Controversial" },
+  "opt_js_sort_hot": { "message": "Hot" },
+  "opt_js_sort_new": { "message": "New" },
+  "opt_js_sort_rising": { "message": "Rising" },
+  "opt_js_sort_top": { "message": "Top" },
+  "opt_js_status_active": { "message": "Active" },
+  "opt_js_storage_no_data": { "message": "No data" },
+  "opt_js_time_all_time": { "message": "All Time" },
+  "opt_js_time_past_hour": { "message": "Past Hour" },
+  "opt_js_time_this_month": { "message": "This Month" },
+  "opt_js_time_this_week": { "message": "This Week" },
+  "opt_js_time_this_year": { "message": "This Year" },
+  "opt_js_time_today": { "message": "Today" },
+  "opt_js_urltest_allowlisted_domain_detail": {
+    "message": "$hostname$ stays on new Reddit by design",
+    "placeholders": {
+      "hostname": { "content": "$1" }
+    }
+  },
+  "opt_js_urltest_allowlisted_path_detail": {
+    "message": "This path stays on new Reddit by design"
+  },
+  "opt_js_urltest_already_old_title": { "message": "Already on Old Reddit" },
+  "opt_js_urltest_invalid_url_detail": {
+    "message": "Please enter a valid URL starting with https://"
+  },
+  "opt_js_urltest_invalid_url_title": { "message": "Invalid URL" },
+  "opt_js_urltest_no_redirect_needed": { "message": "No redirect needed" },
+  "opt_js_urltest_not_handled_detail": {
+    "message": "This URL doesn't match any redirect rules"
+  },
+  "opt_js_urltest_not_handled_title": { "message": "Not handled" },
+  "opt_js_urltest_not_reddit_detail": {
+    "message": "This tool only tests Reddit URLs"
+  },
+  "opt_js_urltest_not_reddit_title": { "message": "Not a Reddit URL" },
+  "opt_js_urltest_not_redirected_allowlisted_title": {
+    "message": "Not redirected (allowlisted)"
+  },
+  "opt_js_urltest_not_redirected_whitelisted_title": {
+    "message": "Not redirected (whitelisted)"
+  },
+  "opt_js_urltest_whitelisted_subreddit_detail": {
+    "message": "r/$subreddit$ is in your exceptions list",
+    "placeholders": {
+      "subreddit": { "content": "$1" }
+    }
+  },
+  "opt_js_urltest_would_redirect_title": {
+    "message": "Would redirect to Old Reddit"
+  },
+  "opt_js_word_and": { "message": "and" }
+}

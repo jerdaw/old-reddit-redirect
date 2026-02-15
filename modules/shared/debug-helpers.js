@@ -11,6 +11,18 @@ let debugEnabled = false;
 // Initialize debug state from storage
 (async () => {
   try {
+    // In non-extension environments (e.g. unit tests), `chrome` may not exist.
+    const chromeApi = globalThis.chrome;
+    if (
+      !chromeApi ||
+      !chromeApi.storage ||
+      !chromeApi.storage.local ||
+      typeof chromeApi.storage.local.get !== "function"
+    ) {
+      debugEnabled = false;
+      return;
+    }
+
     const prefs = await getStorage({ debug: { enabled: false } });
     debugEnabled = prefs.debug?.enabled || false;
   } catch (_error) {

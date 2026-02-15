@@ -32,3 +32,8 @@ docs/IMPLEMENTATION-SUMMARY*.md
 docs/IMPROVEMENT-PLAN*.md
 docs/PHASE-*-SUMMARY.md
 docs/PHASE-PROGRESSION.md
+
+# Archive docs are part of the repo history
+!docs/archive/IMPLEMENTATION-PLAN*.md
+!docs/archive/PHASE-*-SUMMARY.md
+!docs/archive/PHASE-PROGRESSION.md

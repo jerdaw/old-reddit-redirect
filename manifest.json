@@ -1,6 +1,7 @@
 {
-  "name": "Old Reddit Redirect",
-  "description": "Ensure Reddit always loads the old design",
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
   "version": "19.0.0",
   "manifest_version": 3,
   "browser_specific_settings": {
@@ -27,7 +28,7 @@
       "suggested_key": {
         "default": "Alt+Shift+R"
       },
-      "description": "Toggle Old Reddit Redirect on/off"
+      "description": "__MSG_toggleRedirect__"
     }
   },
   "background": {

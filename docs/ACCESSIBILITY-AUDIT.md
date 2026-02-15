@@ -1,7 +1,7 @@
 # Accessibility Audit - Options Page
 
 **Audit Date:** 2026-02-04
-**Auditor:** Claude Sonnet 4.5
+**Auditor:** Project maintainer
 **Scope:** `/src/pages/options/options.html` and `/src/pages/options/options.js`
 **Standards:** WCAG 2.1 Level AA
 

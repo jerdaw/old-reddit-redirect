@@ -33,10 +33,15 @@ Historical planning and implementation documents:
 
 - **IMPLEMENTATION-LOG.md** - Development history and decisions
 - **IMPLEMENTATION-PLAN-v7.md** through **v12.3.md** - Version planning docs
+- **2026-02-15-v23-stabilization-plan.md** - Archived stabilization plan (completed)
 - **PHASE-\*-SUMMARY.md** - Phase completion summaries
 - **SINK-IT-FEATURE-ANALYSIS.md** - Feature comparison analysis
 
 These documents are kept for historical reference but represent completed work.
+
+## Planning (`planning/`)
+
+Short-lived implementation/maintenance plans that are actively being worked. When a plan is complete, it should be archived into `archive/`.
 
 ## Active Documentation (root directory)
 
