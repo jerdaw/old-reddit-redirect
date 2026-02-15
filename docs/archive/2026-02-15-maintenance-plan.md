@@ -1,14 +1,28 @@
+---
+title: "Maintenance Plan"
+status: archived
+owner: jer
+created: 2026-02-15
+archived: 2026-02-15
+last_updated: 2026-02-15
+tags:
+  - maintenance
+  - cleanup
+  - docs
+  - roadmap
+---
+
 # Maintenance Plan (2026-02-15)
 
 Owner: jer
-Status: in-progress
+Status: archived
 Last updated: 2026-02-15
 
 Scope: Maintenance, cleanup, documentation accuracy, attribution policy compliance, and repo hygiene. Keep changes focused on shipping/maintaining core functionality.
 
 ## Step 1: Audit And Cleanup
 
-- [ ] Remove temp/junk files and artifacts (without deleting needed dev deps mid-work)
+- [x] Remove temp/junk files and artifacts (without deleting needed dev deps mid-work)
 - [x] Verify `.gitignore` covers local-only artifacts (and does not unintentionally ignore committed docs)
 - [x] Ensure `CLAUDE.md` and `GEMINI.md` are symlinks to `AGENTS.md`
 
@@ -16,7 +30,7 @@ Scope: Maintenance, cleanup, documentation accuracy, attribution policy complian
 
 - [x] Update docs index (`docs/README.md`) for any new/archived docs
 - [x] Update `ROADMAP.md` to reflect reality (version/status/what is actually complete)
-- [ ] If a plan is fully implemented, archive it per `docs/archive/` conventions
+- [x] If a plan is fully implemented, archive it per `docs/archive/` conventions
 
 ## Step 3: Attribution Policy Compliance
 
