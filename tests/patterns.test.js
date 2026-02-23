@@ -112,6 +112,22 @@ describe("Videos redirect pattern", () => {
     const match = "https://www.reddit.com/video/abc123".match(regex);
     expect(match[2]).toBe("abc123");
   });
+
+  it("should match video URLs with a title slug", () => {
+    expect(
+      testRegex(
+        rule12.condition.regexFilter,
+        "https://www.reddit.com/videos/1miong5/some_title_slug/"
+      )
+    ).toBe(true);
+  });
+
+  it("should capture ID and slug together for correct redirect", () => {
+    const regex = new RegExp(rule12.condition.regexFilter);
+    const match =
+      "https://www.reddit.com/videos/1miong5/some_title_slug/".match(regex);
+    expect(match[2]).toBe("1miong5/some_title_slug");
+  });
 });
 
 describe("Allowlist patterns", () => {

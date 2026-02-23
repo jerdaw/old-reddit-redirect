@@ -90,7 +90,7 @@
       }
     },
     "condition": {
-      "regexFilter": "^https://(www|np|nr|ns|amp|i|m)?\\.?reddit\\.com/videos?/([a-zA-Z0-9_-]+)/?$",
+      "regexFilter": "^https://(www|np|nr|ns|amp|i|m)?\\.?reddit\\.com/videos?/([a-zA-Z0-9_-]+(?:/[a-zA-Z0-9_-]*)?)/?$",
       "resourceTypes": ["main_frame"]
     }
   },
