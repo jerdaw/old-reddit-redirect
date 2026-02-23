@@ -10,21 +10,23 @@ import { debugLog } from "./debug-helpers.js";
  * Export current settings to a JSON file
  * @param {string} filename - Filename for the download
  */
-export async function exportSettings(filename = "old-reddit-redirect-settings.json") {
+export async function exportSettings(
+  filename = "old-reddit-redirect-settings.json"
+) {
   try {
     const data = await getStorage(null); // Get all storage
     // Remove internal/cache fields if necessary
     const exportData = {
       version: chrome.runtime.getManifest().version,
       timestamp: new Date().toISOString(),
-      settings: data
+      settings: data,
     };
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement("a");
     a.href = url;
     a.download = filename;
@@ -32,7 +34,7 @@ export async function exportSettings(filename = "old-reddit-redirect-settings.js
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
+
     debugLog("[ORR] Settings exported");
   } catch (error) {
     console.error("[ORR] Export failed:", error);
@@ -52,7 +54,7 @@ export async function importSettings(data) {
     }
 
     // specific validation logic here if needed
-    
+
     await setStorage(data.settings);
     debugLog("[ORR] Settings imported");
     return { success: true, message: "Settings imported successfully" };
@@ -75,18 +77,18 @@ export function exportList(type, list, metadata) {
     metadata: {
       ...metadata,
       version: "1.0",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     },
-    items: list
+    items: list,
   };
 
-  const filename = `orr-${type}-${metadata.name.toLowerCase().replace(/\s+/g, '-')}.json`;
-  
+  const filename = `orr-${type}-${metadata.name.toLowerCase().replace(/\s+/g, "-")}.json`;
+
   const blob = new Blob([JSON.stringify(exportData, null, 2)], {
     type: "application/json",
   });
   const url = URL.createObjectURL(blob);
-  
+
   const a = document.createElement("a");
   a.href = url;
   a.download = filename;

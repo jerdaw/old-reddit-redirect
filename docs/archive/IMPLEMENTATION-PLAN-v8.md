@@ -12,6 +12,7 @@
 This document outlines the implementation plan for **Phase 4.1: Remember Sort Order** of Old Reddit Redirect. This feature remembers users' preferred sort order (hot/new/top/rising/controversial) for each subreddit and automatically applies it on future visits.
 
 **Key Benefits**:
+
 - Saves users time by eliminating repetitive sort changes
 - Provides personalized browsing experience per subreddit
 - Works seamlessly without disrupting Reddit's native behavior
@@ -22,17 +23,18 @@ This document outlines the implementation plan for **Phase 4.1: Remember Sort Or
 
 ### Repository Status
 
-| Metric | Value |
-|--------|-------|
-| Current Version | 7.2.0 (released 2026-01-30) |
-| Test Coverage | 197 tests, 100% passing |
-| ESLint Errors | 0 |
-| Content Script Size | ~750 lines |
-| Storage Schema Version | 2 |
+| Metric                 | Value                       |
+| ---------------------- | --------------------------- |
+| Current Version        | 7.2.0 (released 2026-01-30) |
+| Test Coverage          | 197 tests, 100% passing     |
+| ESLint Errors          | 0                           |
+| Content Script Size    | ~750 lines                  |
+| Storage Schema Version | 2                           |
 
 ### Completed Infrastructure
 
 Phase 4 builds on all previous phases:
+
 - Content script with MutationObserver
 - Storage abstraction layer with sync support
 - Options page UI patterns
@@ -57,6 +59,7 @@ Automatically apply user's preferred sort order when visiting subreddits, elimin
 #### URL Structure Analysis
 
 Old Reddit subreddit URLs follow this pattern:
+
 ```
 https://old.reddit.com/r/subreddit/              # Default (hot)
 https://old.reddit.com/r/subreddit/?sort=new     # New
@@ -67,6 +70,7 @@ https://old.reddit.com/r/subreddit/?sort=controversial  # Controversial
 ```
 
 **Sort Options**:
+
 - `hot` (default, no parameter)
 - `new`
 - `top` (with time: `hour`, `day`, `week`, `month`, `year`, `all`)
@@ -76,18 +80,21 @@ https://old.reddit.com/r/subreddit/?sort=controversial  # Controversial
 #### Implementation Approach
 
 **1. Detection Logic** (content-script.js):
+
 - Detect when user changes sort order manually
 - Extract subreddit name from URL
 - Extract new sort order from URL or dropdown
 - Save preference to storage
 
 **2. Application Logic** (content-script.js):
+
 - On page load, check if current page is a subreddit listing
 - Extract subreddit name
 - Check if preference exists for this subreddit
 - If preference differs from current sort, redirect to preferred sort
 
 **3. Storage Schema** (storage.js):
+
 ```javascript
 sortPreferences: {
   // Key: subreddit name (lowercase)
@@ -99,6 +106,7 @@ sortPreferences: {
 ```
 
 **4. Options UI** (options.html/js):
+
 - Table or list showing saved preferences
 - Search/filter capability
 - Delete individual preference
@@ -131,11 +139,13 @@ sortPreferences: {
 #### Detection Methods
 
 **Method 1: URL Change Detection** (Preferred)
+
 - Listen for URL changes using `watchForDynamicContent` observer
 - Compare old sort vs new sort
 - Save preference when sort changes
 
 **Method 2: Click Detection**
+
 - Attach listeners to sort links/buttons
 - Requires finding Reddit's sort UI elements
 - More fragile if Reddit changes UI
@@ -196,8 +206,8 @@ const DEFAULT_SETTINGS = {
 // Add to SYNC_KEYS
 const SYNC_KEYS = [
   // ... existing keys
-  'sortPreferences',
-  'sortPreferencesEnabled',
+  "sortPreferences",
+  "sortPreferencesEnabled",
 ];
 ```
 
@@ -211,7 +221,7 @@ const SYNC_KEYS = [
 
   <div class="setting">
     <label>
-      <input type="checkbox" id="sort-preferences-enabled" checked>
+      <input type="checkbox" id="sort-preferences-enabled" checked />
       Remember sort order per subreddit
     </label>
     <p class="description">
@@ -228,7 +238,7 @@ const SYNC_KEYS = [
       <button id="import-prefs">Import</button>
     </div>
 
-    <input type="text" id="pref-search" placeholder="Search subreddits...">
+    <input type="text" id="pref-search" placeholder="Search subreddits..." />
 
     <table id="prefs-table">
       <thead>
@@ -245,7 +255,8 @@ const SYNC_KEYS = [
     </table>
 
     <p class="empty-state" id="prefs-empty" style="display: none;">
-      No saved preferences yet. Visit a subreddit and change the sort order to save a preference.
+      No saved preferences yet. Visit a subreddit and change the sort order to
+      save a preference.
     </p>
   </div>
 </section>
@@ -316,6 +327,7 @@ const SYNC_KEYS = [
 ### Test Plan
 
 **Unit Tests** (tests/sort-preferences.test.js):
+
 - `isSubredditPage()` correctly identifies subreddit URLs
 - `getSubredditFromUrl()` extracts subreddit name
 - `getCurrentSort()` parses sort from URL
@@ -325,6 +337,7 @@ const SYNC_KEYS = [
 - Time parameter handling for top/controversial
 
 **Manual Testing**:
+
 1. Visit /r/AskReddit, change sort to "new"
 2. Navigate away and return
 3. Verify sort is "new" automatically
@@ -423,8 +436,8 @@ function getSubredditFromUrl() {
 
 function getCurrentSort() {
   const params = new URLSearchParams(window.location.search);
-  const sort = params.get('sort') || 'hot';
-  const time = params.get('t') || null;
+  const sort = params.get("sort") || "hot";
+  const time = params.get("t") || null;
   return { sort, time };
 }
 
@@ -432,17 +445,17 @@ function buildSortUrl(subreddit, sortData) {
   let url = `https://old.reddit.com/r/${subreddit}/`;
   const params = new URLSearchParams();
 
-  if (sortData.sort && sortData.sort !== 'hot') {
-    params.set('sort', sortData.sort);
+  if (sortData.sort && sortData.sort !== "hot") {
+    params.set("sort", sortData.sort);
   }
 
   if (sortData.time) {
-    params.set('t', sortData.time);
+    params.set("t", sortData.time);
   }
 
   const queryString = params.toString();
   if (queryString) {
-    url += '?' + queryString;
+    url += "?" + queryString;
   }
 
   return url;
@@ -462,7 +475,7 @@ async function applySortPreference() {
   if (!isSubredditPage()) return;
 
   // Prevent redirect loops
-  if (sessionStorage.getItem('orr-sort-redirected')) {
+  if (sessionStorage.getItem("orr-sort-redirected")) {
     return;
   }
 
@@ -479,7 +492,7 @@ async function applySortPreference() {
   const newUrl = buildSortUrl(subreddit, preference);
 
   // Mark redirect to prevent loop
-  sessionStorage.setItem('orr-sort-redirected', 'true');
+  sessionStorage.setItem("orr-sort-redirected", "true");
 
   // Redirect
   window.location.href = newUrl;
@@ -511,7 +524,7 @@ async function detectSortChange() {
     await storage.setSortPreference(subreddit, currentSort);
 
     // Clear redirect flag (user is manually navigating)
-    sessionStorage.removeItem('orr-sort-redirected');
+    sessionStorage.removeItem("orr-sort-redirected");
 
     logger.debug(`Saved sort preference for /r/${subreddit}:`, currentSort);
   }
@@ -521,8 +534,8 @@ async function detectSortChange() {
 }
 
 // Initialize on page load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', async () => {
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", async () => {
     await applySortPreference();
     lastSort = getCurrentSort();
   });
@@ -546,27 +559,49 @@ Add sort preferences section after comment enhancements:
 
   <div class="setting">
     <label class="checkbox-label">
-      <input type="checkbox" id="sort-preferences-enabled" checked>
+      <input type="checkbox" id="sort-preferences-enabled" checked />
       <span>Remember sort order per subreddit</span>
     </label>
     <p class="description">
-      Automatically apply your preferred sort order (new/top/rising/etc.) when visiting subreddits.
-      Your preference is saved when you manually change the sort order.
+      Automatically apply your preferred sort order (new/top/rising/etc.) when
+      visiting subreddits. Your preference is saved when you manually change the
+      sort order.
     </p>
   </div>
 
   <div class="sort-preferences-management" id="sort-prefs-container">
     <div class="prefs-header">
-      <h3>Saved Preferences (<span id="pref-count">0</span>/<span id="pref-max">100</span>)</h3>
+      <h3>
+        Saved Preferences (<span id="pref-count">0</span>/<span id="pref-max"
+          >100</span
+        >)
+      </h3>
       <div class="prefs-controls">
-        <input type="text" id="pref-search" placeholder="Search subreddits..." class="search-input">
-        <button id="export-prefs" class="secondary-button" title="Export preferences as JSON">
+        <input
+          type="text"
+          id="pref-search"
+          placeholder="Search subreddits..."
+          class="search-input"
+        />
+        <button
+          id="export-prefs"
+          class="secondary-button"
+          title="Export preferences as JSON"
+        >
           Export
         </button>
-        <button id="import-prefs" class="secondary-button" title="Import preferences from JSON">
+        <button
+          id="import-prefs"
+          class="secondary-button"
+          title="Import preferences from JSON"
+        >
           Import
         </button>
-        <button id="clear-all-prefs" class="danger-button" title="Clear all saved preferences">
+        <button
+          id="clear-all-prefs"
+          class="danger-button"
+          title="Clear all saved preferences"
+        >
           Clear All
         </button>
       </div>
@@ -589,7 +624,8 @@ Add sort preferences section after comment enhancements:
       </table>
 
       <p class="empty-state" id="prefs-empty">
-        No saved preferences yet. Visit a subreddit and change the sort order to automatically save your preference.
+        No saved preferences yet. Visit a subreddit and change the sort order to
+        automatically save your preference.
       </p>
     </div>
   </div>
@@ -604,18 +640,18 @@ Add sort preferences management:
 // Load sort preferences on page load
 async function loadSortPreferences() {
   const enabled = await storage.isSortPreferencesEnabled();
-  document.getElementById('sort-preferences-enabled').checked = enabled;
+  document.getElementById("sort-preferences-enabled").checked = enabled;
 
   await refreshSortPreferencesList();
 }
 
 async function refreshSortPreferencesList() {
   const prefs = await storage.getSortPreferences();
-  const tbody = document.getElementById('prefs-tbody');
-  const emptyState = document.getElementById('prefs-empty');
-  const countSpan = document.getElementById('pref-count');
-  const maxSpan = document.getElementById('pref-max');
-  const searchInput = document.getElementById('pref-search');
+  const tbody = document.getElementById("prefs-tbody");
+  const emptyState = document.getElementById("prefs-empty");
+  const countSpan = document.getElementById("pref-count");
+  const maxSpan = document.getElementById("pref-max");
+  const searchInput = document.getElementById("pref-search");
 
   const entries = Object.entries(prefs);
   const searchTerm = searchInput.value.toLowerCase();
@@ -630,19 +666,20 @@ async function refreshSortPreferencesList() {
   maxSpan.textContent = storage.DEFAULT_SETTINGS.sortPreferencesMaxEntries;
 
   if (filtered.length === 0) {
-    tbody.innerHTML = '';
-    emptyState.style.display = 'block';
+    tbody.innerHTML = "";
+    emptyState.style.display = "block";
     return;
   }
 
-  emptyState.style.display = 'none';
+  emptyState.style.display = "none";
 
-  tbody.innerHTML = filtered.map(([subreddit, data]) => {
-    const sortDisplay = formatSortDisplay(data.sort);
-    const timeDisplay = data.time ? formatTimeDisplay(data.time) : '—';
-    const dateDisplay = formatDate(data.timestamp);
+  tbody.innerHTML = filtered
+    .map(([subreddit, data]) => {
+      const sortDisplay = formatSortDisplay(data.sort);
+      const timeDisplay = data.time ? formatTimeDisplay(data.time) : "—";
+      const dateDisplay = formatDate(data.timestamp);
 
-    return `
+      return `
       <tr data-subreddit="${escapeHtml(subreddit)}">
         <td class="subreddit-cell">
           <a href="https://old.reddit.com/r/${escapeHtml(subreddit)}/"
@@ -663,33 +700,34 @@ async function refreshSortPreferencesList() {
         </td>
       </tr>
     `;
-  }).join('');
+    })
+    .join("");
 
   // Attach delete handlers
-  tbody.querySelectorAll('.delete-pref').forEach(btn => {
-    btn.addEventListener('click', handleDeletePreference);
+  tbody.querySelectorAll(".delete-pref").forEach((btn) => {
+    btn.addEventListener("click", handleDeletePreference);
   });
 }
 
 function formatSortDisplay(sort) {
   const labels = {
-    hot: 'Hot',
-    new: 'New',
-    top: 'Top',
-    rising: 'Rising',
-    controversial: 'Controversial',
+    hot: "Hot",
+    new: "New",
+    top: "Top",
+    rising: "Rising",
+    controversial: "Controversial",
   };
   return labels[sort] || sort;
 }
 
 function formatTimeDisplay(time) {
   const labels = {
-    hour: 'Past Hour',
-    day: 'Today',
-    week: 'This Week',
-    month: 'This Month',
-    year: 'This Year',
-    all: 'All Time',
+    hour: "Past Hour",
+    day: "Today",
+    week: "This Week",
+    month: "This Month",
+    year: "This Year",
+    all: "All Time",
   };
   return labels[time] || time;
 }
@@ -700,8 +738,8 @@ function formatDate(timestamp) {
   const diffMs = now - date;
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Yesterday';
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "Yesterday";
   if (diffDays < 7) return `${diffDays} days ago`;
   if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
 
@@ -725,7 +763,7 @@ async function handleDeletePreference(e) {
 }
 
 async function handleClearAllPreferences() {
-  if (!confirm('Clear all saved sort preferences? This cannot be undone.')) {
+  if (!confirm("Clear all saved sort preferences? This cannot be undone.")) {
     return;
   }
 
@@ -736,10 +774,10 @@ async function handleClearAllPreferences() {
 async function handleExportPreferences() {
   const prefs = await storage.getSortPreferences();
   const json = JSON.stringify(prefs, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
+  const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
-  const a = document.createElement('a');
+  const a = document.createElement("a");
   a.href = url;
   a.download = `sort-preferences-${Date.now()}.json`;
   a.click();
@@ -748,9 +786,9 @@ async function handleExportPreferences() {
 }
 
 async function handleImportPreferences() {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/json';
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "application/json";
 
   input.onchange = async (e) => {
     const file = e.target.files[0];
@@ -761,8 +799,8 @@ async function handleImportPreferences() {
       const imported = JSON.parse(text);
 
       // Validate structure
-      if (typeof imported !== 'object') {
-        throw new Error('Invalid format');
+      if (typeof imported !== "object") {
+        throw new Error("Invalid format");
       }
 
       const current = await storage.getSortPreferences();
@@ -773,7 +811,7 @@ async function handleImportPreferences() {
 
       alert(`Imported ${Object.keys(imported).length} preferences`);
     } catch (err) {
-      alert('Failed to import preferences: ' + err.message);
+      alert("Failed to import preferences: " + err.message);
     }
   };
 
@@ -781,20 +819,25 @@ async function handleImportPreferences() {
 }
 
 // Event listeners
-document.getElementById('sort-preferences-enabled')
-  .addEventListener('change', handleSortPreferencesToggle);
+document
+  .getElementById("sort-preferences-enabled")
+  .addEventListener("change", handleSortPreferencesToggle);
 
-document.getElementById('pref-search')
-  .addEventListener('input', refreshSortPreferencesList);
+document
+  .getElementById("pref-search")
+  .addEventListener("input", refreshSortPreferencesList);
 
-document.getElementById('clear-all-prefs')
-  .addEventListener('click', handleClearAllPreferences);
+document
+  .getElementById("clear-all-prefs")
+  .addEventListener("click", handleClearAllPreferences);
 
-document.getElementById('export-prefs')
-  .addEventListener('click', handleExportPreferences);
+document
+  .getElementById("export-prefs")
+  .addEventListener("click", handleExportPreferences);
 
-document.getElementById('import-prefs')
-  .addEventListener('click', handleImportPreferences);
+document
+  .getElementById("import-prefs")
+  .addEventListener("click", handleImportPreferences);
 
 // Load on page init
 loadSortPreferences();
@@ -959,53 +1002,53 @@ body.dark-mode .search-input {
 Create comprehensive tests in `tests/sort-preferences.test.js`:
 
 ```javascript
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from "vitest";
 
-describe('Sort Preferences - URL Parsing', () => {
-  it('should identify subreddit pages', () => {
-    expect(isSubredditPage('/r/AskReddit/')).toBe(true);
-    expect(isSubredditPage('/r/AskReddit')).toBe(true);
-    expect(isSubredditPage('/r/AskReddit/comments/abc')).toBe(false);
-    expect(isSubredditPage('/')).toBe(false);
+describe("Sort Preferences - URL Parsing", () => {
+  it("should identify subreddit pages", () => {
+    expect(isSubredditPage("/r/AskReddit/")).toBe(true);
+    expect(isSubredditPage("/r/AskReddit")).toBe(true);
+    expect(isSubredditPage("/r/AskReddit/comments/abc")).toBe(false);
+    expect(isSubredditPage("/")).toBe(false);
   });
 
-  it('should extract subreddit name', () => {
+  it("should extract subreddit name", () => {
     // Test implementation
   });
 
-  it('should parse current sort from URL', () => {
+  it("should parse current sort from URL", () => {
     // Test various sort URLs
   });
 
-  it('should build correct sort URLs', () => {
+  it("should build correct sort URLs", () => {
     // Test URL construction
   });
 });
 
-describe('Sort Preferences - Storage', () => {
-  it('should save sort preference', async () => {
+describe("Sort Preferences - Storage", () => {
+  it("should save sort preference", async () => {
     // Test saving
   });
 
-  it('should enforce 100 entry limit with LRU', async () => {
+  it("should enforce 100 entry limit with LRU", async () => {
     // Test limit enforcement
   });
 
-  it('should delete individual preference', async () => {
+  it("should delete individual preference", async () => {
     // Test deletion
   });
 
-  it('should clear all preferences', async () => {
+  it("should clear all preferences", async () => {
     // Test clear all
   });
 });
 
-describe('Sort Preferences - Detection', () => {
-  it('should detect sort change', () => {
+describe("Sort Preferences - Detection", () => {
+  it("should detect sort change", () => {
     // Test detection logic
   });
 
-  it('should not save preference on page load', () => {
+  it("should not save preference on page load", () => {
     // Verify no auto-save
   });
 });
@@ -1016,16 +1059,19 @@ describe('Sort Preferences - Detection', () => {
 ## Risk Mitigation
 
 **Redirect Loops**:
+
 - Use sessionStorage flag
 - Only redirect once per page load
 - Clear flag on manual sort change
 
 **Performance**:
+
 - Use interval-based detection (1000ms) to avoid constant checking
 - Limit storage to 100 entries
 - Optimize preference lookup
 
 **User Experience**:
+
 - Make feature toggleable
 - Provide clear UI for managing preferences
 - Show count of saved preferences
@@ -1111,24 +1157,28 @@ describe('Sort Preferences - Detection', () => {
 ### Technical Details
 
 **Redirect Prevention**:
+
 - Uses `sessionStorage.getItem('orr-sort-redirected')` flag
 - Flag is set before redirect, preventing infinite loops
 - Flag is cleared when user manually changes sort
 - Flag persists only for the session, not across page loads
 
 **Sort Detection**:
+
 - Runs every 1000ms to check for URL changes
 - Compares current URL with last URL
 - Detects sort changes by comparing current and last sort objects
 - Only saves preference when sort actually changes (not on initial page load)
 
 **Performance**:
+
 - Minimal overhead: interval-based checking (1000ms) is very lightweight
 - No DOM manipulation for detection (only URL parsing)
 - Storage operations are async and don't block UI
 - LRU eviction ensures storage doesn't grow unbounded
 
 **Security**:
+
 - All subreddit names are HTML-escaped before displaying
 - Import validation checks JSON structure before applying
 - No XSS vulnerabilities in table rendering
@@ -1143,6 +1193,7 @@ describe('Sort Preferences - Detection', () => {
 ### Next Steps
 
 **Phase 4 has two remaining features:**
+
 - Phase 4.2: User Tagging (status: Under Consideration)
 - Phase 4.3: Scroll Position Memory (status: Under Consideration)
 

@@ -21,14 +21,14 @@ This document outlines the implementation plan for **Phase 3: Comment Enhancemen
 
 ### Repository Status
 
-| Metric | Value |
-|--------|-------|
-| Current Version | 6.0.0 (released 2026-01-30) |
-| Test Coverage | 120 tests, 100% passing |
-| ESLint Errors | 0 |
-| TODO Comments | 0 (clean codebase) |
-| Content Script Size | ~468 lines |
-| Storage Schema Version | 1 |
+| Metric                 | Value                       |
+| ---------------------- | --------------------------- |
+| Current Version        | 6.0.0 (released 2026-01-30) |
+| Test Coverage          | 120 tests, 100% passing     |
+| ESLint Errors          | 0                           |
+| TODO Comments          | 0 (clean codebase)          |
+| Content Script Size    | ~468 lines                  |
+| Storage Schema Version | 1                           |
 
 ### Completed Infrastructure
 
@@ -42,13 +42,13 @@ Phase 3 builds on infrastructure established in Phases 1 & 2:
 
 ### Key Files to Modify
 
-| File | Current Lines | Purpose |
-|------|---------------|---------|
-| `content-script.js` | 468 | Core content modifications |
-| `styles.css` | ~400 | CSS injection for themes/features |
-| `options.js` | ~1,600 | Options page logic |
-| `options.html` | ~500 | Options page UI |
-| `storage.js` | ~800 | Storage schema and methods |
+| File                | Current Lines | Purpose                           |
+| ------------------- | ------------- | --------------------------------- |
+| `content-script.js` | 468           | Core content modifications        |
+| `styles.css`        | ~400          | CSS injection for themes/features |
+| `options.js`        | ~1,600        | Options page logic                |
+| `options.html`      | ~500          | Options page UI                   |
+| `storage.js`        | ~800          | Storage schema and methods        |
 
 ### Assumptions
 
@@ -82,6 +82,7 @@ Add rainbow-colored stripes to the left edge of comments indicating nesting dept
 #### Technical Design
 
 **DOM Structure (Old Reddit):**
+
 ```html
 <div class="thing comment" data-fullname="t1_xxx">
   <div class="child">
@@ -98,6 +99,7 @@ Add rainbow-colored stripes to the left edge of comments indicating nesting dept
 ```
 
 **Approach:**
+
 1. Use CSS `::before` pseudo-element for color stripe (no DOM modification needed)
 2. Calculate depth via JavaScript and apply `data-depth` attribute
 3. Define 10-color palette with CSS variables
@@ -106,34 +108,37 @@ Add rainbow-colored stripes to the left edge of comments indicating nesting dept
 **Color Palettes:**
 
 Standard (Rainbow):
+
 ```css
---orr-depth-1: #e74c3c;  /* Red */
---orr-depth-2: #e67e22;  /* Orange */
---orr-depth-3: #f1c40f;  /* Yellow */
---orr-depth-4: #2ecc71;  /* Green */
---orr-depth-5: #1abc9c;  /* Teal */
---orr-depth-6: #3498db;  /* Blue */
---orr-depth-7: #9b59b6;  /* Purple */
---orr-depth-8: #e91e63;  /* Pink */
---orr-depth-9: #795548;  /* Brown */
+--orr-depth-1: #e74c3c; /* Red */
+--orr-depth-2: #e67e22; /* Orange */
+--orr-depth-3: #f1c40f; /* Yellow */
+--orr-depth-4: #2ecc71; /* Green */
+--orr-depth-5: #1abc9c; /* Teal */
+--orr-depth-6: #3498db; /* Blue */
+--orr-depth-7: #9b59b6; /* Purple */
+--orr-depth-8: #e91e63; /* Pink */
+--orr-depth-9: #795548; /* Brown */
 --orr-depth-10: #607d8b; /* Gray */
 ```
 
 Color-Blind Friendly (High Contrast):
+
 ```css
---orr-depth-cb-1: #000000;  /* Black */
---orr-depth-cb-2: #e69f00;  /* Orange */
---orr-depth-cb-3: #56b4e9;  /* Sky Blue */
---orr-depth-cb-4: #009e73;  /* Bluish Green */
---orr-depth-cb-5: #f0e442;  /* Yellow */
---orr-depth-cb-6: #0072b2;  /* Blue */
---orr-depth-cb-7: #d55e00;  /* Vermillion */
---orr-depth-cb-8: #cc79a7;  /* Reddish Purple */
---orr-depth-cb-9: #999999;  /* Gray */
+--orr-depth-cb-1: #000000; /* Black */
+--orr-depth-cb-2: #e69f00; /* Orange */
+--orr-depth-cb-3: #56b4e9; /* Sky Blue */
+--orr-depth-cb-4: #009e73; /* Bluish Green */
+--orr-depth-cb-5: #f0e442; /* Yellow */
+--orr-depth-cb-6: #0072b2; /* Blue */
+--orr-depth-cb-7: #d55e00; /* Vermillion */
+--orr-depth-cb-8: #cc79a7; /* Reddish Purple */
+--orr-depth-cb-9: #999999; /* Gray */
 --orr-depth-cb-10: #666666; /* Dark Gray */
 ```
 
 **Storage Schema Addition:**
+
 ```javascript
 commentEnhancements: {
   colorCodedComments: true,
@@ -143,6 +148,7 @@ commentEnhancements: {
 ```
 
 **CSS Implementation:**
+
 ```css
 /* Color-coded comments */
 .orr-color-comments .thing.comment[data-depth]::before {
@@ -161,6 +167,7 @@ commentEnhancements: {
 ```
 
 **Performance Considerations:**
+
 - Run depth calculation once on page load
 - Use requestIdleCallback for initial processing
 - Batch DOM updates
@@ -180,11 +187,13 @@ commentEnhancements: {
 #### Test Plan
 
 **Unit Tests (Vitest):**
+
 - `calculateCommentDepth()` returns correct depth for nested elements
 - Storage schema includes new fields with correct defaults
 - Color palette variables are properly defined
 
 **Manual Testing:**
+
 1. Navigate to thread with 100+ comments, verify colors
 2. Toggle feature on/off, verify immediate effect
 3. Switch color palette, verify change
@@ -210,9 +219,14 @@ Add floating navigation buttons to jump between top-level (parent) comments, ena
 #### Technical Design
 
 **Button Container:**
+
 ```html
 <div id="orr-comment-nav" class="orr-comment-nav">
-  <button id="orr-nav-prev" class="orr-nav-button" title="Previous parent comment">
+  <button
+    id="orr-nav-prev"
+    class="orr-nav-button"
+    title="Previous parent comment"
+  >
     <svg><!-- Up arrow --></svg>
   </button>
   <button id="orr-nav-next" class="orr-nav-button" title="Next parent comment">
@@ -225,18 +239,20 @@ Add floating navigation buttons to jump between top-level (parent) comments, ena
 ```
 
 **Positioning:**
+
 - Fixed position, bottom-right corner
 - 20px offset from edge
 - Respects Reddit's sidebar
 - Optional: draggable positioning (future enhancement)
 
 **Navigation Logic:**
+
 ```javascript
 function getParentComments() {
   // Parent comments are .thing.comment elements whose
   // parent .sitetable is the main comment area (not nested)
   return document.querySelectorAll(
-    '.commentarea > .sitetable > .thing.comment'
+    ".commentarea > .sitetable > .thing.comment"
   );
 }
 
@@ -247,7 +263,7 @@ function scrollToComment(comment) {
 
   window.scrollTo({
     top: offsetPosition,
-    behavior: 'smooth'
+    behavior: "smooth",
   });
 }
 
@@ -265,6 +281,7 @@ function navigateToNext() {
 ```
 
 **Storage Schema Addition:**
+
 ```javascript
 commentEnhancements: {
   // ... existing
@@ -274,6 +291,7 @@ commentEnhancements: {
 ```
 
 **CSS Implementation:**
+
 ```css
 .orr-comment-nav {
   position: fixed;
@@ -294,7 +312,9 @@ commentEnhancements: {
   color: white;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.15s, background 0.15s;
+  transition:
+    transform 0.15s,
+    background 0.15s;
 }
 
 .orr-nav-button:hover {
@@ -316,11 +336,12 @@ body:not(.comments-page) .orr-comment-nav {
 ```
 
 **Keyboard Shortcuts (Optional):**
+
 - `j` - Next parent comment
 - `k` - Previous parent comment
 - `t` - Back to top
 
-*Note: Keyboard shortcuts are opt-in to avoid conflicts with Reddit's native shortcuts and RES.*
+_Note: Keyboard shortcuts are opt-in to avoid conflicts with Reddit's native shortcuts and RES._
 
 #### Acceptance Criteria
 
@@ -337,11 +358,13 @@ body:not(.comments-page) .orr-comment-nav {
 #### Test Plan
 
 **Unit Tests:**
+
 - `getParentComments()` returns correct elements
 - Navigation finds correct next/previous comment
 - Position calculation accounts for header offset
 
 **Manual Testing:**
+
 1. Navigate to thread with 50+ parent comments
 2. Click "Next" repeatedly, verify smooth scrolling to each parent
 3. Click "Previous" to go back, verify correct behavior
@@ -378,11 +401,14 @@ Detect image links in comments and allow users to expand/collapse images inline 
 **Supported Extensions:** `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`, `.svg`
 
 **Link Detection Regex:**
+
 ```javascript
-const IMAGE_PATTERN = /^https?:\/\/(i\.redd\.it|preview\.redd\.it|i\.imgur\.com|imgur\.com)\/[\w\-\.]+(\.(jpg|jpeg|png|gif|webp|svg))?$/i;
+const IMAGE_PATTERN =
+  /^https?:\/\/(i\.redd\.it|preview\.redd\.it|i\.imgur\.com|imgur\.com)\/[\w\-\.]+(\.(jpg|jpeg|png|gif|webp|svg))?$/i;
 ```
 
 **DOM Modification:**
+
 ```html
 <!-- Before -->
 <a href="https://i.redd.it/example.jpg">image link</a>
@@ -397,11 +423,16 @@ const IMAGE_PATTERN = /^https?:\/\/(i\.redd\.it|preview\.redd\.it|i\.imgur\.com|
 <a href="https://i.redd.it/example.jpg">image link</a>
 <button class="orr-expand-image orr-expanded" data-image="...">[-]</button>
 <div class="orr-inline-image">
-  <img src="https://i.redd.it/example.jpg" loading="lazy" alt="Expanded image">
+  <img
+    src="https://i.redd.it/example.jpg"
+    loading="lazy"
+    alt="Expanded image"
+  />
 </div>
 ```
 
 **Storage Schema Addition:**
+
 ```javascript
 commentEnhancements: {
   // ... existing
@@ -411,6 +442,7 @@ commentEnhancements: {
 ```
 
 **CSS Implementation:**
+
 ```css
 .orr-expand-image {
   margin-left: 4px;
@@ -459,6 +491,7 @@ commentEnhancements: {
 ```
 
 **Error Handling:**
+
 - Image load failure: Show error message, remove expand state
 - Invalid URL: Don't add expand button
 - CORS issues: Use link click fallback
@@ -479,11 +512,13 @@ commentEnhancements: {
 #### Test Plan
 
 **Unit Tests:**
+
 - `isImageUrl()` correctly identifies image URLs
 - `convertImgurUrl()` converts page URLs to direct links
 - Storage schema includes new fields
 
 **Manual Testing:**
+
 1. Find comment with i.redd.it link, verify expand button appears
 2. Click expand, verify image loads inline
 3. Click collapse, verify image removed
@@ -499,12 +534,14 @@ commentEnhancements: {
 ### Milestone 1: v7.0.0 - Color-Coded Comments
 
 **Deliverables:**
+
 - Color-coded comment depth indicators
 - Standard and color-blind palettes
 - Options UI toggle and palette selector
 - Unit tests
 
 **Files Modified:**
+
 - `content-script.js` - Add depth calculation and class application
 - `styles.css` - Add color stripe CSS
 - `options.html` - Add toggle and palette selector
@@ -513,6 +550,7 @@ commentEnhancements: {
 - `tests/comments.test.js` - New test file
 
 **Definition of Done:**
+
 - [ ] All acceptance criteria met
 - [ ] Tests passing
 - [ ] Manual testing complete
@@ -524,12 +562,14 @@ commentEnhancements: {
 ### Milestone 2: v7.1.0 - Comment Navigation
 
 **Deliverables:**
+
 - Floating navigation button container
 - Next/Previous/Top navigation
 - Options UI toggle
 - Unit tests
 
 **Files Modified:**
+
 - `content-script.js` - Add navigation logic and button injection
 - `styles.css` - Add button styles
 - `options.html` - Add toggle
@@ -538,9 +578,11 @@ commentEnhancements: {
 - `tests/comments.test.js` - Add navigation tests
 
 **Dependencies:**
+
 - None (can be implemented independently of v7.0.0)
 
 **Definition of Done:**
+
 - [ ] All acceptance criteria met
 - [ ] Tests passing
 - [ ] Touch targets verified (44px minimum)
@@ -551,6 +593,7 @@ commentEnhancements: {
 ### Milestone 3: v7.2.0 - Inline Image Expansion
 
 **Deliverables:**
+
 - Image link detection
 - Expand/collapse functionality
 - Image host support (Reddit, Imgur)
@@ -558,6 +601,7 @@ commentEnhancements: {
 - Unit tests
 
 **Files Modified:**
+
 - `content-script.js` - Add image detection and expansion
 - `styles.css` - Add image expansion styles
 - `options.html` - Add toggle and width setting
@@ -566,9 +610,11 @@ commentEnhancements: {
 - `tests/comments.test.js` - Add image expansion tests
 
 **Dependencies:**
+
 - None (can be implemented independently)
 
 **Definition of Done:**
+
 - [ ] All acceptance criteria met
 - [ ] Tests passing
 - [ ] Error handling verified
@@ -580,26 +626,26 @@ commentEnhancements: {
 
 ### High Risk
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Reddit DOM changes | Features break | Use semantic selectors, add feature detection |
-| RES conflicts | User complaints | Test with RES, use unique class prefixes |
-| Performance degradation | Poor UX | Benchmark early, optimize hot paths |
+| Risk                    | Impact          | Mitigation                                    |
+| ----------------------- | --------------- | --------------------------------------------- |
+| Reddit DOM changes      | Features break  | Use semantic selectors, add feature detection |
+| RES conflicts           | User complaints | Test with RES, use unique class prefixes      |
+| Performance degradation | Poor UX         | Benchmark early, optimize hot paths           |
 
 ### Medium Risk
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Image host CORS issues | Expansion fails | Handle errors gracefully, fallback to links |
-| Mobile layout issues | Buttons overlap UI | Test on narrow viewports, responsive CSS |
-| Storage schema migration | Data loss | Implement migration in `storage.js` |
+| Risk                     | Impact             | Mitigation                                  |
+| ------------------------ | ------------------ | ------------------------------------------- |
+| Image host CORS issues   | Expansion fails    | Handle errors gracefully, fallback to links |
+| Mobile layout issues     | Buttons overlap UI | Test on narrow viewports, responsive CSS    |
+| Storage schema migration | Data loss          | Implement migration in `storage.js`         |
 
 ### Low Risk
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Color accessibility | Some users can't see | Provide color-blind palette |
-| Keyboard shortcut conflicts | Confusion | Make shortcuts opt-in |
+| Risk                        | Impact               | Mitigation                  |
+| --------------------------- | -------------------- | --------------------------- |
+| Color accessibility         | Some users can't see | Provide color-blind palette |
+| Keyboard shortcut conflicts | Confusion            | Make shortcuts opt-in       |
 
 ---
 
@@ -629,6 +675,7 @@ commentEnhancements: {
 
 **Emergency Rollback:**
 If a feature causes widespread issues:
+
 1. Push hotfix release with feature disabled by default
 2. Users can re-enable if working for them
 3. Fix root cause
@@ -669,22 +716,22 @@ tests/
 
 ### Test Coverage Goals
 
-| Area | Target Coverage |
-|------|-----------------|
-| Comment depth calculation | 100% |
-| Navigation functions | 100% |
-| Image URL detection | 100% |
-| Storage schema | 100% |
-| Error handling | 90% |
+| Area                      | Target Coverage |
+| ------------------------- | --------------- |
+| Comment depth calculation | 100%            |
+| Navigation functions      | 100%            |
+| Image URL detection       | 100%            |
+| Storage schema            | 100%            |
+| Error handling            | 90%             |
 
 ### Manual Test Matrix
 
-| Feature | Chrome | Firefox | Firefox Android | RES Installed |
-|---------|--------|---------|-----------------|---------------|
-| Color-coded comments | Required | Required | Best effort | Required |
-| Navigation buttons | Required | Required | Required | Required |
-| Inline images | Required | Required | Best effort | Required |
-| Dark mode compat | Required | Required | Required | Required |
+| Feature              | Chrome   | Firefox  | Firefox Android | RES Installed |
+| -------------------- | -------- | -------- | --------------- | ------------- |
+| Color-coded comments | Required | Required | Best effort     | Required      |
+| Navigation buttons   | Required | Required | Required        | Required      |
+| Inline images        | Required | Required | Best effort     | Required      |
+| Dark mode compat     | Required | Required | Required        | Required      |
 
 ---
 
@@ -733,17 +780,35 @@ tests/
 
 ```javascript
 const DEFAULTS = {
-  _schemaVersion: 2,  // Bumped from 1
+  _schemaVersion: 2, // Bumped from 1
   enabled: true,
-  stats: { /* unchanged */ },
-  temporaryDisable: { /* unchanged */ },
-  subredditOverrides: { /* unchanged */ },
-  contentFiltering: { /* unchanged */ },
-  frontend: { /* unchanged */ },
-  ui: { /* unchanged */ },
-  darkMode: { /* unchanged */ },
-  nagBlocking: { /* unchanged */ },
-  sync: { /* unchanged */ },
+  stats: {
+    /* unchanged */
+  },
+  temporaryDisable: {
+    /* unchanged */
+  },
+  subredditOverrides: {
+    /* unchanged */
+  },
+  contentFiltering: {
+    /* unchanged */
+  },
+  frontend: {
+    /* unchanged */
+  },
+  ui: {
+    /* unchanged */
+  },
+  darkMode: {
+    /* unchanged */
+  },
+  nagBlocking: {
+    /* unchanged */
+  },
+  sync: {
+    /* unchanged */
+  },
 
   // NEW in v7.0.0
   commentEnhancements: {
@@ -1006,22 +1071,26 @@ Proceed with v7.2.0 - Inline Image Expansion (Phase 3.3)
 ### Technical Details
 
 **Image URL Detection Pattern:**
+
 ```javascript
-/^https?:\/\/(i\.redd\.it|preview\.redd\.it|i\.imgur\.com|imgur\.com)\/[\w\-\.]+(\.(jpg|jpeg|png|gif|webp|svg))?$/i
+/^https?:\/\/(i\.redd\.it|preview\.redd\.it|i\.imgur\.com|imgur\.com)\/[\w\-\.]+(\.(jpg|jpeg|png|gif|webp|svg))?$/i;
 ```
 
 **Supported Hosts:**
+
 - `i.redd.it` - Reddit's image CDN (direct)
 - `preview.redd.it` - Reddit's preview CDN (direct)
 - `i.imgur.com` - Imgur's direct image links
 - `imgur.com` - Imgur page URLs (converted to i.imgur.com)
 
 **Imgur URL Conversion:**
+
 - `https://imgur.com/abc123` → `https://i.imgur.com/abc123.jpg`
 - Always uses HTTPS protocol
 - Only converts simple page URLs (not albums or galleries)
 
 **Performance:**
+
 - Lazy loading prevents bandwidth waste on collapsed images
 - Images only requested when user clicks expand
 - Minimal DOM manipulation (only button and container)
@@ -1039,11 +1108,13 @@ Proceed with v7.2.0 - Inline Image Expansion (Phase 3.3)
 **Phase 3 (Comment Enhancements) is now complete! ✅**
 
 All three features successfully implemented:
+
 - v7.0.0: Color-Coded Comments ✅
 - v7.1.0: Comment Navigation Buttons ✅
 - v7.2.0: Inline Image Expansion ✅
 
 Future work:
+
 - Phase 4 features are marked "Under Consideration" in ROADMAP.md
 - Monitor user feedback for feature improvements
 - Consider adding more image hosts if requested

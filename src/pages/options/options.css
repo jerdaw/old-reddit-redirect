@@ -1965,7 +1965,9 @@ footer a:hover {
   gap: 8px;
   padding: 10px 20px;
   font-size: 15px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   border: none;
 }
 

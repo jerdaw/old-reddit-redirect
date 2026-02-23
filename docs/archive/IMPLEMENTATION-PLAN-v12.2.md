@@ -11,14 +11,15 @@
 
 **Current Status**: All Phases Complete ✅ - Ready for Release
 
-| Phase | Status | Tests | Notes |
-|-------|--------|-------|-------|
-| Phase 1: Storage Schema & Core Infrastructure | ✅ Complete | 56/56 passing | All utilities implemented and tested |
-| Phase 2: Content Script Keyboard Handler | ✅ Complete | 74/74 passing | All actions and UI implemented |
-| Phase 3: Options UI & Conflict Detection | ✅ Complete | 92/92 passing | Full management UI with import/export |
-| Phase 4: Testing & Documentation | ✅ Complete | 523/523 passing | All documentation updated, version bumped |
+| Phase                                         | Status      | Tests           | Notes                                     |
+| --------------------------------------------- | ----------- | --------------- | ----------------------------------------- |
+| Phase 1: Storage Schema & Core Infrastructure | ✅ Complete | 56/56 passing   | All utilities implemented and tested      |
+| Phase 2: Content Script Keyboard Handler      | ✅ Complete | 74/74 passing   | All actions and UI implemented            |
+| Phase 3: Options UI & Conflict Detection      | ✅ Complete | 92/92 passing   | Full management UI with import/export     |
+| Phase 4: Testing & Documentation              | ✅ Complete | 523/523 passing | All documentation updated, version bumped |
 
 **Phase 1 Completion Summary**:
+
 - ✅ Extended `storage.js` with keyboard shortcuts schema (11 default shortcuts)
 - ✅ Added 8 storage API methods for shortcut management
 - ✅ Created `keyboard-utils.js` with 9 utility functions
@@ -27,6 +28,7 @@
 - ✅ Prettier formatting applied
 
 **Phase 2 Completion Summary**:
+
 - ✅ Implemented Map-based shortcut registry in content script
 - ✅ Added centralized keyboard event handler with chord support
 - ✅ Implemented 7 new shortcut actions (dark mode, compact, text-only, palette, images, help, vim-jump)
@@ -38,6 +40,7 @@
 - ✅ Total: 74 tests passing
 
 **Phase 3 Completion Summary**:
+
 - ✅ Added keyboard shortcuts section to options.html (~145 lines)
 - ✅ Implemented shortcuts management table with grouping
 - ✅ Created edit modal with real-time key capture
@@ -50,6 +53,7 @@
 - ✅ Total: 92 tests passing (523 overall)
 
 **Phase 4 Completion Summary**:
+
 - ✅ Updated CHANGELOG.md with comprehensive v12.2.0 entry (~150 lines)
 - ✅ Updated README.md with keyboard shortcuts section
 - ✅ Updated CLAUDE.md with new test count (523 tests) and v12.2.0 feature documentation
@@ -69,6 +73,7 @@
 This document outlines the implementation plan for **v12.2.0 - Customizable Keyboard Shortcuts**, which will allow users to remap all keyboard shortcuts in the extension to their preferred key combinations. This addresses Phase 9.3 of the roadmap and completes the "Advanced User Features" phase alongside user muting (9.1) and advanced keyword filtering (9.2).
 
 **Key Deliverables**:
+
 - User-defined keyboard shortcuts for all interactive features
 - Chord/sequence shortcuts (e.g., `g` then `t` for "go to top")
 - Keyboard shortcut conflict detection and warnings
@@ -86,6 +91,7 @@ This document outlines the implementation plan for **v12.2.0 - Customizable Keyb
 **Architecture**: Manifest V3 browser extension (Chrome/Firefox)
 **Test Coverage**: 431 tests across 15 test suites
 **Recent Changes**:
+
 - v12.0.0: User muting (34 tests, 230 LOC)
 - v12.1.0: Advanced keyword filtering (46 tests, 370 LOC)
 
@@ -99,6 +105,7 @@ The extension currently has **4 hardcoded keyboard shortcuts**:
 4. **Shift+Home** - Jump to top of page (content script)
 
 **Current Implementation**:
+
 - Manifest command: Defined in `manifest.json`, handled in `background.js`
 - Content script shortcuts: Handled directly in `content-script.js` with hardcoded key checks
 - No user customization available
@@ -108,6 +115,7 @@ The extension currently has **4 hardcoded keyboard shortcuts**:
 ### Features Lacking Keyboard Shortcuts
 
 **High-Value Features** (would benefit from shortcuts):
+
 1. Toggle dark mode (Auto/Light/Dark/OLED)
 2. Toggle compact feed mode
 3. Toggle text-only mode
@@ -120,23 +128,27 @@ The extension currently has **4 hardcoded keyboard shortcuts**:
 10. Export statistics
 
 **Lower-Priority Features**:
+
 - Individual nag blocking toggles
 - Filter toggles (flair, score, etc.)
 
 ### Technical Constraints
 
 **Manifest V3 Limitations**:
+
 - Command shortcuts (manifest.json) are limited and managed by browser
 - Content script shortcuts have no built-in API
 - Must handle focus/input conflicts (don't trigger in text fields)
 - Chord shortcuts require custom state management
 
 **Browser Compatibility**:
+
 - Chrome: Full support for `chrome.commands` API
 - Firefox: Good support but some limitations on shortcut keys
 - Must test cross-browser compatibility
 
 **Performance Considerations**:
+
 - Keyboard listeners must be lightweight (<1ms per keypress)
 - Chord timeout should be configurable (default: 1000ms)
 - Must not interfere with Reddit's native shortcuts
@@ -144,11 +156,13 @@ The extension currently has **4 hardcoded keyboard shortcuts**:
 ### Key Unknowns and Assumptions
 
 **Unknowns**:
+
 1. ❓ How many users will actually customize shortcuts? (Assumption: 10-20% of power users)
 2. ❓ What's the optimal chord timeout? (Assumption: 1000ms based on Vim/Emacs conventions)
 3. ❓ Should we support modifier-only shortcuts (e.g., just "Ctrl")? (Assumption: No, too conflict-prone)
 
 **Assumptions**:
+
 1. ✓ Users want Vim/Emacs-style chord shortcuts (e.g., `g` `g` to go to top)
 2. ✓ Conflict detection is critical for UX (prevent broken shortcuts)
 3. ✓ Import/export is essential for sharing/backup
@@ -157,12 +171,14 @@ The extension currently has **4 hardcoded keyboard shortcuts**:
 ### Dependencies
 
 **Internal Dependencies**:
+
 - Storage API (`storage.js`) - extend for keyboard shortcuts schema
 - Content script - rewrite keyboard handling to use dynamic shortcuts
 - Options page - add keyboard shortcuts management UI
 - Background script - handle manifest command customization (if possible)
 
 **External Dependencies**:
+
 - Chrome Extensions API: `chrome.commands` for manifest shortcuts
 - Browser keyboard event APIs: `KeyboardEvent`, `event.key`, `event.code`
 
@@ -391,6 +407,7 @@ function executeShortcutAction(shortcut) {
 ```
 
 **Performance**:
+
 - Event handler: <1ms per keypress
 - Registry lookup: O(1) with Map
 - Chord buffer: <100 bytes memory
@@ -400,6 +417,7 @@ function executeShortcutAction(shortcut) {
 **New Section**: "Keyboard Shortcuts" (after User Muting, before Scroll Position Memory)
 
 **Layout**:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ Keyboard Shortcuts                                          │
@@ -430,6 +448,7 @@ function executeShortcutAction(shortcut) {
 ```
 
 **Edit Modal**:
+
 ```
 ┌─────────────────────────────────────────┐
 │ Edit Shortcut: Toggle Dark Mode         │
@@ -453,6 +472,7 @@ function executeShortcutAction(shortcut) {
 ```
 
 **Conflict Detection UI**:
+
 ```
 ┌─────────────────────────────────────────┐
 │ ⚠️ Keyboard Shortcut Conflicts          │
@@ -477,6 +497,7 @@ function executeShortcutAction(shortcut) {
 ```
 
 **Keyboard Reference Overlay** (press Shift+/ to show):
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                   Keyboard Shortcuts                         │
@@ -533,14 +554,14 @@ function detectConflicts(shortcuts) {
             shortcut1: id1,
             shortcut2: id2,
             keys: keys1,
-            severity: 'error', // Both enabled, same context
+            severity: "error", // Both enabled, same context
           });
         } else {
           conflicts.push({
             shortcut1: id1,
             shortcut2: id2,
             keys: keys1,
-            severity: 'warning', // Same keys but different contexts
+            severity: "warning", // Same keys but different contexts
           });
         }
       }
@@ -551,7 +572,7 @@ function detectConflicts(shortcuts) {
 }
 
 function contextsOverlap(context1, context2) {
-  if (context1 === 'any' || context2 === 'any') return true;
+  if (context1 === "any" || context2 === "any") return true;
   return context1 === context2;
 }
 ```
@@ -567,6 +588,7 @@ function contextsOverlap(context1, context2) {
 **Goal**: Set up storage schema and keyboard event handling system
 
 **Tasks**:
+
 1. ✅ Extend `storage.js` with `keyboardShortcuts` defaults
 2. ✅ Add storage API methods:
    - `getKeyboardShortcuts()`
@@ -585,12 +607,14 @@ function contextsOverlap(context1, context2) {
    - `clearChordBuffer()` function
 
 **Deliverables**:
+
 - Extended storage schema
 - 5 new storage API methods
 - 4 utility functions
 - Chord state management
 
 **Validation**:
+
 - Unit tests for key normalization (10 tests)
 - Unit tests for storage API (8 tests)
 - Chord buffer management tests (5 tests)
@@ -604,6 +628,7 @@ function contextsOverlap(context1, context2) {
 **Goal**: Implement dynamic keyboard shortcut system in content script
 
 **Tasks**:
+
 1. ✅ Refactor existing hardcoded shortcuts to use registry:
    - Move `Shift+J/K` to registry
    - Move `Shift+Home` to registry
@@ -635,12 +660,14 @@ function contextsOverlap(context1, context2) {
    - ESC to close
 
 **Deliverables**:
+
 - Refactored keyboard handling (~200 lines)
 - 7 shortcut actions
 - Visual feedback system
 - Help overlay UI
 
 **Validation**:
+
 - Integration tests for each action (7 tests)
 - Chord shortcut tests (5 tests)
 - Context filtering tests (3 tests)
@@ -655,6 +682,7 @@ function contextsOverlap(context1, context2) {
 **Goal**: Build comprehensive keyboard shortcuts management UI
 
 **Tasks**:
+
 1. ✅ Add "Keyboard Shortcuts" section to `options.html`:
    - Master toggle checkbox
    - Chord timeout input
@@ -685,12 +713,14 @@ function contextsOverlap(context1, context2) {
    - Confirmation dialogs
 
 **Deliverables**:
+
 - New options page section (~150 lines HTML)
 - Keyboard shortcuts management UI (~300 lines JS)
 - Edit modal with key capture
 - Import/export functionality
 
 **Validation**:
+
 - UI functionality tests (manual)
 - Import/export tests (5 tests)
 - Conflict detection tests (8 tests)
@@ -704,6 +734,7 @@ function contextsOverlap(context1, context2) {
 **Goal**: Comprehensive testing and documentation
 
 **Tasks**:
+
 1. ✅ Create test suite `tests/keyboard-shortcuts.test.js`:
    - Storage schema tests (5 tests)
    - Key normalization tests (10 tests)
@@ -731,6 +762,7 @@ function contextsOverlap(context1, context2) {
 5. ✅ Update version numbers (12.1.0 → 12.2.0)
 
 **Deliverables**:
+
 - Comprehensive test suite (43+ tests)
 - Updated documentation (4 files)
 - Performance benchmarks
@@ -738,6 +770,7 @@ function contextsOverlap(context1, context2) {
 - Version bump
 
 **Validation**:
+
 - All tests pass (474+ total tests)
 - No ESLint errors
 - Code formatted with Prettier
@@ -752,6 +785,7 @@ function contextsOverlap(context1, context2) {
 ### Dependencies
 
 **Internal**:
+
 1. ✅ Storage API - Must extend without breaking existing data
 2. ✅ Content script - Major refactor of keyboard handling
 3. ✅ Options page - New UI section
@@ -759,6 +793,7 @@ function contextsOverlap(context1, context2) {
 5. ⚠️ Feed enhancements - Must be toggle-able via shortcut
 
 **External**:
+
 1. ✅ Browser APIs - `KeyboardEvent`, `chrome.commands`
 2. ⚠️ Reddit's keyboard shortcuts - Potential conflicts
 
@@ -766,17 +801,18 @@ function contextsOverlap(context1, context2) {
 
 ### Risks and Mitigation
 
-| Risk | Severity | Probability | Mitigation |
-|------|----------|-------------|------------|
-| **Conflicts with Reddit shortcuts** | Medium | High | Context-aware shortcuts, input field filtering, user customization |
-| **Performance degradation** | Low | Low | Optimized event handler, Map-based registry, early returns |
-| **Cross-browser compatibility** | Medium | Medium | Test on Chrome & Firefox, fallback for unsupported keys |
-| **User confusion** | Medium | Medium | Clear UI, help overlay, conflict warnings, good defaults |
-| **Chord timeout too short/long** | Low | Medium | Make it configurable, default to 1000ms |
-| **Import breaks existing shortcuts** | Low | Low | Validation on import, backup before import |
-| **Storage quota exceeded** | Very Low | Very Low | Shortcuts use <5KB, well within limits |
+| Risk                                 | Severity | Probability | Mitigation                                                         |
+| ------------------------------------ | -------- | ----------- | ------------------------------------------------------------------ |
+| **Conflicts with Reddit shortcuts**  | Medium   | High        | Context-aware shortcuts, input field filtering, user customization |
+| **Performance degradation**          | Low      | Low         | Optimized event handler, Map-based registry, early returns         |
+| **Cross-browser compatibility**      | Medium   | Medium      | Test on Chrome & Firefox, fallback for unsupported keys            |
+| **User confusion**                   | Medium   | Medium      | Clear UI, help overlay, conflict warnings, good defaults           |
+| **Chord timeout too short/long**     | Low      | Medium      | Make it configurable, default to 1000ms                            |
+| **Import breaks existing shortcuts** | Low      | Low         | Validation on import, backup before import                         |
+| **Storage quota exceeded**           | Very Low | Very Low    | Shortcuts use <5KB, well within limits                             |
 
 **Rollback Plan**:
+
 - Feature flag: `enabled: false` disables all custom shortcuts
 - Falls back to hardcoded defaults if registry fails to load
 - Clear storage option in options page if corruption occurs
@@ -818,21 +854,25 @@ Day 4: Testing & Documentation (6-8h)
 ### Milestones
 
 **M1: Storage Complete** (End of Day 1)
+
 - ✅ Storage schema implemented
 - ✅ 23 tests passing
 - ✅ No breaking changes to existing storage
 
 **M2: Keyboard Handler Complete** (End of Day 2)
+
 - ✅ All shortcuts working in content script
 - ✅ Help overlay functional
 - ✅ 41 total tests passing
 
 **M3: Options UI Complete** (End of Day 3)
+
 - ✅ Full keyboard shortcuts management UI
 - ✅ Conflict detection working
 - ✅ 54 total tests passing
 
 **M4: Release Ready** (End of Day 4)
+
 - ✅ All 474+ tests passing
 - ✅ Documentation complete
 - ✅ Manual testing complete
@@ -845,16 +885,19 @@ Day 4: Testing & Documentation (6-8h)
 ### Rollout Strategy
 
 **Phase 1: Internal Testing** (Day 4)
+
 - Developer testing on multiple browsers
 - All automated tests passing
 - Manual testing checklist complete
 
 **Phase 2: Soft Launch** (Post-Release)
+
 - Feature enabled by default for new users
 - Existing users see notification about new feature
 - Monitor for bug reports
 
 **Phase 3: Full Rollout** (1 week post-release)
+
 - Feature fully rolled out
 - Documentation published
 - User feedback collected
@@ -862,6 +905,7 @@ Day 4: Testing & Documentation (6-8h)
 ### Feature Flags
 
 **Master Toggle**:
+
 ```javascript
 keyboardShortcuts: {
   enabled: true,  // Set to false to disable entire feature
@@ -869,6 +913,7 @@ keyboardShortcuts: {
 ```
 
 **Per-Shortcut Toggle**:
+
 ```javascript
 shortcuts: {
   "toggle-dark-mode": {
@@ -880,16 +925,19 @@ shortcuts: {
 ### Rollback Plan
 
 **Level 1: Disable Feature** (1 minute)
+
 - Set `keyboardShortcuts.enabled = false` in defaults
 - Push update to store
 - Users fall back to original hardcoded shortcuts
 
 **Level 2: Revert Changes** (1 hour)
+
 - Revert to v12.1.0
 - No data loss (storage schema is backward compatible)
 - Users keep their customizations for future re-enable
 
 **Level 3: Clear User Data** (Last Resort)
+
 - Provide "Reset Keyboard Shortcuts" button in options
 - Clears `keyboardShortcuts` object
 - Returns to default configuration
@@ -897,6 +945,7 @@ shortcuts: {
 ### Monitoring
 
 **Metrics to Track**:
+
 1. Customization rate (% users who modify shortcuts)
 2. Most customized shortcuts (which shortcuts are changed)
 3. Conflict detection triggers (how often users see warnings)
@@ -904,8 +953,9 @@ shortcuts: {
 5. Error rates (keyboard handler errors in logs)
 
 **Success Criteria**:
+
 - <1% error rate in keyboard handling
-- >5% customization rate among active users
+- > 5% customization rate among active users
 - <5% conflict reports
 - Positive user feedback
 
@@ -916,6 +966,7 @@ shortcuts: {
 ### Unit Tests (43+ new tests)
 
 **Storage API Tests** (`tests/keyboard-shortcuts.test.js`):
+
 - Storage schema structure (5 tests)
 - Get/set/reset shortcuts (8 tests)
 - Key normalization (10 tests)
@@ -923,6 +974,7 @@ shortcuts: {
 - Import/export (5 tests)
 
 **Keyboard Handler Tests**:
+
 - Chord buffer management (5 tests)
 - Context filtering (3 tests)
 - Action execution (7 tests)
@@ -934,6 +986,7 @@ shortcuts: {
 ### Integration Tests
 
 **Manual Testing Checklist**:
+
 - [ ] All default shortcuts work
 - [ ] Custom shortcuts can be set
 - [ ] Chord shortcuts work (e.g., `g g`)
@@ -946,6 +999,7 @@ shortcuts: {
 ### Performance Tests
 
 **Benchmarks**:
+
 - Keydown handler: <1ms per event
 - Registry lookup: <0.1ms
 - Conflict detection: <10ms for 20 shortcuts
@@ -958,12 +1012,14 @@ shortcuts: {
 ### User-Facing Documentation
 
 **README.md Updates**:
+
 - Add "Keyboard Shortcuts" section
 - List all default shortcuts
 - Explain customization process
 - Link to help overlay (Shift+/)
 
 **CHANGELOG.md Entry**:
+
 ```markdown
 ## [12.2.0] - 2026-01-31
 
@@ -980,11 +1036,13 @@ shortcuts: {
 ```
 
 **CLAUDE.md Updates**:
+
 - Update test count (431 → 474+)
 - Add v12.2.0 to version history
 - Document keyboard shortcuts architecture
 
 **ROADMAP.md Updates**:
+
 - Mark Phase 9.3 as completed (✅)
 - Update version table with v12.2.0
 - Update current version to 12.2.0
@@ -992,6 +1050,7 @@ shortcuts: {
 ### Developer Documentation
 
 **Architecture Notes**:
+
 - Document shortcut registry system
 - Explain chord buffer mechanism
 - Detail conflict detection algorithm
@@ -1004,6 +1063,7 @@ shortcuts: {
 ### Functional Requirements
 
 **Must Have** (Blocking Release):
+
 - ✅ All existing shortcuts still work
 - ✅ Users can customize any shortcut
 - ✅ Chord shortcuts work correctly
@@ -1013,12 +1073,14 @@ shortcuts: {
 - ✅ No performance degradation
 
 **Should Have** (Release with caveats):
+
 - ✅ Visual feedback on shortcut execution
 - ✅ Context-aware shortcuts (feed vs comments)
 - ✅ Configurable chord timeout
 - ✅ Cross-browser compatibility
 
 **Nice to Have** (Post-release):
+
 - 🔮 Shortcut suggestions based on usage
 - 🔮 Preset configurations (Vim-style, Emacs-style)
 - 🔮 Cloud sync of shortcuts
@@ -1026,17 +1088,20 @@ shortcuts: {
 ### Non-Functional Requirements
 
 **Performance**:
+
 - Keydown handler: <1ms latency
 - No UI jank or lag
 - Minimal memory footprint (<100KB)
 
 **Usability**:
+
 - Clear UI for customization
 - Helpful error messages
 - Good default shortcuts
 - Discoverable via help overlay
 
 **Reliability**:
+
 - 100% test pass rate
 - No breaking changes
 - Graceful fallback on errors
@@ -1045,18 +1110,21 @@ shortcuts: {
 ### Acceptance Criteria
 
 **Code Quality**:
+
 - ✅ All tests passing (474+ tests)
 - ✅ ESLint: zero errors
 - ✅ Prettier: all files formatted
 - ✅ No console errors in normal operation
 
 **User Experience**:
+
 - ✅ Shortcuts feel responsive (<100ms feedback)
 - ✅ Conflicts are clearly communicated
 - ✅ Help overlay is useful
 - ✅ Customization is intuitive
 
 **Documentation**:
+
 - ✅ README updated
 - ✅ CHANGELOG complete
 - ✅ CLAUDE.md accurate
@@ -1101,12 +1169,14 @@ shortcuts: {
 ### Default Shortcuts Specification
 
 **Current Shortcuts** (4):
+
 1. `Alt+Shift+R` - Toggle redirect on/off (manifest command)
 2. `Shift+J` - Next parent comment (content, comments context)
 3. `Shift+K` - Previous parent comment (content, comments context)
 4. `Shift+Home` - Jump to top (content, any context)
 
 **New Shortcuts** (7):
+
 1. `d` - Toggle dark mode (content, any context)
 2. `c` - Toggle compact mode (content, feed context)
 3. `t` - Toggle text-only mode (content, feed context)
@@ -1132,28 +1202,31 @@ shortcuts: {
 ### Storage Size Estimation
 
 **Default Configuration**:
+
 - 11 shortcuts × 150 bytes = 1,650 bytes
 - Chord buffer: 100 bytes
 - Total: ~2KB
 
 **Heavy Customization**:
+
 - 20 shortcuts × 200 bytes = 4,000 bytes
 - Custom descriptions: 1KB
 - Total: ~5KB
 
 **Limits**:
+
 - Chrome sync storage: 100KB quota
 - Plenty of headroom for expansion
 
 ### Browser Compatibility Matrix
 
-| Feature | Chrome | Firefox | Notes |
-|---------|--------|---------|-------|
-| KeyboardEvent.key | ✅ | ✅ | Full support |
-| KeyboardEvent.code | ✅ | ✅ | Full support |
-| chrome.commands | ✅ | ✅ | Limited customization |
-| Event.stopPropagation | ✅ | ✅ | Full support |
-| Map data structure | ✅ | ✅ | Full support |
+| Feature               | Chrome | Firefox | Notes                 |
+| --------------------- | ------ | ------- | --------------------- |
+| KeyboardEvent.key     | ✅     | ✅      | Full support          |
+| KeyboardEvent.code    | ✅     | ✅      | Full support          |
+| chrome.commands       | ✅     | ✅      | Limited customization |
+| Event.stopPropagation | ✅     | ✅      | Full support          |
+| Map data structure    | ✅     | ✅      | Full support          |
 
 **No Blockers**: All required APIs are fully supported.
 
@@ -1164,18 +1237,21 @@ shortcuts: {
 This implementation plan provides a comprehensive roadmap for v12.2.0 - Customizable Keyboard Shortcuts. The feature will significantly enhance the power user experience by allowing full customization of all keyboard shortcuts, with chord support, conflict detection, and a visual help system.
 
 **Key Highlights**:
+
 - **Phased approach**: 4 sequential phases over 3-4 days
 - **Low risk**: Comprehensive testing, fallback mechanisms, rollback plan
 - **High value**: Addresses Phase 9.3 of roadmap, completes Advanced User Features
 - **Well-scoped**: 43+ new tests, ~650 lines of new code, clear deliverables
 
 **Next Steps**:
+
 1. Review and approve this plan
 2. Begin Phase 1 implementation (Storage & Infrastructure)
 3. Iterate through phases with validation at each milestone
 4. Release v12.2.0 upon completion of all phases
 
 **Questions for Stakeholder**:
+
 - ❓ Any additional shortcuts that should be supported?
 - ❓ Any concerns about default key bindings?
 - ❓ Should we prioritize any specific shortcuts?

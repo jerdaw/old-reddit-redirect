@@ -13,13 +13,15 @@
 This document outlines the implementation plan for **Phase 5.2: Privacy & Tracking Protection** (v11.1.0) of Old Reddit Redirect. This phase focuses on protecting user privacy by removing tracking parameters from URLs and providing referrer control when leaving Reddit.
 
 **Key Benefits**:
-- Automatic removal of 30+ tracking parameters (utm_*, fbclid, gclid, etc.)
+
+- Automatic removal of 30+ tracking parameters (utm\_\*, fbclid, gclid, etc.)
 - Real-time URL cleaning on link clicks
 - Statistics tracking for transparency
 - Referrer policy control for enhanced privacy
 - Visual feedback when tracking is stripped
 
 **Previous Release:** v11.0.0 - Feed Enhancements (completed)
+
 - 33 new tests added (303 total)
 - Storage schema v3 implemented
 - Feed customization features delivered
@@ -31,6 +33,7 @@ This document outlines the implementation plan for **Phase 5.2: Privacy & Tracki
 ### Repository Status (v11.0.0)
 
 **Recently Completed (v11.0.0):**
+
 - ✅ Feed Enhancements (compact mode, text-only, custom CSS)
 - ✅ Storage schema migrated to v3
 - ✅ 33 new feed enhancement tests
@@ -38,6 +41,7 @@ This document outlines the implementation plan for **Phase 5.2: Privacy & Tracki
 - ✅ Zero lint errors
 
 **Codebase Metrics:**
+
 - storage.js: ~1,150 lines (+56 from v10.0.0)
 - content-script.js: ~1,580 lines (+60 from v10.0.0)
 - background.js: 954 lines (unchanged)
@@ -45,11 +49,13 @@ This document outlines the implementation plan for **Phase 5.2: Privacy & Tracki
 - Total: ~6,446 lines across main files
 
 **Test Coverage:**
+
 - 303 tests across 11 test files
 - All passing, zero flakes
 - Coverage includes storage, patterns, comments, feed enhancements
 
 **Architecture:**
+
 - Manifest V3 with declarativeNetRequest
 - Service worker for background tasks
 - Content script for DOM manipulation
@@ -103,7 +109,7 @@ This document outlines the implementation plan for **Phase 5.2: Privacy & Tracki
 ### Unknown Factors
 
 1. **Edge Cases:**
-   - How many legitimate URLs use utm_* for non-tracking purposes?
+   - How many legitimate URLs use utm\_\* for non-tracking purposes?
    - Are there tracking params we haven't identified?
    - Will parameter removal break any Reddit functionality?
 
@@ -123,6 +129,7 @@ This document outlines the implementation plan for **Phase 5.2: Privacy & Tracki
 ### Overview
 
 Phase 5.2 adds two complementary privacy features:
+
 1. **Tracking Parameter Removal** - Strips known tracking params from URLs
 2. **Referrer Control** - Manages what referrer information is sent
 
@@ -141,50 +148,50 @@ Both features are designed to work transparently while providing user control an
 ```javascript
 const DEFAULT_TRACKING_PARAMS = [
   // UTM parameters (standard marketing analytics)
-  'utm_source',     // Traffic source
-  'utm_medium',     // Marketing medium
-  'utm_campaign',   // Campaign name
-  'utm_term',       // Paid keyword
-  'utm_content',    // Content variant
-  'utm_name',       // Campaign name (alternative)
-  'utm_cid',        // Campaign ID
+  "utm_source", // Traffic source
+  "utm_medium", // Marketing medium
+  "utm_campaign", // Campaign name
+  "utm_term", // Paid keyword
+  "utm_content", // Content variant
+  "utm_name", // Campaign name (alternative)
+  "utm_cid", // Campaign ID
 
   // Social media tracking
-  'fbclid',         // Facebook click identifier
-  'gclid',          // Google Ads click identifier
-  'msclkid',        // Microsoft Advertising click ID
-  'twclid',         // Twitter/X click identifier
-  'li_fat_id',      // LinkedIn first-party anonymous tracker ID
-  'igshid',         // Instagram share ID
+  "fbclid", // Facebook click identifier
+  "gclid", // Google Ads click identifier
+  "msclkid", // Microsoft Advertising click ID
+  "twclid", // Twitter/X click identifier
+  "li_fat_id", // LinkedIn first-party anonymous tracker ID
+  "igshid", // Instagram share ID
 
   // Referral tracking
-  'ref',            // Generic referrer
-  'ref_source',     // Referrer source
-  'ref_url',        // Referrer URL
-  'referrer',       // Referrer (alternate spelling)
-  'share_id',       // Share identifier
-  'shared',         // Shared flag
+  "ref", // Generic referrer
+  "ref_source", // Referrer source
+  "ref_url", // Referrer URL
+  "referrer", // Referrer (alternate spelling)
+  "share_id", // Share identifier
+  "shared", // Shared flag
 
   // Click tracking
-  'click_id',       // Generic click identifier
-  'clickid',        // Click ID (variant)
-  '_ga',            // Google Analytics client ID
+  "click_id", // Generic click identifier
+  "clickid", // Click ID (variant)
+  "_ga", // Google Analytics client ID
 
   // Reddit-specific tracking
-  'rdt_cid',        // Reddit tracking cookie ID
-  '$deep_link',     // Reddit app deep link
-  '$3p',            // Reddit third-party tracking
-  '_branch_match_id',     // Branch.io match ID
-  '_branch_referrer',     // Branch.io referrer
+  "rdt_cid", // Reddit tracking cookie ID
+  "$deep_link", // Reddit app deep link
+  "$3p", // Reddit third-party tracking
+  "_branch_match_id", // Branch.io match ID
+  "_branch_referrer", // Branch.io referrer
 
   // Email marketing
-  'mc_cid',         // Mailchimp campaign ID
-  'mc_eid',         // Mailchimp email ID
+  "mc_cid", // Mailchimp campaign ID
+  "mc_eid", // Mailchimp email ID
 
   // Other common trackers
-  'yclid',          // Yandex click ID
-  'zanpid',         // Zanox affiliate ID
-  'rb_clickid',     // Rakuten click ID
+  "yclid", // Yandex click ID
+  "zanpid", // Zanox affiliate ID
+  "rb_clickid", // Rakuten click ID
 ];
 ```
 
@@ -193,22 +200,26 @@ const DEFAULT_TRACKING_PARAMS = [
 **Option A: Content Script Interception (Recommended)**
 
 Pros:
+
 - Works for all link types
 - Can provide immediate feedback
 - Easy to debug and test
 - Full control over behavior
 
 Cons:
+
 - Requires click event listener
 - Slightly more code in content script
 
 **Option B: Declarative Net Request**
 
 Pros:
+
 - No runtime overhead
 - Works even if content script disabled
 
 Cons:
+
 - Limited to 30 rules in Chrome
 - Complex regex patterns
 - Hard to provide user feedback
@@ -217,6 +228,7 @@ Cons:
 **Decision: Use Option A (Content Script Interception)**
 
 Rationale:
+
 - We already have content script infrastructure
 - Need user feedback capability
 - Need per-user customization
@@ -238,7 +250,7 @@ function removeTrackingParams(url, paramsToRemove) {
     const urlObj = new URL(url);
 
     let removed = [];
-    paramsToRemove.forEach(param => {
+    paramsToRemove.forEach((param) => {
       if (urlObj.searchParams.has(param)) {
         urlObj.searchParams.delete(param);
         removed.push(param);
@@ -248,14 +260,14 @@ function removeTrackingParams(url, paramsToRemove) {
     return {
       cleanUrl: urlObj.toString(),
       paramsRemoved: removed,
-      wasModified: removed.length > 0
+      wasModified: removed.length > 0,
     };
   } catch (error) {
     // Invalid URL, return original
     return {
       cleanUrl: url,
       paramsRemoved: [],
-      wasModified: false
+      wasModified: false,
     };
   }
 }
@@ -274,14 +286,14 @@ async function initTrackingProtection() {
   if (!privacy.removeTracking) return;
 
   // Intercept all link clicks
-  document.addEventListener('click', handleLinkClick, true);
+  document.addEventListener("click", handleLinkClick, true);
 }
 
 /**
  * Handle link clicks
  */
 async function handleLinkClick(event) {
-  const link = event.target.closest('a');
+  const link = event.target.closest("a");
   if (!link || !link.href) return;
 
   const config = await chrome.storage.local.get({ privacy: {} });
@@ -302,16 +314,16 @@ async function handleLinkClick(event) {
 
     // Send stats to background
     chrome.runtime.sendMessage({
-      type: 'TRACKING_PARAMS_CLEANED',
+      type: "TRACKING_PARAMS_CLEANED",
       original: link.href,
       cleaned: result.cleanUrl,
-      paramsRemoved: result.paramsRemoved
+      paramsRemoved: result.paramsRemoved,
     });
 
     // Navigate to cleaned URL
     if (event.ctrlKey || event.metaKey || event.button === 1) {
       // Middle click or Ctrl+click - open in new tab
-      window.open(result.cleanUrl, '_blank');
+      window.open(result.cleanUrl, "_blank");
     } else {
       // Normal click - navigate in same tab
       window.location.href = result.cleanUrl;
@@ -325,26 +337,26 @@ async function handleLinkClick(event) {
 ```javascript
 // In background.js
 chrome.runtime.onMessage.addListener((message, sender) => {
-  if (message.type === 'TRACKING_PARAMS_CLEANED') {
+  if (message.type === "TRACKING_PARAMS_CLEANED") {
     updateTrackingStats(message);
 
     // Show badge if enabled
     const showBadge = privacy.showTrackingBadge;
     if (showBadge) {
       chrome.action.setBadgeText({
-        text: '🛡️',
-        tabId: sender.tab.id
+        text: "🛡️",
+        tabId: sender.tab.id,
       });
       chrome.action.setBadgeBackgroundColor({
-        color: '#4CAF50',
-        tabId: sender.tab.id
+        color: "#4CAF50",
+        tabId: sender.tab.id,
       });
 
       // Clear badge after 2 seconds
       setTimeout(() => {
         chrome.action.setBadgeText({
-          text: '',
-          tabId: sender.tab.id
+          text: "",
+          tabId: sender.tab.id,
         });
       }, 2000);
     }
@@ -357,19 +369,19 @@ async function updateTrackingStats(data) {
   const stats = privacy.trackingStats || {
     totalCleaned: 0,
     lastCleaned: null,
-    byType: {}
+    byType: {},
   };
 
   stats.totalCleaned++;
   stats.lastCleaned = new Date().toISOString();
 
   // Categorize by param type
-  data.paramsRemoved.forEach(param => {
-    if (param.startsWith('utm_')) {
+  data.paramsRemoved.forEach((param) => {
+    if (param.startsWith("utm_")) {
       stats.byType.utm = (stats.byType.utm || 0) + 1;
-    } else if (param === 'fbclid') {
+    } else if (param === "fbclid") {
       stats.byType.facebook = (stats.byType.facebook || 0) + 1;
-    } else if (param === 'gclid') {
+    } else if (param === "gclid") {
       stats.byType.google = (stats.byType.google || 0) + 1;
     } else {
       stats.byType.other = (stats.byType.other || 0) + 1;
@@ -522,12 +534,12 @@ privacy: {
 
 #### Referrer Policy Options
 
-| Policy | Behavior | Privacy Level | Compatibility |
-|--------|----------|---------------|---------------|
-| **no-referrer** | No referrer sent | Maximum | May break some sites |
-| **origin** | Only domain sent (old.reddit.com) | High | Good |
-| **same-origin** | Full URL only within Reddit | Medium | Excellent |
-| **default** | Browser default | Low | Perfect |
+| Policy          | Behavior                          | Privacy Level | Compatibility        |
+| --------------- | --------------------------------- | ------------- | -------------------- |
+| **no-referrer** | No referrer sent                  | Maximum       | May break some sites |
+| **origin**      | Only domain sent (old.reddit.com) | High          | Good                 |
+| **same-origin** | Full URL only within Reddit       | Medium        | Excellent            |
+| **default**     | Browser default                   | Low           | Perfect              |
 
 **Recommended Default:** `same-origin` (balance of privacy and compatibility)
 
@@ -552,9 +564,9 @@ async function applyReferrerPolicy() {
   }
 
   // Inject new referrer policy
-  const meta = document.createElement('meta');
-  meta.name = 'referrer';
-  meta.content = privacy.referrerPolicy || 'same-origin';
+  const meta = document.createElement("meta");
+  meta.name = "referrer";
+  meta.content = privacy.referrerPolicy || "same-origin";
   document.head.appendChild(meta);
 
   console.log(`[ORR] Applied referrer policy: ${meta.content}`);
@@ -598,26 +610,30 @@ async function applyReferrerPolicy() {
 
 ```javascript
 const REFERRER_POLICY_INFO = {
-  'default': {
-    description: 'Uses your browser\'s default referrer policy. Typically sends full URL to all sites.',
-    privacy: 'Low',
-    compatibility: 'Perfect'
+  default: {
+    description:
+      "Uses your browser's default referrer policy. Typically sends full URL to all sites.",
+    privacy: "Low",
+    compatibility: "Perfect",
   },
-  'same-origin': {
-    description: 'Sends full URL only when staying on Reddit. External sites only see that you came from Reddit.',
-    privacy: 'Medium',
-    compatibility: 'Excellent'
+  "same-origin": {
+    description:
+      "Sends full URL only when staying on Reddit. External sites only see that you came from Reddit.",
+    privacy: "Medium",
+    compatibility: "Excellent",
   },
-  'origin': {
-    description: 'Only sends domain (old.reddit.com) to all sites. Never sends the specific page URL.',
-    privacy: 'High',
-    compatibility: 'Good'
+  origin: {
+    description:
+      "Only sends domain (old.reddit.com) to all sites. Never sends the specific page URL.",
+    privacy: "High",
+    compatibility: "Good",
   },
-  'no-referrer': {
-    description: 'No referrer information sent to any site. Maximum privacy but may break some websites.',
-    privacy: 'Maximum',
-    compatibility: 'May break some sites'
-  }
+  "no-referrer": {
+    description:
+      "No referrer information sent to any site. Maximum privacy but may break some websites.",
+    privacy: "Maximum",
+    compatibility: "May break some sites",
+  },
 };
 ```
 
@@ -637,6 +653,7 @@ const REFERRER_POLICY_INFO = {
 ### Phase 5.2.1: Storage Schema (Day 1, 2-3 hours)
 
 **Files to Modify:**
+
 - `storage.js` - Add privacy configuration
 
 **Tasks:**
@@ -732,6 +749,7 @@ async isTrackingRemovalEnabled() {
 ```
 
 **Validation:**
+
 - Run `npm test` - all existing tests should pass
 - Verify schema version still 3 (no migration needed)
 
@@ -740,6 +758,7 @@ async isTrackingRemovalEnabled() {
 ### Phase 5.2.2: Content Script Logic (Day 1-2, 4-5 hours)
 
 **Files to Modify:**
+
 - `content-script.js` - Add tracking protection logic
 
 **Tasks:**
@@ -755,6 +774,7 @@ async isTrackingRemovalEnabled() {
 **Estimated Lines:** ~200 lines
 
 **Validation:**
+
 - Manual test: Click links with utm_source params
 - Verify params removed from final URL
 - Check console for any errors
@@ -764,6 +784,7 @@ async isTrackingRemovalEnabled() {
 ### Phase 5.2.3: Background Script Logic (Day 2, 2-3 hours)
 
 **Files to Modify:**
+
 - `background.js` - Add stats tracking and badge display
 
 **Tasks:**
@@ -780,7 +801,7 @@ async isTrackingRemovalEnabled() {
 chrome.runtime.onMessage.addListener(async (message, sender) => {
   // ... existing handlers
 
-  if (message.type === 'TRACKING_PARAMS_CLEANED') {
+  if (message.type === "TRACKING_PARAMS_CLEANED") {
     await handleTrackingCleaned(message, sender);
   }
 });
@@ -788,26 +809,26 @@ chrome.runtime.onMessage.addListener(async (message, sender) => {
 async function handleTrackingCleaned(data, sender) {
   // Update stats
   await window.Storage.updateTrackingStats({
-    paramsRemoved: data.paramsRemoved
+    paramsRemoved: data.paramsRemoved,
   });
 
   // Show badge if enabled
   const privacy = await window.Storage.getPrivacy();
   if (privacy.showTrackingBadge && sender.tab) {
     chrome.action.setBadgeText({
-      text: '🛡️',
-      tabId: sender.tab.id
+      text: "🛡️",
+      tabId: sender.tab.id,
     });
     chrome.action.setBadgeBackgroundColor({
-      color: '#4CAF50',
-      tabId: sender.tab.id
+      color: "#4CAF50",
+      tabId: sender.tab.id,
     });
 
     // Clear after 2 seconds
     setTimeout(() => {
       chrome.action.setBadgeText({
-        text: '',
-        tabId: sender.tab.id
+        text: "",
+        tabId: sender.tab.id,
       });
     }, 2000);
   }
@@ -815,6 +836,7 @@ async function handleTrackingCleaned(data, sender) {
 ```
 
 **Validation:**
+
 - Test badge appears when params cleaned
 - Verify badge disappears after 2 seconds
 - Check stats increment correctly
@@ -824,6 +846,7 @@ async function handleTrackingCleaned(data, sender) {
 ### Phase 5.2.4: Options Page UI (Day 2-3, 3-4 hours)
 
 **Files to Modify:**
+
 - `options.html` - Add privacy section
 - `options.css` - Add privacy section styles
 
@@ -841,6 +864,7 @@ async function handleTrackingCleaned(data, sender) {
 **HTML Location:** After Feed Enhancements, before Alternative Frontend
 
 **CSS Additions:**
+
 - `.privacy-stats` - Stats grid container
 - `.stats-grid` - 2-column grid layout
 - `.stat-item` - Individual stat display
@@ -849,6 +873,7 @@ async function handleTrackingCleaned(data, sender) {
 - `.referrer-policy-info` - Policy description box
 
 **Validation:**
+
 - Visual inspection of all elements
 - Responsive layout on narrow screens
 - Dark mode compatibility
@@ -858,6 +883,7 @@ async function handleTrackingCleaned(data, sender) {
 ### Phase 5.2.5: Options Page Logic (Day 3, 4-5 hours)
 
 **Files to Modify:**
+
 - `options.js` - Add privacy settings management
 
 **Tasks:**
@@ -918,6 +944,7 @@ elements.privacyRemoveTracking.addEventListener('change', handleTrackingToggle);
 ```
 
 **Validation:**
+
 - Test all toggles update storage
 - Verify stats display correctly
 - Test clear stats resets counts
@@ -929,6 +956,7 @@ elements.privacyRemoveTracking.addEventListener('change', handleTrackingToggle);
 ### Phase 5.2.6: Test Suite (Day 3-4, 3-4 hours)
 
 **Files to Create:**
+
 - `tests/privacy.test.js` - Privacy feature tests
 
 **Test Categories:**
@@ -967,26 +995,27 @@ elements.privacyRemoveTracking.addEventListener('change', handleTrackingToggle);
 **Test File Structure:**
 
 ```javascript
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from "vitest";
 
-describe('Privacy - Storage Schema', () => {
+describe("Privacy - Storage Schema", () => {
   // 5 tests
 });
 
-describe('Privacy - URL Cleaning', () => {
+describe("Privacy - URL Cleaning", () => {
   // 8 tests
 });
 
-describe('Privacy - Statistics Tracking', () => {
+describe("Privacy - Statistics Tracking", () => {
   // 7 tests
 });
 
-describe('Privacy - Referrer Policy', () => {
+describe("Privacy - Referrer Policy", () => {
   // 5 tests
 });
 ```
 
 **Validation:**
+
 - Run `npm test` - all 328 tests should pass (303 + 25)
 - Zero lint errors
 - All edge cases covered
@@ -1015,6 +1044,7 @@ describe('Privacy - Referrer Policy', () => {
    - Update version to 11.1.0
 
 **Validation:**
+
 - Links work correctly
 - Markdown renders properly
 - Version numbers consistent
@@ -1026,11 +1056,13 @@ describe('Privacy - Referrer Policy', () => {
 ### Automated Testing
 
 **Test Pyramid:**
+
 - Unit tests: 25 new tests
 - Integration tests: Covered by manual testing
 - E2E tests: Not applicable (browser extension)
 
 **Coverage Goals:**
+
 - URL cleaning logic: 100%
 - Storage methods: 100%
 - Stats tracking: 100%
@@ -1095,6 +1127,7 @@ describe('Privacy - Referrer Policy', () => {
    - [ ] Verify meta tag removed
 
 **Browser Testing:**
+
 - Chrome (latest)
 - Firefox (latest)
 - Edge (Chromium-based)
@@ -1105,12 +1138,12 @@ describe('Privacy - Referrer Policy', () => {
 
 ### Target Metrics
 
-| Metric | Target | Measurement |
-|--------|--------|-------------|
-| URL cleaning time | <10ms | Time from click to navigation |
-| Badge display time | <50ms | Time from clean to badge visible |
-| Stats update time | <20ms | Time to update storage |
-| Memory overhead | <500KB | Additional memory for feature |
+| Metric              | Target     | Measurement                      |
+| ------------------- | ---------- | -------------------------------- |
+| URL cleaning time   | <10ms      | Time from click to navigation    |
+| Badge display time  | <50ms      | Time from clean to badge visible |
+| Stats update time   | <20ms      | Time to update storage           |
+| Memory overhead     | <500KB     | Additional memory for feature    |
 | Content script size | +200 lines | Total added to content-script.js |
 
 ### Performance Testing
@@ -1133,6 +1166,7 @@ describe('Privacy - Referrer Policy', () => {
    - Expected: <2000ms (20ms average)
 
 **Tools:**
+
 - Chrome DevTools Performance tab
 - `console.time()` / `console.timeEnd()`
 - Manual stopwatch for navigation delays
@@ -1144,31 +1178,34 @@ describe('Privacy - Referrer Policy', () => {
 ### Dependencies
 
 **Internal:**
+
 - Existing storage infrastructure (v3 schema)
 - Content script injection mechanism
 - Background message passing
 - Options page framework
 
 **External:**
+
 - Chrome/Firefox URL API
 - Extension badge API
 - Storage API quota (unlimited for extensions)
 
 ### Risk Assessment
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| **URL cleaning breaks navigation** | Low | High | Comprehensive testing, easy disable toggle |
-| **Performance degradation** | Low | Medium | Profile extensively, optimize if needed |
-| **False positives (removing needed params)** | Medium | Low | Conservative default list, user customization |
-| **Badge API issues** | Very Low | Low | Graceful degradation if badge fails |
-| **Referrer policy conflicts** | Low | Medium | Check for existing meta tags, warn user |
-| **Storage quota exceeded** | Very Low | Low | Stats limited to simple counters |
-| **Browser compatibility** | Low | Medium | Test on Chrome and Firefox |
+| Risk                                         | Probability | Impact | Mitigation                                    |
+| -------------------------------------------- | ----------- | ------ | --------------------------------------------- |
+| **URL cleaning breaks navigation**           | Low         | High   | Comprehensive testing, easy disable toggle    |
+| **Performance degradation**                  | Low         | Medium | Profile extensively, optimize if needed       |
+| **False positives (removing needed params)** | Medium      | Low    | Conservative default list, user customization |
+| **Badge API issues**                         | Very Low    | Low    | Graceful degradation if badge fails           |
+| **Referrer policy conflicts**                | Low         | Medium | Check for existing meta tags, warn user       |
+| **Storage quota exceeded**                   | Very Low    | Low    | Stats limited to simple counters              |
+| **Browser compatibility**                    | Low         | Medium | Test on Chrome and Firefox                    |
 
 ### Critical Risks
 
 **None identified.** All features:
+
 - Are opt-in (can be disabled)
 - Don't modify Reddit's core functionality
 - Have fallback behavior if they fail
@@ -1198,15 +1235,18 @@ describe('Privacy - Referrer Policy', () => {
 ### Phased Rollout (Optional)
 
 **Week 1: Development**
+
 - Complete implementation
 - Internal testing
 
 **Week 2: Beta Testing**
+
 - Release to beta users (if program exists)
 - Collect feedback
 - Fix critical bugs
 
 **Week 3: Stable Release**
+
 - Publish to Chrome Web Store / Firefox Add-ons
 - Monitor for issues
 - Update documentation
@@ -1220,7 +1260,7 @@ Consider adding killswitch for quick disable:
 const PRIVACY_FEATURE_ENABLED = true; // Can be toggled remotely if needed
 
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === 'TRACKING_PARAMS_CLEANED') {
+  if (message.type === "TRACKING_PARAMS_CLEANED") {
     if (!PRIVACY_FEATURE_ENABLED) return; // Killswitch
     // ... normal handling
   }
@@ -1236,6 +1276,7 @@ chrome.runtime.onMessage.addListener((message) => {
 3. **Long-term:** Fix issues, re-enable in next release
 
 **Storage Impact:**
+
 - No schema changes (still v3)
 - Can rollback without data migration
 - Old versions ignore new privacy fields
@@ -1247,16 +1288,19 @@ chrome.runtime.onMessage.addListener((message) => {
 ### Quantitative Metrics
 
 **Code Quality:**
+
 - [ ] All 328+ tests passing
 - [ ] Zero lint errors
 - [ ] Zero console errors in manual testing
 
 **Performance:**
+
 - [ ] URL cleaning <10ms average
 - [ ] No navigation delays
 - [ ] Badge display <50ms
 
 **Coverage:**
+
 - [ ] 25+ new tests added
 - [ ] All tracking params in default list tested
 - [ ] All referrer policies tested
@@ -1264,16 +1308,19 @@ chrome.runtime.onMessage.addListener((message) => {
 ### Qualitative Metrics
 
 **User Experience:**
+
 - [ ] Feature works transparently (no user intervention)
 - [ ] Stats provide useful information
 - [ ] UI is clear and understandable
 
 **Code Quality:**
+
 - [ ] Code follows project conventions
 - [ ] Comments explain complex logic
 - [ ] No code duplication
 
 **Documentation:**
+
 - [ ] README updated with new features
 - [ ] CHANGELOG entry complete
 - [ ] CLAUDE.md updated
@@ -1285,19 +1332,23 @@ chrome.runtime.onMessage.addListener((message) => {
 ### Detailed Schedule (4 days)
 
 **Day 1 (6-8 hours):**
+
 - Morning: Storage schema (2-3 hours)
 - Afternoon: Content script logic Part 1 (4-5 hours)
 
 **Day 2 (6-8 hours):**
+
 - Morning: Content script logic Part 2 (2 hours)
 - Late morning: Background script logic (2-3 hours)
 - Afternoon: Options page UI (3-4 hours)
 
 **Day 3 (6-8 hours):**
+
 - Morning: Options page logic (4-5 hours)
 - Afternoon: Test suite Part 1 (3-4 hours)
 
 **Day 4 (4-6 hours):**
+
 - Morning: Test suite Part 2 (1-2 hours)
 - Late morning: Documentation (1-2 hours)
 - Afternoon: Manual testing and fixes (2-3 hours)
@@ -1319,12 +1370,14 @@ chrome.runtime.onMessage.addListener((message) => {
 ### Monitoring
 
 **Metrics to Track:**
+
 - User adoption rate (if analytics available)
 - Feature toggle rates
 - Bug reports related to navigation
 - Performance complaints
 
 **Tools:**
+
 - GitHub Issues for bug reports
 - Extension store reviews
 - User feedback channels
@@ -1332,11 +1385,13 @@ chrome.runtime.onMessage.addListener((message) => {
 ### Iteration Plan
 
 **v11.1.1 (Patch):**
+
 - Bug fixes from user reports
 - Performance improvements if needed
 - Additional tracking params if discovered
 
 **v11.2.0 (Next Phase):**
+
 - Advanced Content Blocking
 - Jump to Top button
 - AI Overview blocking
@@ -1350,26 +1405,50 @@ chrome.runtime.onMessage.addListener((message) => {
 ```javascript
 const DEFAULT_TRACKING_PARAMS = [
   // UTM (7)
-  'utm_source', 'utm_medium', 'utm_campaign', 'utm_term',
-  'utm_content', 'utm_name', 'utm_cid',
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "utm_name",
+  "utm_cid",
 
   // Social Media (6)
-  'fbclid', 'gclid', 'msclkid', 'twclid', 'li_fat_id', 'igshid',
+  "fbclid",
+  "gclid",
+  "msclkid",
+  "twclid",
+  "li_fat_id",
+  "igshid",
 
   // Referral (6)
-  'ref', 'ref_source', 'ref_url', 'referrer', 'share_id', 'shared',
+  "ref",
+  "ref_source",
+  "ref_url",
+  "referrer",
+  "share_id",
+  "shared",
 
   // Click Tracking (3)
-  'click_id', 'clickid', '_ga',
+  "click_id",
+  "clickid",
+  "_ga",
 
   // Reddit-Specific (5)
-  'rdt_cid', '$deep_link', '$3p', '_branch_match_id', '_branch_referrer',
+  "rdt_cid",
+  "$deep_link",
+  "$3p",
+  "_branch_match_id",
+  "_branch_referrer",
 
   // Email Marketing (2)
-  'mc_cid', 'mc_eid',
+  "mc_cid",
+  "mc_eid",
 
   // Other (3)
-  'yclid', 'zanpid', 'rb_clickid'
+  "yclid",
+  "zanpid",
+  "rb_clickid",
 ];
 ```
 
@@ -1380,6 +1459,7 @@ const DEFAULT_TRACKING_PARAMS = [
 ## Appendix B: File Change Summary
 
 ### New Files
+
 ```
 tests/privacy.test.js                    (~250 lines, 25 tests)
 ```
@@ -1387,6 +1467,7 @@ tests/privacy.test.js                    (~250 lines, 25 tests)
 ### Modified Files
 
 **v11.1.0 Changes:**
+
 ```
 storage.js              (+150 lines: privacy schema + 6 methods)
 content-script.js       (+200 lines: tracking removal + referrer control)
@@ -1402,6 +1483,7 @@ CLAUDE.md               (+15 lines: privacy notes)
 ```
 
 **Total Impact:**
+
 - +1,115 lines of code added
 - +25 tests (303 → 328)
 - 1 new test file

@@ -12,6 +12,7 @@
 This document outlines the implementation plan for **Phase 4.2: User Tagging** of Old Reddit Redirect. This feature allows users to add custom labels/tags to Reddit users, making it easier to identify and track users across different threads and subreddits.
 
 **Key Benefits**:
+
 - Quickly identify users you've tagged (friends, helpful commenters, trolls, etc.)
 - Add custom notes and colors to user tags
 - Tags appear consistently across all Reddit pages
@@ -23,13 +24,13 @@ This document outlines the implementation plan for **Phase 4.2: User Tagging** o
 
 ### Repository Status
 
-| Metric | Value |
-|--------|-------|
-| Current Version | 8.0.0 (released 2026-01-30) |
-| Test Coverage | 220 tests, 100% passing |
-| ESLint Errors | 0 |
-| Content Script Size | ~1,106 lines |
-| Storage Schema Version | 2 |
+| Metric                 | Value                       |
+| ---------------------- | --------------------------- |
+| Current Version        | 8.0.0 (released 2026-01-30) |
+| Test Coverage          | 220 tests, 100% passing     |
+| ESLint Errors          | 0                           |
+| Content Script Size    | ~1,106 lines                |
+| Storage Schema Version | 2                           |
 
 ---
 
@@ -51,20 +52,26 @@ Add the ability to tag Reddit users with custom text and colors. Tags appear as 
 #### UI Components
 
 **1. Tag Button (next to username)**
+
 ```html
 <!-- Injected after .author element -->
 <a class="author">username</a>
-<button class="orr-tag-btn" data-username="username" title="Tag user">🏷️</button>
+<button class="orr-tag-btn" data-username="username" title="Tag user">
+  🏷️
+</button>
 
 <!-- When tag exists -->
 <a class="author">username</a>
 <span class="orr-user-tag" data-username="username" style="background: #color">
   Tag Text
 </span>
-<button class="orr-tag-edit" data-username="username" title="Edit tag">✏️</button>
+<button class="orr-tag-edit" data-username="username" title="Edit tag">
+  ✏️
+</button>
 ```
 
 **2. Tag Dialog**
+
 ```html
 <div class="orr-tag-dialog">
   <div class="orr-tag-dialog-header">
@@ -74,7 +81,12 @@ Add the ability to tag Reddit users with custom text and colors. Tags appear as 
   <div class="orr-tag-dialog-body">
     <label>
       Tag Text
-      <input type="text" id="orr-tag-text" maxlength="50" placeholder="e.g., Friend, Expert, etc.">
+      <input
+        type="text"
+        id="orr-tag-text"
+        maxlength="50"
+        placeholder="e.g., Friend, Expert, etc."
+      />
     </label>
     <label>
       Color
@@ -120,6 +132,7 @@ userTags: {
 #### Content Script Logic
 
 **1. Find and Mark Usernames**
+
 ```javascript
 function findUsernames() {
   // Find all .author elements that don't have tag buttons yet
@@ -146,6 +159,7 @@ function findUsernames() {
 ```
 
 **2. Tag Dialog Management**
+
 ```javascript
 let currentDialog = null;
 
@@ -158,7 +172,7 @@ function showTagDialog(username, existingTag = null) {
   currentDialog = dialog;
 
   // Focus input
-  dialog.querySelector('#orr-tag-text').focus();
+  dialog.querySelector("#orr-tag-text").focus();
 
   // Attach event handlers
   attachDialogHandlers(dialog, username);
@@ -173,6 +187,7 @@ function closeTagDialog() {
 ```
 
 **3. Tag Application**
+
 ```javascript
 async function saveUserTag(username, text, color) {
   await storage.setUserTag(username, { text, color, timestamp: Date.now() });
@@ -211,11 +226,13 @@ function refreshUsernameTags(username) {
 #### Options Page UI
 
 **Tag Management Section**:
+
 ```html
 <section class="setting">
   <h2>User Tags</h2>
   <p class="section-description">
-    Add custom labels and colors to Reddit users. Tags appear as badges next to usernames.
+    Add custom labels and colors to Reddit users. Tags appear as badges next to
+    usernames.
   </p>
 
   <div class="option-row">
@@ -227,9 +244,16 @@ function refreshUsernameTags(username) {
 
   <div class="user-tags-management">
     <div class="tags-header">
-      <h3>Saved Tags (<span id="tag-count">0</span>/<span id="tag-max">500</span>)</h3>
+      <h3>
+        Saved Tags (<span id="tag-count">0</span>/<span id="tag-max">500</span>)
+      </h3>
       <div class="tags-controls">
-        <input type="text" id="tag-search" placeholder="Search users..." class="search-input">
+        <input
+          type="text"
+          id="tag-search"
+          placeholder="Search users..."
+          class="search-input"
+        />
         <button id="export-tags" class="secondary-button">Export</button>
         <button id="import-tags" class="secondary-button">Import</button>
         <button id="clear-all-tags" class="danger-button">Clear All</button>
@@ -252,7 +276,8 @@ function refreshUsernameTags(username) {
     </table>
 
     <p class="empty-state" id="tags-empty">
-      No tags yet. Visit Reddit and click the tag button (🏷️) next to any username to add a tag.
+      No tags yet. Visit Reddit and click the tag button (🏷️) next to any
+      username to add a tag.
     </p>
   </div>
 </section>
@@ -261,6 +286,7 @@ function refreshUsernameTags(username) {
 #### CSS Styling
 
 **Tag Badge**:
+
 ```css
 .orr-user-tag {
   display: inline-block;
@@ -281,6 +307,7 @@ function refreshUsernameTags(username) {
 ```
 
 **Tag Button**:
+
 ```css
 .orr-tag-btn {
   display: inline-block;
@@ -302,6 +329,7 @@ function refreshUsernameTags(username) {
 ```
 
 **Tag Dialog**:
+
 ```css
 .orr-tag-dialog {
   position: fixed;
@@ -330,20 +358,21 @@ function refreshUsernameTags(username) {
 ### Preset Colors
 
 12 carefully chosen colors for tags:
+
 ```javascript
 const TAG_COLORS = [
-  '#e74c3c', // Red
-  '#e67e22', // Orange
-  '#f39c12', // Yellow
-  '#2ecc71', // Green
-  '#1abc9c', // Teal
-  '#3498db', // Blue
-  '#9b59b6', // Purple
-  '#e91e63', // Pink
-  '#607d8b', // Gray
-  '#795548', // Brown
-  '#ff5722', // Deep Orange
-  '#00bcd4', // Cyan
+  "#e74c3c", // Red
+  "#e67e22", // Orange
+  "#f39c12", // Yellow
+  "#2ecc71", // Green
+  "#1abc9c", // Teal
+  "#3498db", // Blue
+  "#9b59b6", // Purple
+  "#e91e63", // Pink
+  "#607d8b", // Gray
+  "#795548", // Brown
+  "#ff5722", // Deep Orange
+  "#00bcd4", // Cyan
 ];
 ```
 
@@ -368,6 +397,7 @@ const TAG_COLORS = [
 ### Test Plan
 
 **Unit Tests** (tests/user-tags.test.js):
+
 - Storage methods (getUserTag, setUserTag, deleteUserTag, clearUserTags)
 - Username normalization (case-insensitive)
 - Max tag limit enforcement
@@ -375,6 +405,7 @@ const TAG_COLORS = [
 - HTML escaping for tag text
 
 **Manual Testing**:
+
 1. Find a username on Reddit, click tag button
 2. Enter tag text "Friend" and select blue color
 3. Verify badge appears next to username
@@ -395,6 +426,7 @@ const TAG_COLORS = [
 ### Milestone: v9.0.0 - User Tagging
 
 **Deliverables**:
+
 - User tag storage schema
 - Tag button injection next to usernames
 - Tag dialog UI
@@ -404,6 +436,7 @@ const TAG_COLORS = [
 - Unit tests
 
 **Files to Modify**:
+
 - `storage.js` - Add userTags schema and methods
 - `content-script.js` - Add tag detection, dialog, and display logic
 - `styles.css` - Add tag button, badge, and dialog styles
@@ -413,6 +446,7 @@ const TAG_COLORS = [
 - `tests/user-tags.test.js` - New test file
 
 **Definition of Done**:
+
 - [ ] All acceptance criteria met
 - [ ] Tests passing
 - [ ] Manual testing complete
@@ -425,18 +459,18 @@ const TAG_COLORS = [
 
 ### Medium Risk
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Performance with many tags | Slow page rendering | Use efficient DOM queries, cache tag lookups |
-| Dialog positioning issues | Poor UX on small screens | Use responsive positioning, max-width |
-| Tag text XSS | Security vulnerability | Escape all tag text before display |
+| Risk                       | Impact                   | Mitigation                                   |
+| -------------------------- | ------------------------ | -------------------------------------------- |
+| Performance with many tags | Slow page rendering      | Use efficient DOM queries, cache tag lookups |
+| Dialog positioning issues  | Poor UX on small screens | Use responsive positioning, max-width        |
+| Tag text XSS               | Security vulnerability   | Escape all tag text before display           |
 
 ### Low Risk
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Storage quota limits | Can't save more tags | Enforce 500 tag limit, provide warning |
-| Color contrast issues | Tags hard to read | Use white text on all colors, ensure good contrast |
+| Risk                  | Impact               | Mitigation                                         |
+| --------------------- | -------------------- | -------------------------------------------------- |
+| Storage quota limits  | Can't save more tags | Enforce 500 tag limit, provide warning             |
+| Color contrast issues | Tags hard to read    | Use white text on all colors, ensure good contrast |
 
 ---
 
@@ -541,22 +575,26 @@ const TAG_COLORS = [
 ### Technical Details
 
 **Tag Colors**:
+
 - 12 carefully chosen colors with good contrast against white text
 - Colors include: Red, Orange, Yellow, Green, Teal, Blue, Purple, Pink, Gray, Brown, Deep Orange, Cyan
 - All colors use 6-digit hex format (#RRGGBB)
 
 **Security**:
+
 - All tag text HTML-escaped using div.textContent before display
 - All usernames HTML-escaped to prevent XSS
 - No eval() or innerHTML with user content
 
 **Performance**:
+
 - Tags applied efficiently with querySelector and MutationObserver
 - Usernames marked as processed (`.orr-tagged`) to avoid duplicate processing
 - Dialog is singleton - only one can be open at a time
 - Real-time updates use targeted message passing
 
 **UX Features**:
+
 - Dialog animations (fade-in overlay, slide-in dialog)
 - Color picker with visual selection feedback
 - Escape key closes dialog
@@ -575,6 +613,7 @@ const TAG_COLORS = [
 ### Next Steps
 
 **Phase 4 has one remaining feature:**
+
 - Phase 4.3: Scroll Position Memory (status: Under Consideration)
 
 Or move to Phase 5 features if more capabilities are desired.

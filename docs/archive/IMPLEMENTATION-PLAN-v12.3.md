@@ -14,6 +14,7 @@
 This document outlines the implementation plan for **v12.3.0 - Custom Views & Layouts**, which will allow users to save and quickly switch between custom combinations of feed enhancement settings. This addresses Phase 9.4 of the roadmap and completes the "Advanced User Features" phase alongside user muting (9.1), advanced keyword filtering (9.2), and customizable keyboard shortcuts (9.3).
 
 **Key Deliverables**:
+
 - Layout preset system with save/load/delete functionality
 - Quick-switch interface in popup and keyboard shortcuts
 - Per-subreddit layout preferences with auto-apply
@@ -31,6 +32,7 @@ This document outlines the implementation plan for **v12.3.0 - Custom Views & La
 **Architecture**: Manifest V3 browser extension (Chrome/Firefox)
 **Test Coverage**: 523 tests across 16 test suites
 **Recent Changes**:
+
 - v12.0.0: User muting (34 tests, 230 LOC)
 - v12.1.0: Advanced keyword filtering (46 tests, 370 LOC)
 - v12.2.0: Customizable keyboard shortcuts (92 tests, ~1400 LOC) - **in progress**
@@ -48,6 +50,7 @@ The extension currently has **7 feed enhancement toggles**:
 7. **customCSSEnabled** - Toggle for custom CSS
 
 **Current Limitations**:
+
 - Users must manually toggle each setting individually
 - No way to save combinations as named presets
 - No quick-switch mechanism between different "modes"
@@ -55,6 +58,7 @@ The extension currently has **7 feed enhancement toggles**:
 - Switching between reading modes requires multiple clicks
 
 **User Pain Points** (from competitive analysis):
+
 - Want "reading mode" preset (compact + text-only)
 - Want "image browsing mode" preset (uncropped images, no compact)
 - Want "clean mode" preset (hide all clutter)
@@ -64,17 +68,20 @@ The extension currently has **7 feed enhancement toggles**:
 ### Technical Foundation
 
 **Storage Infrastructure**:
+
 - `feedEnhancements` object with 7 boolean/string fields
 - All settings sync across browsers via `chrome.storage.sync`
 - Settings persistence and validation in `storage.js`
 
 **UI Integration Points**:
+
 - Popup UI (`popup.js`) - Current location for toggle switches
 - Options page (`options.js`) - Detailed settings management
 - Content script (`content-script.js`) - Applies feed enhancements
 - Background script (`background.js`) - Messaging and state management
 
 **Related Features**:
+
 - Keyboard shortcuts system (v12.2.0) - Can be extended for layout switching
 - Storage API (v11.0.0+) - Robust storage abstraction layer
 - Import/export infrastructure (v12.0.0+) - Pattern established for JSON export
@@ -88,6 +95,7 @@ The extension currently has **7 feed enhancement toggles**:
 **Definition**: A layout preset is a named combination of feed enhancement settings that can be saved, loaded, and quickly switched.
 
 **Preset Structure**:
+
 ```javascript
 {
   id: "preset-uuid",
@@ -108,6 +116,7 @@ The extension currently has **7 feed enhancement toggles**:
 ```
 
 **Default Presets** (5 built-in, non-deletable):
+
 1. **Default** - All enhancements disabled (Reddit's default appearance)
 2. **Reading Mode** - Compact + text-only for focused reading
 3. **Image Browsing** - Uncropped images + clean layout
@@ -115,6 +124,7 @@ The extension currently has **7 feed enhancement toggles**:
 5. **Power User** - Compact + uncropped + clean (everything enabled)
 
 **User Presets** (up to 10 custom):
+
 - User-created presets
 - Fully customizable names and settings
 - Can be edited, deleted, exported, imported
@@ -123,6 +133,7 @@ The extension currently has **7 feed enhancement toggles**:
 ### 2. Quick-Switch Interface
 
 **Popup Integration**:
+
 - Add "Layout" section above or below current toggles
 - Show current active preset name
 - Dropdown or button grid to switch presets
@@ -130,6 +141,7 @@ The extension currently has **7 feed enhancement toggles**:
 - "Manage Presets" link to options page
 
 **Keyboard Shortcuts** (extends v12.2.0 system):
+
 - `1` - Switch to preset #1 (Default)
 - `2` - Switch to preset #2 (Reading Mode)
 - `3` - Switch to preset #3 (Image Browsing)
@@ -139,6 +151,7 @@ The extension currently has **7 feed enhancement toggles**:
 - `L` - Open layout quick-switcher overlay
 
 **Quick-Switcher Overlay** (similar to help overlay):
+
 - Press `L` to show floating layout switcher
 - Grid of preset cards with icons and names
 - Click to switch, ESC to close
@@ -150,6 +163,7 @@ The extension currently has **7 feed enhancement toggles**:
 **Feature**: Automatically apply specific layouts when visiting certain subreddits
 
 **Storage Structure**:
+
 ```javascript
 {
   subredditLayouts: {
@@ -162,6 +176,7 @@ The extension currently has **7 feed enhancement toggles**:
 ```
 
 **Behavior**:
+
 - When navigating to r/pics, automatically apply "Image Browsing" preset
 - When navigating to r/AskReddit, automatically apply "Reading Mode" preset
 - Visual indicator in popup showing "Auto-applied: Reading Mode (r/AskReddit)"
@@ -169,6 +184,7 @@ The extension currently has **7 feed enhancement toggles**:
 - Option to globally disable auto-apply
 
 **UI**:
+
 - Options page: Table of subreddit → layout mappings
 - Add mapping: Subreddit input + preset dropdown
 - Remove mapping: Delete button per row
@@ -177,6 +193,7 @@ The extension currently has **7 feed enhancement toggles**:
 ### 4. Preset Management
 
 **Options Page UI**:
+
 - New "Layout Presets" section
 - Table of all presets (default + user)
 - Actions per preset:
@@ -187,6 +204,7 @@ The extension currently has **7 feed enhancement toggles**:
   - **Test** - Apply temporarily to preview
 
 **Create/Edit Modal**:
+
 - Preset name input (required, max 50 chars)
 - Description textarea (optional, max 200 chars)
 - Icon picker (emoji or text, max 5 chars)
@@ -195,6 +213,7 @@ The extension currently has **7 feed enhancement toggles**:
 - Save/Cancel buttons
 
 **Import/Export**:
+
 - Export single preset to JSON file
 - Export all presets to JSON file
 - Import preset(s) from JSON file
@@ -203,6 +222,7 @@ The extension currently has **7 feed enhancement toggles**:
 ### 5. Storage Schema
 
 **New Storage Objects**:
+
 ```javascript
 {
   layoutPresets: {
@@ -229,6 +249,7 @@ The extension currently has **7 feed enhancement toggles**:
 ```
 
 **Storage API Methods** (add to `storage.js`):
+
 - `getLayoutPresets()` - Get all presets
 - `getLayoutPreset(id)` - Get single preset
 - `setLayoutPreset(id, preset)` - Save/update preset
@@ -240,6 +261,7 @@ The extension currently has **7 feed enhancement toggles**:
 - `removeSubredditLayout(subreddit)` - Remove mapping
 
 **Estimated Storage Size**:
+
 - Default presets: ~2 KB (5 presets × 400 bytes)
 - User presets: ~4 KB (10 presets × 400 bytes)
 - Subreddit mappings: ~5 KB (100 mappings × 50 bytes)
@@ -254,6 +276,7 @@ The extension currently has **7 feed enhancement toggles**:
 **Goal**: Set up storage schema and core preset management system
 
 **Tasks**:
+
 1. Extend `storage.js` with `layoutPresets` defaults
    - Define 5 default preset objects
    - Add storage schema validation
@@ -274,12 +297,14 @@ The extension currently has **7 feed enhancement toggles**:
 4. Write UUID generation for user presets
 
 **Deliverables**:
+
 - Extended storage schema with `layoutPresets`
 - 8 new storage API methods
 - 3 validation utility functions
 - UUID helper function
 
 **Validation**:
+
 - Unit tests for storage API (10 tests)
 - Unit tests for validation (5 tests)
 - Schema migration tests (3 tests)
@@ -293,6 +318,7 @@ The extension currently has **7 feed enhancement toggles**:
 **Goal**: Implement logic to apply presets to feed enhancements
 
 **Tasks**:
+
 1. Implement `applyLayoutPreset(presetId)` in content script:
    - Load preset from storage
    - Extract settings object
@@ -319,6 +345,7 @@ The extension currently has **7 feed enhancement toggles**:
    - `saveAsPreset` message
 
 **Deliverables**:
+
 - Preset application logic (~150 lines)
 - Current preset detection
 - Save current as preset functionality
@@ -326,6 +353,7 @@ The extension currently has **7 feed enhancement toggles**:
 - Message handlers
 
 **Validation**:
+
 - Integration tests for apply logic (5 tests)
 - Auto-apply tests (5 tests)
 - Message passing tests (3 tests)
@@ -339,6 +367,7 @@ The extension currently has **7 feed enhancement toggles**:
 **Goal**: Build popup interface and quick-switcher overlay
 
 **Tasks**:
+
 1. Update `popup.html`:
    - Add "Layout Presets" section
    - Current preset indicator
@@ -368,6 +397,7 @@ The extension currently has **7 feed enhancement toggles**:
    - Add shortcuts `Ctrl+Shift+1-5` for user presets
 
 **Deliverables**:
+
 - Updated popup UI (~100 lines HTML)
 - Popup logic (~150 lines JS)
 - Quick-switcher overlay (~200 lines)
@@ -375,6 +405,7 @@ The extension currently has **7 feed enhancement toggles**:
 - Keyboard shortcut integration
 
 **Validation**:
+
 - Manual testing of popup UI
 - Manual testing of quick-switcher
 - Keyboard shortcut tests (5 tests)
@@ -388,6 +419,7 @@ The extension currently has **7 feed enhancement toggles**:
 **Goal**: Build comprehensive preset management interface
 
 **Tasks**:
+
 1. Add "Layout Presets" section to `options.html`:
    - Master toggle for layout presets feature
    - Presets management table
@@ -424,6 +456,7 @@ The extension currently has **7 feed enhancement toggles**:
    - Validation and merge strategy
 
 **Deliverables**:
+
 - Layout presets section (~200 lines HTML)
 - Management UI logic (~400 lines JS)
 - Create/edit modal
@@ -432,6 +465,7 @@ The extension currently has **7 feed enhancement toggles**:
 - CSS styles (~150 lines)
 
 **Validation**:
+
 - Manual testing of all CRUD operations
 - Import/export tests (5 tests)
 - Validation tests (4 tests)
@@ -445,6 +479,7 @@ The extension currently has **7 feed enhancement toggles**:
 **Goal**: Comprehensive testing, documentation, and release preparation
 
 **Tasks**:
+
 1. Write comprehensive test suite:
    - Storage API tests (10 tests)
    - Validation tests (5 tests)
@@ -478,6 +513,7 @@ The extension currently has **7 feed enhancement toggles**:
    - No impact on page load time
 
 **Deliverables**:
+
 - Comprehensive test suite (33+ tests)
 - Updated documentation (4 files)
 - Manual test results
@@ -485,6 +521,7 @@ The extension currently has **7 feed enhancement toggles**:
 - Version bump to 12.3.0
 
 **Validation**:
+
 - All tests passing
 - Documentation review
 - Performance benchmarks met
@@ -499,6 +536,7 @@ The extension currently has **7 feed enhancement toggles**:
 ### Storage Schema Design
 
 **Hierarchy**:
+
 ```
 layoutPresets (object)
 ├── enabled (boolean)
@@ -520,6 +558,7 @@ layoutPresets (object)
 ```
 
 **Preset Object Schema**:
+
 ```javascript
 {
   id: string,              // UUID or preset slug
@@ -543,6 +582,7 @@ layoutPresets (object)
 ### Application Flow
 
 **Preset Switch Flow**:
+
 1. User clicks preset in popup/quick-switcher or presses keyboard shortcut
 2. `applyLayoutPreset(presetId)` called in content script
 3. Load preset from storage via storage API
@@ -554,6 +594,7 @@ layoutPresets (object)
 9. Show toast notification (optional)
 
 **Auto-Apply Flow**:
+
 1. Content script initializes on page load
 2. Detect current subreddit from URL
 3. Check if `autoApply` is enabled
@@ -563,6 +604,7 @@ layoutPresets (object)
 7. Update current preset indicator
 
 **Create Preset Flow**:
+
 1. User clicks "Save Current as Preset"
 2. Capture current feed enhancement settings
 3. Open create modal with pre-filled settings
@@ -576,18 +618,21 @@ layoutPresets (object)
 ### Performance Considerations
 
 **Storage Access**:
+
 - Presets loaded once on extension initialization
 - Cached in memory for fast switching
 - Only write to storage on preset create/edit/delete
 - Debounce writes to prevent excessive storage calls
 
 **DOM Manipulation**:
+
 - Batch preset application updates
 - Use requestAnimationFrame for UI updates
 - Minimize reflows/repaints during switch
 - Target: <100ms preset switch latency
 
 **Memory Usage**:
+
 - Preset cache: ~20 KB (15 presets × 1.3 KB overhead)
 - Quick-switcher overlay: Render on-demand, destroy on close
 - No persistent event listeners (use event delegation)
@@ -596,22 +641,24 @@ layoutPresets (object)
 
 ## Risk Assessment & Mitigation
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-| Preset switching too slow | Medium | Medium | Optimize with caching, batch DOM updates, profile performance |
-| Storage quota exceeded | Low | High | Enforce 10 preset limit, 100 subreddit limit, validate on import |
-| Preset settings conflict with manual toggles | High | Medium | Clear UI indicator, "Custom" preset when manually changed |
-| User confusion with multiple interfaces | Medium | Medium | Consistent UI language, tooltips, help text |
-| Import/export compatibility | Low | Low | Version field, schema validation, error messages |
-| Auto-apply breaks expected behavior | Medium | Medium | Clear notifications, easy disable, manual override |
-| Keyboard shortcut conflicts | Low | Medium | Use v12.2.0 conflict detection, allow remapping |
+| Risk                                         | Likelihood | Impact | Mitigation                                                       |
+| -------------------------------------------- | ---------- | ------ | ---------------------------------------------------------------- |
+| Preset switching too slow                    | Medium     | Medium | Optimize with caching, batch DOM updates, profile performance    |
+| Storage quota exceeded                       | Low        | High   | Enforce 10 preset limit, 100 subreddit limit, validate on import |
+| Preset settings conflict with manual toggles | High       | Medium | Clear UI indicator, "Custom" preset when manually changed        |
+| User confusion with multiple interfaces      | Medium     | Medium | Consistent UI language, tooltips, help text                      |
+| Import/export compatibility                  | Low        | Low    | Version field, schema validation, error messages                 |
+| Auto-apply breaks expected behavior          | Medium     | Medium | Clear notifications, easy disable, manual override               |
+| Keyboard shortcut conflicts                  | Low        | Medium | Use v12.2.0 conflict detection, allow remapping                  |
 
 **Critical Path Dependencies**:
+
 - Phase 1 must complete before Phase 2 (storage before logic)
 - Phase 2 must complete before Phase 3 (logic before UI)
 - Keyboard shortcut integration requires v12.2.0 completion
 
 **Rollback Strategy**:
+
 - **Level 1**: Disable feature via `layoutPresets.enabled = false` (1 minute)
 - **Level 2**: Revert to v12.2.0 (1 hour, lose layout presets only)
 - **Level 3**: Clear user presets via storage API (preserve default presets)
@@ -621,6 +668,7 @@ layoutPresets (object)
 ## Success Criteria
 
 **Functional Requirements**:
+
 - ✅ Users can create, edit, delete custom layout presets
 - ✅ 5 default presets available out-of-box
 - ✅ Quick-switch via popup, keyboard shortcuts, or overlay
@@ -629,6 +677,7 @@ layoutPresets (object)
 - ✅ No conflicts with existing feed enhancement toggles
 
 **Performance Requirements**:
+
 - ✅ Preset switch latency <100ms
 - ✅ Auto-apply latency <50ms
 - ✅ Storage usage <15 KB
@@ -636,6 +685,7 @@ layoutPresets (object)
 - ✅ Quick-switcher overlay renders in <200ms
 
 **Quality Requirements**:
+
 - ✅ 33+ new tests (95%+ pass rate)
 - ✅ ESLint passing
 - ✅ Prettier formatted
@@ -643,6 +693,7 @@ layoutPresets (object)
 - ✅ Cross-browser compatibility (Chrome, Firefox)
 
 **User Experience Requirements**:
+
 - ✅ Clear visual feedback on preset switch
 - ✅ Intuitive preset management UI
 - ✅ Helpful tooltips and descriptions
@@ -655,15 +706,16 @@ layoutPresets (object)
 
 **Total Duration**: 4-5 days (38-48 hours)
 
-| Day | Phase | Hours | Milestone |
-|-----|-------|-------|-----------|
-| 1 | Phase 1: Storage & Infrastructure | 6-8 | Storage schema complete, 18 tests passing |
-| 2 | Phase 2: Application Logic | 6-8 | Preset switching functional, 13 tests passing |
-| 3 | Phase 3: Popup & Quick-Switcher | 8-10 | UI working, keyboard shortcuts integrated |
-| 4 | Phase 4: Options Page UI | 10-12 | Full management interface, import/export done |
-| 5 | Phase 5: Testing & Documentation | 8-10 | 556+ tests passing, docs updated, v12.3.0 ready |
+| Day | Phase                             | Hours | Milestone                                       |
+| --- | --------------------------------- | ----- | ----------------------------------------------- |
+| 1   | Phase 1: Storage & Infrastructure | 6-8   | Storage schema complete, 18 tests passing       |
+| 2   | Phase 2: Application Logic        | 6-8   | Preset switching functional, 13 tests passing   |
+| 3   | Phase 3: Popup & Quick-Switcher   | 8-10  | UI working, keyboard shortcuts integrated       |
+| 4   | Phase 4: Options Page UI          | 10-12 | Full management interface, import/export done   |
+| 5   | Phase 5: Testing & Documentation  | 8-10  | 556+ tests passing, docs updated, v12.3.0 ready |
 
 **Critical Milestones**:
+
 - **Day 1 EOD**: Storage API functional, unit tests passing
 - **Day 2 EOD**: Can apply presets programmatically, auto-apply working
 - **Day 3 EOD**: Popup and quick-switcher fully functional
@@ -726,12 +778,14 @@ layoutPresets (object)
 ### Monitoring Plan
 
 **First 24 Hours**:
+
 - Monitor GitHub issues for bug reports
 - Check browser store reviews
 - Monitor error logs (if available)
 - Be ready to hotfix critical issues
 
 **First Week**:
+
 - Collect user feedback on layout presets
 - Track preset creation/usage via anonymous analytics (if implemented)
 - Identify most popular default presets
@@ -819,6 +873,7 @@ layoutPresets (object)
    - Should default presets be editable or strictly read-only?
 
 **Mitigation for Unknowns**:
+
 - Collect feedback via GitHub issues
 - Monitor usage patterns (if analytics implemented)
 - Iterate based on real-world usage
@@ -829,6 +884,7 @@ layoutPresets (object)
 ## Appendix: Default Presets Specification
 
 ### Preset 1: Default
+
 ```javascript
 {
   id: "default",
@@ -848,6 +904,7 @@ layoutPresets (object)
 ```
 
 ### Preset 2: Reading Mode
+
 ```javascript
 {
   id: "reading-mode",
@@ -867,6 +924,7 @@ layoutPresets (object)
 ```
 
 ### Preset 3: Image Browsing
+
 ```javascript
 {
   id: "image-browsing",
@@ -886,6 +944,7 @@ layoutPresets (object)
 ```
 
 ### Preset 4: Minimal
+
 ```javascript
 {
   id: "minimal",
@@ -905,6 +964,7 @@ layoutPresets (object)
 ```
 
 ### Preset 5: Power User
+
 ```javascript
 {
   id: "power-user",
@@ -930,6 +990,7 @@ layoutPresets (object)
 This implementation plan provides a comprehensive roadmap for v12.3.0 - Custom Views & Layouts (Phase 9.4). Upon completion, users will have a powerful system for saving, switching, and auto-applying layout combinations, completing the Advanced User Features phase of the roadmap.
 
 **Expected Impact**:
+
 - **+33 tests** (523 → 556 total)
 - **+900 lines of code** (storage, UI, logic, tests)
 - **+1 major feature** (28 → 29 total features)

@@ -20,17 +20,21 @@ export function startDomMonitor() {
 
   const target = document.querySelector(OBSERVED_SELECTOR);
   if (!target) {
-    debugLog("[DOM Monitor] Target container not found. Possible layout change.");
+    debugLog(
+      "[DOM Monitor] Target container not found. Possible layout change."
+    );
     // This itself is a signal of breakage
     return;
   }
 
   observer = new MutationObserver((mutations) => {
     changeCount += mutations.length;
-    
+
     if (changeCount > THRESHOLD_CHANGES) {
-      debugLog("[DOM Monitor] High DOM churn detected. Possible conflict or loop.");
-      // In a real implementation, we might want to flag this to the user 
+      debugLog(
+        "[DOM Monitor] High DOM churn detected. Possible conflict or loop."
+      );
+      // In a real implementation, we might want to flag this to the user
       // or throttle our own script execution if we suspect we are causing it.
       observer.disconnect();
     }
@@ -39,9 +43,9 @@ export function startDomMonitor() {
   observer.observe(target, {
     childList: true,
     subtree: true,
-    attributes: false // We mostly care about structure
+    attributes: false, // We mostly care about structure
   });
-  
+
   debugLog("[DOM Monitor] Started.");
 }
 
@@ -50,17 +54,13 @@ export function startDomMonitor() {
  * @returns {Array<string>} List of missing critical selectors
  */
 export function checkCriticalSelectors() {
-  const critical = [
-    "#siteTable",
-    "#header",
-    ".side"
-  ];
-  
-  const missing = critical.filter(sel => !document.querySelector(sel));
-  
+  const critical = ["#siteTable", "#header", ".side"];
+
+  const missing = critical.filter((sel) => !document.querySelector(sel));
+
   if (missing.length > 0) {
     console.warn(`[ORR] Critical elements missing: ${missing.join(", ")}`);
   }
-  
+
   return missing;
 }

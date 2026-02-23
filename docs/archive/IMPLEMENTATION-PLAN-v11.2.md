@@ -62,6 +62,7 @@ Phase 5.3 adds advanced content blocking and navigation features to Old Reddit R
 ### Version 11.1.0 Status ✅
 
 **Completed Features:**
+
 - ✅ Feed Enhancements (v11.0.0): Compact mode, text-only, uncrop, custom CSS
 - ✅ Privacy & Tracking Protection (v11.1.0): Tracking removal, referrer control
 - ✅ Test count: 329 tests across 12 test suites
@@ -111,17 +112,20 @@ Phase 5.3 adds advanced content blocking and navigation features to Old Reddit R
 ### Key Unknowns & Assumptions
 
 **Unknowns:**
+
 1. What CSS selectors will Reddit use for AI content on old.reddit.com? (Future-proofing challenge)
 2. Do trending/recommendations appear on old.reddit.com or only new Reddit?
 3. Will Reddit's DOM structure change with future updates?
 
 **Assumptions:**
+
 1. AI content will eventually appear on old.reddit.com (plan defensively)
 2. Promoted content patterns from new Reddit can inform old Reddit selectors
 3. Users want maximum control (individual toggles vs. global switch)
 4. Jump-to-top should be opt-in (default enabled) with keyboard shortcut
 
 **Approach to Unknowns:**
+
 - Use generic selectors based on known patterns (`[data-*]`, `.promoted`, `.ai-*`)
 - Monitor Sink It for Reddit changelog for selector updates
 - Build extensible system that's easy to update with new selectors
@@ -134,12 +138,14 @@ Phase 5.3 adds advanced content blocking and navigation features to Old Reddit R
 ### Feature 5.8: AI Overview Blocking
 
 **User Experience:**
+
 - Toggle in options page: "Block AI-generated content"
 - Hides AI answers, summaries, overviews (when/if they appear on old Reddit)
 - Works silently in background (no visual feedback needed)
 - Default: Enabled (most users want to avoid AI content)
 
 **Technical Behavior:**
+
 - DOM removal via CSS selector matching
 - MutationObserver watches for dynamically inserted AI content
 - Selectors target:
@@ -149,22 +155,24 @@ Phase 5.3 adds advanced content blocking and navigation features to Old Reddit R
 - Performance: <5ms overhead per DOM scan
 
 **Default Selectors (Researched from Sink It & Reddit DOM):**
+
 ```javascript
 aiContent: [
   '[data-ai-generated="true"]',
   '[data-testid*="ai"]',
-  '.ai-overview',
-  '.ai-answer',
-  '.ai-summary',
-  '.generated-content',
+  ".ai-overview",
+  ".ai-answer",
+  ".ai-summary",
+  ".generated-content",
   '[aria-label*="AI-generated"]',
   '[aria-label*="AI answer"]',
-  '.search-ai-answer',
-  '.ai-comment',
-]
+  ".search-ai-answer",
+  ".ai-comment",
+];
 ```
 
 **Edge Cases:**
+
 - AI content may not exist yet on old.reddit.com → selectors won't match anything (no harm)
 - Future Reddit updates may use different selectors → easy to add via storage updates
 - User-contributed posts with "AI" in title → won't be blocked (selectors target specific classes)
@@ -174,6 +182,7 @@ aiContent: [
 ### Feature 5.9: Enhanced Promoted Content Blocking
 
 **User Experience:**
+
 - Four new toggles in Nag Blocking section:
   - "Block trending posts sections"
   - "Block recommended communities"
@@ -183,6 +192,7 @@ aiContent: [
 - Instant application (no page reload needed)
 
 **Technical Behavior:**
+
 - Extends existing `nagBlocking` storage object
 - Adds 4 new boolean fields:
   ```javascript
@@ -195,6 +205,7 @@ aiContent: [
 - MutationObserver catches dynamically inserted promoted content
 
 **Default Selectors (Old Reddit Specific):**
+
 ```javascript
 trending: [
   '.trending-subreddits',
@@ -226,6 +237,7 @@ morePosts: [
 ```
 
 **Integration with Existing System:**
+
 - Adds selectors to `nagSelectors` object in `content-script.js`
 - Follows same pattern as login prompts, email verification, etc.
 - Uses same MutationObserver debouncing (100ms)
@@ -236,11 +248,13 @@ morePosts: [
 ### Feature 5.10: Jump to Top Button (Enhancement)
 
 **Current State:**
+
 - Function exists: `navigateToTop()` at line 592-597
 - Button exists in comment navigation floating UI
 - Works perfectly with smooth scroll
 
 **What's New:**
+
 - **Standalone keyboard shortcut**: `Shift+Home` (intuitive, not used by Reddit)
 - **Independent toggle**: Can enable jump-to-top without enabling full comment navigation
 - **Accessibility improvements**:
@@ -249,43 +263,49 @@ morePosts: [
   - Reduced motion support (instant scroll if user prefers reduced motion)
 
 **User Experience:**
+
 - New option in Comment Enhancements section: "Jump to top keyboard shortcut (Shift+Home)"
 - Default: Enabled
 - Works on all old.reddit.com pages (feed, comments, profiles)
 - Visual feedback: Brief highlight at top of page (1 second)
 
 **Technical Implementation:**
+
 ```javascript
 // New function wrapping existing navigateToTop()
 function handleJumpToTopKeyboard(event) {
-  if (event.shiftKey && event.key === 'Home') {
+  if (event.shiftKey && event.key === "Home") {
     event.preventDefault();
 
     // Check user's motion preference
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     window.scrollTo({
       top: 0,
-      behavior: prefersReducedMotion ? 'auto' : 'smooth'
+      behavior: prefersReducedMotion ? "auto" : "smooth",
     });
 
     // Accessibility: Announce to screen readers
-    const announcement = document.createElement('div');
-    announcement.setAttribute('role', 'status');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.textContent = 'Scrolled to top of page';
-    announcement.style.cssText = 'position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;';
+    const announcement = document.createElement("div");
+    announcement.setAttribute("role", "status");
+    announcement.setAttribute("aria-live", "polite");
+    announcement.textContent = "Scrolled to top of page";
+    announcement.style.cssText =
+      "position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;";
     document.body.appendChild(announcement);
     setTimeout(() => announcement.remove(), 1000);
 
     // Visual feedback
-    document.body.classList.add('orr-jumped-to-top');
-    setTimeout(() => document.body.classList.remove('orr-jumped-to-top'), 1000);
+    document.body.classList.add("orr-jumped-to-top");
+    setTimeout(() => document.body.classList.remove("orr-jumped-to-top"), 1000);
   }
 }
 ```
 
 **Storage Schema:**
+
 ```javascript
 commentEnhancements: {
   // ... existing fields ...
@@ -306,6 +326,7 @@ Why: We're extending existing objects, not restructuring
 **Modified Objects:**
 
 1. **`nagBlocking`** (extends existing from v6.0.0):
+
 ```javascript
 nagBlocking: {
   enabled: true,
@@ -323,6 +344,7 @@ nagBlocking: {
 ```
 
 2. **`commentEnhancements`** (extends existing from v7.0.0):
+
 ```javascript
 commentEnhancements: {
   colorCodedComments: true,
@@ -344,6 +366,7 @@ commentEnhancements: {
 **New Sections:**
 
 1. **Extended Nag Selectors** (line ~155, expand existing object):
+
 ```javascript
 const nagSelectors = {
   loginPrompts: [...], // existing
@@ -381,6 +404,7 @@ const nagSelectors = {
 ```
 
 2. **Extended applyNagBlocking()** (line ~134, add conditions):
+
 ```javascript
 if (nagBlocking.blockAIContent) {
   selectorsToBlock.push(...nagSelectors.aiContent);
@@ -400,14 +424,15 @@ if (nagBlocking.blockMorePosts) {
 ```
 
 3. **Jump to Top Keyboard Handler** (new function, line ~620):
+
 ```javascript
 async function initJumpToTopKeyboard() {
-  const prefs = await chrome.storage.sync.get(['commentEnhancements']);
+  const prefs = await chrome.storage.sync.get(["commentEnhancements"]);
   const enhancements = prefs.commentEnhancements || {};
 
   if (!enhancements.jumpToTopShortcut) return;
 
-  document.addEventListener('keydown', handleJumpToTopKeyboard);
+  document.addEventListener("keydown", handleJumpToTopKeyboard);
 }
 
 function handleJumpToTopKeyboard(event) {
@@ -416,20 +441,24 @@ function handleJumpToTopKeyboard(event) {
 ```
 
 4. **Initialization** (add to page load sequence, line ~1695):
+
 ```javascript
 // After existing initialization calls:
 initJumpToTopKeyboard();
 ```
 
 **Modified Functions:**
+
 - `applyNagBlocking()` - Add 5 new conditional blocks
 - Page initialization - Add `initJumpToTopKeyboard()` call
 
 **New Functions:**
+
 - `initJumpToTopKeyboard()` - Initialize keyboard listener
 - `handleJumpToTopKeyboard(event)` - Handle Shift+Home shortcut
 
 **Lines Added**: ~80 lines
+
 - Selector definitions: ~30 lines
 - Conditional blocks in applyNagBlocking: ~15 lines
 - Jump to top keyboard handler: ~35 lines
@@ -443,6 +472,7 @@ initJumpToTopKeyboard();
 **Modified Methods:**
 
 1. **Update `getNagBlocking()` default** (line ~753):
+
 ```javascript
 async getNagBlocking() {
   const defaults = {
@@ -463,6 +493,7 @@ async getNagBlocking() {
 ```
 
 2. **Update `getCommentEnhancements()` default** (line ~770):
+
 ```javascript
 async getCommentEnhancements() {
   const defaults = {
@@ -491,6 +522,7 @@ async getCommentEnhancements() {
 **New UI Elements:**
 
 1. **Nag Blocking Section** (add 5 new checkboxes after existing 4):
+
 ```html
 <!-- Existing checkboxes -->
 <label class="checkbox-label">
@@ -504,7 +536,8 @@ async getCommentEnhancements() {
   <span>Block AI-generated content</span>
 </label>
 <p class="help-text">
-  Hides AI answers, summaries, and overviews. Future-proofed against Reddit's AI features.
+  Hides AI answers, summaries, and overviews. Future-proofed against Reddit's AI
+  features.
 </p>
 
 <label class="checkbox-label">
@@ -529,6 +562,7 @@ async getCommentEnhancements() {
 ```
 
 2. **Comment Enhancements Section** (add 1 new checkbox):
+
 ```html
 <!-- After inline images checkbox -->
 <label class="checkbox-label">
@@ -536,7 +570,8 @@ async getCommentEnhancements() {
   <span>Jump to top keyboard shortcut (Shift+Home)</span>
 </label>
 <p class="help-text">
-  Press Shift+Home to smoothly scroll to the top of any page. Respects reduced motion preferences.
+  Press Shift+Home to smoothly scroll to the top of any page. Respects reduced
+  motion preferences.
 </p>
 ```
 
@@ -547,42 +582,50 @@ async getCommentEnhancements() {
 **File**: `options.js`
 
 **New Element References** (add to elements object, line ~93):
+
 ```javascript
 const elements = {
   // ... existing elements ...
 
   // NEW:
-  blockAIContent: document.getElementById('block-ai-content'),
-  blockTrending: document.getElementById('block-trending'),
-  blockRecommended: document.getElementById('block-recommended'),
-  blockCommunityHighlights: document.getElementById('block-community-highlights'),
-  blockMorePosts: document.getElementById('block-more-posts'),
-  jumpToTopShortcut: document.getElementById('jump-to-top-shortcut'),
+  blockAIContent: document.getElementById("block-ai-content"),
+  blockTrending: document.getElementById("block-trending"),
+  blockRecommended: document.getElementById("block-recommended"),
+  blockCommunityHighlights: document.getElementById(
+    "block-community-highlights"
+  ),
+  blockMorePosts: document.getElementById("block-more-posts"),
+  jumpToTopShortcut: document.getElementById("jump-to-top-shortcut"),
 };
 ```
 
 **Modified Functions:**
 
 1. **`loadNagBlockingSettings()`** (line ~997, add 5 lines):
+
 ```javascript
 async function loadNagBlockingSettings() {
   const nagBlocking = await window.Storage.getNagBlocking();
 
   elements.nagBlockingEnabled.checked = nagBlocking.enabled !== false;
   elements.blockLoginPrompts.checked = nagBlocking.blockLoginPrompts !== false;
-  elements.blockEmailVerification.checked = nagBlocking.blockEmailVerification !== false;
-  elements.blockPremiumBanners.checked = nagBlocking.blockPremiumBanners !== false;
+  elements.blockEmailVerification.checked =
+    nagBlocking.blockEmailVerification !== false;
+  elements.blockPremiumBanners.checked =
+    nagBlocking.blockPremiumBanners !== false;
   elements.blockAppPrompts.checked = nagBlocking.blockAppPrompts !== false;
   // NEW:
   elements.blockAIContent.checked = nagBlocking.blockAIContent !== false;
   elements.blockTrending.checked = nagBlocking.blockTrending !== false;
   elements.blockRecommended.checked = nagBlocking.blockRecommended !== false;
-  elements.blockCommunityHighlights.checked = nagBlocking.blockCommunityHighlights !== false;
+  elements.blockCommunityHighlights.checked =
+    nagBlocking.blockCommunityHighlights !== false;
   elements.blockMorePosts.checked = nagBlocking.blockMorePosts !== false;
 }
 ```
 
 2. **`handleNagBlockingChange()`** (line ~1010, add 5 conditions):
+
 ```javascript
 async function handleNagBlockingChange(e) {
   const nagBlocking = await window.Storage.getNagBlocking();
@@ -611,11 +654,13 @@ async function handleNagBlockingChange(e) {
 ```
 
 3. **`loadCommentEnhancementsSettings()`** (add 1 line):
+
 ```javascript
 elements.jumpToTopShortcut.checked = enhancements.jumpToTopShortcut !== false;
 ```
 
 4. **`handleCommentEnhancementsChange()`** (add 1 condition):
+
 ```javascript
 else if (e.target === elements.jumpToTopShortcut) {
   enhancements.jumpToTopShortcut = e.target.checked;
@@ -623,16 +668,23 @@ else if (e.target === elements.jumpToTopShortcut) {
 ```
 
 5. **`attachListeners()`** (add 6 listeners, line ~2735):
+
 ```javascript
 // Nag blocking (add after existing listeners)
-elements.blockAIContent.addEventListener('change', handleNagBlockingChange);
-elements.blockTrending.addEventListener('change', handleNagBlockingChange);
-elements.blockRecommended.addEventListener('change', handleNagBlockingChange);
-elements.blockCommunityHighlights.addEventListener('change', handleNagBlockingChange);
-elements.blockMorePosts.addEventListener('change', handleNagBlockingChange);
+elements.blockAIContent.addEventListener("change", handleNagBlockingChange);
+elements.blockTrending.addEventListener("change", handleNagBlockingChange);
+elements.blockRecommended.addEventListener("change", handleNagBlockingChange);
+elements.blockCommunityHighlights.addEventListener(
+  "change",
+  handleNagBlockingChange
+);
+elements.blockMorePosts.addEventListener("change", handleNagBlockingChange);
 
 // Comment enhancements
-elements.jumpToTopShortcut.addEventListener('change', handleCommentEnhancementsChange);
+elements.jumpToTopShortcut.addEventListener(
+  "change",
+  handleCommentEnhancementsChange
+);
 ```
 
 **Lines Added**: ~50 lines
@@ -646,10 +698,11 @@ elements.jumpToTopShortcut.addEventListener('change', handleCommentEnhancementsC
 **New Styles:**
 
 1. **Jump to top visual feedback**:
+
 ```css
 /* Jump to top animation */
 body.orr-jumped-to-top::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -661,8 +714,12 @@ body.orr-jumped-to-top::before {
 }
 
 @keyframes orr-jump-flash {
-  0% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Reduced motion: No animation */
@@ -714,11 +771,13 @@ body.orr-jumped-to-top::before {
    - [ ] Document selector sources (where they came from)
 
 **Validation**:
+
 - ✅ Storage API returns correct defaults for new fields
 - ✅ All selectors documented with sources
 - ✅ No performance regression with new selectors
 
 **Deliverables**:
+
 - Updated `storage.js` with new defaults
 - Documented selector list with test results
 - Performance validation report
@@ -764,6 +823,7 @@ body.orr-jumped-to-top::before {
    - [ ] Console warnings for missing selectors (not errors)
 
 **Validation**:
+
 - ✅ AI content selectors don't match anything (expected - future-proof)
 - ✅ Promoted content selectors remove existing elements (if found)
 - ✅ Jump-to-top keyboard shortcut works on all pages
@@ -771,6 +831,7 @@ body.orr-jumped-to-top::before {
 - ✅ No console errors
 
 **Deliverables**:
+
 - Updated `content-script.js` with ~80 new lines
 - Updated `styles.css` with ~20 new lines
 - Manual test report
@@ -812,12 +873,14 @@ body.orr-jumped-to-top::before {
    - [ ] Verify focus indicators
 
 **Validation**:
+
 - ✅ All checkboxes functional
 - ✅ Settings persist across browser restarts
 - ✅ Sync works if enabled
 - ✅ No visual regressions
 
 **Deliverables**:
+
 - Updated `options.html` with ~40 new lines
 - Updated `options.js` with ~50 new lines
 - Accessibility test report
@@ -846,8 +909,8 @@ body.orr-jumped-to-top::before {
 
 3. **Manual Testing** (2 hours)
    - [ ] Test on old.reddit.com/r/all (feed)
-   - [ ] Test on old.reddit.com/r/AskReddit/comments/* (comments)
-   - [ ] Test on old.reddit.com/user/* (profile)
+   - [ ] Test on old.reddit.com/r/AskReddit/comments/\* (comments)
+   - [ ] Test on old.reddit.com/user/\* (profile)
    - [ ] Test with all toggles ON
    - [ ] Test with all toggles OFF
    - [ ] Test Shift+Home on all pages
@@ -862,12 +925,14 @@ body.orr-jumped-to-top::before {
    - [ ] Update `package.json` version to 11.2.0
 
 **Validation**:
+
 - ✅ All 352 tests passing
 - ✅ Zero lint errors
 - ✅ Manual testing complete
 - ✅ Documentation accurate
 
 **Deliverables**:
+
 - `tests/advanced-blocking.test.js` (~300 lines)
 - Updated documentation files
 - Test report
@@ -914,6 +979,7 @@ body.orr-jumped-to-top::before {
    - Should update dynamically via MutationObserver
 
 **Test Environment**:
+
 - Vitest with JSDOM
 - Mock chrome.storage API
 - Mock DOM with sample promoted content
@@ -926,6 +992,7 @@ body.orr-jumped-to-top::before {
 ### Manual Testing Checklist
 
 **Test Environment**:
+
 - Chrome 120+ (latest stable)
 - Firefox 120+ (latest stable)
 - Old Reddit logged in
@@ -934,6 +1001,7 @@ body.orr-jumped-to-top::before {
 **Scenarios**:
 
 **Nag Blocking:**
+
 - [ ] Enable "Block AI content" → verify no errors (content doesn't exist yet)
 - [ ] Enable "Block trending" → verify trending sections hidden (if they exist)
 - [ ] Enable "Block recommended" → verify recommendations hidden
@@ -943,6 +1011,7 @@ body.orr-jumped-to-top::before {
 - [ ] Toggle individual options → verify instant updates (no reload)
 
 **Jump to Top:**
+
 - [ ] Enable jump-to-top shortcut
 - [ ] Press Shift+Home on feed page → scroll to top smoothly
 - [ ] Press Shift+Home on comments page → scroll to top smoothly
@@ -953,11 +1022,13 @@ body.orr-jumped-to-top::before {
 - [ ] Test with screen reader → verify "Scrolled to top" announcement
 
 **Performance:**
+
 - [ ] Time page load with all features enabled → no degradation
 - [ ] Monitor memory usage → <2MB increase
 - [ ] Test on large comment thread (1000+ comments) → smooth scrolling
 
 **Edge Cases:**
+
 - [ ] Page with no promoted content → no errors
 - [ ] Page with all promoted content types → all blocked
 - [ ] Rapid toggling of options → no race conditions
@@ -970,22 +1041,26 @@ body.orr-jumped-to-top::before {
 ### Rollout Strategy
 
 **Phase 1: Internal Testing (Day 1-2)**
+
 - Developer testing on local build
 - All automated tests passing
 - Manual testing complete
 
 **Phase 2: Soft Launch (Day 3)**
+
 - Tag v11.2.0-rc1 (release candidate)
 - Test installation on clean browser profiles
 - Monitor for console errors
 
 **Phase 3: Production Release (Day 4)**
+
 - Tag v11.2.0
 - Update manifest.json and package.json
 - Create GitHub release with changelog
 - (User will handle Chrome/Firefox store submissions)
 
 **No Gradual Rollout Needed**:
+
 - Features are opt-in (default enabled, but toggle-able)
 - Low risk (extends existing systems)
 - Easy to disable via options page
@@ -997,6 +1072,7 @@ body.orr-jumped-to-top::before {
 **Scenario 1: Minor Bug (e.g., CSS selector doesn't work)**
 
 **Action**: Hotfix release
+
 1. Identify broken selector
 2. Update selector in content-script.js
 3. Push v11.2.1 patch
@@ -1009,6 +1085,7 @@ body.orr-jumped-to-top::before {
 **Scenario 2: Major Issue (e.g., page load performance regression)**
 
 **Action**: Feature disable + rollback
+
 1. Provide instruction to users: Disable all new toggles in options
 2. Revert to v11.1.0 tag
 3. Investigate root cause
@@ -1021,6 +1098,7 @@ body.orr-jumped-to-top::before {
 **Scenario 3: Critical Breakage (e.g., extension crashes)**
 
 **Action**: Full rollback
+
 1. Revert Git to v11.1.0
 2. Publish emergency patch v11.1.1 (identical to v11.1.0)
 3. Investigate in development branch
@@ -1035,11 +1113,13 @@ body.orr-jumped-to-top::before {
 Storage schema stays at v3. New fields have defaults. No user action required.
 
 **Upgrade path** (v11.1.0 → v11.2.0):
+
 - Install update
 - All new features enabled by default
 - User can disable in options if unwanted
 
 **Downgrade path** (v11.2.0 → v11.1.0):
+
 - Rollback to v11.1.0 tag
 - Extra storage fields ignored (no errors)
 - No data loss
@@ -1050,13 +1130,13 @@ Storage schema stays at v3. New fields have defaults. No user action required.
 
 ### High-Level Timeline
 
-| Day | Phase                           | Hours   | Cumulative |
-| --- | ------------------------------- | ------- | ---------- |
-| 1   | Storage & Selectors             | 6-8     | 6-8        |
-| 2   | Content Script Implementation   | 6-8     | 12-16      |
-| 3   | Options UI & Polish             | 4-6     | 16-22      |
-| 4   | Testing & Documentation         | 4-6     | 20-28      |
-|     | **Total**                       | **20-28** | **20-28**  |
+| Day | Phase                         | Hours     | Cumulative |
+| --- | ----------------------------- | --------- | ---------- |
+| 1   | Storage & Selectors           | 6-8       | 6-8        |
+| 2   | Content Script Implementation | 6-8       | 12-16      |
+| 3   | Options UI & Polish           | 4-6       | 16-22      |
+| 4   | Testing & Documentation       | 4-6       | 20-28      |
+|     | **Total**                     | **20-28** | **20-28**  |
 
 **Buffer**: 2-4 hours for unexpected issues
 
@@ -1065,24 +1145,28 @@ Storage schema stays at v3. New fields have defaults. No user action required.
 ### Detailed Milestones
 
 **Milestone 1: Storage Schema Complete (End of Day 1)**
+
 - ✅ `storage.js` updated with new defaults
 - ✅ Selectors researched and documented
 - ✅ Initial selector testing complete
 - **Validation**: `npm test` passes, storage API works
 
 **Milestone 2: Core Functionality Complete (End of Day 2)**
+
 - ✅ Content blocking logic implemented
 - ✅ Jump-to-top keyboard shortcut working
 - ✅ Manual testing shows blocking works
 - **Validation**: Features work on old.reddit.com
 
 **Milestone 3: UI Complete (End of Day 3)**
+
 - ✅ Options page updated
 - ✅ All checkboxes functional
 - ✅ Visual polish applied
 - **Validation**: Settings save/load correctly
 
 **Milestone 4: Release Ready (End of Day 4)**
+
 - ✅ All 352 tests passing
 - ✅ Zero lint errors
 - ✅ Documentation complete
@@ -1104,6 +1188,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ```
 
 **Parallel Work Opportunities**:
+
 - Documentation can start on Day 2 (while implementation is ongoing)
 - Test file creation can start on Day 3 (while UI is being built)
 
@@ -1114,23 +1199,27 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Must Have (Required for v11.2.0 Release)
 
 **Functionality:**
+
 - [ ] All 5 new nag blocking options functional
 - [ ] Jump-to-top keyboard shortcut (Shift+Home) works
 - [ ] Settings persist across browser restarts
 - [ ] Live updates (no page reload needed when toggling)
 
 **Quality:**
+
 - [ ] All 352 tests passing (329 existing + 23 new)
 - [ ] Zero ESLint errors
 - [ ] Zero console errors during manual testing
 - [ ] Code formatted with Prettier
 
 **Performance:**
+
 - [ ] Page load time: <50ms overhead (imperceptible)
 - [ ] Memory usage: <2MB increase
 - [ ] Selector matching: <10ms per DOM scan
 
 **Documentation:**
+
 - [ ] CHANGELOG.md updated with v11.2.0 entry
 - [ ] README.md reflects new features
 - [ ] CLAUDE.md has correct test count
@@ -1141,16 +1230,19 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Nice to Have (Post-Launch Improvements)
 
 **User Experience:**
+
 - [ ] Selector auto-update mechanism (check for new selectors from community)
 - [ ] Visual feedback when content is blocked (subtle counter badge)
 - [ ] Import/export for custom selectors (advanced users)
 
 **Developer Experience:**
+
 - [ ] Automated selector discovery tool
 - [ ] Performance profiling dashboard
 - [ ] Visual regression testing
 
 **Community:**
+
 - [ ] User-contributed selector database
 - [ ] Reddit DOM change monitoring
 - [ ] Selector effectiveness analytics (privacy-preserving)
@@ -1167,6 +1259,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 **Why**: Old Reddit doesn't have AI content yet. Selectors are future-proof.
 
 **Mitigation**:
+
 - Document this expectation in code comments
 - Add console.debug (not error) when selectors match 0 elements
 - Monitor Reddit's feature releases
@@ -1184,6 +1277,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 **Why**: CSS selectors could match unintended elements.
 
 **Mitigation**:
+
 - Conservative selectors (specific class names, not generic)
 - Extensive testing with logged-in and logged-out views
 - Quick disable option in options page
@@ -1201,6 +1295,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 **Why**: Adding 30+ new selectors to querySelectorAll could slow DOM scans.
 
 **Mitigation**:
+
 - Benchmark selector matching time (must be <10ms)
 - Use existing MutationObserver debouncing (100ms)
 - Selectors already grouped by category (only run if enabled)
@@ -1218,6 +1313,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 **Why**: Reddit frequently updates their DOM structure.
 
 **Mitigation**:
+
 - Monitor Reddit changelog and announcements
 - Extensible selector system (easy to add/modify)
 - User community can report broken selectors via GitHub issues
@@ -1235,6 +1331,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 **Why**: Shift+Home might conflict with browser or other extensions.
 
 **Mitigation**:
+
 - Test with popular Reddit extensions (RES, Toolbox)
 - Shift+Home is standard "select to top" in text editors (users expect it)
 - Allow disabling shortcut in options
@@ -1252,6 +1349,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 **Why**: Screen reader announcements might not work correctly.
 
 **Mitigation**:
+
 - Test with NVDA and JAWS
 - Follow ARIA best practices (role="status", aria-live="polite")
 - Reduced motion support
@@ -1269,6 +1367,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 **Why**: Adding fields to synced objects could cause sync issues.
 
 **Mitigation**:
+
 - Backward compatible (old versions ignore new fields)
 - Defaults ensure no undefined values
 - Test sync with multiple browser instances
@@ -1283,11 +1382,13 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Sink It for Reddit Changelog (v7.100.0+)
 
 **AI Content Blocking** (added v7.100.0):
+
 - "Reddit Answers"
 - "AI-generated overviews"
 - Selectors likely target: `[data-testid="ai-answer"]`, `.search-ai-answer`
 
 **Promoted Content** (various versions):
+
 - v7.73.0: "Trending posts"
 - v7.80.0: "Community recommendations"
 - v7.95.0: "More posts you may like"
@@ -1295,17 +1396,20 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Reddit DOM Inspection (January 2026)
 
 **Old Reddit** (old.reddit.com):
+
 - Minimal promoted content compared to new Reddit
 - Premium banners: `.gold-accent`, `.premium-banner`
 - Sidebar ads: `.native-banner-ad`
 - No AI content observed yet
 
 **New Reddit** (reddit.com):
+
 - AI answers in search: `[data-testid="search-ai-answer"]`
 - Trending: `[data-testid="trending-subreddits"]`
 - Recommended: `[data-testid="subreddit-recommendations"]`
 
-**Onion Routing** (*.onion domains):
+**Onion Routing** (\*.onion domains):
+
 - Similar DOM to regular Reddit
 - Same selectors apply
 
@@ -1327,13 +1431,13 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 
 ### Our Shortcuts
 
-| Shortcut     | Action                   | Conflicts? |
-| ------------ | ------------------------ | ---------- |
-| Shift+J      | Next parent comment      | No         |
-| Shift+K      | Previous parent comment  | No         |
-| Shift+Home   | Jump to top (smooth)     | No*        |
+| Shortcut   | Action                  | Conflicts? |
+| ---------- | ----------------------- | ---------- |
+| Shift+J    | Next parent comment     | No         |
+| Shift+K    | Previous parent comment | No         |
+| Shift+Home | Jump to top (smooth)    | No\*       |
 
-*Note: Browser's native Home key still works (instant scroll). Shift+Home is additive.
+\*Note: Browser's native Home key still works (instant scroll). Shift+Home is additive.
 
 ---
 
@@ -1342,6 +1446,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Approach 1: Global "Block All Promoted Content" Toggle
 
 **Why Rejected**:
+
 - Users want granular control
 - Some users may want trending but not AI content
 - Harder to debug (all-or-nothing)
@@ -1350,6 +1455,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Approach 2: Custom CSS Selector Input for Users
 
 **Why Deferred** (could add in v11.3.0):
+
 - Too advanced for average users
 - Risk of users breaking extension with bad selectors
 - Maintenance burden (support questions)
@@ -1358,6 +1464,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Approach 3: Machine Learning to Detect Promoted Content
 
 **Why Rejected**:
+
 - Massive scope increase
 - Privacy concerns (content analysis)
 - Performance overhead
@@ -1366,6 +1473,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 ### Approach 4: Jump-to-Top as Separate Extension
 
 **Why Rejected**:
+
 - Function already exists in our codebase
 - Users want all-in-one extension
 - Minimal code to expose it
@@ -1409,6 +1517,7 @@ Day 1 (Storage) → Day 2 (Implementation) → Day 3 (UI) → Day 4 (Testing)
 Before merging v11.2.0:
 
 **Code Quality:**
+
 - [ ] All functions have JSDoc comments
 - [ ] No commented-out code
 - [ ] No console.log (use logger.js)
@@ -1416,28 +1525,33 @@ Before merging v11.2.0:
 - [ ] Async/await used consistently (no raw Promises)
 
 **Testing:**
+
 - [ ] All new code covered by tests
 - [ ] Edge cases tested (empty DOM, rapid toggles, etc.)
 - [ ] Performance benchmarks documented
 
 **Documentation:**
+
 - [ ] README.md updated
 - [ ] CHANGELOG.md follows Keep a Changelog format
 - [ ] Inline comments for complex logic
 - [ ] CLAUDE.md reflects new test count
 
 **Accessibility:**
+
 - [ ] Keyboard navigation works
 - [ ] Screen reader announcements present
 - [ ] Reduced motion respected
 - [ ] Focus indicators visible
 
 **Performance:**
+
 - [ ] No memory leaks (test with Chrome DevTools)
 - [ ] No blocking operations on main thread
 - [ ] Debouncing/throttling where appropriate
 
 **Security:**
+
 - [ ] No eval() or innerHTML with user input
 - [ ] No XSS vulnerabilities
 - [ ] Storage inputs sanitized
@@ -1449,12 +1563,14 @@ Before merging v11.2.0:
 Phase 5.3 (v11.2.0) completes the Phase 5 roadmap with advanced content blocking and improved navigation. The implementation builds on proven patterns from v6.0.0 (nag blocking) and v7.1.0 (comment navigation), making this a low-risk, high-value release.
 
 **Next Steps**:
+
 1. Get approval for this implementation plan
 2. Begin Day 1: Storage & Selectors
 3. Follow phased implementation plan
 4. Ship v11.2.0 in 3-4 days
 
 **After v11.2.0**:
+
 - Phase 5 complete (all 10 features shipped)
 - Assess user feedback
 - Consider Phase 6 features (performance, accessibility, internationalization)

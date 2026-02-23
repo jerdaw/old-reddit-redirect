@@ -14,9 +14,9 @@ export async function initSmartCollections() {
 
   // Expose global API for bookmarks module to use
   window.ORR_SmartCollections = {
-    getTags: (entry) => calculateTags(entry)
+    getTags: (entry) => calculateTags(entry),
   };
-  
+
   debugLog("[ORR] Smart Collections initialized");
 }
 
@@ -31,7 +31,15 @@ export function calculateTags(entry) {
   const sub = entry.subreddit ? entry.subreddit.toLowerCase() : "";
 
   // category: Coding
-  const codingSubs = ["javascript", "reactjs", "programming", "webdev", "learnprogramming", "css", "html"];
+  const codingSubs = [
+    "javascript",
+    "reactjs",
+    "programming",
+    "webdev",
+    "learnprogramming",
+    "css",
+    "html",
+  ];
   if (codingSubs.includes(sub)) {
     tags.add("Coding");
   }
@@ -48,12 +56,19 @@ export function calculateTags(entry) {
   }
 
   // type: Video
-  if (/\b(video|youtube|watch)\b/i.test(title) || entry.url.includes("youtube.com") || entry.url.includes("youtu.be")) {
+  if (
+    /\b(video|youtube|watch)\b/i.test(title) ||
+    entry.url.includes("youtube.com") ||
+    entry.url.includes("youtu.be")
+  ) {
     tags.add("Video");
   }
 
   // type: Discussion
-  if (/\b(discuss|discussion|thought|opinion)\b/i.test(title) || title.includes("?")) {
+  if (
+    /\b(discuss|discussion|thought|opinion)\b/i.test(title) ||
+    title.includes("?")
+  ) {
     tags.add("Discussion");
   }
 

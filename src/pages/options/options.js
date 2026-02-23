@@ -782,7 +782,9 @@
     const removed = await window.Storage.cleanupReadingHistory();
     if (removed > 0) {
       await refreshReadingHistoryDisplay();
-      showToast(msg("opt_js_toast_retention_updated_removed", [String(removed)]));
+      showToast(
+        msg("opt_js_toast_retention_updated_removed", [String(removed)])
+      );
     } else {
       showToast(msg("opt_js_success_retention_updated"));
     }
@@ -792,7 +794,12 @@
    * Handle clear reading history
    */
   async function handleClearReadingHistory() {
-    if (!confirm(msg("opt_js_confirm_clear_all_reading_history_this_cannot_be_undone"))) return;
+    if (
+      !confirm(
+        msg("opt_js_confirm_clear_all_reading_history_this_cannot_be_undone")
+      )
+    )
+      return;
 
     await window.Storage.clearReadingHistory();
     await refreshReadingHistoryDisplay();
@@ -823,7 +830,9 @@
     a.click();
     URL.revokeObjectURL(url);
 
-    showToast(msg("opt_js_toast_exported_history_entries", [String(data.entryCount)]));
+    showToast(
+      msg("opt_js_toast_exported_history_entries", [String(data.entryCount)])
+    );
   }
 
   /**
@@ -847,7 +856,9 @@
         });
       });
 
-      showToast(msg("opt_js_toast_imported_history_entries", [String(imported)]));
+      showToast(
+        msg("opt_js_toast_imported_history_entries", [String(imported)])
+      );
     } catch (_error) {
       showToast(msg("opt_js_error_import_invalid_format"));
     }
@@ -962,7 +973,11 @@
         await window.Storage.removeNsfwAllowedSubreddit(subreddit);
         await refreshNsfwAllowedList();
         notifyContentScripts();
-        showToast(msg("opt_js_toast_removed_subreddit_from_allowed_list", [String(subreddit)]));
+        showToast(
+          msg("opt_js_toast_removed_subreddit_from_allowed_list", [
+            String(subreddit),
+          ])
+        );
       });
     });
   }
@@ -1031,7 +1046,9 @@
     input.value = "";
     await refreshNsfwAllowedList();
     notifyContentScripts();
-    showToast(msg("opt_js_toast_added_subreddit_to_allowed_list", [String(subreddit)]));
+    showToast(
+      msg("opt_js_toast_added_subreddit_to_allowed_list", [String(subreddit)])
+    );
   }
 
   /**
@@ -1039,7 +1056,9 @@
    */
   async function handleClearNsfwAllowed() {
     if (
-      !confirm(msg("opt_js_confirm_clear_all_allowed_subreddits_nsfw_everywhere"))
+      !confirm(
+        msg("opt_js_confirm_clear_all_allowed_subreddits_nsfw_everywhere")
+      )
     ) {
       return;
     }
@@ -1295,7 +1314,13 @@
   async function handleDeletePreference(e) {
     const subreddit = e.target.dataset.subreddit;
 
-    if (!confirm(msg("opt_js_confirm_delete_sort_preference_for_subreddit", [String(subreddit)]))) {
+    if (
+      !confirm(
+        msg("opt_js_confirm_delete_sort_preference_for_subreddit", [
+          String(subreddit),
+        ])
+      )
+    ) {
       return;
     }
 
@@ -1316,7 +1341,11 @@
     }
 
     if (
-      !confirm(msg("opt_js_confirm_clear_all_sort_preferences_with_count", [String(count)]))
+      !confirm(
+        msg("opt_js_confirm_clear_all_sort_preferences_with_count", [
+          String(count),
+        ])
+      )
     ) {
       return;
     }
@@ -1370,9 +1399,17 @@
         await window.Storage.setSortPreferences(config);
         await refreshSortPreferencesList();
 
-        alert(msg("opt_js_alert_imported_preferences", [String(Object.keys(imported).length)]));
+        alert(
+          msg("opt_js_alert_imported_preferences", [
+            String(Object.keys(imported).length),
+          ])
+        );
       } catch (err) {
-        alert(msg("opt_js_alert_failed_to_import_preferences", [String(err.message)]));
+        alert(
+          msg("opt_js_alert_failed_to_import_preferences", [
+            String(err.message),
+          ])
+        );
       }
     };
 
@@ -1581,7 +1618,9 @@
   async function handleDeleteTag(e) {
     const username = e.target.dataset.username;
 
-    if (!confirm(msg("opt_js_confirm_delete_tag_for_user", [String(username)]))) {
+    if (
+      !confirm(msg("opt_js_confirm_delete_tag_for_user", [String(username)]))
+    ) {
       return;
     }
 
@@ -1612,7 +1651,9 @@
     }
 
     if (
-      !confirm(msg("opt_js_confirm_clear_all_user_tags_with_count", [String(count)]))
+      !confirm(
+        msg("opt_js_confirm_clear_all_user_tags_with_count", [String(count)])
+      )
     ) {
       return;
     }
@@ -1673,7 +1714,11 @@
         await window.Storage.setUserTags(config);
         await refreshUserTagsList();
 
-        alert(msg("opt_js_alert_imported_tags", [String(Object.keys(imported).length)]));
+        alert(
+          msg("opt_js_alert_imported_tags", [
+            String(Object.keys(imported).length),
+          ])
+        );
 
         // Notify content script to refresh
         chrome.tabs.query({ url: "*://old.reddit.com/*" }, (tabs) => {
@@ -1841,7 +1886,11 @@
       return;
     }
 
-    if (!confirm(msg("opt_js_confirm_unmute_all_users_with_count", [String(count)]))) {
+    if (
+      !confirm(
+        msg("opt_js_confirm_unmute_all_users_with_count", [String(count)])
+      )
+    ) {
       return;
     }
 
@@ -1908,7 +1957,11 @@
           }
         });
       } catch (err) {
-        alert(msg("opt_js_alert_failed_to_import_muted_users", [String(err.message)]));
+        alert(
+          msg("opt_js_alert_failed_to_import_muted_users", [
+            String(err.message),
+          ])
+        );
       }
     };
 
@@ -1942,7 +1995,8 @@
    * Handle clear scroll positions
    */
   async function handleClearScrollPositions() {
-    if (!confirm(msg("opt_js_confirm_clear_all_saved_scroll_positions"))) return;
+    if (!confirm(msg("opt_js_confirm_clear_all_saved_scroll_positions")))
+      return;
 
     await window.Storage.clearScrollPositions();
     await loadScrollPositions();
@@ -2062,7 +2116,10 @@
 
       showToast(msg("opt_js_toast_css_is_valid"), "success");
     } catch (error) {
-      showToast(msg("opt_js_toast_css_validation_failed", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_css_validation_failed", [String(error.message)]),
+        "error"
+      );
     }
   }
 
@@ -2264,7 +2321,9 @@
           elements.cleanupResult.textContent = `Cleaned ${items} items, freed ${bytesFree} KB`;
           elements.cleanupResult.className = "cleanup-result success";
         } else {
-          elements.cleanupResult.textContent = msg("opt_js_msg_no_expired_data");
+          elements.cleanupResult.textContent = msg(
+            "opt_js_msg_no_expired_data"
+          );
           elements.cleanupResult.className = "cleanup-result";
         }
         elements.cleanupResult.style.display = "block";
@@ -2275,7 +2334,10 @@
       showToast(msg("opt_js_toast_cleanup_completed"), "success");
     } catch (error) {
       console.error("[ORR] Cleanup failed:", error);
-      showToast(msg("opt_js_toast_cleanup_failed", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_cleanup_failed", [String(error.message)]),
+        "error"
+      );
     } finally {
       if (elements.runStorageCleanup) {
         elements.runStorageCleanup.disabled = false;
@@ -2291,7 +2353,9 @@
     try {
       if (elements.runStorageMaintenance) {
         elements.runStorageMaintenance.disabled = true;
-        elements.runStorageMaintenance.textContent = msg("opt_js_status_running");
+        elements.runStorageMaintenance.textContent = msg(
+          "opt_js_status_running"
+        );
       }
 
       const results = await window.Storage.runMaintenance();
@@ -2315,12 +2379,16 @@
       showToast(msg("opt_js_toast_maintenance_completed"), "success");
     } catch (error) {
       console.error("[ORR] Maintenance failed:", error);
-      showToast(msg("opt_js_toast_maintenance_failed", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_maintenance_failed", [String(error.message)]),
+        "error"
+      );
     } finally {
       if (elements.runStorageMaintenance) {
         elements.runStorageMaintenance.disabled = false;
-        elements.runStorageMaintenance.textContent =
-          msg("opt_js_btn_full_maintenance");
+        elements.runStorageMaintenance.textContent = msg(
+          "opt_js_btn_full_maintenance"
+        );
       }
     }
   }
@@ -2605,7 +2673,13 @@
 
     // Notify content scripts
     notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-    showToast(msg(config.enabled ? "opt_js_toast_layout_presets_enabled" : "opt_js_toast_layout_presets_disabled"));
+    showToast(
+      msg(
+        config.enabled
+          ? "opt_js_toast_layout_presets_enabled"
+          : "opt_js_toast_layout_presets_disabled"
+      )
+    );
   }
 
   /**
@@ -2620,14 +2694,21 @@
     }
 
     if (name.length > 50) {
-      showToast(msg("opt_js_toast_preset_name_is_too_long_max_50_characters"), "error");
+      showToast(
+        msg("opt_js_toast_preset_name_is_too_long_max_50_characters"),
+        "error"
+      );
       return;
     }
 
     // Check if preset already exists
     const existing = await window.Storage.getLayoutPreset(name);
     if (existing) {
-      if (!confirm(msg("opt_js_confirm_preset_already_exists_overwrite", [String(name)]))) {
+      if (
+        !confirm(
+          msg("opt_js_confirm_preset_already_exists_overwrite", [String(name)])
+        )
+      ) {
         return;
       }
     }
@@ -2678,7 +2759,10 @@
   async function applyPresetToCurrentSettings(presetName) {
     const preset = await window.Storage.getLayoutPreset(presetName);
     if (!preset) {
-      showToast(msg("opt_js_toast_preset_not_found", [String(presetName)]), "error");
+      showToast(
+        msg("opt_js_toast_preset_not_found", [String(presetName)]),
+        "error"
+      );
       return;
     }
 
@@ -2734,7 +2818,10 @@
     const preset = await window.Storage.getLayoutPreset(presetName);
 
     if (!preset) {
-      showToast(msg("opt_js_toast_preset_not_found", [String(presetName)]), "error");
+      showToast(
+        msg("opt_js_toast_preset_not_found", [String(presetName)]),
+        "error"
+      );
       return;
     }
 
@@ -2790,7 +2877,10 @@
     if (newName !== originalName) {
       const existing = await window.Storage.getLayoutPreset(newName);
       if (existing) {
-        showToast(msg("opt_js_toast_preset_already_exists", [String(newName)]), "error");
+        showToast(
+          msg("opt_js_toast_preset_already_exists", [String(newName)]),
+          "error"
+        );
         return;
       }
     }
@@ -2882,7 +2972,9 @@
 
       await refreshMappingsList();
       notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-      showToast(msg("opt_js_toast_layout_set_for_subreddit", [String(subreddit)]));
+      showToast(
+        msg("opt_js_toast_layout_set_for_subreddit", [String(subreddit)])
+      );
     } catch (error) {
       showToast(msg("opt_js_toast_error", [String(error.message)]), "error");
     }
@@ -2894,14 +2986,20 @@
   async function handleDeleteMapping(e) {
     const subreddit = e.target.dataset.subreddit;
 
-    if (!confirm(msg("opt_js_confirm_remove_layout_for_subreddit", [String(subreddit)]))) {
+    if (
+      !confirm(
+        msg("opt_js_confirm_remove_layout_for_subreddit", [String(subreddit)])
+      )
+    ) {
       return;
     }
 
     await window.Storage.deleteSubredditLayout(subreddit);
     await refreshMappingsList();
     notifyContentScripts("REFRESH_LAYOUT_PRESETS");
-    showToast(msg("opt_js_toast_layout_removed_for_subreddit", [String(subreddit)]));
+    showToast(
+      msg("opt_js_toast_layout_removed_for_subreddit", [String(subreddit)])
+    );
   }
 
   /**
@@ -2916,7 +3014,13 @@
       return;
     }
 
-    if (!confirm(msg("opt_js_confirm_clear_all_subreddit_layout_mappings", [String(count)]))) {
+    if (
+      !confirm(
+        msg("opt_js_confirm_clear_all_subreddit_layout_mappings", [
+          String(count),
+        ])
+      )
+    ) {
       return;
     }
 
@@ -2939,7 +3043,9 @@
     }
 
     if (
-      !confirm(msg("opt_js_confirm_clear_all_presets_and_mappings", [String(count)]))
+      !confirm(
+        msg("opt_js_confirm_clear_all_presets_and_mappings", [String(count)])
+      )
     ) {
       return;
     }
@@ -3013,9 +3119,17 @@
         await loadLayoutPresets();
 
         const presetCount = Object.keys(imported.presets).length;
-        showToast(msg("opt_js_toast_imported_presets", [String(presetCount), presetCount === 1 ? "" : "s"]));
+        showToast(
+          msg("opt_js_toast_imported_presets", [
+            String(presetCount),
+            presetCount === 1 ? "" : "s",
+          ])
+        );
       } catch (err) {
-        showToast(msg("opt_js_toast_failed_to_import", [String(err.message)]), "error");
+        showToast(
+          msg("opt_js_toast_failed_to_import", [String(err.message)]),
+          "error"
+        );
       }
     };
 
@@ -3227,13 +3341,13 @@
       let statusText = "";
       let statusClass = "";
       if (score < 40) {
-      statusText = msg("opt_js_privacy_status_needs_improvement");
+        statusText = msg("opt_js_privacy_status_needs_improvement");
         statusClass = "score-low";
       } else if (score < 70) {
-      statusText = msg("opt_js_privacy_status_good_protection");
+        statusText = msg("opt_js_privacy_status_good_protection");
         statusClass = "score-medium";
       } else {
-      statusText = msg("opt_js_privacy_status_excellent_protection");
+        statusText = msg("opt_js_privacy_status_excellent_protection");
         statusClass = "score-high";
       }
       elements.privacyScoreStatus.textContent = statusText;
@@ -3338,7 +3452,10 @@
       .filter((p) => p.length > 0);
 
     if (params.length === 0) {
-      showToast(msg("opt_js_toast_please_enter_at_least_one_tracking_parameter"), "error");
+      showToast(
+        msg("opt_js_toast_please_enter_at_least_one_tracking_parameter"),
+        "error"
+      );
       return;
     }
 
@@ -3347,14 +3464,17 @@
 
     await window.Storage.setPrivacy(privacy);
 
-    showToast(msg("opt_js_toast_saved_tracking_parameters", [String(params.length)]));
+    showToast(
+      msg("opt_js_toast_saved_tracking_parameters", [String(params.length)])
+    );
   }
 
   /**
    * Handle reset tracking parameters to defaults
    */
   async function handleResetTrackingParams() {
-    if (!confirm(msg("opt_js_confirm_reset_tracking_parameters_to_defaults"))) return;
+    if (!confirm(msg("opt_js_confirm_reset_tracking_parameters_to_defaults")))
+      return;
 
     const privacy = await window.Storage.getPrivacy();
 
@@ -3651,7 +3771,9 @@
     await loadWhitelist();
     await loadSuggestions();
 
-    showToast(msg("opt_js_toast_subreddit_added_to_exceptions", [String(subreddit)]));
+    showToast(
+      msg("opt_js_toast_subreddit_added_to_exceptions", [String(subreddit)])
+    );
   }
 
   /**
@@ -3733,14 +3855,22 @@
     // Notify background to update badge
     chrome.runtime.sendMessage({ type: "UPDATE_BADGE" });
 
-    showToast(msg(enabled ? "opt_js_toast_redirect_enabled" : "opt_js_toast_redirect_disabled"));
+    showToast(
+      msg(
+        enabled
+          ? "opt_js_toast_redirect_enabled"
+          : "opt_js_toast_redirect_disabled"
+      )
+    );
   }
 
   /**
    * Clear statistics
    */
   async function handleClearStats() {
-    if (!confirm(msg("opt_js_confirm_clear_all_statistics_this_cannot_be_undone"))) {
+    if (
+      !confirm(msg("opt_js_confirm_clear_all_statistics_this_cannot_be_undone"))
+    ) {
       return;
     }
 
@@ -3808,7 +3938,13 @@
       behavior,
     });
 
-    showToast(msg(behavior === "popup" ? "opt_js_toast_icon_click_opens_popup" : "opt_js_toast_icon_click_toggles_redirect"));
+    showToast(
+      msg(
+        behavior === "popup"
+          ? "opt_js_toast_icon_click_opens_popup"
+          : "opt_js_toast_icon_click_toggles_redirect"
+      )
+    );
   }
 
   /**
@@ -4069,7 +4205,9 @@
     elements.subredditInput.value = "";
     await loadWhitelist();
 
-    showToast(msg("opt_js_toast_subreddit_added_to_exceptions", [String(subreddit)]));
+    showToast(
+      msg("opt_js_toast_subreddit_added_to_exceptions", [String(subreddit)])
+    );
   }
 
   /**
@@ -4087,7 +4225,11 @@
       await chrome.runtime.sendMessage({ type: "UPDATE_SUBREDDIT_RULES" });
 
       await loadWhitelist();
-      showToast(msg("opt_js_toast_subreddit_removed_from_exceptions", [String(subreddit)]));
+      showToast(
+        msg("opt_js_toast_subreddit_removed_from_exceptions", [
+          String(subreddit),
+        ])
+      );
     }
   }
 
@@ -4115,7 +4257,10 @@
     }
 
     if (overrides.mutedSubreddits.length >= 100) {
-      showToast(msg("opt_js_toast_maximum_100_muted_subreddits_allowed"), "error");
+      showToast(
+        msg("opt_js_toast_maximum_100_muted_subreddits_allowed"),
+        "error"
+      );
       return;
     }
 
@@ -4203,7 +4348,10 @@
       const imported = JSON.parse(text);
 
       if (!Array.isArray(imported)) {
-        showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
+        showToast(
+          msg("opt_js_toast_invalid_format_must_be_json_array"),
+          "error"
+        );
         return;
       }
 
@@ -4212,7 +4360,10 @@
         (s) => typeof s !== "string" || !/^[a-z0-9_]+$/i.test(s)
       );
       if (invalid.length > 0) {
-        showToast(msg("opt_js_toast_invalid_subreddit_names", [invalid.join(", ")]), "error");
+        showToast(
+          msg("opt_js_toast_invalid_subreddit_names", [invalid.join(", ")]),
+          "error"
+        );
         return;
       }
 
@@ -4247,9 +4398,14 @@
         });
       });
 
-      showToast(msg("opt_js_toast_subreddits_imported", [String(newMutes.length)]));
+      showToast(
+        msg("opt_js_toast_subreddits_imported", [String(newMutes.length)])
+      );
     } catch (error) {
-      showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_import_failed", [String(error.message)]),
+        "error"
+      );
     } finally {
       // Reset file input
       event.target.value = "";
@@ -4475,7 +4631,9 @@
       });
     });
 
-    showToast(msg("opt_js_toast_minimum_score_set", [String(filtering.minScore)]));
+    showToast(
+      msg("opt_js_toast_minimum_score_set", [String(filtering.minScore)])
+    );
   }
 
   /**
@@ -4592,7 +4750,10 @@
         const imported = JSON.parse(text);
 
         if (!Array.isArray(imported)) {
-          showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
+          showToast(
+            msg("opt_js_toast_invalid_format_must_be_json_array"),
+            "error"
+          );
           return;
         }
 
@@ -4625,9 +4786,14 @@
         });
 
         await loadFlairFiltering();
-        showToast(msg("opt_js_toast_flairs_imported", [String(newFlairs.length)]));
+        showToast(
+          msg("opt_js_toast_flairs_imported", [String(newFlairs.length)])
+        );
       } catch (error) {
-        showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
+        showToast(
+          msg("opt_js_toast_import_failed", [String(error.message)]),
+          "error"
+        );
       }
     };
 
@@ -4672,7 +4838,10 @@
       const imported = JSON.parse(text);
 
       if (!Array.isArray(imported)) {
-        showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
+        showToast(
+          msg("opt_js_toast_invalid_format_must_be_json_array"),
+          "error"
+        );
         return;
       }
 
@@ -4716,9 +4885,14 @@
         });
       });
 
-      showToast(msg("opt_js_toast_keywords_imported", [String(newKeywords.length)]));
+      showToast(
+        msg("opt_js_toast_keywords_imported", [String(newKeywords.length)])
+      );
     } catch (error) {
-      showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_import_failed", [String(error.message)]),
+        "error"
+      );
     } finally {
       // Reset file input
       event.target.value = "";
@@ -4866,7 +5040,10 @@
       const imported = JSON.parse(text);
 
       if (!Array.isArray(imported)) {
-        showToast(msg("opt_js_toast_invalid_format_must_be_json_array"), "error");
+        showToast(
+          msg("opt_js_toast_invalid_format_must_be_json_array"),
+          "error"
+        );
         return;
       }
 
@@ -4918,9 +5095,14 @@
         });
       });
 
-      showToast(msg("opt_js_toast_domains_imported", [String(newDomains.length)]));
+      showToast(
+        msg("opt_js_toast_domains_imported", [String(newDomains.length)])
+      );
     } catch (error) {
-      showToast(msg("opt_js_toast_import_failed", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_import_failed", [String(error.message)]),
+        "error"
+      );
     } finally {
       // Reset file input
       event.target.value = "";
@@ -4992,11 +5174,20 @@
 
       const validation = window.Storage.validateImport(data);
       if (!validation.valid) {
-        showToast(msg("opt_js_toast_invalid_settings_file", [String(validation.errors[0])]), "error");
+        showToast(
+          msg("opt_js_toast_invalid_settings_file", [
+            String(validation.errors[0]),
+          ]),
+          "error"
+        );
         return;
       }
 
-      if (!confirm(msg("opt_js_confirm_this_will_replace_your_current_settings_continue"))) {
+      if (
+        !confirm(
+          msg("opt_js_confirm_this_will_replace_your_current_settings_continue")
+        )
+      ) {
         return;
       }
 
@@ -5009,7 +5200,10 @@
       // Reload page to refresh UI
       setTimeout(() => location.reload(), 1000);
     } catch (error) {
-      showToast(msg("opt_js_toast_failed_to_import", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_failed_to_import", [String(error.message)]),
+        "error"
+      );
     }
 
     // Reset input
@@ -5033,7 +5227,10 @@
 
       await loadSyncStatus();
     } catch (error) {
-      showToast(msg("opt_js_toast_sync_error", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_sync_error", [String(error.message)]),
+        "error"
+      );
       elements.syncToggle.checked = !enabled; // Revert
     }
   }
@@ -5109,7 +5306,9 @@
       displayTestResult(
         "allow",
         msg("opt_js_urltest_not_redirected_allowlisted_title"),
-        msg("opt_js_urltest_allowlisted_domain_detail", [String(urlObj.hostname)])
+        msg("opt_js_urltest_allowlisted_domain_detail", [
+          String(urlObj.hostname),
+        ])
       );
       return true;
     }
@@ -6009,7 +6208,11 @@
       `;
 
       li.querySelector(".remove-tag").addEventListener("click", async () => {
-        if (confirm(msg("opt_js_confirm_unsubscribe_from_list", [String(sub.name)]))) {
+        if (
+          confirm(
+            msg("opt_js_confirm_unsubscribe_from_list", [String(sub.name)])
+          )
+        ) {
           const data = await chrome.storage.local.get("community");
           const newSubs = (data.community?.subscriptions || []).filter(
             (s) => s.id !== sub.id
@@ -6465,7 +6668,14 @@
         keyboardShortcuts: keyboardShortcutsCache,
       });
       detectAndDisplayConflicts();
-      showToast(msg(enabled ? "opt_js_toast_shortcut_enabled" : "opt_js_toast_shortcut_disabled"), "success");
+      showToast(
+        msg(
+          enabled
+            ? "opt_js_toast_shortcut_enabled"
+            : "opt_js_toast_shortcut_disabled"
+        ),
+        "success"
+      );
     } catch (error) {
       console.error("[ORR] Failed to toggle shortcut:", error);
       showToast(msg("opt_js_toast_failed_to_update_shortcut"), "error");
@@ -6563,7 +6773,9 @@
           shortcut.context === "any" ||
           currentContext === "any"
         ) {
-          validation.textContent = msg("opt_js_validation_conflicts_with", [String(shortcut.description)]);
+          validation.textContent = msg("opt_js_validation_conflicts_with", [
+            String(shortcut.description),
+          ]);
           validation.className = "validation-message";
           return false;
         }
@@ -6608,7 +6820,8 @@
    * Reset shortcut to default
    */
   async function resetShortcut() {
-    if (!confirm(msg("opt_js_confirm_reset_this_shortcut_to_its_default"))) return;
+    if (!confirm(msg("opt_js_confirm_reset_this_shortcut_to_its_default")))
+      return;
 
     try {
       const defaults = await storage.getDefaults();
@@ -6746,7 +6959,13 @@
       }
 
       // Confirm overwrite
-      if (!confirm(msg("opt_js_confirm_this_will_overwrite_your_current_shortcuts_continue"))) {
+      if (
+        !confirm(
+          msg(
+            "opt_js_confirm_this_will_overwrite_your_current_shortcuts_continue"
+          )
+        )
+      ) {
         return;
       }
 
@@ -6764,7 +6983,10 @@
       showToast(msg("opt_js_toast_shortcuts_imported_successfully"), "success");
     } catch (error) {
       console.error("[ORR] Failed to import shortcuts:", error);
-      showToast(msg("opt_js_toast_failed_to_import_shortcuts", [String(error.message)]), "error");
+      showToast(
+        msg("opt_js_toast_failed_to_import_shortcuts", [String(error.message)]),
+        "error"
+      );
     }
   }
 
@@ -6772,9 +6994,7 @@
    * Reset all shortcuts to defaults
    */
   async function resetAllShortcuts() {
-    if (
-      !confirm(msg("opt_js_confirm_reset_all_keyboard_shortcuts"))
-    ) {
+    if (!confirm(msg("opt_js_confirm_reset_all_keyboard_shortcuts"))) {
       return;
     }
 

@@ -18,12 +18,10 @@ export async function initDiscovery() {
     import("./related.js").then((m) => m.initRelatedPosts());
   }
 
-
-
   // Smart collections (auto-tagging)
   if (settings.smartCollections) {
     import("./smart-collections.js").then((m) => m.initSmartCollections());
   }
-    
+
   debugLog("[ORR] Discovery module initialized");
 }

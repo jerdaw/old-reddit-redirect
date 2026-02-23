@@ -12,6 +12,7 @@
 This document outlines the implementation plan for **Phase 4.3: Scroll Position Memory** of Old Reddit Redirect. This feature remembers users' scroll positions when they navigate away from a page and automatically restores that position when they return via the back button.
 
 **Key Benefits**:
+
 - Eliminates frustration of losing your place when using back button
 - Seamless browsing experience across Reddit
 - Automatic cleanup of old positions (24-hour retention)
@@ -52,6 +53,7 @@ scrollPositions: {
 #### Implementation Approach
 
 **1. Save Position on Navigation**:
+
 ```javascript
 window.addEventListener('beforeunload', () => {
   const url = normalizeUrl(window.location.href);
@@ -61,8 +63,9 @@ window.addEventListener('beforeunload', () => {
 ```
 
 **2. Restore Position on Page Load**:
+
 ```javascript
-window.addEventListener('load', async () => {
+window.addEventListener("load", async () => {
   const url = normalizeUrl(window.location.href);
   const position = await storage.getScrollPosition(url);
 
@@ -74,11 +77,13 @@ window.addEventListener('load', async () => {
 ```
 
 **3. URL Normalization**:
+
 - Remove query parameters for consistency (except important ones like sort)
 - Normalize trailing slashes
 - Key by base URL to avoid storing duplicate positions
 
 **4. Cleanup Strategy**:
+
 - Delete positions older than 24 hours
 - Enforce max 100 entries with LRU eviction
 - Run cleanup on page load (async, non-blocking)
@@ -115,6 +120,7 @@ window.addEventListener('load', async () => {
 ### Test Plan
 
 **Unit Tests**:
+
 - URL normalization logic
 - Storage methods (get/set/delete/clear)
 - Cleanup logic (24-hour retention)
@@ -122,6 +128,7 @@ window.addEventListener('load', async () => {
 - Position clamping to valid range
 
 **Manual Testing**:
+
 1. Browse /r/all, scroll halfway down
 2. Click a post
 3. Click back button
@@ -171,8 +178,8 @@ function normalizeScrollUrl(url) {
     let key = urlObj.origin + urlObj.pathname;
 
     // Include sort parameter if present
-    if (urlObj.searchParams.has('sort')) {
-      key += '?sort=' + urlObj.searchParams.get('sort');
+    if (urlObj.searchParams.has("sort")) {
+      key += "?sort=" + urlObj.searchParams.get("sort");
     }
 
     return key;
@@ -197,7 +204,7 @@ async function saveScrollPosition() {
 
     logger.debug(`Saved scroll position for ${url}: ${scrollY}`);
   } catch (error) {
-    logger.error('Error saving scroll position:', error);
+    logger.error("Error saving scroll position:", error);
   }
 }
 
@@ -213,19 +220,23 @@ async function restoreScrollPosition() {
     if (!position) return;
 
     // Small delay to allow content to load
-    requestIdleCallback(() => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const clampedY = Math.max(0, Math.min(position.scrollY, maxScroll));
+    requestIdleCallback(
+      () => {
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const clampedY = Math.max(0, Math.min(position.scrollY, maxScroll));
 
-      window.scrollTo({
-        top: clampedY,
-        behavior: 'instant', // Instant, not smooth
-      });
+        window.scrollTo({
+          top: clampedY,
+          behavior: "instant", // Instant, not smooth
+        });
 
-      logger.debug(`Restored scroll position for ${url}: ${clampedY}`);
-    }, { timeout: 100 });
+        logger.debug(`Restored scroll position for ${url}: ${clampedY}`);
+      },
+      { timeout: 100 }
+    );
   } catch (error) {
-    logger.error('Error restoring scroll position:', error);
+    logger.error("Error restoring scroll position:", error);
   }
 }
 
@@ -237,17 +248,17 @@ async function cleanupScrollPositions() {
 
     await storage.cleanupOldScrollPositions();
   } catch (error) {
-    logger.error('Error cleaning up scroll positions:', error);
+    logger.error("Error cleaning up scroll positions:", error);
   }
 }
 
 // Attach event listeners
-window.addEventListener('beforeunload', saveScrollPosition);
-window.addEventListener('load', restoreScrollPosition);
-window.addEventListener('load', cleanupScrollPositions);
+window.addEventListener("beforeunload", saveScrollPosition);
+window.addEventListener("load", restoreScrollPosition);
+window.addEventListener("load", cleanupScrollPositions);
 
 // Also restore on DOMContentLoaded for faster response
-document.addEventListener('DOMContentLoaded', restoreScrollPosition);
+document.addEventListener("DOMContentLoaded", restoreScrollPosition);
 ```
 
 ### Step 3: Options Page
@@ -256,8 +267,8 @@ document.addEventListener('DOMContentLoaded', restoreScrollPosition);
 <section class="setting">
   <h2>Scroll Position Memory</h2>
   <p class="section-description">
-    Remember your scroll position when navigating away from pages.
-    Your position is automatically restored when you return via the back button.
+    Remember your scroll position when navigating away from pages. Your position
+    is automatically restored when you return via the back button.
   </p>
 
   <div class="option-row">
@@ -272,8 +283,9 @@ document.addEventListener('DOMContentLoaded', restoreScrollPosition);
 
   <div class="scroll-positions-management">
     <p class="info-text">
-      <strong>Storage:</strong> <span id="scroll-positions-count">0</span> positions saved
-      (max 100, auto-cleanup after 24 hours)
+      <strong>Storage:</strong>
+      <span id="scroll-positions-count">0</span> positions saved (max 100,
+      auto-cleanup after 24 hours)
     </p>
     <button id="clear-scroll-positions" class="secondary-button">
       Clear All Positions
@@ -288,11 +300,11 @@ document.addEventListener('DOMContentLoaded', restoreScrollPosition);
 async function loadScrollPositions() {
   const config = await window.Storage.getScrollPositions();
 
-  document.getElementById('scroll-positions-enabled').checked =
+  document.getElementById("scroll-positions-enabled").checked =
     config.enabled !== false;
 
   const count = Object.keys(config.positions || {}).length;
-  document.getElementById('scroll-positions-count').textContent = count;
+  document.getElementById("scroll-positions-count").textContent = count;
 }
 
 async function handleScrollPositionsToggle(e) {
@@ -303,18 +315,20 @@ async function handleScrollPositionsToggle(e) {
 }
 
 async function handleClearScrollPositions() {
-  if (!confirm('Clear all saved scroll positions?')) return;
+  if (!confirm("Clear all saved scroll positions?")) return;
 
   await window.Storage.clearScrollPositions();
   await loadScrollPositions();
 }
 
 // Event listeners
-document.getElementById('scroll-positions-enabled')
-  .addEventListener('change', handleScrollPositionsToggle);
+document
+  .getElementById("scroll-positions-enabled")
+  .addEventListener("change", handleScrollPositionsToggle);
 
-document.getElementById('clear-scroll-positions')
-  .addEventListener('click', handleClearScrollPositions);
+document
+  .getElementById("clear-scroll-positions")
+  .addEventListener("click", handleClearScrollPositions);
 ```
 
 ---
@@ -324,40 +338,40 @@ document.getElementById('clear-scroll-positions')
 ```javascript
 // tests/scroll-positions.test.js
 
-describe('Scroll Positions - URL Normalization', () => {
-  it('should normalize URLs correctly', () => {
+describe("Scroll Positions - URL Normalization", () => {
+  it("should normalize URLs correctly", () => {
     // Test URL normalization logic
   });
 
-  it('should preserve sort parameter', () => {
+  it("should preserve sort parameter", () => {
     // Test that ?sort=new is preserved
   });
 
-  it('should remove unnecessary query params', () => {
+  it("should remove unnecessary query params", () => {
     // Test that other params are removed
   });
 });
 
-describe('Scroll Positions - Storage', () => {
-  it('should save scroll position', () => {
+describe("Scroll Positions - Storage", () => {
+  it("should save scroll position", () => {
     // Test saving
   });
 
-  it('should restore scroll position', () => {
+  it("should restore scroll position", () => {
     // Test restoration
   });
 
-  it('should cleanup old positions', () => {
+  it("should cleanup old positions", () => {
     // Test 24-hour retention
   });
 
-  it('should enforce max entries', () => {
+  it("should enforce max entries", () => {
     // Test LRU eviction
   });
 });
 
-describe('Scroll Positions - Position Clamping', () => {
-  it('should clamp to valid range', () => {
+describe("Scroll Positions - Position Clamping", () => {
+  it("should clamp to valid range", () => {
     // Test that position is clamped to document height
   });
 });
@@ -369,11 +383,11 @@ describe('Scroll Positions - Position Clamping', () => {
 
 ### Low Risk
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| Storage quota | Can't save positions | Enforce max 100 entries, 24-hour cleanup |
-| Performance | Slow page loads | Use async operations, requestIdleCallback |
-| Dynamic content | Wrong position | Small delay before restoring |
+| Risk            | Impact               | Mitigation                                |
+| --------------- | -------------------- | ----------------------------------------- |
+| Storage quota   | Can't save positions | Enforce max 100 entries, 24-hour cleanup  |
+| Performance     | Slow page loads      | Use async operations, requestIdleCallback |
+| Dynamic content | Wrong position       | Small delay before restoring              |
 
 ---
 
