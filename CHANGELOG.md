@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Dependabot auto-merge**: Weekly grouped dev-dependency updates (patch/minor) are now squash-merged automatically once CI passes; major updates require manual review
+
+### Fixed
+
+- **Video URL redirect**: URLs with a title slug after the post ID (e.g. `/videos/ID/title-slug/`) now correctly redirect to `old.reddit.com/comments/ID/title-slug/` instead of falling through to a 404. Rule 12's regex was extended to capture the optional slug segment.
+
+---
+
 - **Switch All Tabs**: Two new popup buttons to switch all open Reddit tabs to old or new Reddit in one click
   - "All Tabs → Old" switches all www/new/np reddit.com tabs to old.reddit.com
   - "All Tabs → New" switches all old.reddit.com tabs to www.reddit.com

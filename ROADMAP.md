@@ -377,4 +377,4 @@ See `CONTRIBUTING.md` for development guidelines.
 
 ---
 
-_Last updated: 2026-02-15_
+_Last updated: 2026-02-23_

@@ -9,7 +9,7 @@ AI coding agent instructions for this repository. This file provides guidance fo
 | Command            | Purpose                    |
 | ------------------ | -------------------------- |
 | `npm install`      | Install dependencies       |
-| `npm test`         | Run test suite (860 tests) |
+| `npm test`         | Run test suite (905 tests) |
 | `npm run dev`      | Live-reload dev server     |
 | `npm run lint:fix` | Fix linting issues         |
 | `npm run format`   | Format with Prettier       |
@@ -22,7 +22,7 @@ AI coding agent instructions for this repository. This file provides guidance fo
 **Type:** Browser extension (Chrome/Firefox)
 **Purpose:** Redirects all Reddit URLs to old.reddit.com
 **API:** Manifest V3 with `declarativeNetRequest`
-**Tests:** Vitest (860 tests across 26 suites)
+**Tests:** Vitest (905 tests across 33 suites)
 
 ---
 
@@ -284,10 +284,18 @@ Add priority 3 rule:
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/ci.yml`):
+GitHub Actions workflows:
+
+**`.github/workflows/ci.yml`** — runs on every push/PR to master:
 
 1. **Validate**: JSON/JS syntax, ESLint, Prettier
 2. **Build**: Create zip, verify contents, upload artifact
+
+**`.github/workflows/dependabot-auto-merge.yml`** — auto-merges Dependabot PRs:
+
+- Patch and minor dev-dependency updates are squash-merged automatically once CI passes
+- Major version bumps remain open for manual review
+- Grouped weekly (Mondays) via `.github/dependabot.yml`
 
 ---
 
