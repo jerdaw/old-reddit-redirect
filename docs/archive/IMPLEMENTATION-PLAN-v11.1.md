@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-This document outlines the implementation plan for **Phase 5.2: Privacy & Tracking Protection** (v11.1.0) of Old Reddit Redirect. This phase focuses on protecting user privacy by removing tracking parameters from URLs and providing referrer control when leaving Reddit.
+This document outlines the implementation plan for **Phase 5.2: Privacy & Tracking Protection** (v11.1.0) of Old Reddit Enhanced. This phase focuses on protecting user privacy by removing tracking parameters from URLs and providing referrer control when leaving Reddit.
 
 **Key Benefits**:
 

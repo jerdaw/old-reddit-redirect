@@ -206,7 +206,7 @@ export async function initCommentNavigation() {
   try {
     await applyCommentNavigation();
   } catch (error) {
-    console.error("[ORR] Comment navigation initialization failed:", error);
+    console.error("[ORE] Comment navigation initialization failed:", error);
   }
 }
 

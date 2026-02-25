@@ -23,5 +23,5 @@ export async function initDiscovery() {
     import("./smart-collections.js").then((m) => m.initSmartCollections());
   }
 
-  debugLog("[ORR] Discovery module initialized");
+  debugLog("[ORE] Discovery module initialized");
 }

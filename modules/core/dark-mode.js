@@ -160,7 +160,7 @@ export async function initDarkMode() {
     // Auto-collapse bots is called separately in main init
     // to avoid duplication with mutation observer
   } catch (error) {
-    console.error("[ORR] Dark mode initialization failed:", error);
+    console.error("[ORE] Dark mode initialization failed:", error);
   }
 }
 

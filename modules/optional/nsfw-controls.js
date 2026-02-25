@@ -136,7 +136,7 @@ export async function initNsfwControls() {
   try {
     await applyNsfwControls();
   } catch (error) {
-    console.error("[ORR] NSFW controls initialization failed:", error);
+    console.error("[ORE] NSFW controls initialization failed:", error);
   }
 }
 

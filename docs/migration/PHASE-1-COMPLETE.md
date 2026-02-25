@@ -5,7 +5,7 @@
 
 ## Overview
 
-Phase 1 establishes the foundation for modular code splitting in Old Reddit Redirect. The implementation adds ES module support while maintaining full backward compatibility through a feature flag system.
+Phase 1 establishes the foundation for modular code splitting in Old Reddit Enhanced. The implementation adds ES module support while maintaining full backward compatibility through a feature flag system.
 
 ## Deliverables Completed
 

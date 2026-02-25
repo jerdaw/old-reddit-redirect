@@ -54,10 +54,10 @@ async function trackReadingHistory() {
         commentCount: commentCount,
       });
 
-      debugLog(`[ORR] Tracked post in reading history: ${postId}`);
+      debugLog(`[ORE] Tracked post in reading history: ${postId}`);
     }
   } catch (error) {
-    console.error("[ORR] Error tracking reading history:", error);
+    console.error("[ORE] Error tracking reading history:", error);
   }
 }
 
@@ -119,7 +119,7 @@ async function markVisitedPosts() {
       }
     }
   } catch (error) {
-    console.error("[ORR] Error marking visited posts:", error);
+    console.error("[ORE] Error marking visited posts:", error);
   }
 }
 
@@ -143,7 +143,7 @@ export async function initReadingHistory() {
     // Mark visited posts if on a listing page
     await markVisitedPosts();
   } catch (error) {
-    console.error("[ORR] Reading history initialization failed:", error);
+    console.error("[ORE] Reading history initialization failed:", error);
   }
 }
 

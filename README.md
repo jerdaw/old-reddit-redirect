@@ -1,9 +1,7 @@
-# Old Reddit Redirect
+# Old Reddit Enhanced
 
-> [!IMPORTANT]
-> **This is an actively maintained fork** of [tom-james-watson/old-reddit-redirect](https://github.com/tom-james-watson/old-reddit-redirect).
->
-> The original repository has not been updated since July 2025. This fork includes new features and bug fixes that have been requested but not merged upstream.
+> [!NOTE]
+> Originally based on [old-reddit-redirect](https://github.com/tom-james-watson/old-reddit-redirect) by Tom Watson. This project has since evolved into a comprehensive enhancement suite for old.reddit.com with many new features beyond simple URL redirection.
 
 ## New Features in This Fork
 
@@ -185,7 +183,7 @@
 
 [Firefox extension](https://addons.mozilla.org/firefox/addon/old-reddit-redirect)
 
-Dislike Reddit's redesign? Old Reddit Redirect will ensure that you always load the old (old.reddit.com) design instead.
+Dislike Reddit's redesign? Old Reddit Enhanced will ensure that you always load the old (old.reddit.com) design instead.
 
 Will force all reddit.com usage to old.reddit.com. Will work when navigating to the site, opening links, using old bookmarks. Works regardless of whether you are logged in or not, and in incognito mode.
 
@@ -273,7 +271,7 @@ npm run build         # Build extension zip (or use: make)
 ### Building
 
 ```bash
-make        # Creates old-reddit-redirect.zip
+make        # Creates old-reddit-enhanced.zip
 make clean  # Remove build artifacts
 ```
 

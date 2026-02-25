@@ -1,6 +1,6 @@
-# Old Reddit Redirect - Feature Roadmap
+# Old Reddit Enhanced - Feature Roadmap
 
-> **Purpose**: Track completed work and plan future enhancements for Old Reddit Redirect
+> **Purpose**: Track completed work and plan future enhancements for Old Reddit Enhanced
 >
 > **Reference**: See `docs/SINK-IT-FEATURE-ANALYSIS.md` for competitive analysis
 
@@ -348,7 +348,7 @@ When selecting the next phase, we consider:
 
 ## Contributing
 
-Feature requests and suggestions are welcome! Please open a [GitHub issue](https://github.com/tom-james-watson/old-reddit-redirect/issues) with:
+Feature requests and suggestions are welcome! Please open a [GitHub issue](https://github.com/jerdaw/old-reddit-enhanced/issues) with:
 
 - **Use Case**: Why you need this feature
 - **Priority**: How important is it to you?
@@ -377,4 +377,4 @@ See `CONTRIBUTING.md` for development guidelines.
 
 ---
 
-_Last updated: 2026-02-23_
+_Last updated: 2026-02-24_

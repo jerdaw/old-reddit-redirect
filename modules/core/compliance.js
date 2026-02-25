@@ -57,7 +57,7 @@ export class ComplianceManager {
     const sessionVerified = sessionStorage.getItem("orr-age-verified");
     if (sessionVerified) return;
 
-    debugLog("[ORR] Compliance: NSFW content detected, checking verification");
+    debugLog("[ORE] Compliance: NSFW content detected, checking verification");
     this.showAgeVerificationModal();
   }
 
@@ -169,7 +169,7 @@ export class ComplianceManager {
 
     // Update last verified timestamp if we want to persist longer (optional future enhancement)
     // For now, we stick to session-only for stricter compliance
-    debugLog("[ORR] Compliance: User verified age");
+    debugLog("[ORE] Compliance: User verified age");
   }
 }
 

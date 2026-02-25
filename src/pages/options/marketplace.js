@@ -26,7 +26,7 @@
 
     const listData = await response.json();
     if (
-      listData.type !== "orr-list" ||
+      (listData.type !== "ore-list" && listData.type !== "orr-list") ||
       !Array.isArray(listData.items) ||
       !listData.metadata
     ) {

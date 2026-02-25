@@ -9,7 +9,7 @@
 
 ## Quick Overview
 
-Phase 5.3 completes the Phase 5 roadmap by adding advanced content blocking and navigation features to Old Reddit Redirect.
+Phase 5.3 completes the Phase 5 roadmap by adding advanced content blocking and navigation features to Old Reddit Enhanced.
 
 **What's Being Built:**
 

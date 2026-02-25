@@ -752,7 +752,7 @@ Use a contrast checker tool (e.g., WebAIM Contrast Checker) to verify:
 
 **Analysis:** The page maintains proper heading hierarchy:
 
-- `<h1>` - Main page title ("Old Reddit Redirect")
+- `<h1>` - Main page title ("Old Reddit Enhanced")
 - `<h2>` - Section headings (Statistics, Visual Preferences, Dark Mode, etc.)
 - `<h3>` - Subsection headings (Last 7 Days, Top Subreddits, etc.)
 - `<h4>` - Modal subsections (Visual Settings in preset edit modal)
@@ -1111,7 +1111,7 @@ Run automated accessibility scanners:
 
 ## Conclusion
 
-The Old Reddit Redirect options page has a **strong accessibility foundation** with semantic HTML, proper ARIA labeling, and keyboard support. The main areas for improvement are:
+The Old Reddit Enhanced options page has a **strong accessibility foundation** with semantic HTML, proper ARIA labeling, and keyboard support. The main areas for improvement are:
 
 1. **Modal focus management** - Critical for keyboard and screen reader users
 2. **Button labeling** - Important for screen reader users

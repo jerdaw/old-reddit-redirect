@@ -158,7 +158,7 @@ export async function initInlineImages() {
   try {
     await applyInlineImages();
   } catch (error) {
-    console.error("[ORR] Inline images initialization failed:", error);
+    console.error("[ORE] Inline images initialization failed:", error);
   }
 }
 

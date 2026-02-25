@@ -3,8 +3,7 @@
  * Generates pre-filled GitHub issue links for reporting broken selectors
  */
 
-const REPO_URL =
-  "https://github.com/tom-james-watson/old-reddit-redirect/issues/new";
+const REPO_URL = "https://github.com/jerdaw/old-reddit-enhanced/issues/new";
 
 /**
  * Open the issue reporter with pre-filled details

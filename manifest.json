@@ -21,7 +21,7 @@
   },
   "action": {
     "default_popup": "src/pages/popup/popup.html",
-    "default_title": "Old Reddit Redirect"
+    "default_title": "Old Reddit Enhanced"
   },
   "commands": {
     "toggle-redirect": {

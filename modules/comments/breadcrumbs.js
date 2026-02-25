@@ -32,7 +32,7 @@ export class BreadcrumbsManager {
     });
 
     if (!this.settings.breadcrumbs.enabled) {
-      debugLog("[ORR] Breadcrumbs disabled");
+      debugLog("[ORE] Breadcrumbs disabled");
       return;
     }
 
@@ -47,7 +47,7 @@ export class BreadcrumbsManager {
     // Initial check
     this.checkScroll();
 
-    debugLog("[ORR] Breadcrumbs initialized");
+    debugLog("[ORE] Breadcrumbs initialized");
   }
 
   /**

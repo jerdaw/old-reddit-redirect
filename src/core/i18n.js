@@ -40,7 +40,7 @@
         languageOverride: sanitizeOverride(i18n.languageOverride),
       };
     } catch (error) {
-      console.error("[ORR] i18n settings read error:", error);
+      console.error("[ORE] i18n settings read error:", error);
       return DEFAULT_SETTINGS;
     }
   }

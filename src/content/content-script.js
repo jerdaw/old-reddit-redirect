@@ -9,7 +9,7 @@
 
 // Import and initialize module loader
 import("../../modules/loader.js").catch((error) => {
-  console.error("[ORR] Failed to load modules:", error);
+  console.error("[ORE] Failed to load modules:", error);
 
   // Report error to background for telemetry
   try {
@@ -20,6 +20,6 @@ import("../../modules/loader.js").catch((error) => {
       stack: error.stack,
     });
   } catch (msgError) {
-    console.error("[ORR] Failed to report module load error:", msgError);
+    console.error("[ORE] Failed to report module load error:", msgError);
   }
 });

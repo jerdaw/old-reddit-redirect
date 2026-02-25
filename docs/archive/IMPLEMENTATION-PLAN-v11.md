@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines the implementation plan for **Phase 5: Feed Enhancements & Performance** of Old Reddit Redirect. This phase focuses on improving the browsing experience on old.reddit.com through feed customization, privacy enhancements, and additional content blocking capabilities.
+This document outlines the implementation plan for **Phase 5: Feed Enhancements & Performance** of Old Reddit Enhanced. This phase focuses on improving the browsing experience on old.reddit.com through feed customization, privacy enhancements, and additional content blocking capabilities.
 
 **Key Benefits**:
 
@@ -1703,7 +1703,7 @@ CHANGELOG.md            (+25 lines: v11.2.0 entry)
 
 ## Conclusion
 
-Phase 5 represents a natural evolution of Old Reddit Redirect, focusing on:
+Phase 5 represents a natural evolution of Old Reddit Enhanced, focusing on:
 
 1. **User Customization** - Give users control over feed appearance
 2. **Privacy** - Protect users from tracking and surveillance

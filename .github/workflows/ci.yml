@@ -56,13 +56,13 @@ jobs:
 
       - name: Verify package contents
         run: |
-          unzip -l old-reddit-redirect.zip
+          unzip -l old-reddit-enhanced.zip
           echo ""
-          echo "Package size: $(du -h old-reddit-redirect.zip | cut -f1)"
+          echo "Package size: $(du -h old-reddit-enhanced.zip | cut -f1)"
 
       - name: Upload extension artifact
         uses: actions/upload-artifact@v4
         with:
-          name: old-reddit-redirect
-          path: old-reddit-redirect.zip
+          name: old-reddit-enhanced
+          path: old-reddit-enhanced.zip
           retention-days: 30

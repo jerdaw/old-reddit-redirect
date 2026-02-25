@@ -4,11 +4,11 @@
 
 ## Overview
 
-Old Reddit Redirect is a browser extension that automatically redirects Reddit URLs to old.reddit.com. This privacy policy explains what data the extension collects and how it is used.
+Old Reddit Enhanced is a browser extension that automatically redirects Reddit URLs to old.reddit.com. This privacy policy explains what data the extension collects and how it is used.
 
 ## Data Collection
 
-**Old Reddit Redirect does not collect any data.**
+**Old Reddit Enhanced does not collect any data.**
 
 Specifically, the extension:
 
@@ -49,8 +49,8 @@ If we make changes to this privacy policy, we will update the "Last updated" dat
 
 ## Contact
 
-If you have questions about this privacy policy, please open an issue on the [GitHub repository](https://github.com/tom-james-watson/old-reddit-redirect).
+If you have questions about this privacy policy, please open an issue on the [GitHub repository](https://github.com/jerdaw/old-reddit-enhanced).
 
 ## Open Source
 
-This extension is open source. You can review the complete source code to verify these privacy claims at: https://github.com/tom-james-watson/old-reddit-redirect
+This extension is open source. You can review the complete source code to verify these privacy claims at: https://github.com/jerdaw/old-reddit-enhanced

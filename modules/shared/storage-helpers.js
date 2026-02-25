@@ -12,7 +12,7 @@ export async function getStorage(defaults = {}) {
   try {
     return await chrome.storage.local.get(defaults);
   } catch (error) {
-    console.error("[ORR] Storage read error:", error);
+    console.error("[ORE] Storage read error:", error);
     return defaults;
   }
 }
@@ -26,7 +26,7 @@ export async function setStorage(values) {
   try {
     await chrome.storage.local.set(values);
   } catch (error) {
-    console.error("[ORR] Storage write error:", error);
+    console.error("[ORE] Storage write error:", error);
     throw error;
   }
 }
@@ -55,7 +55,7 @@ export async function updateStorage(updates) {
 
     await chrome.storage.local.set(merged);
   } catch (error) {
-    console.error("[ORR] Storage update error:", error);
+    console.error("[ORE] Storage update error:", error);
     throw error;
   }
 }
@@ -69,7 +69,7 @@ export async function removeStorage(keys) {
   try {
     await chrome.storage.local.remove(keys);
   } catch (error) {
-    console.error("[ORR] Storage remove error:", error);
+    console.error("[ORE] Storage remove error:", error);
     throw error;
   }
 }
@@ -82,7 +82,7 @@ export async function clearStorage() {
   try {
     await chrome.storage.local.clear();
   } catch (error) {
-    console.error("[ORR] Storage clear error:", error);
+    console.error("[ORE] Storage clear error:", error);
     throw error;
   }
 }

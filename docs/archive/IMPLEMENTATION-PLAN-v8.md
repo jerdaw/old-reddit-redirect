@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines the implementation plan for **Phase 4.1: Remember Sort Order** of Old Reddit Redirect. This feature remembers users' preferred sort order (hot/new/top/rising/controversial) for each subreddit and automatically applies it on future visits.
+This document outlines the implementation plan for **Phase 4.1: Remember Sort Order** of Old Reddit Enhanced. This feature remembers users' preferred sort order (hot/new/top/rising/controversial) for each subreddit and automatically applies it on future visits.
 
 **Key Benefits**:
 

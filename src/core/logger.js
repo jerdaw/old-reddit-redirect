@@ -1,12 +1,12 @@
 "use strict";
 
 /**
- * Centralized logging utility for Old Reddit Redirect
+ * Centralized logging utility for Old Reddit Enhanced
  * Provides context-aware logging with configurable levels
  */
 
 (function () {
-  const LOG_PREFIX = "[OldRedditRedirect]";
+  const LOG_PREFIX = "[OldRedditEnhanced]";
 
   const LOG_LEVELS = {
     DEBUG: 0,

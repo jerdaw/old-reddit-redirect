@@ -161,7 +161,7 @@ export async function initNagBlocking() {
   try {
     await applyNagBlocking();
   } catch (error) {
-    console.error("[ORR] Nag blocking initialization failed:", error);
+    console.error("[ORE] Nag blocking initialization failed:", error);
   }
 }
 

@@ -1,7 +1,7 @@
 .PHONY: run clean
 
-old-reddit-redirect.zip: manifest.json rules.json src/ modules/ img/ LICENSE.txt
-	zip -r old-reddit-redirect.zip \
+old-reddit-enhanced.zip: manifest.json rules.json src/ modules/ img/ LICENSE.txt
+	zip -r old-reddit-enhanced.zip \
 		manifest.json \
 		rules.json \
 		src/ \

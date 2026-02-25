@@ -1,4 +1,4 @@
-# Old Reddit Redirect
+# Old Reddit Enhanced
 
 Prefer the classic Reddit interface? This extension automatically redirects all Reddit URLs to old.reddit.com.
 
@@ -34,7 +34,7 @@ Some features only work on new Reddit:
 ## Open Source
 
 This extension is completely open source. View the code, report issues, or contribute at:
-https://github.com/tom-james-watson/old-reddit-redirect
+https://github.com/jerdaw/old-reddit-enhanced
 
 ## Privacy
 
@@ -49,4 +49,4 @@ This extension collects no data. It operates entirely locally in your browser. S
 ## Support
 
 Having issues? Please report them on GitHub:
-https://github.com/tom-james-watson/old-reddit-redirect/issues
+https://github.com/jerdaw/old-reddit-enhanced/issues

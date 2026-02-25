@@ -2,7 +2,7 @@
 
 **Release Date**: 2026-01-30
 
-Version 6.0.0 is a major feature release that adds comprehensive enhancements to Old Reddit Redirect. This release includes dark mode support, enhanced nag blocking, and powerful content filtering capabilities.
+Version 6.0.0 is a major feature release that adds comprehensive enhancements to Old Reddit Enhanced. This release includes dark mode support, enhanced nag blocking, and powerful content filtering capabilities.
 
 ## 🎨 Dark Mode & Theming
 
@@ -90,7 +90,7 @@ Filter posts linking to specific websites.
 
 ## 🐛 Bug Reports
 
-Found an issue? [Report it on GitHub](https://github.com/tom-james-watson/old-reddit-redirect/issues)
+Found an issue? [Report it on GitHub](https://github.com/jerdaw/old-reddit-enhanced/issues)
 
 ## 🙏 Acknowledgments
 
@@ -98,4 +98,4 @@ This release implements features inspired by community feedback and competitive 
 
 ---
 
-**Full Changelog**: [v5.0.0...v6.0.0](https://github.com/tom-james-watson/old-reddit-redirect/compare/v5.0.0...v6.0.0)
+**Full Changelog**: [v5.0.0...v6.0.0](https://github.com/jerdaw/old-reddit-enhanced/compare/v5.0.0...v6.0.0)

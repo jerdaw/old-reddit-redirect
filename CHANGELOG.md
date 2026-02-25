@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Old Reddit Redirect will be documented in this file.
+All notable changes to Old Reddit Enhanced will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -25,6 +25,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Visual feedback showing count of switched tabs
 
 ### Changed
+
+#### Rebrand: Old Reddit Redirect → Old Reddit Enhanced (2026-02-24)
+
+- **Project renamed** to Old Reddit Enhanced (ORE) to reflect its growth from a simple redirect
+  extension into a full Reddit enhancement suite (158+ files, ~70,000 lines, 24 feature modules)
+- Extension display name updated in manifest, all UI strings, notifications, and i18n files
+- Log prefix changed from `[ORR]` to `[ORE]` across all source files
+- Export filenames updated: `old-reddit-enhanced-settings-*.json`, `ore-muted-*.json`
+- List format identifier updated from `orr-list` to `ore-list`; old format remains accepted for
+  backward compatibility with previously exported filter lists
+- GitHub repository: `jerdaw/old-reddit-redirect` → `jerdaw/old-reddit-enhanced`
+- LICENSE updated with dual copyright: Tom Watson (2014), Jeremy Dawson (2026)
+- Internal CSS `orr-` class prefix and `ORRI18n` global unchanged (internal namespacing)
+- Firefox GUID and Chrome extension ID unchanged (store continuity)
+- See `docs/adr/001-rebrand-to-old-reddit-enhanced.md` for decision rationale
 
 #### Code Quality Improvements (2026-02-05)
 
@@ -1591,6 +1606,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Links
 
-- [GitHub Repository](https://github.com/tom-james-watson/old-reddit-redirect)
+- [GitHub Repository](https://github.com/jerdaw/old-reddit-enhanced)
 - [Chrome Web Store](https://chrome.google.com/webstore/detail/old-reddit-redirect/dneaehbmnbhcippjikoajpoabadpodje)
 - [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/old-reddit-redirect)

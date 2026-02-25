@@ -17,7 +17,7 @@ export async function initSmartCollections() {
     getTags: (entry) => calculateTags(entry),
   };
 
-  debugLog("[ORR] Smart Collections initialized");
+  debugLog("[ORE] Smart Collections initialized");
 }
 
 /**

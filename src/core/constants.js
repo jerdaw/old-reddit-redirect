@@ -41,4 +41,4 @@ export const THROTTLE_DELAY_MS = 100;
 
 // Misc
 export const RULESET_ID = "ruleset_1";
-export const LOG_PREFIX = "[ORR]";
+export const LOG_PREFIX = "[ORE]";

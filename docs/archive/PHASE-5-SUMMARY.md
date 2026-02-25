@@ -8,7 +8,7 @@
 
 ## Overview
 
-Phase 5 introduces feed customization, privacy protection, and advanced content blocking to Old Reddit Redirect. This phase builds naturally on the foundation established in Phases 1-4, focusing on user control, privacy, and browsing experience.
+Phase 5 introduces feed customization, privacy protection, and advanced content blocking to Old Reddit Enhanced. This phase builds naturally on the foundation established in Phases 1-4, focusing on user control, privacy, and browsing experience.
 
 ---
 
@@ -375,7 +375,7 @@ Phase 5 features are inspired by "Sink It for Reddit" analysis (see `docs/SINK-I
 
 ## Conclusion
 
-Phase 5 represents a natural evolution of Old Reddit Redirect, adding highly-requested features while maintaining the project's core values:
+Phase 5 represents a natural evolution of Old Reddit Enhanced, adding highly-requested features while maintaining the project's core values:
 
 - **User-First:** All features designed for better UX
 - **Privacy-First:** Tracking protection, no data collection

@@ -1,10 +1,10 @@
 # Sink It for Reddit - Feature Analysis
 
-> **Purpose**: Comprehensive analysis of "Sink It for Reddit" features compared to "Old Reddit Redirect" to identify potential roadmap additions.
+> **Purpose**: Comprehensive analysis of "Sink It for Reddit" features compared to "Old Reddit Enhanced" to identify potential roadmap additions.
 >
 > **Date**: 2026-01-30
 > **Sink It Version Analyzed**: 7.108.x
-> **Old Reddit Redirect Version**: 5.0.0
+> **Old Reddit Enhanced Version**: 5.0.0
 
 ---
 
@@ -12,10 +12,10 @@
 
 **Sink It for Reddit** is a fundamentally different extension with a broader scope:
 
-- **Old Reddit Redirect**: Focused redirect tool (new Reddit → old Reddit)
+- **Old Reddit Enhanced**: Focused redirect tool (new Reddit → old Reddit)
 - **Sink It**: Comprehensive Reddit enhancement suite for BOTH old and new Reddit
 
-Sink It has ~100+ features across UI enhancement, content filtering, navigation, and privacy. Many features are mobile-first (Safari/iOS). This document categorizes relevant features by applicability to Old Reddit Redirect.
+Sink It has ~100+ features across UI enhancement, content filtering, navigation, and privacy. Many features are mobile-first (Safari/iOS). This document categorizes relevant features by applicability to Old Reddit Enhanced.
 
 ---
 
@@ -416,7 +416,7 @@ Any content-heavy features need careful performance testing.
 
 ## 8. Feature Comparison Matrix
 
-| Category                  | Sink It                        | Old Reddit Redirect          |
+| Category                  | Sink It                        | Old Reddit Enhanced          |
 | ------------------------- | ------------------------------ | ---------------------------- |
 | **Core Function**         | Enhance both Reddit UIs        | Redirect to old Reddit       |
 | **Dark Mode**             | ✅ Adaptive + OLED + Permanent | ❌ None                      |
@@ -566,4 +566,4 @@ Based on store listings, Sink It shows:
 
 ---
 
-_Document generated for Old Reddit Redirect roadmap planning_
+_Document generated for Old Reddit Enhanced roadmap planning_

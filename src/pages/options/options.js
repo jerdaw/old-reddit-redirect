@@ -5,8 +5,7 @@
 
   function openIssueReporter(type = "bug", details = {}) {
     const params = new URLSearchParams();
-    const repoUrl =
-      "https://github.com/tom-james-watson/old-reddit-redirect/issues/new";
+    const repoUrl = "https://github.com/jerdaw/old-reddit-enhanced/issues/new";
 
     if (type === "selector") {
       params.set("labels", "broken-selector");
@@ -2237,7 +2236,7 @@
       updateFeatureCounts(healthReport.counts);
       updateStorageHealthBanner(healthReport);
     } catch (error) {
-      console.error("[ORR] Failed to load storage stats:", error);
+      console.error("[ORE] Failed to load storage stats:", error);
     }
   }
 
@@ -2333,7 +2332,7 @@
       await refreshStorageStats();
       showToast(msg("opt_js_toast_cleanup_completed"), "success");
     } catch (error) {
-      console.error("[ORR] Cleanup failed:", error);
+      console.error("[ORE] Cleanup failed:", error);
       showToast(
         msg("opt_js_toast_cleanup_failed", [String(error.message)]),
         "error"
@@ -2378,7 +2377,7 @@
       await refreshStorageStats();
       showToast(msg("opt_js_toast_maintenance_completed"), "success");
     } catch (error) {
-      console.error("[ORR] Maintenance failed:", error);
+      console.error("[ORE] Maintenance failed:", error);
       showToast(
         msg("opt_js_toast_maintenance_failed", [String(error.message)]),
         "error"
@@ -3906,7 +3905,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `old-reddit-redirect-stats-${formatDate(new Date())}.json`;
+    a.download = `old-reddit-enhanced-stats-${formatDate(new Date())}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -4322,7 +4321,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `orr-muted-subreddits-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `ore-muted-subreddits-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -4726,7 +4725,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `orr-muted-flairs-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `ore-muted-flairs-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -4812,7 +4811,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `orr-muted-keywords-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `ore-muted-keywords-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -5014,7 +5013,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `orr-muted-domains-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `ore-muted-domains-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -5140,7 +5139,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `old-reddit-redirect-settings-${formatDate(new Date())}.json`;
+    a.download = `old-reddit-enhanced-settings-${formatDate(new Date())}.json`;
     a.click();
 
     URL.revokeObjectURL(url);
@@ -6091,7 +6090,7 @@
 
   function exportCommunityList(type, list, metadata) {
     const exportData = {
-      type: "orr-list",
+      type: "ore-list",
       contentType: type,
       metadata: {
         ...metadata,
@@ -6528,7 +6527,7 @@
       // Update UI
       updateKeyboardShortcutsUI();
     } catch (error) {
-      console.error("[ORR] Failed to load keyboard shortcuts:", error);
+      console.error("[ORE] Failed to load keyboard shortcuts:", error);
       showToast(msg("opt_js_toast_failed_to_load_keyboard_shortcuts"), "error");
     }
   }
@@ -6677,7 +6676,7 @@
         "success"
       );
     } catch (error) {
-      console.error("[ORR] Failed to toggle shortcut:", error);
+      console.error("[ORE] Failed to toggle shortcut:", error);
       showToast(msg("opt_js_toast_failed_to_update_shortcut"), "error");
     }
   };
@@ -6811,7 +6810,7 @@
       updateKeyboardShortcutsUI();
       showToast(msg("opt_js_toast_shortcut_updated_successfully"), "success");
     } catch (error) {
-      console.error("[ORR] Failed to save shortcut:", error);
+      console.error("[ORE] Failed to save shortcut:", error);
       showToast(msg("opt_js_toast_failed_to_save_shortcut"), "error");
     }
   }
@@ -6841,7 +6840,7 @@
         showToast(msg("opt_js_toast_shortcut_reset_to_default"), "success");
       }
     } catch (error) {
-      console.error("[ORR] Failed to reset shortcut:", error);
+      console.error("[ORE] Failed to reset shortcut:", error);
       showToast(msg("opt_js_toast_failed_to_reset_shortcut"), "error");
     }
   }
@@ -6940,7 +6939,7 @@
 
       showToast(msg("opt_js_toast_shortcuts_exported_successfully"), "success");
     } catch (error) {
-      console.error("[ORR] Failed to export shortcuts:", error);
+      console.error("[ORE] Failed to export shortcuts:", error);
       showToast(msg("opt_js_toast_failed_to_export_shortcuts"), "error");
     }
   }
@@ -6982,7 +6981,7 @@
       updateKeyboardShortcutsUI();
       showToast(msg("opt_js_toast_shortcuts_imported_successfully"), "success");
     } catch (error) {
-      console.error("[ORR] Failed to import shortcuts:", error);
+      console.error("[ORE] Failed to import shortcuts:", error);
       showToast(
         msg("opt_js_toast_failed_to_import_shortcuts", [String(error.message)]),
         "error"
@@ -7009,7 +7008,7 @@
       updateKeyboardShortcutsUI();
       showToast(msg("opt_js_toast_all_shortcuts_reset_to_defaults"), "success");
     } catch (error) {
-      console.error("[ORR] Failed to reset shortcuts:", error);
+      console.error("[ORE] Failed to reset shortcuts:", error);
       showToast(msg("opt_js_toast_failed_to_reset_shortcuts"), "error");
     }
   }

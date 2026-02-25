@@ -95,7 +95,7 @@ export async function initColorCoding() {
   try {
     await applyColorCodedComments();
   } catch (error) {
-    console.error("[ORR] Color-coded comments initialization failed:", error);
+    console.error("[ORE] Color-coded comments initialization failed:", error);
   }
 }
 

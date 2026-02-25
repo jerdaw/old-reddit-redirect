@@ -79,8 +79,7 @@
 
   function openIssueReporter(type = "bug", details = {}) {
     const params = new URLSearchParams();
-    const repoUrl =
-      "https://github.com/tom-james-watson/old-reddit-redirect/issues/new";
+    const repoUrl = "https://github.com/jerdaw/old-reddit-enhanced/issues/new";
 
     if (type === "selector") {
       params.set("labels", "broken-selector");

@@ -50,7 +50,7 @@ describe("Community Features", () => {
   describe("Subscriptions Module", () => {
     it("should add a valid subscription", async () => {
       const mockList = {
-        type: "orr-list",
+        type: "ore-list",
         contentType: "keywords",
         metadata: { name: "Test List", author: "Tester" },
         items: ["spoiler"],
@@ -90,7 +90,7 @@ describe("Community Features", () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
-          type: "orr-list",
+          type: "ore-list",
           contentType: "invalid-type",
           metadata: { name: "Bad Type" },
           items: ["a"],
@@ -108,7 +108,7 @@ describe("Community Features", () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
-          type: "orr-list",
+          type: "ore-list",
           contentType: "subreddits",
           metadata: { name: "Sub List", author: "Tester" },
           items: ["r/News", "NEWS", "askreddit", "bad-name!"],
@@ -130,7 +130,7 @@ describe("Community Features", () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
-          type: "orr-list",
+          type: "ore-list",
           contentType: "domains",
           metadata: { name: "Domain List", author: "Tester" },
           items: ["https://www.foo.com/", "foo.com", "Bar.net"],
@@ -155,7 +155,7 @@ describe("Community Features", () => {
       global.fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => ({
-          type: "orr-list",
+          type: "ore-list",
           contentType: "keywords",
           metadata: { name: "Meta List", author: "Tester" },
           items: ["meta"],

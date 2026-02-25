@@ -20,13 +20,13 @@ import { debugLog } from "./shared/debug-helpers.js";
  */
 export async function initializeFeatures() {
   try {
-    debugLog("[ORR] Module loader: Starting feature initialization");
+    debugLog("[ORE] Module loader: Starting feature initialization");
 
     // Get user preferences (will be used in later phases)
     const _prefs = await getStorage({});
 
     // Phase 2: Core modules (always load)
-    debugLog("[ORR] Module loader: Loading core features");
+    debugLog("[ORE] Module loader: Loading core features");
     const { initDarkMode } = await import("./core/dark-mode.js");
     const { initAccessibility } = await import("./core/accessibility.js");
     const { initNagBlocking } = await import("./core/nag-blocking.js");
@@ -49,22 +49,22 @@ export async function initializeFeatures() {
       checkCriticalSelectors();
     } catch (e) {
       if (typeof console.warn === "function") {
-        console.warn("[ORR] DOM Monitor failed to start", e);
+        console.warn("[ORE] DOM Monitor failed to start", e);
       } else if (typeof console.log === "function") {
-        console.log("[ORR] DOM Monitor failed to start", e);
+        console.log("[ORE] DOM Monitor failed to start", e);
       }
     }
 
     // Phase 3: Comment modules (lazy load for comment pages)
     if (isCommentsPage()) {
-      debugLog("[ORR] Module loader: Comments page detected, loading features");
+      debugLog("[ORE] Module loader: Comments page detected, loading features");
       const { initCommentFeatures } = await import("./comments/index.js");
       await initCommentFeatures();
     }
 
     // Phase 5: Feed modules (lazy load for feed pages)
     if (isSubredditPage() || isFrontPage()) {
-      debugLog("[ORR] Module loader: Feed page detected, loading features");
+      debugLog("[ORE] Module loader: Feed page detected, loading features");
       const { initFeedFeatures } = await import("./feed/index.js");
       await initFeedFeatures();
     }
@@ -74,7 +74,7 @@ export async function initializeFeatures() {
     await initOptionalFeatures();
 
     // Phase 5: Discovery modules (load if enabled)
-    debugLog("[ORR] Module loader: Loading discovery features");
+    debugLog("[ORE] Module loader: Loading discovery features");
     const { initDiscovery } = await import("./discovery/index.js");
     await initDiscovery();
 
@@ -82,9 +82,9 @@ export async function initializeFeatures() {
     const { autoCollapseBotComments } = await import("./core/dark-mode.js");
     await autoCollapseBotComments();
 
-    debugLog("[ORR] Module loader: Initialization complete");
+    debugLog("[ORE] Module loader: Initialization complete");
   } catch (error) {
-    console.error("[ORR] Module loader: Initialization failed:", error);
+    console.error("[ORE] Module loader: Initialization failed:", error);
     // Report error to background for telemetry
     try {
       chrome.runtime.sendMessage({
@@ -94,7 +94,7 @@ export async function initializeFeatures() {
         stack: error.stack,
       });
     } catch (msgError) {
-      console.error("[ORR] Module loader: Failed to report error:", msgError);
+      console.error("[ORE] Module loader: Failed to report error:", msgError);
     }
     throw error;
   }
@@ -105,13 +105,13 @@ export async function initializeFeatures() {
  * Called on page unload to prevent memory leaks
  */
 function cleanupAllModules() {
-  debugLog("[ORR] Module loader: Cleaning up event listeners and observers");
+  debugLog("[ORE] Module loader: Cleaning up event listeners and observers");
   if (window.orrCleanup && Array.isArray(window.orrCleanup)) {
     for (const cleanup of window.orrCleanup) {
       try {
         cleanup();
       } catch (error) {
-        console.error("[ORR] Module loader: Cleanup error:", error);
+        console.error("[ORE] Module loader: Cleanup error:", error);
       }
     }
     window.orrCleanup = [];

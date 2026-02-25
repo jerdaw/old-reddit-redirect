@@ -43,7 +43,7 @@ export class BookmarksManager {
     // Observer for dynamic comments
     this.initObserver();
 
-    debugLog("[ORR] Bookmarks initialized");
+    debugLog("[ORE] Bookmarks initialized");
   }
 
   injectStyles() {
@@ -296,7 +296,7 @@ export class BookmarksManager {
       await setStorage({ bookmarks: this.settings });
 
       container.remove();
-      debugLog("[ORR] Saved tags for " + id);
+      debugLog("[ORE] Saved tags for " + id);
     };
 
     const cancelBtn = createElement(

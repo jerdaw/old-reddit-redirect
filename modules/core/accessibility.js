@@ -102,6 +102,6 @@ export async function initAccessibility() {
     if (!window.orrCleanup) window.orrCleanup = [];
     window.orrCleanup.push(cleanup);
   } catch (error) {
-    console.error("[ORR] Accessibility initialization failed:", error);
+    console.error("[ORE] Accessibility initialization failed:", error);
   }
 }

@@ -255,7 +255,7 @@ async function applyUserMuting() {
       }
     }
   } catch (error) {
-    console.error("[ORR] User muting failed:", error);
+    console.error("[ORE] User muting failed:", error);
   }
 }
 
@@ -272,7 +272,7 @@ export async function initFiltering() {
       applyUserMuting(),
     ]);
   } catch (error) {
-    console.error("[ORR] Content filtering initialization failed:", error);
+    console.error("[ORE] Content filtering initialization failed:", error);
   }
 }
 

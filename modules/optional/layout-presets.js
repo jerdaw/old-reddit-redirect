@@ -129,9 +129,9 @@ async function applyLayoutPreset() {
       removePresetCSS();
     }
 
-    debugLog(`[ORR] Applied layout preset: ${presetName}`);
+    debugLog(`[ORE] Applied layout preset: ${presetName}`);
   } catch (error) {
-    console.error("[ORR] Error applying layout preset:", error);
+    console.error("[ORE] Error applying layout preset:", error);
   }
 }
 
@@ -143,7 +143,7 @@ export async function initLayoutPresets() {
   try {
     await applyLayoutPreset();
   } catch (error) {
-    console.error("[ORR] Layout presets initialization failed:", error);
+    console.error("[ORE] Layout presets initialization failed:", error);
   }
 }
 

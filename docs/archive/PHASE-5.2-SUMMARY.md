@@ -9,7 +9,7 @@
 
 ## Quick Overview
 
-Phase 5.2 adds privacy protection features to Old Reddit Redirect by automatically removing tracking parameters from URLs and providing referrer control.
+Phase 5.2 adds privacy protection features to Old Reddit Enhanced by automatically removing tracking parameters from URLs and providing referrer control.
 
 **What's Being Built:**
 

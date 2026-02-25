@@ -1,6 +1,12 @@
 # Documentation Index
 
-This directory contains detailed documentation for the Old Reddit Redirect project.
+This directory contains detailed documentation for the Old Reddit Enhanced project.
+
+## Architecture Decision Records (`adr/`)
+
+Significant architectural and project decisions:
+
+- **[ADR-001](adr/001-rebrand-to-old-reddit-enhanced.md)** — Rebrand to Old Reddit Enhanced (2026-02-24)
 
 ## Migration Documentation (`migration/`)
 
@@ -35,6 +41,7 @@ Historical planning and implementation documents:
 - **IMPLEMENTATION-PLAN-v7.md** through **v12.3.md** - Version planning docs
 - **2026-02-15-v23-stabilization-plan.md** - Archived stabilization plan (completed)
 - **2026-02-15-maintenance-plan.md** - Archived maintenance plan (completed)
+- **2026-02-24-maintenance-log.md** - Rebrand + maintenance log (completed)
 - **PHASE-\*-SUMMARY.md** - Phase completion summaries
 - **SINK-IT-FEATURE-ANALYSIS.md** - Feature comparison analysis
 

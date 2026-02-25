@@ -100,13 +100,13 @@ async function applySortPreference() {
     sessionStorage.setItem("orr-sort-redirected", "true");
 
     debugLog(
-      `[ORR] Applying sort preference for /r/${subreddit}: ${preference.sort}${preference.time ? ` (${preference.time})` : ""}`
+      `[ORE] Applying sort preference for /r/${subreddit}: ${preference.sort}${preference.time ? ` (${preference.time})` : ""}`
     );
 
     // Redirect
     window.location.href = newUrl;
   } catch (error) {
-    console.error("[ORR] Error applying sort preference:", error);
+    console.error("[ORE] Error applying sort preference:", error);
   }
 }
 
@@ -150,14 +150,14 @@ async function detectSortChange() {
       sessionStorage.removeItem("orr-sort-redirected");
 
       debugLog(
-        `[ORR] Saved sort preference for /r/${subreddit}: ${currentSort.sort}${currentSort.time ? ` (${currentSort.time})` : ""}`
+        `[ORE] Saved sort preference for /r/${subreddit}: ${currentSort.sort}${currentSort.time ? ` (${currentSort.time})` : ""}`
       );
     }
 
     lastUrl = currentUrl;
     lastSort = currentSort;
   } catch (error) {
-    console.error("[ORR] Error detecting sort change:", error);
+    console.error("[ORE] Error detecting sort change:", error);
   }
 }
 
@@ -210,7 +210,7 @@ export async function initSortPreferences() {
     if (!window.orrCleanup) window.orrCleanup = [];
     window.orrCleanup.push(cleanup);
   } catch (error) {
-    console.error("[ORR] Sort preferences initialization failed:", error);
+    console.error("[ORE] Sort preferences initialization failed:", error);
   }
 }
 

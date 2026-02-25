@@ -59,7 +59,7 @@ export function checkCriticalSelectors() {
   const missing = critical.filter((sel) => !document.querySelector(sel));
 
   if (missing.length > 0) {
-    console.warn(`[ORR] Critical elements missing: ${missing.join(", ")}`);
+    console.warn(`[ORE] Critical elements missing: ${missing.join(", ")}`);
   }
 
   return missing;

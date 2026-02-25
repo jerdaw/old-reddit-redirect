@@ -24,7 +24,7 @@ export async function initRelatedPosts() {
     const historyData = await window.Storage.getReadingHistory();
     history = historyData.entries || [];
   } catch (e) {
-    console.error("[ORR] Failed to load reading history for related posts", e);
+    console.error("[ORE] Failed to load reading history for related posts", e);
     return;
   }
 

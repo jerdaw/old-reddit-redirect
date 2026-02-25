@@ -38,7 +38,7 @@ export class SearchManager {
     this.createWidget();
     this.attachGlobalListeners();
 
-    debugLog("[ORR] Comment search initialized");
+    debugLog("[ORE] Comment search initialized");
   }
 
   injectStyles() {

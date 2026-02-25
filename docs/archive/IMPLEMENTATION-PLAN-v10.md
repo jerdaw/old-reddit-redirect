@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines the implementation plan for **Phase 4.3: Scroll Position Memory** of Old Reddit Redirect. This feature remembers users' scroll positions when they navigate away from a page and automatically restores that position when they return via the back button.
+This document outlines the implementation plan for **Phase 4.3: Scroll Position Memory** of Old Reddit Enhanced. This feature remembers users' scroll positions when they navigate away from a page and automatically restores that position when they return via the back button.
 
 **Key Benefits**:
 

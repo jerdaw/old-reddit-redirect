@@ -56,7 +56,7 @@ export async function addSubscription(url) {
 
     return subscription;
   } catch (error) {
-    console.error("[ORR] Failed to add subscription:", error);
+    console.error("[ORE] Failed to add subscription:", error);
     throw error;
   }
 }
@@ -81,7 +81,7 @@ export async function removeSubscription(id) {
  */
 function validateList(data) {
   if (
-    data.type !== "orr-list" ||
+    (data.type !== "ore-list" && data.type !== "orr-list") ||
     !data.items ||
     !Array.isArray(data.items) ||
     !data.metadata ||
@@ -104,7 +104,7 @@ async function applySubscriptionFilters(subscription) {
   const type = canonicalizeContentType(subscription.type);
   if (!type) {
     debugLog(
-      `[ORR] Unknown subscription type for ${subscription.name}; skipping merge`
+      `[ORE] Unknown subscription type for ${subscription.name}; skipping merge`
     );
     return [];
   }
@@ -160,7 +160,7 @@ async function applySubscriptionFilters(subscription) {
     }
   }
 
-  debugLog(`[ORR] Applying filters from ${subscription.name}`);
+  debugLog(`[ORE] Applying filters from ${subscription.name}`);
   return appliedItems;
 }
 

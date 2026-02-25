@@ -1,9 +1,9 @@
 {
-  "name": "old-reddit-redirect",
+  "name": "old-reddit-enhanced",
   "version": "19.0.0",
   "private": true,
   "type": "module",
-  "description": "Browser extension to redirect Reddit to old.reddit.com",
+  "description": "Browser extension to enhance old Reddit with modern features",
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

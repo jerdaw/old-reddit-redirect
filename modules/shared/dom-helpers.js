@@ -13,7 +13,7 @@ export function $(selector, context = document) {
   try {
     return context.querySelector(selector);
   } catch (error) {
-    console.warn(`[ORR] Invalid selector: ${selector}`, error);
+    console.warn(`[ORE] Invalid selector: ${selector}`, error);
     return null;
   }
 }
@@ -28,7 +28,7 @@ export function $$(selector, context = document) {
   try {
     return Array.from(context.querySelectorAll(selector));
   } catch (error) {
-    console.warn(`[ORR] Invalid selector: ${selector}`, error);
+    console.warn(`[ORE] Invalid selector: ${selector}`, error);
     return [];
   }
 }

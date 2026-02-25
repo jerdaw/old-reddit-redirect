@@ -53,7 +53,7 @@ async function applyFeedEnhancements() {
       removeCustomCSS();
     }
   } catch (error) {
-    console.error("[ORR] Error applying feed enhancements:", error);
+    console.error("[ORE] Error applying feed enhancements:", error);
   }
 }
 
@@ -65,7 +65,7 @@ export async function initFeedModes() {
   try {
     await applyFeedEnhancements();
   } catch (error) {
-    console.error("[ORR] Feed modes initialization failed:", error);
+    console.error("[ORE] Feed modes initialization failed:", error);
   }
 }
 

@@ -319,7 +319,7 @@ async function applyUserTags() {
       }
     }
   } catch (error) {
-    console.error("[ORR] Error applying user tags:", error);
+    console.error("[ORE] Error applying user tags:", error);
   }
 }
 
@@ -331,7 +331,7 @@ export async function initUserTags() {
   try {
     await applyUserTags();
   } catch (error) {
-    console.error("[ORR] User tags initialization failed:", error);
+    console.error("[ORE] User tags initialization failed:", error);
   }
 }
 

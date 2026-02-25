@@ -70,8 +70,8 @@ if (typeof importScripts === "function") {
 
     // Tooltip
     const title = enabled
-      ? `Old Reddit Redirect is ON\n${stats.todayRedirects} redirects today`
-      : "Old Reddit Redirect is OFF (click to enable)";
+      ? `Old Reddit Enhanced is ON\n${stats.todayRedirects} redirects today`
+      : "Old Reddit Enhanced is OFF (click to enable)";
 
     const setTitle = tabId ? { title, tabId } : { title };
 
@@ -674,7 +674,7 @@ if (typeof importScripts === "function") {
             chrome.notifications.create({
               type: "basic",
               iconUrl: "img/icon128.png",
-              title: "Old Reddit Redirect",
+              title: "Old Reddit Enhanced",
               message: `r/${subreddit} will stay on new Reddit`,
               silent: true,
             });
@@ -706,7 +706,7 @@ if (typeof importScripts === "function") {
           chrome.notifications.create({
             type: "basic",
             iconUrl: "img/icon128.png",
-            title: "Old Reddit Redirect",
+            title: "Old Reddit Enhanced",
             message: `r/${subreddit} muted from /r/all and /r/popular`,
             silent: true,
           });
@@ -739,7 +739,7 @@ if (typeof importScripts === "function") {
           chrome.notifications.create({
             type: "basic",
             iconUrl: "img/icon128.png",
-            title: "Old Reddit Redirect",
+            title: "Old Reddit Enhanced",
             message: `u/${username} has been muted`,
             silent: true,
           });
@@ -1034,7 +1034,7 @@ if (typeof importScripts === "function") {
         chrome.notifications.create({
           type: "basic",
           iconUrl: "img/icon128.png",
-          title: "Old Reddit Redirect",
+          title: "Old Reddit Enhanced",
           message: "Redirect has been re-enabled",
           silent: true,
         });

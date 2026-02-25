@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * Storage abstraction layer for Old Reddit Redirect
+ * Storage abstraction layer for Old Reddit Enhanced
  * Provides a centralized API for managing extension settings and data
  *
  * This module integrates:

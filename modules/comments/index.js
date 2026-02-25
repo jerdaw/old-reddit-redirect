@@ -14,7 +14,7 @@ import { debugLog } from "../shared/debug-helpers.js";
  */
 export async function initCommentFeatures() {
   try {
-    debugLog("[ORR] Loading comment features");
+    debugLog("[ORE] Loading comment features");
 
     // Get preferences to determine which features to load
     const prefs = await getStorage({
@@ -83,9 +83,9 @@ export async function initCommentFeatures() {
     // Load all enabled features in parallel
     await Promise.allSettled(loaders);
 
-    debugLog("[ORR] Comment features loaded");
+    debugLog("[ORE] Comment features loaded");
   } catch (error) {
-    console.error("[ORR] Comment features initialization failed:", error);
+    console.error("[ORE] Comment features initialization failed:", error);
     throw error;
   }
 }

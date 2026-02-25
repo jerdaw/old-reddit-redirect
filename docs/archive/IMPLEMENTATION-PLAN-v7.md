@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines the implementation plan for **Phase 3: Comment Enhancements** of Old Reddit Redirect. Phase 3 focuses on improving the comment reading and navigation experience on old.reddit.com through three features:
+This document outlines the implementation plan for **Phase 3: Comment Enhancements** of Old Reddit Enhanced. Phase 3 focuses on improving the comment reading and navigation experience on old.reddit.com through three features:
 
 1. **Color-Coded Comments** (v7.0.0) - Visual nesting indicators
 2. **Comment Navigation Buttons** (v7.1.0) - Floating navigation controls

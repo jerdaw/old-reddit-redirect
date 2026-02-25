@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document outlines the implementation plan for **Phase 4.2: User Tagging** of Old Reddit Redirect. This feature allows users to add custom labels/tags to Reddit users, making it easier to identify and track users across different threads and subreddits.
+This document outlines the implementation plan for **Phase 4.2: User Tagging** of Old Reddit Enhanced. This feature allows users to add custom labels/tags to Reddit users, making it easier to identify and track users across different threads and subreddits.
 
 **Key Benefits**:
 

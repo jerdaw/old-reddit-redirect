@@ -1,6 +1,6 @@
 # Modular Architecture
 
-This directory contains the modular implementation of Old Reddit Redirect's content script features. The architecture uses native ES modules with lazy loading and conditional feature loading to improve performance and reduce bundle size.
+This directory contains the modular implementation of Old Reddit Enhanced's content script features. The architecture uses native ES modules with lazy loading and conditional feature loading to improve performance and reduce bundle size.
 
 ## Overview
 
@@ -340,7 +340,7 @@ import { debugLog } from "../shared/debug-helpers.js";
  * @returns {Promise<void>}
  */
 export async function initCustomFeature() {
-  debugLog("[ORR] Custom Feature: Initializing");
+  debugLog("[ORE] Custom Feature: Initializing");
 
   const prefs = await getStorage({
     customFeature: {
@@ -350,7 +350,7 @@ export async function initCustomFeature() {
   });
 
   if (!prefs.customFeature?.enabled) {
-    debugLog("[ORR] Custom Feature: Disabled, skipping");
+    debugLog("[ORE] Custom Feature: Disabled, skipping");
     return;
   }
 
@@ -366,7 +366,7 @@ export async function initCustomFeature() {
     // Clean up event listeners, observers, etc.
   });
 
-  debugLog("[ORR] Custom Feature: Initialized");
+  debugLog("[ORE] Custom Feature: Initialized");
 }
 
 /**
@@ -475,21 +475,21 @@ To see which modules are loading:
 
 1. Enable debug mode in settings
 2. Open browser console
-3. Look for `[ORR] Module loader:` messages
+3. Look for `[ORE] Module loader:` messages
 4. Check timestamps to measure load times
 
 **Example output:**
 
 ```
-[ORR] Module loader: Starting feature initialization
-[ORR] Module loader: Loading core features
-[ORR] Dark Mode: Initializing
-[ORR] Accessibility: Initializing
-[ORR] Nag Blocking: Initializing
-[ORR] Content Filtering: Initializing
-[ORR] Module loader: Comments page detected, loading features
-[ORR] Color Coding: Initializing
-[ORR] Module loader: Initialization complete
+[ORE] Module loader: Starting feature initialization
+[ORE] Module loader: Loading core features
+[ORE] Dark Mode: Initializing
+[ORE] Accessibility: Initializing
+[ORE] Nag Blocking: Initializing
+[ORE] Content Filtering: Initializing
+[ORE] Module loader: Comments page detected, loading features
+[ORE] Color Coding: Initializing
+[ORE] Module loader: Initialization complete
 ```
 
 ## Best Practices
@@ -537,7 +537,7 @@ const el = document.querySelector(".selector");
 try {
   await riskyOperation();
 } catch (error) {
-  console.error("[ORR] Feature: Error:", error);
+  console.error("[ORE] Feature: Error:", error);
   // Continue execution, don't break other features
 }
 

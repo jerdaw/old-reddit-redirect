@@ -1,6 +1,6 @@
-# Contributing to Old Reddit Redirect
+# Contributing to Old Reddit Enhanced
 
-Thank you for your interest in contributing to this actively maintained fork of Old Reddit Redirect!
+Thank you for your interest in contributing to this actively maintained fork of Old Reddit Enhanced!
 
 ## Getting Started
 
@@ -8,8 +8,8 @@ Thank you for your interest in contributing to this actively maintained fork of 
 2. Clone your fork locally:
 
    ```bash
-   git clone git@github.com:YOUR_USERNAME/old-reddit-redirect.git
-   cd old-reddit-redirect
+   git clone git@github.com:YOUR_USERNAME/old-reddit-enhanced.git
+   cd old-reddit-enhanced
    ```
 
 3. Ensure you have [Node.js](https://nodejs.org/en) installed
@@ -214,7 +214,7 @@ Example:
 
 Found a bug or have a feature request?
 
-1. Check existing [issues](https://github.com/jerdaw/old-reddit-redirect/issues) first
+1. Check existing [issues](https://github.com/jerdaw/old-reddit-enhanced/issues) first
 2. Open a new issue with:
    - Clear description of the problem
    - Steps to reproduce (for bugs)

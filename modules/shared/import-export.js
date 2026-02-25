@@ -11,7 +11,7 @@ import { debugLog } from "./debug-helpers.js";
  * @param {string} filename - Filename for the download
  */
 export async function exportSettings(
-  filename = "old-reddit-redirect-settings.json"
+  filename = "old-reddit-enhanced-settings.json"
 ) {
   try {
     const data = await getStorage(null); // Get all storage
@@ -35,9 +35,9 @@ export async function exportSettings(
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    debugLog("[ORR] Settings exported");
+    debugLog("[ORE] Settings exported");
   } catch (error) {
-    console.error("[ORR] Export failed:", error);
+    console.error("[ORE] Export failed:", error);
     throw error;
   }
 }
@@ -56,10 +56,10 @@ export async function importSettings(data) {
     // specific validation logic here if needed
 
     await setStorage(data.settings);
-    debugLog("[ORR] Settings imported");
+    debugLog("[ORE] Settings imported");
     return { success: true, message: "Settings imported successfully" };
   } catch (error) {
-    console.error("[ORR] Import failed:", error);
+    console.error("[ORE] Import failed:", error);
     return { success: false, message: error.message };
   }
 }
@@ -72,7 +72,7 @@ export async function importSettings(data) {
  */
 export function exportList(type, list, metadata) {
   const exportData = {
-    type: "orr-list",
+    type: "ore-list",
     contentType: type,
     metadata: {
       ...metadata,
@@ -82,7 +82,7 @@ export function exportList(type, list, metadata) {
     items: list,
   };
 
-  const filename = `orr-${type}-${metadata.name.toLowerCase().replace(/\s+/g, "-")}.json`;
+  const filename = `ore-${type}-${metadata.name.toLowerCase().replace(/\s+/g, "-")}.json`;
 
   const blob = new Blob([JSON.stringify(exportData, null, 2)], {
     type: "application/json",

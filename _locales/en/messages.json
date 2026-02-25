@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Old Reddit Redirect",
+    "message": "Old Reddit Enhanced",
     "description": "Extension name"
   },
   "extDescription": {
@@ -12,7 +12,7 @@
     "description": "Command description"
   },
   "options_title": {
-    "message": "Old Reddit Redirect Options",
+    "message": "Old Reddit Enhanced Options",
     "description": "Title of the options page"
   },
   "popup_enableRedirect": { "message": "Enable Redirect" },
@@ -44,8 +44,8 @@
   "popup_btnOptions": { "message": "Options" },
   "popup_btnReportBroken": { "message": "Report Broken" },
   "popup_loadingShortcut": { "message": "Loading shortcut..." },
-  "popup_container_aria": { "message": "Old Reddit Redirect popup" },
-  "popup_logo_alt": { "message": "Old Reddit Redirect logo" },
+  "popup_container_aria": { "message": "Old Reddit Enhanced popup" },
+  "popup_logo_alt": { "message": "Old Reddit Enhanced logo" },
   "popup_cancel_aria": {
     "message": "Cancel temporary disable and re-enable redirect"
   },
@@ -463,7 +463,7 @@
 
   "opt_sus_heading": { "message": "Sustainability & Support" },
   "opt_sus_desc": {
-    "message": "Old Reddit Redirect is free and open source. Supporting the project helps ensure long-term maintenance."
+    "message": "Old Reddit Enhanced is free and open source. Supporting the project helps ensure long-term maintenance."
   },
   "opt_sus_age": { "message": "Enable age verification reminder" },
   "opt_sus_age_desc": {

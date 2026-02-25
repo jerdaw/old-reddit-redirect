@@ -13,7 +13,7 @@ import { debugLog } from "../shared/debug-helpers.js";
  */
 export async function initOptionalFeatures() {
   try {
-    debugLog("[ORR] Checking optional features");
+    debugLog("[ORE] Checking optional features");
 
     // Get preferences to determine which features to load
     const prefs = await getStorage({
@@ -27,13 +27,13 @@ export async function initOptionalFeatures() {
 
     // Load user tags if enabled
     if (prefs.userTags?.enabled) {
-      debugLog("[ORR] Loading user tags");
+      debugLog("[ORE] Loading user tags");
       loaders.push(import("./user-tags.js").then((m) => m.initUserTags()));
     }
 
     // Load NSFW controls if enabled
     if (prefs.nsfwControls?.enabled) {
-      debugLog("[ORR] Loading NSFW controls");
+      debugLog("[ORE] Loading NSFW controls");
       loaders.push(
         import("./nsfw-controls.js").then((m) => m.initNsfwControls())
       );
@@ -41,7 +41,7 @@ export async function initOptionalFeatures() {
 
     // Load layout presets if enabled
     if (prefs.layoutPresets?.enabled) {
-      debugLog("[ORR] Loading layout presets");
+      debugLog("[ORE] Loading layout presets");
       loaders.push(
         import("./layout-presets.js").then((m) => m.initLayoutPresets())
       );
@@ -49,7 +49,7 @@ export async function initOptionalFeatures() {
 
     // Load reading history if enabled
     if (prefs.readingHistory?.enabled) {
-      debugLog("[ORR] Loading reading history");
+      debugLog("[ORE] Loading reading history");
       loaders.push(
         import("./reading-history.js").then((m) => m.initReadingHistory())
       );
@@ -60,11 +60,11 @@ export async function initOptionalFeatures() {
     await Promise.allSettled(loaders);
 
     if (loaders.length > 0) {
-      debugLog(`[ORR] Loaded ${loaders.length} optional features`);
+      debugLog(`[ORE] Loaded ${loaders.length} optional features`);
     } else {
-      debugLog("[ORR] No optional features enabled");
+      debugLog("[ORE] No optional features enabled");
     }
   } catch (error) {
-    console.error("[ORR] Optional features initialization failed:", error);
+    console.error("[ORE] Optional features initialization failed:", error);
   }
 }

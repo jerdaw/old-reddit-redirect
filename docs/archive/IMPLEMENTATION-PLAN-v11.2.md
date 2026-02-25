@@ -1,4 +1,4 @@
-# Implementation Plan: Old Reddit Redirect v11.2.0
+# Implementation Plan: Old Reddit Enhanced v11.2.0
 
 > **Phase 5.3: Advanced Content Blocking**
 >
@@ -28,7 +28,7 @@
 
 ### What We're Building
 
-Phase 5.3 adds advanced content blocking and navigation features to Old Reddit Redirect:
+Phase 5.3 adds advanced content blocking and navigation features to Old Reddit Enhanced:
 
 1. **AI Overview Blocking** - Block AI-generated content and answers (future-proof)
 2. **Enhanced Promoted Content Blocking** - Block trending, recommendations, community highlights
