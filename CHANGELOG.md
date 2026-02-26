@@ -10,9 +10,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Dependabot auto-merge**: Weekly grouped dev-dependency updates (patch/minor) are now squash-merged automatically once CI passes; major updates require manual review
+- **Options page sidebar navigation**: Sticky sidebar with anchor links to all settings sections, IntersectionObserver-based active highlighting, and debounced search filtering
+- **Firefox compatibility CI**: Added `web-ext lint` step to CI workflow for Firefox manifest validation
+- **Service worker state recovery**: `disabledTabs` Set is now rebuilt from persisted session rules on service worker restart, preventing state loss on MV3 termination
+- **Background.js test suite**: 10 tests covering session rule recovery, message dispatch, tab disable/enable cycle, and toggle behavior
+- **Storage helpers test suite**: 5 tests for concurrent write serialization and deep merge correctness
+- **Integration test suite**: 10 tests for cross-module interactions, storage round-trips, and error resilience
 
 ### Fixed
 
+- **XSS in marketplace**: 5 unsanitized `innerHTML` interpolations in `createCard()` now use `escapeHtml()` to prevent stored XSS from community list metadata
+- **SSRF via custom domain**: Custom frontend domain validation now blocks localhost, private IPs (127.x, 10.x, 172.16-31.x, 192.168.x), and IP-only domains
+- **Import validation gaps**: `validateImport()` now enforces size limits (5MB overall, 500 whitelist entries, 200 keywords) and validates regex patterns before import
+- **Storage race conditions**: Added promise-based mutex (`withStorageLock()`) to serialize read-modify-write operations in `updateStorage()`
+- **Shallow merge data loss**: `updateStorage()` now uses recursive `deepMerge()` that preserves nested properties (arrays replaced, not merged)
+- **Missing redirect for new.reddit.com**: Added `new` subdomain to all regex redirect rules (rules 1, 2, 11, 12, 20) and added `new.reddit.com` host permission
+- **Missing `tabs` permission**: Added to manifest (required by 13+ `chrome.tabs.*` calls in background.js)
+- **Flash of wrong theme (FOIT)**: Synchronous `localStorage` cache read in `content-script.js` applies theme class immediately; `dark-mode.js` writes the cache for next load
+- **Layout thrashing in minimap**: Split build loop into batched read pass (all `getBoundingClientRect()`) then write pass; throttled scroll handler to 16ms with cleanup
+- **1-second polling in sort-preferences**: Removed redundant `setInterval` polling; added `hashchange` listener as lightweight fallback alongside MutationObserver
+- **Unbatched content filtering reads**: `initFiltering()` now reads all storage in a single call, passing results to sub-functions
+- **Event listener leak in navigation**: Registered nav container cleanup in `window.orrCleanup`
+- **Event listener leak in user-tags**: Escape handler reference stored in module variable and reliably removed in `closeTagDialog()` on all close paths
+- **Silent error swallowing**: All 3 `Promise.allSettled` call sites (optional, comments, feed modules) now log rejected promise reasons
+- **Modal focus trapping**: Reusable `trapFocus()` utility traps Tab/Shift+Tab in preset and keyboard edit modals; added `role="dialog"`, `aria-modal="true"`, `aria-labelledby` attributes
 - **Video URL redirect**: URLs with a title slug after the post ID (e.g. `/videos/ID/title-slug/`) now correctly redirect to `old.reddit.com/comments/ID/title-slug/` instead of falling through to a 404. Rule 12's regex was extended to capture the optional slug segment.
 
 ---

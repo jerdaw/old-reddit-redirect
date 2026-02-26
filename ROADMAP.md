@@ -14,7 +14,7 @@
 **Bundle Size**: 156KB (13.8% reduction from v18)
 **Test Coverage**: See `npm test` output for current counts
 
-**Latest Addition (unreleased)**: Switch All Tabs (bulk switch between old/new)
+**Latest Addition (unreleased)**: Security/reliability audit (20 fixes), Switch All Tabs
 **Next Focus**: Stabilize and ship items in `CHANGELOG.md#Unreleased`
 
 ---
@@ -377,4 +377,4 @@ See `CONTRIBUTING.md` for development guidelines.
 
 ---
 
-_Last updated: 2026-02-24_
+_Last updated: 2026-02-26_

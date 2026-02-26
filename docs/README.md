@@ -7,6 +7,7 @@ This directory contains detailed documentation for the Old Reddit Enhanced proje
 Significant architectural and project decisions:
 
 - **[ADR-001](adr/001-rebrand-to-old-reddit-enhanced.md)** — Rebrand to Old Reddit Enhanced (2026-02-24)
+- **[ADR-002](adr/002-comprehensive-audit-2026-02.md)** — Comprehensive security, reliability, and performance audit (2026-02-26)
 
 ## Migration Documentation (`migration/`)
 

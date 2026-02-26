@@ -9,7 +9,7 @@ AI coding agent instructions for this repository. This file provides guidance fo
 | Command            | Purpose                    |
 | ------------------ | -------------------------- |
 | `npm install`      | Install dependencies       |
-| `npm test`         | Run test suite (905 tests) |
+| `npm test`         | Run test suite (938 tests) |
 | `npm run dev`      | Live-reload dev server     |
 | `npm run lint:fix` | Fix linting issues         |
 | `npm run format`   | Format with Prettier       |
@@ -22,7 +22,7 @@ AI coding agent instructions for this repository. This file provides guidance fo
 **Type:** Browser extension (Chrome/Firefox)
 **Purpose:** Enhances old.reddit.com with redirects, dark mode, content filtering, and more
 **API:** Manifest V3 with `declarativeNetRequest`
-**Tests:** Vitest (905 tests across 33 suites)
+**Tests:** Vitest (938 tests across 36 suites)
 
 ---
 
@@ -124,33 +124,36 @@ Rules in `rules.json` use priority ordering (higher = processed first):
 
 ### Test Suites
 
-| File                                 | Tests | Coverage                        |
-| ------------------------------------ | ----- | ------------------------------- |
-| `rules.test.js`                      | 11    | Rule structure, manifest config |
-| `patterns.test.js`                   | 21    | URL pattern matching            |
-| `stats.test.js`                      | 19    | Statistics tracking             |
-| `storage.test.js`                    | 21    | Storage schema, sync            |
-| `frontends.test.js`                  | 26    | Alternative frontend configs    |
-| `suggestions.test.js`                | 22    | Subreddit suggestions           |
-| `comments.test.js`                   | 77    | Comment enhancements            |
-| `sort-preferences.test.js`           | 23    | Sort order memory               |
-| `user-tags.test.js`                  | 25    | User tagging                    |
-| `user-muting.test.js`                | 34    | User muting                     |
-| `advanced-keyword-filtering.test.js` | 46    | Keyword/regex filtering         |
-| `scroll-positions.test.js`           | 25    | Scroll position memory          |
-| `privacy.test.js`                    | 25    | Tracking protection             |
-| `advanced-blocking.test.js`          | 23    | Content blocking                |
-| `keyboard-shortcuts.test.js`         | 92    | Keyboard shortcuts              |
-| `feed-enhancements.test.js`          | 33    | Feed modes, custom CSS          |
-| `layout-presets.test.js`             | 42    | Layout preset management        |
-| `privacy-enhancements.test.js`       | 39    | Privacy settings                |
-| `performance.test.js`                | 28    | Performance benchmarks          |
-| `accessibility.test.js`              | 38    | Accessibility features          |
-| `navigation-enhancements.test.js`    | 28    | Navigation features             |
-| `reading-history.test.js`            | 28    | Reading history                 |
-| `nsfw-controls.test.js`              | 39    | NSFW content controls           |
-| `comment-minimap.test.js`            | 46    | Comment thread minimap          |
-| `switch-tabs.test.js`                | 30    | Switch all tabs URL transforms  |
+| File                                 | Tests | Coverage                         |
+| ------------------------------------ | ----- | -------------------------------- |
+| `rules.test.js`                      | 11    | Rule structure, manifest config  |
+| `patterns.test.js`                   | 21    | URL pattern matching             |
+| `stats.test.js`                      | 19    | Statistics tracking              |
+| `storage.test.js`                    | 21    | Storage schema, sync             |
+| `frontends.test.js`                  | 26    | Alternative frontend configs     |
+| `suggestions.test.js`                | 22    | Subreddit suggestions            |
+| `comments.test.js`                   | 77    | Comment enhancements             |
+| `sort-preferences.test.js`           | 23    | Sort order memory                |
+| `user-tags.test.js`                  | 25    | User tagging                     |
+| `user-muting.test.js`                | 34    | User muting                      |
+| `advanced-keyword-filtering.test.js` | 46    | Keyword/regex filtering          |
+| `scroll-positions.test.js`           | 25    | Scroll position memory           |
+| `privacy.test.js`                    | 25    | Tracking protection              |
+| `advanced-blocking.test.js`          | 23    | Content blocking                 |
+| `keyboard-shortcuts.test.js`         | 92    | Keyboard shortcuts               |
+| `feed-enhancements.test.js`          | 33    | Feed modes, custom CSS           |
+| `layout-presets.test.js`             | 42    | Layout preset management         |
+| `privacy-enhancements.test.js`       | 39    | Privacy settings                 |
+| `performance.test.js`                | 28    | Performance benchmarks           |
+| `accessibility.test.js`              | 38    | Accessibility features           |
+| `navigation-enhancements.test.js`    | 28    | Navigation features              |
+| `reading-history.test.js`            | 28    | Reading history                  |
+| `nsfw-controls.test.js`              | 39    | NSFW content controls            |
+| `comment-minimap.test.js`            | 46    | Comment thread minimap           |
+| `switch-tabs.test.js`                | 30    | Switch all tabs URL transforms   |
+| `background.test.js`                 | 10    | Service worker, message dispatch |
+| `storage-helpers.test.js`            | 5     | Storage mutex, deep merge        |
+| `integration.test.js`                | 10    | Cross-module integration         |
 
 ### Running Tests
 
@@ -329,7 +332,7 @@ GitHub Actions workflows:
 │   ├── feed/              # Lazy-loaded for feeds (3 files)
 │   └── optional/          # Conditionally loaded (5 files)
 ├── img/                   # Icons (16-128px)
-├── tests/                 # Test suites (830 tests)
+├── tests/                 # Test suites (938 tests)
 ├── scripts/               # Build scripts
 ├── store/                 # Store metadata
 └── docs/                  # Documentation
