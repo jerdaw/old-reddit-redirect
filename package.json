@@ -12,6 +12,7 @@
     "validate": "node -e \"JSON.parse(require('fs').readFileSync('./manifest.json')); JSON.parse(require('fs').readFileSync('./rules.json'));\"",
     "test": "vitest run",
     "test:watch": "vitest",
+    "lint:firefox": "web-ext lint --source-dir .",
     "version:check": "node scripts/sync-version.js --check",
     "version:sync": "node scripts/sync-version.js",
     "dev": "npx web-ext run",
@@ -23,7 +24,8 @@
     "globals": "^17.3.0",
     "jsdom": "^28.0.0",
     "prettier": "^3.2.0",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "web-ext": "^8.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

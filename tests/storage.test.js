@@ -482,6 +482,62 @@ describe("Storage API", () => {
       expect(errors).toContain("Invalid badge style");
     });
 
+    it("should reject oversized whitelist", () => {
+      const data = {
+        _exportVersion: 1,
+        subredditOverrides: {
+          whitelist: Array.from({ length: 501 }, (_, i) => `sub${i}`),
+        },
+      };
+
+      const result = globalThis.StorageMigration.validateImport(data);
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => e.includes("500 entry limit"))).toBe(
+        true
+      );
+    });
+
+    it("should reject oversized keyword list", () => {
+      const data = {
+        _exportVersion: 1,
+        contentFiltering: {
+          mutedKeywords: Array.from({ length: 201 }, (_, i) => `kw${i}`),
+          useRegex: false,
+        },
+      };
+
+      const result = globalThis.StorageMigration.validateImport(data);
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => e.includes("200 entry limit"))).toBe(
+        true
+      );
+    });
+
+    it("should reject invalid regex patterns", () => {
+      const data = {
+        _exportVersion: 1,
+        contentFiltering: {
+          mutedKeywords: ["valid", "[invalid"],
+          useRegex: true,
+        },
+      };
+
+      const result = globalThis.StorageMigration.validateImport(data);
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => e.includes("Invalid regex"))).toBe(true);
+    });
+
+    it("should reject data exceeding 5MB size limit", () => {
+      const data = {
+        _exportVersion: 1,
+        frontend: { target: "x".repeat(6 * 1024 * 1024) },
+      };
+
+      const result = globalThis.StorageMigration.validateImport(data);
+      expect(result.valid).toBe(false);
+      expect(result.errors.some((e) => e.includes("5MB"))).toBe(true);
+    });
+
     it("should reject non-array whitelist", () => {
       const data = {
         _exportVersion: 1,

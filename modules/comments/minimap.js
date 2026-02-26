@@ -4,7 +4,7 @@
  */
 
 import { getStorage } from "../shared/storage-helpers.js";
-import { $$ } from "../shared/dom-helpers.js";
+import { $$, throttle } from "../shared/dom-helpers.js";
 import { calculateCommentDepth } from "./color-coding.js";
 import {
   MINIMAP_CONTENT_HEIGHT,
@@ -99,70 +99,67 @@ export async function initMinimap() {
   const docHeight = document.documentElement.scrollHeight;
   const viewportHeight = window.innerHeight;
 
-  // Build minimap entries
-  comments.forEach((comment) => {
-    const entry = document.createElement("div");
-    entry.className = "orr-minimap-entry";
-
-    // Get comment depth
+  // Read pass: batch all DOM reads to avoid layout thrashing
+  const commentData = comments.map((comment) => {
     const depth = calculateCommentDepth(comment);
-    const depthIndex = Math.min(depth, DEPTH_COLORS.length - 1);
-
-    // Calculate position based on comment's position in document
     const rect = comment.getBoundingClientRect();
     const commentTop = window.scrollY + rect.top;
-    const relativePosition = commentTop / docHeight;
-    const entryTop = relativePosition * MINIMAP_CONTENT_HEIGHT;
-
-    // Calculate entry height based on comment size
-    const commentHeight = rect.height;
-    const relativeHeight = Math.max(
-      MINIMAP_MIN_ENTRY_HEIGHT,
-      (commentHeight / docHeight) * MINIMAP_CONTENT_HEIGHT
-    );
-
-    entry.style.top = `${entryTop}px`;
-    entry.style.height = `${Math.min(relativeHeight, MINIMAP_MAX_ENTRY_HEIGHT)}px`;
-    entry.style.left = `${depth * MINIMAP_DEPTH_INDENT}px`;
-    entry.style.width = `${config.width - MINIMAP_ENTRY_PADDING - depth * MINIMAP_DEPTH_INDENT}px`;
-
-    if (config.useDepthColors) {
-      entry.style.backgroundColor = DEPTH_COLORS[depthIndex];
-    }
-
-    // Check if comment is collapsed
     const isCollapsed = comment.classList.contains("collapsed");
-    if (isCollapsed && config.collapsedIndicator) {
-      entry.classList.add("orr-minimap-collapsed");
-    }
-
-    // Add click handler to navigate to comment
-    entry.addEventListener("click", () => {
-      const targetTop = commentTop - MINIMAP_SCROLL_OFFSET;
-      window.scrollTo({
-        top: targetTop,
-        behavior: "smooth",
-      });
-
-      // Briefly highlight the comment
-      comment.classList.add("orr-minimap-highlight");
-      setTimeout(() => {
-        comment.classList.remove("orr-minimap-highlight");
-      }, 1500);
-    });
-
-    // Add hover tooltip
     const authorEl = comment.querySelector("a.author");
     const author = authorEl ? authorEl.textContent : "unknown";
-    entry.title = `${author} (depth ${depth + 1})`;
-
-    content.appendChild(entry);
+    return { comment, depth, rect, commentTop, isCollapsed, author };
   });
+
+  // Write pass: build all minimap entries without triggering layout
+  commentData.forEach(
+    ({ comment, depth, rect, commentTop, isCollapsed, author }) => {
+      const entry = document.createElement("div");
+      entry.className = "orr-minimap-entry";
+
+      const depthIndex = Math.min(depth, DEPTH_COLORS.length - 1);
+      const relativePosition = commentTop / docHeight;
+      const entryTop = relativePosition * MINIMAP_CONTENT_HEIGHT;
+      const relativeHeight = Math.max(
+        MINIMAP_MIN_ENTRY_HEIGHT,
+        (rect.height / docHeight) * MINIMAP_CONTENT_HEIGHT
+      );
+
+      entry.style.top = `${entryTop}px`;
+      entry.style.height = `${Math.min(relativeHeight, MINIMAP_MAX_ENTRY_HEIGHT)}px`;
+      entry.style.left = `${depth * MINIMAP_DEPTH_INDENT}px`;
+      entry.style.width = `${config.width - MINIMAP_ENTRY_PADDING - depth * MINIMAP_DEPTH_INDENT}px`;
+
+      if (config.useDepthColors) {
+        entry.style.backgroundColor = DEPTH_COLORS[depthIndex];
+      }
+
+      if (isCollapsed && config.collapsedIndicator) {
+        entry.classList.add("orr-minimap-collapsed");
+      }
+
+      // Add click handler to navigate to comment
+      entry.addEventListener("click", () => {
+        const targetTop = commentTop - MINIMAP_SCROLL_OFFSET;
+        window.scrollTo({
+          top: targetTop,
+          behavior: "smooth",
+        });
+
+        comment.classList.add("orr-minimap-highlight");
+        setTimeout(() => {
+          comment.classList.remove("orr-minimap-highlight");
+        }, 1500);
+      });
+
+      entry.title = `${author} (depth ${depth + 1})`;
+      content.appendChild(entry);
+    }
+  );
 
   // Set content height
   content.style.height = `${MINIMAP_CONTENT_HEIGHT}px`;
 
-  // Update viewport indicator on scroll
+  // Update viewport indicator on scroll (throttled to ~60fps)
   if (viewportIndicator) {
     const updateViewportIndicator = () => {
       const scrollTop = window.scrollY;
@@ -174,9 +171,17 @@ export async function initMinimap() {
       viewportIndicator.style.height = `${Math.max(10, viewportSize)}px`;
     };
 
+    const throttledUpdate = throttle(updateViewportIndicator, 16);
+
     updateViewportIndicator();
-    window.addEventListener("scroll", updateViewportIndicator, {
+    window.addEventListener("scroll", throttledUpdate, {
       passive: true,
+    });
+
+    // Register scroll handler cleanup
+    if (!window.orrCleanup) window.orrCleanup = [];
+    window.orrCleanup.push(() => {
+      window.removeEventListener("scroll", throttledUpdate);
     });
   }
 

@@ -57,6 +57,12 @@ describe("Domain redirect patterns", () => {
     ).toBe(true);
   });
 
+  it("should match new.reddit.com", () => {
+    expect(
+      testRegex(rule20.condition.regexFilter, "https://new.reddit.com/r/test")
+    ).toBe(true);
+  });
+
   it("should NOT match old.reddit.com", () => {
     expect(
       testRegex(rule20.condition.regexFilter, "https://old.reddit.com/r/test")
@@ -78,6 +84,15 @@ describe("Gallery redirect pattern", () => {
       testRegex(
         rule11.condition.regexFilter,
         "https://reddit.com/gallery/xyz789"
+      )
+    ).toBe(true);
+  });
+
+  it("should match new.reddit.com gallery URLs", () => {
+    expect(
+      testRegex(
+        rule11.condition.regexFilter,
+        "https://new.reddit.com/gallery/abc123"
       )
     ).toBe(true);
   });
@@ -122,6 +137,15 @@ describe("Videos redirect pattern", () => {
     ).toBe(true);
   });
 
+  it("should match new.reddit.com video URLs", () => {
+    expect(
+      testRegex(
+        rule12.condition.regexFilter,
+        "https://new.reddit.com/video/abc123"
+      )
+    ).toBe(true);
+  });
+
   it("should capture ID and slug together for correct redirect", () => {
     const regex = new RegExp(rule12.condition.regexFilter);
     const match =
@@ -149,6 +173,18 @@ describe("Allowlist patterns", () => {
   it("should allowlist /media", () => {
     expect(
       testRegex(rule1.condition.regexFilter, "https://www.reddit.com/media")
+    ).toBe(true);
+  });
+
+  it("should allowlist new.reddit.com paths", () => {
+    expect(
+      testRegex(rule1.condition.regexFilter, "https://new.reddit.com/settings")
+    ).toBe(true);
+    expect(
+      testRegex(
+        rule2.condition.regexFilter,
+        "https://new.reddit.com/notifications"
+      )
     ).toBe(true);
   });
 

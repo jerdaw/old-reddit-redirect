@@ -47,7 +47,12 @@ export async function initFeedFeatures() {
     }
 
     // Load all enabled features in parallel
-    await Promise.allSettled(loaders);
+    const results = await Promise.allSettled(loaders);
+    for (const result of results) {
+      if (result.status === "rejected") {
+        console.error("[ORE] Feed feature failed to load:", result.reason);
+      }
+    }
 
     if (loaders.length > 0) {
       debugLog(`[ORE] Loaded ${loaders.length} feed features`);

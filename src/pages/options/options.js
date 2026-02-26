@@ -390,6 +390,50 @@
   }
 
   /**
+   * Trap focus inside a modal element for accessibility
+   * @param {Element} modal - Modal element to trap focus within
+   * @returns {Function} Cleanup function to restore focus and remove listeners
+   */
+  function trapFocus(modal) {
+    const previousFocus = document.activeElement;
+    const focusableSelector =
+      'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusable = modal.querySelectorAll(focusableSelector);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (first) first.focus();
+
+    const handler = (e) => {
+      if (e.key !== "Tab") return;
+      if (focusable.length === 0) {
+        e.preventDefault();
+        return;
+      }
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    modal.addEventListener("keydown", handler);
+
+    return () => {
+      modal.removeEventListener("keydown", handler);
+      if (previousFocus && previousFocus.focus) {
+        previousFocus.focus();
+      }
+    };
+  }
+
+  /**
    * Format number with commas
    */
   function formatNumber(num) {
@@ -408,6 +452,7 @@
     await loadAllSettings();
     attachListeners();
     initKeyboardShortcutsUI();
+    initSettingsNav();
   }
 
   /**
@@ -2853,8 +2898,9 @@
     // Store original name for rename detection
     modal.dataset.originalName = presetName;
 
-    // Show modal
+    // Show modal and trap focus
     modal.style.display = "flex";
+    modal._releaseFocus = trapFocus(modal);
   }
 
   /**
@@ -3207,15 +3253,19 @@
     const saveBtn = document.getElementById("preset-edit-save");
     const cancelBtn = document.getElementById("preset-edit-cancel");
 
+    const hideModal = () => {
+      modal.style.display = "none";
+      if (modal._releaseFocus) {
+        modal._releaseFocus();
+        modal._releaseFocus = null;
+      }
+    };
+
     if (closeBtn) {
-      closeBtn.addEventListener("click", () => {
-        modal.style.display = "none";
-      });
+      closeBtn.addEventListener("click", hideModal);
     }
     if (cancelBtn) {
-      cancelBtn.addEventListener("click", () => {
-        modal.style.display = "none";
-      });
+      cancelBtn.addEventListener("click", hideModal);
     }
     if (saveBtn) {
       saveBtn.addEventListener("click", handleSavePresetEdit);
@@ -3224,7 +3274,7 @@
     // Close on overlay click
     modal.addEventListener("click", (e) => {
       if (e.target === modal) {
-        modal.style.display = "none";
+        hideModal();
       }
     });
   }
@@ -5553,6 +5603,22 @@
       return;
     }
 
+    // Block private/reserved domains to prevent SSRF
+    const domainLower = domain.toLowerCase();
+    const isPrivate =
+      domainLower === "localhost" ||
+      /^127\./.test(domainLower) ||
+      /^10\./.test(domainLower) ||
+      /^172\.(1[6-9]|2\d|3[01])\./.test(domainLower) ||
+      /^192\.168\./.test(domainLower) ||
+      /^0\./.test(domainLower) ||
+      domainLower === "[::1]" ||
+      /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(domainLower);
+    if (isPrivate) {
+      showToast(msg("opt_js_toast_invalid_domain_format"), "error");
+      return;
+    }
+
     // Check permission
     const hasPermission = await checkPermission(domain);
     if (!hasPermission) {
@@ -6699,8 +6765,10 @@
     document.getElementById("keyboard-edit-enabled").checked = shortcut.enabled;
     document.getElementById("keyboard-edit-validation").textContent = "";
 
-    // Show modal
-    document.getElementById("keyboard-edit-modal").style.display = "flex";
+    // Show modal and trap focus
+    const kbModal = document.getElementById("keyboard-edit-modal");
+    kbModal.style.display = "flex";
+    kbModal._releaseFocus = trapFocus(kbModal);
   };
 
   /**
@@ -6849,7 +6917,12 @@
    * Close edit modal
    */
   function closeEditModal() {
-    document.getElementById("keyboard-edit-modal").style.display = "none";
+    const kbModal = document.getElementById("keyboard-edit-modal");
+    if (kbModal._releaseFocus) {
+      kbModal._releaseFocus();
+      kbModal._releaseFocus = null;
+    }
+    kbModal.style.display = "none";
     currentEditingShortcutId = null;
   }
 
@@ -7088,6 +7161,85 @@
 
     // Load initial data
     loadKeyboardShortcuts();
+  }
+
+  /**
+   * Initialize settings sidebar navigation and search
+   */
+  function initSettingsNav() {
+    const navList = document.getElementById("ore-settings-nav-list");
+    const searchInput = document.getElementById("ore-settings-search");
+    if (!navList) return;
+
+    // Build nav links from all h2 headings in sections
+    const sections = document.querySelectorAll(".container .setting");
+    const navItems = [];
+    sections.forEach((section) => {
+      const heading = section.querySelector("h2");
+      if (!heading) return;
+
+      // Ensure section has an id for anchoring
+      if (!section.id) {
+        const headingId =
+          heading.id ||
+          heading.textContent
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-");
+        section.id = `section-${headingId}`;
+      }
+
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `#${section.id}`;
+      a.textContent = heading.textContent.trim();
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        section.scrollIntoView({ behavior: "smooth" });
+      });
+      li.appendChild(a);
+      navList.appendChild(li);
+      navItems.push({ li, section, text: heading.textContent.toLowerCase() });
+    });
+
+    // Highlight active section via IntersectionObserver
+    if (navItems.length > 0 && window.IntersectionObserver) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              const item = navItems.find((n) => n.section === entry.target);
+              if (item) {
+                navList
+                  .querySelectorAll("a")
+                  .forEach((a) => a.classList.remove("active"));
+                item.li.querySelector("a").classList.add("active");
+              }
+            }
+          }
+        },
+        { rootMargin: "-10% 0px -80% 0px" }
+      );
+      navItems.forEach((item) => observer.observe(item.section));
+    }
+
+    // Search/filter
+    if (searchInput) {
+      let searchTimeout;
+      searchInput.addEventListener("input", () => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          const query = searchInput.value.toLowerCase().trim();
+          navItems.forEach(({ li, section, text }) => {
+            const sectionText = section.textContent.toLowerCase();
+            const matches =
+              !query || text.includes(query) || sectionText.includes(query);
+            section.style.display = matches ? "" : "none";
+            li.style.display = matches ? "" : "none";
+          });
+        }, 200);
+      });
+    }
   }
 
   // Initialize

@@ -205,6 +205,13 @@ async function applyCommentNavigation() {
 export async function initCommentNavigation() {
   try {
     await applyCommentNavigation();
+
+    // Register cleanup to remove nav container
+    if (!window.orrCleanup) window.orrCleanup = [];
+    window.orrCleanup.push(() => {
+      const nav = document.getElementById("orr-comment-nav");
+      if (nav) nav.remove();
+    });
   } catch (error) {
     console.error("[ORE] Comment navigation initialization failed:", error);
   }

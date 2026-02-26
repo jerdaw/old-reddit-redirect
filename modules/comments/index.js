@@ -81,7 +81,12 @@ export async function initCommentFeatures() {
     }
 
     // Load all enabled features in parallel
-    await Promise.allSettled(loaders);
+    const results = await Promise.allSettled(loaders);
+    for (const result of results) {
+      if (result.status === "rejected") {
+        console.error("[ORE] Comment feature failed to load:", result.reason);
+      }
+    }
 
     debugLog("[ORE] Comment features loaded");
   } catch (error) {

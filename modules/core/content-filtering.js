@@ -8,9 +8,10 @@ import { $$ } from "../shared/dom-helpers.js";
 
 /**
  * Apply subreddit muting on /r/all and /r/popular based on user preferences
+ * @param {Object} [prefs] - Pre-fetched preferences (optional)
  * @returns {Promise<void>}
  */
-async function applySubredditMuting() {
+async function applySubredditMuting(prefs) {
   // Only apply on /r/all and /r/popular
   const path = window.location.pathname;
   const isAllOrPopular = path.includes("/r/all") || path.includes("/r/popular");
@@ -19,9 +20,11 @@ async function applySubredditMuting() {
     return;
   }
 
-  const overrides = await getStorage({
-    subredditOverrides: { mutedSubreddits: [] },
-  });
+  const overrides =
+    prefs ||
+    (await getStorage({
+      subredditOverrides: { mutedSubreddits: [] },
+    }));
   const mutedSubreddits = overrides.subredditOverrides?.mutedSubreddits || [];
 
   if (mutedSubreddits.length === 0) {
@@ -47,21 +50,24 @@ async function applySubredditMuting() {
 
 /**
  * Apply keyword filtering to posts with advanced options (regex, flair, score)
+ * @param {Object} [prefs] - Pre-fetched preferences (optional)
  * @returns {Promise<void>}
  */
-async function applyKeywordFiltering() {
-  const filtering = await getStorage({
-    contentFiltering: {
-      mutedKeywords: [],
-      caseSensitive: false,
-      useRegex: false,
-      filterContent: false,
-      filterByFlair: false,
-      mutedFlairs: [],
-      filterByScore: false,
-      minScore: 0,
-    },
-  });
+async function applyKeywordFiltering(prefs) {
+  const filtering =
+    prefs ||
+    (await getStorage({
+      contentFiltering: {
+        mutedKeywords: [],
+        caseSensitive: false,
+        useRegex: false,
+        filterContent: false,
+        filterByFlair: false,
+        mutedFlairs: [],
+        filterByScore: false,
+        minScore: 0,
+      },
+    }));
   const config = filtering.contentFiltering || {};
   const keywords = config.mutedKeywords || [];
   const flairs = config.mutedFlairs || [];
@@ -171,12 +177,15 @@ async function applyKeywordFiltering() {
 
 /**
  * Apply domain filtering to posts based on user preferences
+ * @param {Object} [prefs] - Pre-fetched preferences (optional)
  * @returns {Promise<void>}
  */
-async function applyDomainFiltering() {
-  const filtering = await getStorage({
-    contentFiltering: { mutedDomains: [] },
-  });
+async function applyDomainFiltering(prefs) {
+  const filtering =
+    prefs ||
+    (await getStorage({
+      contentFiltering: { mutedDomains: [] },
+    }));
   const domains = filtering.contentFiltering?.mutedDomains || [];
 
   if (domains.length === 0) {
@@ -265,10 +274,26 @@ async function applyUserMuting() {
  */
 export async function initFiltering() {
   try {
+    // Batch storage reads into a single call
+    const prefs = await getStorage({
+      subredditOverrides: { mutedSubreddits: [] },
+      contentFiltering: {
+        mutedKeywords: [],
+        caseSensitive: false,
+        useRegex: false,
+        filterContent: false,
+        filterByFlair: false,
+        mutedFlairs: [],
+        filterByScore: false,
+        minScore: 0,
+        mutedDomains: [],
+      },
+    });
+
     await Promise.all([
-      applySubredditMuting(),
-      applyKeywordFiltering(),
-      applyDomainFiltering(),
+      applySubredditMuting(prefs),
+      applyKeywordFiltering(prefs),
+      applyDomainFiltering(prefs),
       applyUserMuting(),
     ]);
   } catch (error) {

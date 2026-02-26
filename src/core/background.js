@@ -21,6 +21,32 @@ if (typeof importScripts === "function") {
   // In-memory set for tracking disabled tabs (session-based)
   const disabledTabs = new Set();
 
+  /**
+   * Rebuild disabledTabs set from session rules after service worker restart
+   * Session rules persist across SW termination but the in-memory Set doesn't
+   */
+  async function rebuildDisabledTabs() {
+    try {
+      const sessionRules = await chrome.declarativeNetRequest.getSessionRules();
+      disabledTabs.clear();
+      for (const rule of sessionRules) {
+        if (rule.id >= TAB_RULE_ID_BASE) {
+          disabledTabs.add(rule.id - TAB_RULE_ID_BASE);
+        }
+      }
+      if (disabledTabs.size > 0) {
+        Logger.debug(
+          `Rebuilt disabledTabs from session rules: ${disabledTabs.size} tabs`
+        );
+      }
+    } catch (error) {
+      Logger.error("Failed to rebuild disabled tabs:", error);
+    }
+  }
+
+  // Rebuild on SW wake (top-level execution)
+  rebuildDisabledTabs();
+
   // Badge timeout for tracking protection indicator
   const TRACKING_BADGE_TIMEOUT = 3000; // 3 seconds
   let trackingBadgeTimeout = null;
@@ -1067,6 +1093,9 @@ if (typeof importScripts === "function") {
    * Initialize on install
    */
   chrome.runtime.onInstalled.addListener(async (details) => {
+    // Rebuild disabled tabs from persisted session rules
+    await rebuildDisabledTabs();
+
     // Migrate from legacy storage if needed
     await Storage.migrateFromLegacy();
 
@@ -1117,6 +1146,7 @@ if (typeof importScripts === "function") {
    * Initialize on startup
    */
   chrome.runtime.onStartup.addListener(async () => {
+    await rebuildDisabledTabs();
     await initializeActionUi();
     await updateSubredditRules();
     await updateFrontendRules();

@@ -24,6 +24,7 @@ const TAG_COLORS = [
 
 // Current open dialog reference
 let currentTagDialog = null;
+let currentEscapeHandler = null;
 
 /**
  * Escape HTML to prevent XSS
@@ -136,6 +137,10 @@ function showTagBadge(authorElement, username, tag) {
  * Close the tag dialog and cleanup
  */
 function closeTagDialog() {
+  if (currentEscapeHandler) {
+    document.removeEventListener("keydown", currentEscapeHandler);
+    currentEscapeHandler = null;
+  }
   if (currentTagDialog) {
     const overlay = document.querySelector(".orr-tag-dialog-overlay");
     if (overlay) overlay.remove();
@@ -281,13 +286,12 @@ function showTagDialog(username, existingTag = null) {
   });
 
   // Escape key to close
-  const escapeHandler = (e) => {
+  currentEscapeHandler = (e) => {
     if (e.key === "Escape") {
       closeTagDialog();
-      document.removeEventListener("keydown", escapeHandler);
     }
   };
-  document.addEventListener("keydown", escapeHandler);
+  document.addEventListener("keydown", currentEscapeHandler);
 }
 
 /**

@@ -12,7 +12,7 @@ import { debugLog } from "../shared/debug-helpers.js";
 // Store references for cleanup
 let sortObserver = null;
 let popStateHandler = null;
-let sortCheckInterval = null;
+let hashChangeHandler = null;
 
 /**
  * Get current sort order from URL
@@ -173,9 +173,9 @@ function cleanup() {
     window.removeEventListener("popstate", popStateHandler);
     popStateHandler = null;
   }
-  if (sortCheckInterval) {
-    clearInterval(sortCheckInterval);
-    sortCheckInterval = null;
+  if (hashChangeHandler) {
+    window.removeEventListener("hashchange", hashChangeHandler);
+    hashChangeHandler = null;
   }
 }
 
@@ -203,8 +203,9 @@ export async function initSortPreferences() {
     popStateHandler = detectSortChange;
     window.addEventListener("popstate", popStateHandler);
 
-    // Poll for URL changes as fallback
-    sortCheckInterval = setInterval(detectSortChange, 1000);
+    // Watch for hash changes as lightweight fallback
+    hashChangeHandler = detectSortChange;
+    window.addEventListener("hashchange", hashChangeHandler);
 
     // Register cleanup handler
     if (!window.orrCleanup) window.orrCleanup = [];

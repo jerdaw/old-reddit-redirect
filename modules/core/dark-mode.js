@@ -52,15 +52,32 @@ async function applyDarkMode() {
     "orr-oled-mode",
     "orr-high-contrast-mode"
   );
+  // Also clean up early cache classes from documentElement
+  document.documentElement.classList.remove(
+    "orr-dark-mode",
+    "orr-oled-mode",
+    "orr-high-contrast-mode"
+  );
 
+  let cacheValue = "light";
   if (shouldEnableDark) {
     if (shouldEnableHighContrast) {
       document.body.classList.add("orr-high-contrast-mode");
+      cacheValue = "high-contrast";
     } else if (shouldEnableOLED) {
       document.body.classList.add("orr-oled-mode");
+      cacheValue = "oled";
     } else {
       document.body.classList.add("orr-dark-mode");
+      cacheValue = "dark";
     }
+  }
+
+  // Update localStorage cache for next page load (prevents FOIT)
+  try {
+    localStorage.setItem("ore-theme-cache", cacheValue);
+  } catch {
+    // localStorage may be unavailable
   }
 }
 

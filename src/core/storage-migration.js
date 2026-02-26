@@ -118,6 +118,17 @@
         return { valid: false, errors };
       }
 
+      // Overall size cap (5MB)
+      try {
+        if (JSON.stringify(data).length > 5 * 1024 * 1024) {
+          errors.push("Import data exceeds 5MB size limit");
+          return { valid: false, errors };
+        }
+      } catch {
+        errors.push("Import data is not serializable");
+        return { valid: false, errors };
+      }
+
       // Check export version
       if (!data._exportVersion || data._exportVersion > 1) {
         errors.push("Unsupported export version");
@@ -145,11 +156,36 @@
           if (!Array.isArray(data.subredditOverrides.whitelist)) {
             errors.push("Whitelist must be an array");
           } else {
+            if (data.subredditOverrides.whitelist.length > 500) {
+              errors.push("Whitelist exceeds 500 entry limit");
+            }
             const invalid = data.subredditOverrides.whitelist.filter(
               (s) => typeof s !== "string" || !/^[a-z0-9_]+$/i.test(s)
             );
             if (invalid.length > 0) {
               errors.push(`Invalid subreddit names: ${invalid.join(", ")}`);
+            }
+          }
+        }
+      }
+
+      // Validate content filtering
+      if (data.contentFiltering) {
+        if (typeof data.contentFiltering === "object") {
+          const cf = data.contentFiltering;
+          if (Array.isArray(cf.mutedKeywords)) {
+            if (cf.mutedKeywords.length > 200) {
+              errors.push("Muted keywords exceeds 200 entry limit");
+            }
+            // Validate regex patterns are safe
+            for (const keyword of cf.mutedKeywords) {
+              if (typeof keyword === "string" && cf.useRegex) {
+                try {
+                  new RegExp(keyword);
+                } catch {
+                  errors.push(`Invalid regex pattern: ${keyword}`);
+                }
+              }
             }
           }
         }

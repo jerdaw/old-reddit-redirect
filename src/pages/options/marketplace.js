@@ -87,20 +87,26 @@
     }
   }
 
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   function createCard(list, isSubscribed) {
     const el = document.createElement("div");
     el.className = "card";
 
-    const typeClass = `type-${list.type}`;
+    const typeClass = `type-${escapeHtml(list.type)}`;
 
     el.innerHTML = `
       <div class="card-header">
-        <h3>${list.name}</h3>
-        <span class="badge ${typeClass}">${list.type}</span>
+        <h3>${escapeHtml(list.name)}</h3>
+        <span class="badge ${typeClass}">${escapeHtml(list.type)}</span>
       </div>
       <div class="card-body">
-        <div class="author">by ${list.author}</div>
-        <p>${list.description}</p>
+        <div class="author">by ${escapeHtml(list.author)}</div>
+        <p>${escapeHtml(list.description)}</p>
         <div class="stats">
           <span>👥 ${list.stats.subscribers.toLocaleString()} subscribers</span>
           <span>★ ${list.stats.rating}</span>
@@ -108,7 +114,7 @@
       </div>
       <div class="actions">
         <button class="button ${isSubscribed ? "secondary subscribed" : "primary"}"
-                data-url="${list.url}"
+                data-url="${escapeHtml(list.url)}"
                 ${isSubscribed ? "disabled" : ""}>
           ${isSubscribed ? UI_STRINGS.SUBSCRIBED : UI_STRINGS.SUBSCRIBE}
         </button>

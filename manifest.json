@@ -51,6 +51,7 @@
     "declarativeNetRequestWithHostAccess",
     "contextMenus",
     "storage",
+    "tabs",
     "webNavigation",
     "alarms",
     "notifications",
@@ -60,6 +61,7 @@
   "host_permissions": [
     "*://reddit.com/*",
     "*://www.reddit.com/*",
+    "*://new.reddit.com/*",
     "*://np.reddit.com/*",
     "*://amp.reddit.com/*",
     "*://i.reddit.com/*",

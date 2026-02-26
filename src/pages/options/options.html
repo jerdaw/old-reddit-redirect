@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
+    <nav
+      id="ore-settings-nav"
+      class="ore-settings-nav"
+      aria-label="Settings navigation"
+    >
+      <input
+        type="search"
+        id="ore-settings-search"
+        class="ore-settings-search"
+        placeholder="Search settings..."
+        aria-label="Search settings"
+      />
+      <ul id="ore-settings-nav-list"></ul>
+    </nav>
     <div class="container">
       <h1 data-i18n="extName">Old Reddit Enhanced</h1>
 
@@ -1405,10 +1419,19 @@
       </section>
 
       <!-- Preset Edit Modal -->
-      <div id="preset-edit-modal" class="modal" style="display: none">
+      <div
+        id="preset-edit-modal"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="preset-edit-heading"
+        style="display: none"
+      >
         <div class="modal-content">
           <div class="modal-header">
-            <h3 data-i18n="opt_preset_modal_heading">Edit Preset</h3>
+            <h3 id="preset-edit-heading" data-i18n="opt_preset_modal_heading">
+              Edit Preset
+            </h3>
             <button class="modal-close" id="preset-edit-close">&times;</button>
           </div>
           <div class="modal-body">
@@ -2914,10 +2937,19 @@
       </section>
 
       <!-- Keyboard Shortcut Edit Modal -->
-      <div id="keyboard-edit-modal" class="modal" style="display: none">
+      <div
+        id="keyboard-edit-modal"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="keyboard-edit-heading"
+        style="display: none"
+      >
         <div class="modal-content">
           <div class="modal-header">
-            <h3 data-i18n="opt_kb_modal_heading">Edit Keyboard Shortcut</h3>
+            <h3 id="keyboard-edit-heading" data-i18n="opt_kb_modal_heading">
+              Edit Keyboard Shortcut
+            </h3>
             <button class="modal-close" id="keyboard-edit-close">
               &times;
             </button>

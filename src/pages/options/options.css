@@ -100,7 +100,8 @@ body {
 
 .container {
   max-width: 700px;
-  margin: 0 auto;
+  margin: 0 auto 0 200px;
+  padding: 0 20px;
 }
 
 h1 {
@@ -1993,4 +1994,78 @@ footer a:hover {
 
 .github-btn:hover {
   background-color: #3b4148;
+}
+
+/* ============================================================================
+   SETTINGS SIDEBAR NAVIGATION
+   ============================================================================ */
+
+.ore-settings-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 100vh;
+  overflow-y: auto;
+  background: #1a1a1b;
+  border-right: 1px solid #343536;
+  padding: 12px 0;
+  z-index: 100;
+  font-size: 13px;
+}
+
+.ore-settings-search {
+  width: calc(100% - 16px);
+  margin: 0 8px 8px;
+  padding: 6px 8px;
+  border: 1px solid #343536;
+  border-radius: 4px;
+  background: #272729;
+  color: #d7dadc;
+  font-size: 13px;
+}
+
+.ore-settings-search::placeholder {
+  color: #818384;
+}
+
+.ore-settings-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ore-settings-nav li a {
+  display: block;
+  padding: 6px 12px;
+  color: #818384;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.ore-settings-nav li a:hover {
+  color: #d7dadc;
+  background: #272729;
+}
+
+.ore-settings-nav li a.active {
+  color: #ff4500;
+  border-left-color: #ff4500;
+}
+
+.setting {
+  scroll-margin-top: 16px;
+}
+
+/* Hide sidebar on narrow screens */
+@media (max-width: 900px) {
+  .ore-settings-nav {
+    display: none;
+  }
+  .container {
+    margin: 0 auto;
+  }
 }

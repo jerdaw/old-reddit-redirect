@@ -57,7 +57,12 @@ export async function initOptionalFeatures() {
 
     // Load all enabled features in parallel
     // Use allSettled to continue even if individual features fail
-    await Promise.allSettled(loaders);
+    const results = await Promise.allSettled(loaders);
+    for (const result of results) {
+      if (result.status === "rejected") {
+        console.error("[ORE] Optional feature failed to load:", result.reason);
+      }
+    }
 
     if (loaders.length > 0) {
       debugLog(`[ORE] Loaded ${loaders.length} optional features`);
